@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b22f1cfb.css",
+    "main.js": "/static/js/main.5e8387c6.js",
+    "static/media/background.png": "/static/media/background.5b9e1d146123050206ac.png",
+    "static/media/hl.png": "/static/media/hl.def5f10c042b14737879.png",
+    "static/media/marilao.jpg": "/static/media/marilao.c36c63b9ae5edc145f81.jpg",
+    "static/media/da.jpg": "/static/media/da.4744cceed2608f796175.jpg",
+    "static/media/home.jpg": "/static/media/home.1d900de840d3c46e6ca7.jpg",
+    "static/media/municipal.jpg": "/static/media/municipal.7fa0c0db56f01f629b80.jpg",
+    "static/media/logo.jpg": "/static/media/logo.31ddb1f27a1a4d229ca5.jpg",
+    "static/media/location.png": "/static/media/location.fc64861ced1c2b31dff1.png",
+    "static/media/headerBmcc.png": "/static/media/headerBmcc.f98f5411505fd20a0514.png",
+    "static/media/bmccmem.png": "/static/media/bmccmem.65f36893a8c30df68cd2.png",
+    "static/media/email.png": "/static/media/email.4840dea5f17d5b0a4507.png",
+    "static/media/faqs.png": "/static/media/faqs.95844febc5317d994881.png",
+    "static/media/www.png": "/static/media/www.128e72adc65065f12a07.png",
+    "static/media/contact.png": "/static/media/contact.1bea46e84062ffd41105.png",
+    "static/media/announce.png": "/static/media/announce.ebcc94ccc011c190a955.png",
+    "static/media/marisko.png": "/static/media/marisko.8a5cf40900809e7a93a9.png",
+    "static/media/locationbmcc.png": "/static/media/locationbmcc.683b56e865dc0951e04d.png",
+    "static/media/default-profile-picture1.jpg": "/static/media/default-profile-picture1.90dc751e8e8e5557d629.jpg",
+    "static/media/scholar.png": "/static/media/scholar.99a5fe52abb4ece84439.png",
+    "index.html": "/index.html",
+    "main.b22f1cfb.css.map": "/static/css/main.b22f1cfb.css.map",
+    "main.5e8387c6.js.map": "/static/js/main.5e8387c6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b22f1cfb.css",
+    "static/js/main.5e8387c6.js"
+  ]
+}
