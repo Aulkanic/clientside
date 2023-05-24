@@ -147,7 +147,7 @@ useEffect(() => {
             </div>
             <div className='userlistreq'>
           <label htmlFor="">{docu.requirementName}</label>
-          {!hassubmit ? (<input 
+          {!isDisabled && !hassubmit ? (<input 
           type="file" 
           name={`${docu.requirementName}`} 
           disabled={isDisabled} 
