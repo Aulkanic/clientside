@@ -16,11 +16,13 @@ const Scholar = () => {
 const navigate = useNavigate()
 const [docs, setDocs] = useState([]);
 const [submitted, setSubmittedDocs] = useState([]);
+const [submitted1, setSubmittedDocs1] = useState([]);
 const [fileValues, setFileValues] = useState([]);
 const [fileNames, setFileNames] = useState([]);
 const [loading, setLoading] = useState(false);
 const [loadingPage, setLoadingPage] = useState(false);
 const [images, setImages] = useState([]);
+const [disabledInputs, setDisabledInputs] = useState([]);
 const applicantNum = 1;
 const handleFileChange = (index, event) => {
   const files = [...fileValues];
@@ -30,6 +32,7 @@ const handleFileChange = (index, event) => {
   img instanceof File ? URL.createObjectURL(img) : img)
   setImages(previmg);
   const updatedFileNames = [...fileValues];
+
 
   if (files[index]) {
     updatedFileNames[index] = files[index].name;
@@ -42,21 +45,24 @@ const handleSubmit = (event) => {
   event.preventDefault();
   setLoading(true)
   fileValues.forEach((file, index) => {
+    console.log(index,file)
     const applicantNum = 1;
     const docu = docs[index];
     const formData = new FormData();
     formData.append(`file`, file);
     formData.append(`Reqname`, docu.requirementName);
     formData.append(`applicantNum`, applicantNum);
-
     Axios.post('http://localhost:3006/api/v1/requirements/uploadRequirement',formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   })
     .then(res => {
-      console.log(res)
-      setLoading(false)
+      const updatedDisabledInputs = [...disabledInputs];
+    updatedDisabledInputs[index] = true;
+    setDisabledInputs(updatedDisabledInputs);
+      setSubmittedDocs(res.data.DocumentSubmitted);
+      setLoading(false);
     })
   });
 };
@@ -68,7 +74,8 @@ useEffect(() => {
         Axios.get(`http://localhost:3006/api/v1/requirements/${applicantNum}`)
       ]);
       setDocs(response[0].data.Requirements);
-      setSubmittedDocs(response[1].data.Document);
+      setSubmittedDocs1(response[1].data.Document);
+      
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -76,60 +83,63 @@ useEffect(() => {
 
   fetchData();
 }, []);
-
-    const documentsubmitted = submitted?.map((req, index) => {
-      return (
-        <>
-        {req.File !== 'None' && <div key={index}>
-          <div className="grid_container">
-        <div className="docusibmitted">
-          <div className="docusubprev">   
-          {req.File ? (<img src={req.File} alt="" />) : (<img src={Noimageprev} alt="" />)}
-          </div>
-          <div className='userdocsubstat'>
-        <p>{req.requirement_Name}</p>
-        <p>{req.Status}</p>
-        <p>{req.Comments}</p>
-        </div>
-        </div>
-        {(index + 1) % 2 === 0 && <br />}
-        </div>
-        </div>}
-        </>
-      );
-    });
+    function ViewsubDocs(){
+      if(submitted.length > submitted1.length){
+        const documentsubmitted = submitted?.map((req, index) => {
+          return (
+            <>
+            {req.File !== 'None' && <div key={index}>
+              <div className="grid_container">
+            <div className="docusibmitted">
+              <div className="docusubprev">   
+              {req.File ? (<img src={req.File} alt="" />) : (<img src={Noimageprev} alt="" />)}
+              </div>
+              <div className='userdocsubstat'>
+            <p>{req.requirement_Name}</p>
+            <p>{req.Status}</p>
+            <p>{req.Comments}</p>
+            </div>
+            </div>
+            {(index + 1) % 2 === 0 && <br />}
+            </div>
+            </div>}
+            </>
+          );
+        });    
+        return documentsubmitted  
+      }else{
+        const documentsubmitted1 = submitted1?.map((req, index) => {
+          return (
+            <>
+            {req.File !== 'None' && <div key={index}>
+              <div className="grid_container">
+            <div className="docusibmitted">
+              <div className="docusubprev">   
+              {req.File ? (<img src={req.File} alt="" />) : (<img src={Noimageprev} alt="" />)}
+              </div>
+              <div className='userdocsubstat'>
+            <p>{req.requirement_Name}</p>
+            <p>{req.Status}</p>
+            <p>{req.Comments}</p>
+            </div>
+            </div>
+            {(index + 1) % 2 === 0 && <br />}
+            </div>
+            </div>}
+            </>
+          );
+        });  
+        return documentsubmitted1   
+      }   
+    }
+    
     const requirements = docs?.map((docu, index) => {
-      const checkdocs =  submitted[index];
-      console.log(docu,checkdocs)
-      if(checkdocs){
-        
+      const isDisabled = disabledInputs[index] || false;
+      const valueToCheck = docu.requirementName;
+      const hassubmit = submitted1.some((item) => item.requirement_Name === valueToCheck);
       return (
-        <>
-        {<div key={index}>
-        <div className="grid_container">
-        <div className="requirelist">
-          <div className="requireprev">   
-          {<img src={images[index]} />}
-          </div>
-          <div className='userlistreq'>
-        <label htmlFor="">{docu.requirementName}</label>
-        {!checkdocs ? (<input 
-        type="file" 
-        name={`${docu.requirementName}`}  
-        onChange={(event) => handleFileChange(index, event)} />) 
-          : (<p>Already Submitted</p>)}
-        </div>
-        </div>
-        {(index + 1) % 2 === 0 && <br />}
-        </div>
-        </div>}
-        </>
-      );
-        }
-      else if(!checkdocs){
-        return (
           <>
-          {<div key={index}>
+          <div key={index}>
           <div className="grid_container">
           <div className="requirelist">
             <div className="requireprev">   
@@ -137,20 +147,22 @@ useEffect(() => {
             </div>
             <div className='userlistreq'>
           <label htmlFor="">{docu.requirementName}</label>
-          <input 
+          {!hassubmit ? (<input 
           type="file" 
-          name={`${docu.requirementName}`}  
-          onChange={(event) => handleFileChange(index, event)} />
+          name={`${docu.requirementName}`} 
+          disabled={isDisabled} 
+          onChange={(event) => handleFileChange(index, event)} />)
+          :(<p>Already Submitted</p>)}   
           </div>
           </div>
           {(index + 1) % 2 === 0 && <br />}
           </div>
-          </div>}
+          </div>
           </>
-        );
-      }
-    });
+          )
+ 
 
+    });
 return(
   <>
     <Homepage/>
@@ -170,7 +182,7 @@ return(
         <h1>Your documents</h1>
       </div>
       {submitted ? (<div className='usersbumtdoc'>
-      {documentsubmitted}
+      {ViewsubDocs()}
       </div>) : (<p>No document submitted</p>)}
     </div>
     </div>
