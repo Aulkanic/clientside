@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+.sicard {
+  font-family: 'Inter', sans-serif;
+    background-color: white;
+    margin-top: 20px;
+    border-radius: 6px;
+    height: 70vh;
+    width: 100%;
+  }
+  .container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+  }
+  .card-container{
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    border-top-right-radius: 25px;
+    border-top-left-radius: 25px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 35%;
+    height: 50vh;
+    margin: 10px;
+  }
+  .header{
+    font-style: oblique;
+    font-weight: 400;
+    background: rgb(143, 216, 143);
+    height: 13%;
+    text-align: center;
+    border-top-right-radius: 25px;
+    border-top-left-radius: 25px;
+  }
+  .sicard p{
+    text-align: center;
+    font-weight: 700;
+  }
+.content table{
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+.content table tr{
+  text-align: left;
+}
+  .button {
+    display: inline-block;
+    padding: 15px 25px;
+    font-size: 9px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    margin: 5px 0 40px 35%;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    
+  }
+  
+  .button:hover {background-color: #3e8e41}
+  
+  .button:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }

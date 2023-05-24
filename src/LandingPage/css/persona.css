@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+.Persona{
+    margin-left: 10%;
+    width: 80%;
+    height: 100vh;
+    border: none;
+}
+.Persona h2{
+   font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    text-align: left;
+    height: 50px;
+    margin: 0;
+    padding-left: 20px;
+    padding-top: 10px;
+    border: none;
+    background-color: blue;
+    color: white;
+}
+.ribbon-header {
+  background-color: blue;
+  border: none;
+  position: relative;
+  margin: 0px 0px 20px 0px;
+}
+
+.ribbon-header::before,
+.ribbon-header::after {
+  content: '';
+  position: absolute;
+  bottom: -18.5px;
+  width: 0;
+  height: 0;
+  border: 21px solid transparent;
+}
+
+.ribbon-header::before {
+  height: 40px;
+  left: -41px;
+  border-right-color: blue;
+
+}
+
+.ribbon-header::after {
+  height: 40px;
+  right: -40px;
+  border-left-color: blue;
+
+}
+.ribbon-header-text {
+  position: relative;
+  border: none;
+}
+.personad{
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+.selectgend{
+  margin-top: 15px;
+}
+.personad form{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 60%;
+    padding-bottom: 20px;
+    background:white;
+    color: black;
+    border: none;
+}
+.personfrmcon{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.frmpcard{
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    height: 60%;
+  
+}
+.btnfrmn{
+    display: flex;
+    width: 100%;
+    margin: 10px;
+    font-size: 20px;
+    align-items: center;
+    justify-content: space-around;
+}
+[type="date"] {
+  width: 100%;  
+  background: #fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png) 97% 50% no-repeat;
+  }
+  
+  [type="date"]::-webkit-inner-spin-button {
+    display: none;
+  }
+  
+  [type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+  }
+  .datein {
+    border: 1px solid #c4c4c4;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 3px 5px;
+    width: 315px;
+    height: 30px;
+    font-size: 16px;
+  }
+  .frmpcard .birthpick{
+    width: 100%;
+
+  }
+  .birthlabel{
+    font-family: 'Inter', sans-serif;
+  }

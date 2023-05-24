@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+
+.newsec{
+  display: block;
+  height: 100vh;
+}
+.newsheader{
+  font-family: 'Inter', sans-serif;
+  margin-left: 40%;
+}
+.ncard {
+    background-color: white;
+    margin-top: 20px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-bottom: 90px;
+  }
+  .newses{
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex: 1fr 0.5fr;
+    width: 60%;
+    height: 100%;
+    margin: 5px;
+    border-radius: 15px;
+    padding: 10px 5px 20px 5px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  .pictit{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    height: 100%;
+    padding: 10px;
+
+  }
+  .ndat{
+    margin: 10px 10px 0 30px;
+  }
+
+  .pictit img{
+    width: 100%;
+    margin: 0;
+    height: 90%;
+    border: 2px solid black;
+  }
+  .desdat{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .desdat h3,h6{
+    margin: 5px;
+    font-size: 12px;
+  }
+.ndes{
+  font-size: 12px;
+}
+.desdat .ntitle h3{
+    font-size: 20px;
+    font-weight: bold;
+    color: green;
+}
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }

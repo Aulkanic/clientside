@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+.Fam{
+    width: 80%;
+    margin-left: 10%;
+    height: 100%;
+}
+.Famd{
+    width: 100%;
+    height: 100%;
+}
+.Famd h2{
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    text-align: left;
+    margin: 0;
+    padding: 14px;
+    padding-left: 40px;
+    background-color: blue;
+    color: white;
+}
+.Famd .form{
+    display: flex;
+    padding-bottom: 20px;
+    flex-direction: column;
+    width: 100%;
+    background:white;
+    color: black;
+}
+.fammf{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.frmfamcard{
+
+    width: 90%;
+    height: 100%;
+}
+.frmfamcard div{
+    width: 90%;
+    display: flex;
+}
+.selecthea{
+    margin-top: 15px;
+}
+h3{
+    width: 90%;
+    display: flex;
+    text-align: left;
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-weight: 600;
+    margin: 0;
+}
+.famgnum{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.frmfamgcard{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.numsiblengthin{
+    width: 90%;
+    margin-bottom: 20px;
+}
+.frmbtnfm{
+    display: flex;
+    margin: 10px;
+    align-items: center;
+    justify-content: space-around;
+}

@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+
+.anncard {
+    font-family: 'Inter', sans-serif;
+    border-radius: 6px;
+    height: 100vh;
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 70px;
+  }
+  .announcements{
+    font-family: 'Inter', sans-serif;
+    width: 50%;
+    height: 50%;
+    margin: 5px;
+    border-radius: 15px;
+    padding: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  .annhead{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .annhead p{
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 5px;
+    margin-right: 20px;
+  }
+  .anncard .annhead img{
+    width: 70px;
+    height: 70px;
+  }
+.anncontent{
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.announcements .annto{
+  white-space: nowrap;
+  display: flex;
+}
+.announcements .annto p{
+  font-style: italic;
+  font-size: 12px;
+  margin-right: 10px;
+}
+.towhom p{
+  font-weight: bold;
+  font-size: 12px;
+
+}
+.anntitle h3{
+  margin: 0;
+}
+.anncontent{
+  margin: 10px 0 10px 0;
+}

@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+.lcontact{
+    width: 100%;
+    height: 100%;
+}
+.lcntctcon{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../../userhome/assets/background.png');
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-attachment: scroll;
+    background-size: cover;
+    filter: contrast(10px);
+}
+.contfrm{
+    margin: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 50%;
+    height: 60%;
+    background: white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+}
+.contfrm div{
+    width:100%;
+}
+.btnctnc{
+    width: 50%;
+    margin-left: 20%;
+    color: white;
+    background: green;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+}
+.cntctde{
+    width: 100%;
+    height: 40%;
+    background: #02BE36;
+}
+.cntcthder{
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+}
+.cntctinf{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+.cntctcard{
+    width: 30%;
+    padding: 10px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    background: white;
+    align-items: center;
+    justify-content: top;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.cntctcard img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}

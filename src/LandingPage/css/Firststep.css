@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+.FirstepFrm{
+    width: 80%;
+    margin-left: 10%;
+    height: 100vh;
+}
+.FFd{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+
+}
+.FFd .form{
+    display: flex;
+    padding-bottom: 20px;
+    justify-content: top;
+    flex-direction: column;
+    width: 100%;
+    background: white;
+    color: black;
+}
+.FFcon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+.FFcard{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 70%;
+    padding-top: 30px;
+}
+.FFcard div{
+    width: 90%;
+}
+.frmbtnec{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 10px;
+    width: 100%;
+    margin-top: 30px;
+}

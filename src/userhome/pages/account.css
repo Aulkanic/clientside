@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+.acard {
+    border-radius: 6px;
+    height: 100%;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-self: flex-start;
+    padding: 0;
+    padding-top: 20px;
+  }
+.profile-card{
+  position: absolute;
+  border-radius: 10px;
+  width: 50%;
+  height: 50%;
+  background: linear-gradient(-90deg, rgba(235,239,247,1) 0%, rgba(115,244,177,1) 0%, rgba(140,238,191,1) 0%, rgba(88,141,120,1) 0%, rgba(67,195,178,1) 0%, rgba(255,255,255,1) 0%, rgba(6,135,9,1) 100%);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+
+
+}
+.prof-pic{
+  width: 40%;
+  height: 100%;
+}
+
+.prof-img{
+  padding-top: 10px;
+  height: 75%;
+}
+
+.prof-img img{
+  margin-top: 30px;
+  width: 60%;
+  height: 60%;
+  border: 2px solid black;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.prof-img button{
+  margin-top: 10px;
+}
+.prof-accs{
+  width: 60%;
+  height: 100%;
+
+}
+.prof-accs table{
+  font-family: 'Inter', sans-serif;
+  padding: 10px;
+  width: 100%;
+  height: 100%;  
+  background: none;
+}
+
+.prof-accs table td{
+  background: none;
+  text-align: left;
+  margin: 0;
+}
+.prof-accs table th{
+  font-weight: 600;
+  text-align: left;
+}
+.prof-det{
+  margin: 5px;
+}
+.changeprof{
+  color: white;
+  text-decoration: none;
+}
+
+
+
+
