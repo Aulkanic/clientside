@@ -100,8 +100,9 @@ useEffect(() => {
     });
     const requirements = docs?.map((docu, index) => {
       const checkdocs =  submitted[index];
+      console.log(docu,checkdocs)
       if(checkdocs){
-        console.log(checkdocs)
+        
       return (
         <>
         {<div key={index}>
@@ -112,7 +113,7 @@ useEffect(() => {
           </div>
           <div className='userlistreq'>
         <label htmlFor="">{docu.requirementName}</label>
-        {!checkdocs.requirement_Name === docu.requirementName ? (<input 
+        {!checkdocs ? (<input 
         type="file" 
         name={`${docu.requirementName}`}  
         onChange={(event) => handleFileChange(index, event)} />) 
