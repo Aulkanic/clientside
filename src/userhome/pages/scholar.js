@@ -18,12 +18,16 @@ const [docs, setDocs] = useState([]);
 const [submitted, setSubmittedDocs] = useState([]);
 const [submitted1, setSubmittedDocs1] = useState([]);
 const [fileValues, setFileValues] = useState([]);
+const [fileValues1, setFileValues1] = useState([]);
 const [fileNames, setFileNames] = useState([]);
 const [loading, setLoading] = useState(false);
 const [loadingPage, setLoadingPage] = useState(false);
 const [images, setImages] = useState([]);
+const [images1, setImages1] = useState([]);
+const [editbtn,setEditbtn] = useState(true)
 const [disabledInputs, setDisabledInputs] = useState([]);
 const applicantNum = 1;
+
 const handleFileChange = (index, event) => {
   const files = [...fileValues];
   files[index] = event.target.files[0];
@@ -32,10 +36,23 @@ const handleFileChange = (index, event) => {
   img instanceof File ? URL.createObjectURL(img) : img)
   setImages(previmg);
   const updatedFileNames = [...fileValues];
-
-
   if (files[index]) {
     updatedFileNames[index] = files[index].name;
+  } else {
+    updatedFileNames[index] = 'none';
+  }
+  setFileNames(updatedFileNames);
+};
+const handleFileChange1 = (index, event) => {
+  const files1 = [...fileValues1];
+  files1[index] = event.target.files[0];
+  setFileValues1(files1);
+  const previmg1 = files1.map((img) =>
+  img instanceof File ? URL.createObjectURL(img) : img)
+  setImages1(previmg1);
+  const updatedFileNames = [...fileValues1];
+  if (files1[index]) {
+    updatedFileNames[index] = files1[index].name;
   } else {
     updatedFileNames[index] = 'none';
   }
@@ -45,7 +62,7 @@ const handleSubmit = (event) => {
   event.preventDefault();
   setLoading(true)
   fileValues.forEach((file, index) => {
-    console.log(index,file)
+
     const applicantNum = 1;
     const docu = docs[index];
     const formData = new FormData();
@@ -59,13 +76,41 @@ const handleSubmit = (event) => {
   })
     .then(res => {
       const updatedDisabledInputs = [...disabledInputs];
-    updatedDisabledInputs[index] = true;
-    setDisabledInputs(updatedDisabledInputs);
+      updatedDisabledInputs[index] = true;
+      setDisabledInputs(updatedDisabledInputs);
       setSubmittedDocs(res.data.DocumentSubmitted);
       setLoading(false);
     })
   });
 };
+const DeleteReq = async (reqName,event) =>{
+  const applicantNum = 1;
+  const requirement_Name = reqName;
+  setLoading(true)
+  Axios.delete(`http://localhost:3006/api/v1/requirements/${applicantNum}/${requirement_Name}`
+  )
+  .then(res => {
+    console.log(res)
+    setLoading(false)
+    setSubmittedDocs1(res.data.Document);
+  }
+   )
+  .catch(err => console.log(err));
+}
+const EditReq = async (reqName,index,event) =>{
+  const applicantNum = 1;
+  const requirement_Name = reqName;
+  setLoading(true)
+  Axios.delete(`http://localhost:3006/api/v1/requirements/Edit`
+  )
+  .then(res => {
+    console.log(res)
+    setLoading(false)
+    setSubmittedDocs1(res.data.Document);
+  }
+   )
+  .catch(err => console.log(err));
+}
 useEffect(() => {
   const fetchData = async () => {
     try {
@@ -83,7 +128,7 @@ useEffect(() => {
 
   fetchData();
 }, []);
-    function ViewsubDocs(){
+function ViewsubDocs(){
       if(submitted.length > submitted1.length){
         const documentsubmitted = submitted?.map((req, index) => {
           return (
@@ -98,6 +143,13 @@ useEffect(() => {
             <p>{req.requirement_Name}</p>
             <p>{req.Status}</p>
             <p>{req.Comments}</p>
+            <div>
+              <button>Edit</button>
+              <button onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button>
+              <input disabled={editbtn} type="file" />
+              <button disabled={editbtn}>Save</button>
+              
+            </div>
             </div>
             </div>
             {(index + 1) % 2 === 0 && <br />}
@@ -121,6 +173,13 @@ useEffect(() => {
             <p>{req.requirement_Name}</p>
             <p>{req.Status}</p>
             <p>{req.Comments}</p>
+            <div>
+            <button onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button><br />
+              <label htmlFor="">Edit</label>
+              <input type="file"  onChange={(event) => handleFileChange1(index, event)}/>
+              <button>Save</button>
+              
+            </div>
             </div>
             </div>
             {(index + 1) % 2 === 0 && <br />}
@@ -133,7 +192,7 @@ useEffect(() => {
       }   
     }
     
-    const requirements = docs?.map((docu, index) => {
+const requirements = docs?.map((docu, index) => {
       const isDisabled = disabledInputs[index] || false;
       const valueToCheck = docu.requirementName;
       const hassubmit = submitted1.some((item) => item.requirement_Name === valueToCheck);
