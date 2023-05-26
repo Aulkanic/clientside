@@ -26,6 +26,7 @@ const [images, setImages] = useState([]);
 const [images1, setImages1] = useState([]);
 const [editbtn,setEditbtn] = useState(true)
 const [disabledInputs, setDisabledInputs] = useState([]);
+const [userFiles, setUserFiles] = useState([]);
 const applicantNum = 1;
 
 const handleFileChange = (index, event) => {
@@ -79,6 +80,8 @@ const handleSubmit = (event) => {
       updatedDisabledInputs[index] = true;
       setDisabledInputs(updatedDisabledInputs);
       setSubmittedDocs(res.data.DocumentSubmitted);
+      setFileValues([]);
+      setImages([]);
       setLoading(false);
     })
   });
@@ -98,15 +101,24 @@ const DeleteReq = async (reqName,event) =>{
   .catch(err => console.log(err));
 }
 const EditReq = async (reqName,index,event) =>{
+  console.log(userFiles)
   const applicantNum = 1;
   const requirement_Name = reqName;
+  const formData = new FormData();
+    formData.append(`file`, userFiles[index]);
+    formData.append(`Reqname`, requirement_Name);
+    formData.append(`applicantNum`, applicantNum);
   setLoading(true)
-  Axios.delete(`http://localhost:3006/api/v1/requirements/Edit`
-  )
+  Axios.patch(`http://localhost:3006/api/v1/requirements/Edit`,formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
   .then(res => {
     console.log(res)
     setLoading(false)
     setSubmittedDocs1(res.data.Document);
+    setUserFiles([]);
   }
    )
   .catch(err => console.log(err));
@@ -144,15 +156,24 @@ function ViewsubDocs(){
             <p>{req.Status}</p>
             <p>{req.Comments}</p>
             <div>
-              <button>Edit</button>
+            <input
+          key={index}
+          type="file"
+          value={req[index]}
+          onChange={e => {
+            // Update the corresponding file in the state
+            const updatedFiles = [...userFiles];
+            updatedFiles[index] = e.target.files[0];
+            setUserFiles(updatedFiles);
+          }}
+        />
+        <button onClick={() =>EditReq(req.requirement_Name,index)}>Save Changes</button>
               <button onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button>
-              <input disabled={editbtn} type="file" />
-              <button disabled={editbtn}>Save</button>
               
             </div>
             </div>
             </div>
-            {(index + 1) % 2 === 0 && <br />}
+            {(index + 1) % 3 === 0 && <br />}
             </div>
             </div>}
             </>
@@ -174,15 +195,23 @@ function ViewsubDocs(){
             <p>{req.Status}</p>
             <p>{req.Comments}</p>
             <div>
+            <input
+          key={index}
+          type="file"
+          value={req[index]}
+          onChange={e => {
+            // Update the corresponding file in the state
+            const updatedFiles = [...userFiles];
+            updatedFiles[index] = e.target.files[0];
+            setUserFiles(updatedFiles);
+          }}
+        />
+        <button onClick={() =>EditReq(req.requirement_Name,index)}>Save Changes</button>
             <button onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button><br />
-              <label htmlFor="">Edit</label>
-              <input type="file"  onChange={(event) => handleFileChange1(index, event)}/>
-              <button>Save</button>
-              
             </div>
             </div>
             </div>
-            {(index + 1) % 2 === 0 && <br />}
+            {(index + 1) % 3 === 0 && <br />}
             </div>
             </div>}
             </>
@@ -191,18 +220,16 @@ function ViewsubDocs(){
         return documentsubmitted1   
       }   
     }
-    
 const requirements = docs?.map((docu, index) => {
       const isDisabled = disabledInputs[index] || false;
       const valueToCheck = docu.requirementName;
       const hassubmit = submitted1.some((item) => item.requirement_Name === valueToCheck);
       return (
           <>
-          <div key={index}>
-          <div className="grid_container">
+          <div className='reqlistcontainer' key={index}>
           <div className="requirelist">
             <div className="requireprev">   
-            {<img src={images[index]} />}
+            {images[index] ? (<img src={images[index]} alt='No Image'/>) :(<img src={Noimageprev} alt='No Image'/>)}
             </div>
             <div className='userlistreq'>
           <label htmlFor="">{docu.requirementName}</label>
@@ -214,8 +241,7 @@ const requirements = docs?.map((docu, index) => {
           :(<p>Already Submitted</p>)}   
           </div>
           </div>
-          {(index + 1) % 2 === 0 && <br />}
-          </div>
+          {(index + 1) % 4 === 0 && <br />}
           </div>
           </>
           )
@@ -227,18 +253,22 @@ return(
     <Homepage/>
     {!loadingPage && <div className="userscho">
       <div className='schousercont'>
-    <div>
+    <div className='reqheadtitle'>
     <h1>Requirements</h1>
     </div>
     {!loading && <div className="userequirements">
        {requirements}
-       <button onClick={handleSubmit}>Submit</button>
+       
     </div>}{loading && <LoopingRhombusesSpinner/>}
+    <div className='btnschoupreq'>
+    <button onClick={handleSubmit}>Submit</button>
+    </div>
+
     </div>
     <div className="userdocusub">
       <div className="userschocont">
       <div>
-        <h1>Your documents</h1>
+        <h1>Documents Submitted</h1>
       </div>
       {submitted ? (<div className='usersbumtdoc'>
       {ViewsubDocs()}
