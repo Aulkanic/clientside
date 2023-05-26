@@ -21,10 +21,10 @@ const [fileValues, setFileValues] = useState([]);
 const [fileValues1, setFileValues1] = useState([]);
 const [fileNames, setFileNames] = useState([]);
 const [loading, setLoading] = useState(false);
+const [loading1, setLoading1] = useState(false);
 const [loadingPage, setLoadingPage] = useState(false);
 const [images, setImages] = useState([]);
 const [images1, setImages1] = useState([]);
-const [editbtn,setEditbtn] = useState(true)
 const [disabledInputs, setDisabledInputs] = useState([]);
 const [userFiles, setUserFiles] = useState([]);
 const applicantNum = 1;
@@ -61,9 +61,10 @@ const handleFileChange1 = (index, event) => {
 };
 const handleSubmit = (event) => {
   event.preventDefault();
-  setLoading(true)
-  fileValues.forEach((file, index) => {
 
+    setLoading(true)
+    console.log(fileValues)
+  fileValues.forEach((file, index) => {
     const applicantNum = 1;
     const docu = docs[index];
     const formData = new FormData();
@@ -108,7 +109,7 @@ const EditReq = async (reqName,index,event) =>{
     formData.append(`file`, userFiles[index]);
     formData.append(`Reqname`, requirement_Name);
     formData.append(`applicantNum`, applicantNum);
-  setLoading(true)
+  setLoading1(true)
   Axios.patch(`http://localhost:3006/api/v1/requirements/Edit`,formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
@@ -116,8 +117,8 @@ const EditReq = async (reqName,index,event) =>{
   })
   .then(res => {
     console.log(res)
-    setLoading(false)
-    setSubmittedDocs1(res.data.Document);
+    setLoading1(false)
+    setSubmittedDocs(res.data.Document);
     setUserFiles([]);
   }
    )
@@ -141,8 +142,10 @@ useEffect(() => {
   fetchData();
 }, []);
 function ViewsubDocs(){
-      if(submitted.length > submitted1.length){
+      if(submitted.length > submitted.length){
+       
         const documentsubmitted = submitted?.map((req, index) => {
+          console.log(req)
           return (
             <>
             {req.File !== 'None' && <div key={index}>
@@ -168,7 +171,7 @@ function ViewsubDocs(){
           }}
         />
         <button onClick={() =>EditReq(req.requirement_Name,index)}>Save Changes</button>
-              <button onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button>
+        <button onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button>
               
             </div>
             </div>
@@ -182,6 +185,7 @@ function ViewsubDocs(){
         return documentsubmitted  
       }else{
         const documentsubmitted1 = submitted1?.map((req, index) => {
+          console.log(req)
           return (
             <>
             {req.File !== 'None' && <div key={index}>
@@ -259,7 +263,12 @@ return(
     {!loading && <div className="userequirements">
        {requirements}
        
-    </div>}{loading && <LoopingRhombusesSpinner/>}
+    </div>}{loading && 
+    <div className="userequirements">
+      <div className="looping">
+      <LoopingRhombusesSpinner/>
+        </div></div>
+    }
     <div className='btnschoupreq'>
     <button onClick={handleSubmit}>Submit</button>
     </div>
@@ -270,9 +279,17 @@ return(
       <div>
         <h1>Documents Submitted</h1>
       </div>
-      {submitted ? (<div className='usersbumtdoc'>
-      {ViewsubDocs()}
-      </div>) : (<p>No document submitted</p>)}
+      {!loading1 ? (<div className='usersbumtdoc'>
+      {submitted1.length > 0 ? (ViewsubDocs()) : 
+      (<div className="docusibmitted">
+        <div className='Nodocupost'> 
+        <p>No Document Submitted</p>
+        </div>
+        </div>)}
+      </div>) : (<div className="usersbumtdoc">
+      <div className="looping">
+      <LoopingRhombusesSpinner/>
+        </div></div>)}
     </div>
     </div>
     </div>}{loadingPage && <LoopingRhombusesSpinner/>}

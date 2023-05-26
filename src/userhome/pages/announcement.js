@@ -17,11 +17,11 @@ const Announcement = () => {
         }
       }
       ).then((response) => {
-      setAnnounced(response.data.Announce);
+        const announce = response.data.Announce
+      setAnnounced(announce.reverse());
     });
   }, []);
   const announced = anno.map((data) => {
-    console.log(data)
     return (
       <div className="announcements">
       <div className='anntitle'><h3>{data.title}</h3></div>
@@ -31,16 +31,17 @@ const Announcement = () => {
       </div>
     );
   });
-  if (!anno) return null;
-
   return (
     <>
         <Homepage/>
     <div className='anncard'>
       <div className='annhead'><p>ANNOUNCEMENT</p><span><img src={Announceimg} alt="" /></span></div>
-      <div className='anncontent'>
+      {anno.length > 0 ? (<div className='anncontent'>
       {announced}
-      </div>
+      </div>) : (
+      <div className='anncontent'>
+        <p>No Announcement</p>
+      </div>)}
     </div>
     </>
   )

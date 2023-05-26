@@ -23,11 +23,12 @@ const News = () => {
       }
       ).then((response) => {
         console.log(response)
-      setPost(response.data.News);
+        const news = response.data.News
+      setPost(news.reverse());
     });
   }, []);
   
-
+console.log(post)
   const newsList = post?.map((contact) => {
 
     return (
@@ -43,18 +44,18 @@ const News = () => {
     </div>
     );
   });
-  
-
-  if (!post) return null;
-
+console.log(post)
   return (
     <>
         <Homepage/>
   <div className='newsec'>
     <h1 className='newsheader'>MARISKO NEWS</h1>
-    <div className='ncard'>
+    {post.length > 0 ? (<div className='ncard'>
         {newsList}
-    </div>
+    </div>) : (
+    <div className='ncard'>
+      <p className='NoNews'>No News Available</p>
+    </div>)}
   </div>
     </>
   )

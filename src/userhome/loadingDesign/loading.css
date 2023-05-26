@@ -5,15 +5,13 @@
     display: flex;
     justify-content: center;
     text-align: center;
-    padding: 0;
-    padding-top: 20px;
 }
 .loadingcontainer{
     display: flex;
-    padding-top: 150px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
 }
 .loadingcontent{
     display: flex;
