@@ -7,11 +7,13 @@ import React from 'react'
 
 const RequireAuth = () => {
     const token = useSelector(selectCurrentToken)
-    const location = useLocation()
+    const location = useLocation();
+    const isloggin = localStorage.getItem('LoggedIn');
+    console.log(isloggin)
   return (
-    token
+    isloggin === 'true'
     ? <Outlet/>
-    :        swal('Please Login your Account to continue..') && <Navigate to='/login' state={{ from: location}} replace />
+    :        swal('Please Login to your Account to continue..') && <Navigate to='/login' state={{ from: location}} replace />
   )
 }
 

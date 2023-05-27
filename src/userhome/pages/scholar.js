@@ -59,9 +59,8 @@ const handleFileChange1 = (index, event) => {
   }
   setFileNames(updatedFileNames);
 };
-const handleSubmit = (event) => {
+const handleSubmit = async (event) => {
   event.preventDefault();
-
     setLoading(true)
     console.log(fileValues)
   fileValues.forEach((file, index) => {
@@ -80,9 +79,10 @@ const handleSubmit = (event) => {
       const updatedDisabledInputs = [...disabledInputs];
       updatedDisabledInputs[index] = true;
       setDisabledInputs(updatedDisabledInputs);
-      setSubmittedDocs(res.data.DocumentSubmitted);
+      setSubmittedDocs1(res.data.DocumentSubmitted);
       setFileValues([]);
       setImages([]);
+      window.location.reload();   
       setLoading(false);
     })
   });
@@ -116,10 +116,10 @@ const EditReq = async (reqName,index,event) =>{
     }
   })
   .then(res => {
-    console.log(res)
-    setLoading1(false)
-    setSubmittedDocs(res.data.Document);
+    setSubmittedDocs1(res.data.Document);
     setUserFiles([]);
+    window.location.reload();   
+    setLoading1(false)
   }
    )
   .catch(err => console.log(err));
@@ -141,11 +141,11 @@ useEffect(() => {
 
   fetchData();
 }, []);
-function ViewsubDocs(){
+ function ViewsubDocs(){
       if(submitted.length > submitted.length){
        
         const documentsubmitted = submitted?.map((req, index) => {
-          console.log(req)
+
           return (
             <>
             {req.File !== 'None' && <div key={index}>
@@ -185,7 +185,6 @@ function ViewsubDocs(){
         return documentsubmitted  
       }else{
         const documentsubmitted1 = submitted1?.map((req, index) => {
-          console.log(req)
           return (
             <>
             {req.File !== 'None' && <div key={index}>
@@ -262,7 +261,6 @@ return(
     </div>
     {!loading && <div className="userequirements">
        {requirements}
-       
     </div>}{loading && 
     <div className="userequirements">
       <div className="looping">

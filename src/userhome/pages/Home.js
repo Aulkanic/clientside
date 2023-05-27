@@ -5,9 +5,9 @@ import { useSelector } from 'react-redux'
 import { selectCurrentUser, selectCurrentToken } from '../../features/authenticate/authSlice'
 import { Link } from 'react-router-dom'
 const Home = () => {
-    const user = useSelector(selectCurrentUser)
-    const token = useSelector(selectCurrentToken)
-    const tokenAbbr = `${token.slice(0,9)}...`
+    // const user = useSelector(selectCurrentUser)
+    // const token = useSelector(selectCurrentToken)
+    // const tokenAbbr = `${token.slice(0,9)}...`
 
     const content = (
       <>
