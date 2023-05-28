@@ -4,6 +4,7 @@ import DeleteBtn from '../Button/deletebutton'
 import Button from '@mui/material/Button';
 import Homepage from '../components/Homepage'
 import Axios from 'axios'
+import { UploadingDocs, ListofReq, ListofSub, EditSub, DeleteSub } from '../../Api/request';
 import swal from 'sweetalert';
 import LoopingRhombusesSpinner from '../loadingDesign/loading'
 import { useNavigate } from 'react-router-dom'
@@ -62,7 +63,6 @@ const handleFileChange1 = (index, event) => {
 const handleSubmit = (event) => {
   event.preventDefault();
     setLoading(true)
-    console.log(fileValues)
   fileValues.forEach((file, index) => {
     const applicantNum = 1;
     const docu = docs[index];
@@ -70,12 +70,7 @@ const handleSubmit = (event) => {
     formData.append(`file`, file);
     formData.append(`Reqname`, docu.requirementName);
     formData.append(`applicantNum`, applicantNum);
-    Axios.post('http://localhost:3006/api/v1/requirements/uploadRequirement',formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  })
-    .then(res => {
+    UploadingDocs.UPLOAD_DOCS(formData).then(res => {
       const updatedDisabledInputs = [...disabledInputs];
       updatedDisabledInputs[index] = true;
       setDisabledInputs(updatedDisabledInputs);
@@ -89,12 +84,12 @@ const handleSubmit = (event) => {
 const DeleteReq = async (reqName,event) =>{
   const applicantNum = 1;
   const requirement_Name = reqName;
-  setLoading(true)
-  Axios.delete(`http://localhost:3006/api/v1/requirements/${applicantNum}/${requirement_Name}`
-  )
+  console.log(applicantNum,requirement_Name)
+  setLoading1(true)
+  DeleteSub.DELETE_SUB({applicantNum,requirement_Name})
   .then(res => {
     console.log(res)
-    setLoading(false)
+    setLoading1(false)
     setSubmittedDocs1(res.data.Document);
   }
    )
@@ -109,11 +104,7 @@ const EditReq = async (reqName,index,event) =>{
     formData.append(`Reqname`, requirement_Name);
     formData.append(`applicantNum`, applicantNum);
   setLoading1(true)
-  Axios.patch(`http://localhost:3006/api/v1/requirements/Edit`,formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  })
+  EditSub.EDIT_SUB(formData)
   .then(res => {
     setSubmittedDocs1(res.data.Document);
     setUserFiles([]);
@@ -127,10 +118,9 @@ useEffect(() => {
   const fetchData = async () => {
     try {
       const response = await Promise.all([
-        Axios.get(`http://localhost:3006/api/v1/documents/Requirements`),
-        Axios.get(`http://localhost:3006/api/v1/requirements/${applicantNum}`)
+        ListofReq.FETCH_REQUIREMENTS(),
+        ListofSub.FETCH_SUB(applicantNum)
       ]);
-      console.log(response[0].data)
       setDocs(response[0].data.Requirements);
       setSubmittedDocs1(response[1].data.Document);
       

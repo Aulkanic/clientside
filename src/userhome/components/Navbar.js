@@ -23,10 +23,9 @@ const Navbar = () => {
       });
     },[]);
     const profile = picture?.map((data) =>{
-      console.log(data)
       return (
         <>
-    <div className='scho-info'>
+
                 <div className='profile'>
                  <img src={data.profile} alt="" />
                 </div>
@@ -37,7 +36,6 @@ const Navbar = () => {
                         <small>STATUS:<span className='stat'>{data.status}</span></small>
                     </div>
                 </div>
-            </div>
         </>
       );
     });
@@ -47,7 +45,9 @@ const Navbar = () => {
   }
   return (
     <React.Fragment>
+    <div className='scho-info'>
     {profile}
+    </div>
 <div className='navbar'>
 
             <div className='navsec'>

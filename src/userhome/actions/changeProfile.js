@@ -9,9 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 function ChangeProfile() {
   
   const data = localStorage.getItem('ApplicantNum');
-  const value = JSON.parse(data);
-    var applicantNum = value.ApplicantID;
-    console.log(applicantNum)
+  const applicantNum = JSON.parse(data);
     const [userprof, setProfile] = useState('');
     const [loading, setLoading] = useState(false);
     const [preview, setPreview] = useState();
@@ -19,7 +17,9 @@ function ChangeProfile() {
 function ChangeProf(event){
     event.preventDefault();
     setLoading(true)
-    ChangingProfile.CHANGE_PROFILE({userprof,applicantNum})
+    const data = {userprof,applicantNum};
+    console.log(data)
+    ChangingProfile.CHANGE_PROFILE(data)
     .then(res => {
       console.log(res)
       swal({

@@ -13,6 +13,12 @@ const Endpoints = {
     FETCH_PERSONALINFO:'personalinfo/PA/',
     FETCH_PROFILEBYUSER: 'userProf/getPROFILE/',
     CREATE_REGISTRY: 'user/create',
+    FETCH_TRIVIA: 'trivia/TriviaoftheDay',
+    UPLOAD_REQUIREMENTS: 'requirements/uploadRequirement',
+    LIST_REQUIREMENTS: 'documents/Requirements',
+    FETCH_SUBMITTED: 'requirements/',
+    EDIT_SUBMITTED: 'requirements/Edit',
+    DELETE_SUBMITTED: 'requirements/Delete',
 }
 
 export default Endpoints

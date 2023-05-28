@@ -12,16 +12,16 @@ const Account = () => {
   const [post, setPost] = useState([]);
   const [picture, setProfile] = React.useState([]);
   const data = localStorage.getItem('ApplicantNum');
-  const value = JSON.parse(data);
+  const data1 = localStorage.getItem('ApplicantionNumber');
 
   useEffect(() => {
-    FetchingPersonal.FETCH_PERSONA(value).then((response) => {
+    FetchingPersonal.FETCH_PERSONA(data).then((response) => {
       setPost(response.data); 
     });
   });
 
   useEffect(() => {
-    FetchingProfileUser.FETCH_PROFILEUSER(value).then((response) => {
+    FetchingProfileUser.FETCH_PROFILEUSER(data).then((response) => {
       console.log(response)
       setProfile(response.data.Profile);   
       
@@ -35,6 +35,21 @@ const Account = () => {
       </>
     );
   });
+  const details = picture?.map((data) =>{
+    return (
+      <>
+        <th>Status</th>
+        <td>{data.status}</td>
+      </>
+    )
+  })
+  const email = picture?.map((data) =>{
+    return (
+      <>
+        <p><strong>Email:</strong>{data.email}</p>
+      </>
+    )
+  })
   return (
     <>
 
@@ -51,7 +66,7 @@ const Account = () => {
           </div>
           <div className='prof-det'>
             <div className='prof-email'>
-              <p><strong>Email:</strong>{value.Email}</p>
+              {email}
             </div>
             <div className='prof-password'>
              <Link to='/ChangePassword'> <button>Change Password</button></Link>
@@ -62,7 +77,7 @@ const Account = () => {
           <table>
           <tr>
             <th>Application Number</th>
-            <td>{value.ApplicationNumber}</td>
+            <td>{data1}</td>
             </tr>
             <tr>
             <th>Name</th>
@@ -81,8 +96,7 @@ const Account = () => {
             <td>{post.Contact}</td>
             </tr>
             <tr>
-            <th>Status</th>
-            <td>Pre-Approved</td>
+            {details}
             </tr>
           </table>
         </div>

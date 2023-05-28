@@ -76,9 +76,8 @@ function handleSubmitReg(event){
       console.log(errors)
       return;
     }
-    const data = {fname,lname,mname,email,password};
     setLoading(true)
-    CreatingRegistry.CREATE_REGISTRY(data)
+    CreatingRegistry.CREATE_REGISTRY({fname,lname,mname,email,password})
     .then(res => {
       console.log(res)
       if(res.data.message === 'Created'){

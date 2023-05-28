@@ -1,16 +1,15 @@
-import axios from "axios";
+import { FetchingTrivia } from "../../Api/request";
 import React from "react";
 import './trivia.css'
 import Homepage from '../components/Homepage'
-const baseURL = "http://localhost:3006/api/v1/trivia/TriviaoftheDay";
 
 export default function Trivia() {
   const [post, setPost] = React.useState([]);
 
   React.useEffect(() => {
-    axios.get(baseURL).then((response) => {
-      console.log(response.data.Trivias)
-      setPost(response.data.Trivias);
+    FetchingTrivia.FETCH_TRIVIA().then((response) => {
+      const trivia = response.data.Trivias;
+      setPost(trivia.reverse());
     });
   }, []);
 console.log(post)
