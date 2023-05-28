@@ -8,6 +8,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { FormHelperText } from '@mui/material';
+import { ScholarCategory} from '../../Api/request.js'
 import axios from "axios";
 import '../css/Firststep.css'
 function Firststep() {
@@ -16,15 +17,8 @@ function Firststep() {
   const [scholarprog, setScholarProg] = useState([]);
 
   React.useEffect(() => {
-    axios.get(`http://localhost:3006/api/v1/scholar/schoCat`,
-      {
-        responseType: 'json',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      }
-      ).then((response) => {
+    ScholarCategory.ScholarshipProgram()
+    .then((response) => {
         console.log(response)
       setScholarProg(response.data.SchoCat);
     });

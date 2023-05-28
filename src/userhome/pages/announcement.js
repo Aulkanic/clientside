@@ -3,20 +3,12 @@ import './announcement.css'
 import axios from 'axios'
 import Announceimg from '../assets/announce.png'
 import Homepage from '../components/Homepage'
-const baseURL = "http://localhost:3006/api/v1/announce/Announced";
+import { FetchingAnnouncement } from '../../Api/request'
 const Announcement = () => {
   const [anno, setAnnounced] = React.useState([]);
 
   React.useEffect(() => {
-    axios.get(baseURL,
-      {
-        responseType: 'json',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      }
-      ).then((response) => {
+    FetchingAnnouncement.FETCH_ANNOUNCEMENT().then((response) => {
         const announce = response.data.Announce
       setAnnounced(announce.reverse());
     });

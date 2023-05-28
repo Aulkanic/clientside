@@ -3,6 +3,7 @@ import Homepage from '../components/Homepage'
 import './changeProfile.css'
 import Axios from 'axios'
 import swal from 'sweetalert';
+import { ChangingProfile } from '../../Api/request';
 import LoopingRhombusesSpinner from '../loadingDesign/loading';
 import { Link, useNavigate } from 'react-router-dom';
 function ChangeProfile() {
@@ -18,13 +19,7 @@ function ChangeProfile() {
 function ChangeProf(event){
     event.preventDefault();
     setLoading(true)
-    Axios.patch('http://localhost:3006/api/v1/userProf/profile',{userprof,applicantNum},
-    {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-      }
-    )
+    ChangingProfile.CHANGE_PROFILE({userprof,applicantNum})
     .then(res => {
       console.log(res)
       swal({

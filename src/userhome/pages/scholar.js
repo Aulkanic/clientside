@@ -59,7 +59,7 @@ const handleFileChange1 = (index, event) => {
   }
   setFileNames(updatedFileNames);
 };
-const handleSubmit = async (event) => {
+const handleSubmit = (event) => {
   event.preventDefault();
     setLoading(true)
     console.log(fileValues)
@@ -81,8 +81,7 @@ const handleSubmit = async (event) => {
       setDisabledInputs(updatedDisabledInputs);
       setSubmittedDocs1(res.data.DocumentSubmitted);
       setFileValues([]);
-      setImages([]);
-      window.location.reload();   
+      setImages([]);   
       setLoading(false);
     })
   });
@@ -131,6 +130,7 @@ useEffect(() => {
         Axios.get(`http://localhost:3006/api/v1/documents/Requirements`),
         Axios.get(`http://localhost:3006/api/v1/requirements/${applicantNum}`)
       ]);
+      console.log(response[0].data)
       setDocs(response[0].data.Requirements);
       setSubmittedDocs1(response[1].data.Document);
       

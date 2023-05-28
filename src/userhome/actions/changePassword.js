@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Axios from 'axios'
 import Homepage from '../components/Homepage';
 import swal from 'sweetalert';
+import { Change_Password } from '../../Api/request'
 import './changePassword.css'
 import { Link, useNavigate } from 'react-router-dom';
 import LoopingRhombusesSpinner from '../loadingDesign/loading';
@@ -18,13 +19,7 @@ const ChangePassword = () => {
 function ChangeProf(event){
     event.preventDefault();
     
-    Axios.patch('http://localhost:3006/api/v1/userProf/ChangePassword',{email,currentpassword,newpassword,repass},
-    {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-      }
-    )
+    Change_Password.CHANGE_PASSWORD()
     .then(res => {
         console.log(res.data)
         if(res.data.success === 0){

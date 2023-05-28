@@ -9,6 +9,7 @@ import Municipal from '../assets/municipal.jpg'
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import swal from 'sweetalert';
+import {loginUserAcc} from '../../Api/request'
 import axios from 'axios'
 import LoopingRhombusesSpinner from '../loadingDesign/loading'
 import Lheader from '../../LandingPage/components/header'
@@ -21,6 +22,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const navigate = useNavigate();
+    const [errors, setErrors] = useState({});
     const [login, { isLoading }] = useLoginMutation()
     const dispatch = useDispatch()
 
@@ -33,28 +35,39 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        try {
-            const userData = await login({email, password}).unwrap()
-            localStorage.setItem('ApplicantNum', JSON.stringify(userData));
-            localStorage.setItem('LoggedIn', "true");
-            dispatch(setCredentials({...userData, email}))
-            setEmail('')
-            setPassword('')
-            navigate('/home');
-            swal('Successfully Login');
-        } catch (err) {
-            if(!err?.response){
-                setErrMsg('No server Response')
-            }else if(err.response?.status === 400){
-                setErrMsg('Missing Email or Password');
-            }else if(err.response?.status === 401){
-                setErrMsg('Unauthorized');
-            }else {
-                setErrMsg('Login Failed')
-            }
-    
+        const errors = {};
+        if (!email) {
+          errors.fname = "First Name is required";
         }
-    }
+        if (!password) {
+          errors.lname = "First Name is required";
+        }
+        console.log(Object.keys(errors).length)
+        if (Object.keys(errors).length > 0) {
+          setErrors(errors);
+          console.log(errors)
+          return;
+        }
+        loginUserAcc.USER_LOGIN({email,password})
+        .then(res => {
+          console.log(res)
+          if(res.data.message === 'login'){
+            localStorage.setItem('LoggedIn',true);
+            localStorage.setItem('ApplicantNum',res.data.ApplicantID);
+            localStorage.setItem('ApplicantionNumber',res.data.ApplicationNumber);
+            swal('Login Success');
+            navigate('/home');
+          
+          }else{
+            localStorage.setItem('LoggedIn',false);
+            swal(res.data.message);
+            navigate('/login')
+          }
+      
+        }
+         )
+        .catch(err => console.log(err));
+      }
     
     const handlerEmailInput = (e) => setEmail(e.target.value)
     const handlerPasswordInput = (e) => setPassword(e.target.value)

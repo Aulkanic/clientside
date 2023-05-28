@@ -1,6 +1,7 @@
 import React from 'react'
 import LHeader from '../components/header'
 import '../css/schoCategory.css'
+import { ScholarCategory } from '../../Api/request.js'
 import axios from "axios";
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
@@ -9,20 +10,11 @@ function SchoCategory() {
   const [post, setPost] = React.useState([]);
   
   React.useEffect(() => {
-    axios.get(`http://localhost:3006/api/v1/scholar/schoCat`,
-      {
-        responseType: 'json',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      }
-      ).then((response) => {
-        console.log(response)
-      setPost(response.data.SchoCat);
-    });
+    ScholarCategory.ScholarshipProgram().then((res) =>{
+      console.log(res.data)
+      setPost(res.data.SchoCat);
+    })
   }, []);
-  
 
   const schoCat = post?.map((contact, index) => {
     return (

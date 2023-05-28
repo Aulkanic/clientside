@@ -9,6 +9,8 @@ import './register.css'
 import TextField from '@mui/material/TextField';
 import { useContext } from 'react';
 import Button from '@mui/material/Button';
+import { CreatingRegistry } from '../../Api/request';
+import LoopingRhombusesSpinner from '../loadingDesign/loading';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -17,6 +19,7 @@ const Register = () => {
     const [mname, setmname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading,setLoading] = useState(false)
     const [errors, setErrors] = useState({});
 
 function handleSubmitReg(event){
@@ -73,16 +76,20 @@ function handleSubmitReg(event){
       console.log(errors)
       return;
     }
-    Axios.post('http://localhost:3006/api/v1/user/create',{fname,lname,mname,email,password})
+    const data = {fname,lname,mname,email,password};
+    setLoading(true)
+    CreatingRegistry.CREATE_REGISTRY(data)
     .then(res => {
       console.log(res)
       if(res.data.message === 'Created'){
         swal(res.data.message);
         navigate('/ApplicationForm');
         localStorage.setItem('ApplicationNumber', res.data.data.applicantNum)
+        setLoading(false)
       
       }else{
         swal(res.data.message);
+        setLoading(false)
         navigate('/register')
       }
 
@@ -93,7 +100,7 @@ function handleSubmitReg(event){
   return (
     <>
     <Lheader/>
-      <div className="registration">
+      {!loading && <div className="registration">
         <div className="registrationcon">
           <div className="registrationimg">
             <div className="sloganreg">
@@ -175,7 +182,7 @@ function handleSubmitReg(event){
               </form>
           </div>
         </div>
-      </div>
+      </div>}{loading && <><LoopingRhombusesSpinner/></>}
     </>
   )
 }

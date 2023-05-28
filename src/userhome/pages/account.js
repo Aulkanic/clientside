@@ -3,7 +3,7 @@ import './account.css'
 import Homepage from '../components/Homepage'
 import Image from '../assets/default-profile-picture1.jpg'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import { FetchingPersonal,FetchingProfileUser } from '../../Api/request'
 import {useState, useEffect } from 'react'
 
 
@@ -13,32 +13,16 @@ const Account = () => {
   const [picture, setProfile] = React.useState([]);
   const data = localStorage.getItem('ApplicantNum');
   const value = JSON.parse(data);
-  const baseURL = `http://localhost:3006/api/v1/personalinfo/PA/${value.ApplicantID}`;
-  
+
   useEffect(() => {
-    axios.get(baseURL,
-      {
-        responseType: 'json',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      }
-      ).then((response) => {
+    FetchingPersonal.FETCH_PERSONA(value).then((response) => {
       setPost(response.data); 
     });
   });
 
   useEffect(() => {
-    axios.get(`http://localhost:3006/api/v1/userProf/getPROFILE/${value.ApplicantID}`,
-      {
-        responseType: 'json',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      }
-      ).then((response) => {
+    FetchingProfileUser.FETCH_PROFILEUSER(value).then((response) => {
+      console.log(response)
       setProfile(response.data.Profile);   
       
     });
