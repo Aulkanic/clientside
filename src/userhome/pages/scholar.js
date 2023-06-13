@@ -28,7 +28,7 @@ const [images, setImages] = useState([]);
 const [images1, setImages1] = useState([]);
 const [disabledInputs, setDisabledInputs] = useState([]);
 const [userFiles, setUserFiles] = useState([]);
-const applicantNum = 1;
+const applicantNum = localStorage.getItem('ApplicantNum');
 
 const handleFileChange = (index, event) => {
   const files = [...fileValues];
@@ -64,7 +64,7 @@ const handleSubmit = (event) => {
   event.preventDefault();
     setLoading(true)
   fileValues.forEach((file, index) => {
-    const applicantNum = 1;
+    const applicantNum = localStorage.getItem('ApplicantNum');
     const docu = docs[index];
     const formData = new FormData();
     formData.append(`file`, file);
@@ -82,11 +82,13 @@ const handleSubmit = (event) => {
   });
 };
 const DeleteReq = async (reqName,event) =>{
-  const applicantNum = 1;
+  const id = localStorage.getItem('ApplicantNum');
   const requirement_Name = reqName;
-  console.log(applicantNum,requirement_Name)
+  const formData = new FormData();
+  formData.append('id', id);
+  formData.append('requirement_Name', requirement_Name);
   setLoading1(true)
-  DeleteSub.DELETE_SUB({applicantNum,requirement_Name})
+  DeleteSub.DELETE_SUB(formData)
   .then(res => {
     console.log(res)
     setLoading1(false)
@@ -97,8 +99,9 @@ const DeleteReq = async (reqName,event) =>{
 }
 const EditReq = async (reqName,index,event) =>{
   console.log(userFiles)
-  const applicantNum = 1;
+  const applicantNum = localStorage.getItem('ApplicantNum');
   const requirement_Name = reqName;
+  console.log(userFiles[index],requirement_Name,applicantNum)
   const formData = new FormData();
     formData.append(`file`, userFiles[index]);
     formData.append(`Reqname`, requirement_Name);

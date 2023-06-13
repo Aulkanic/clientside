@@ -10,8 +10,7 @@ const Navbar = () => {
 
     const data = localStorage.getItem('ApplicantNum');
     const value = JSON.parse(data);
-    const data1 = localStorage.getItem('ApplicationNumber');
-    const value1 = JSON.parse(data1);
+    const data1 = localStorage.getItem('ApplicantionNumber');
     const [picture, setProfile] = React.useState([]);
     const [loading,Setloading] = useState(false);
 
@@ -32,7 +31,7 @@ const Navbar = () => {
                 <div className='info'>
                     <div className='details'>
                         <strong>Name:{data.Name}</strong><br />
-                        <small>Application Number:{value1}</small><br />
+                        <small>Application Number:{data1}</small><br />
                         <small>STATUS:<span className='stat'>{data.status}</span></small>
                     </div>
                 </div>

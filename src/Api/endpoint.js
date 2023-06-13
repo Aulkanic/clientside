@@ -10,15 +10,22 @@ const Endpoints = {
     LOGIN_USER:"user/login",
     CHANGE_PROFILE:'userProf/profile',
     FETCH_ANNOUNCEMENTS:'announce/Announced',
+    CREATE_APPFORM:'personalinfo/create',
     FETCH_PERSONALINFO:'personalinfo/PA/',
     FETCH_PROFILEBYUSER: 'userProf/getPROFILE/',
     CREATE_REGISTRY: 'user/create',
+    FETCH_USER:'user/',
     FETCH_TRIVIA: 'trivia/TriviaoftheDay',
     UPLOAD_REQUIREMENTS: 'requirements/uploadRequirement',
     LIST_REQUIREMENTS: 'documents/Requirements',
     FETCH_SUBMITTED: 'requirements/',
     EDIT_SUBMITTED: 'requirements/Edit',
     DELETE_SUBMITTED: 'requirements/Delete',
+    FETCH_FAMLIST: 'personalinfo/',
+    FETCH_APPLICANTSINFO: 'personalinfo/ApplicantFdetails/',
+    REGSITRY_OTP: 'OTP/RegistryOtp',
+    RESEND_OTP: 'OTP/ResendOtp',
+    VALIDATE_OTP: 'OTP/ValidateOtp',
 }
 
 export default Endpoints

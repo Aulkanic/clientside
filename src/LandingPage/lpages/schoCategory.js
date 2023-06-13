@@ -26,7 +26,7 @@ function SchoCategory() {
       <div className="schoDet">
         <div className='ntitle'><h4>{contact.name}</h4></div>
         <div className='ndate'><h6>{contact.description}</h6></div>
-        {contact.status === 'open' ? (<Button variant="contained"><Link className='linkingscho' to='/Scho1' >{contact.status}</Link></Button>) :
+        {contact.status === 'open' || contact.status === 'Open' ? (<Button variant="contained"><Link className='linkingscho' to='/Scho1' >{contact.status}</Link></Button>) :
           (<Button sx={{color:'red'}} variant="contained" disabled>{contact.status}</Button>)}
       </div>
     </div>

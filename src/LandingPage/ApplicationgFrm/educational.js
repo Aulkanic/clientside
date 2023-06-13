@@ -10,6 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import swal from 'sweetalert';
 import Axios from 'axios'
 import { FormHelperText } from '@mui/material';
+import { ApplyForm } from '../../Api/request';
 import '../css/educational.css'
 import { useNavigate } from 'react-router-dom';
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading';
@@ -235,7 +236,7 @@ function Educational() {
           return;
         }
       setLoading(true)
-      Axios.post('http://localhost:3006/api/v1/personalinfo/create',{
+      ApplyForm.CREATE_APPINFO({
         applicantNum,
         address,
         age,
@@ -288,8 +289,7 @@ function Educational() {
         scholarID,
         typeSchool,
         wereLive
-        },
-      )
+        })
       .then(res => {
           console.log(res.data)
           if(res.data.success === 1){
@@ -523,15 +523,11 @@ function Educational() {
                 label="General Weighted Average"
                 onChange={(e) =>setUserData({...userData,"gwa" : e.target.value})}
               >
-                <MenuItem value={'96-100 or 1.00'}>96-100 or 1.00</MenuItem>
-                <MenuItem value={'97-95 or 1.25'}>97-95 or 1.25</MenuItem>
-                <MenuItem value={'92-94 or 1.50'}>92-94 or 1.50</MenuItem>
-                <MenuItem value={'89-91 or 1.75'}>89-91 or 1.75</MenuItem>
-                <MenuItem value={'86-88 or 2.00'}>86-88 or 2.00</MenuItem>
-                <MenuItem value={'83-85 or 2.25'}>83-85 or 2.25</MenuItem>
+                <MenuItem value={'90-100 or 1.00'}>90-100 or 1.00</MenuItem>
+                <MenuItem value={'91-95 or 1.25'}>91-95 or 1.25</MenuItem>
+                <MenuItem value={'86-90 or 2.00'}>86-90 or 2.00</MenuItem>
+                <MenuItem value={'81-85 or 2.25'}>81-85 or 2.25</MenuItem>
                 <MenuItem value={'80-82 or 2.50'}>80-82 or 2.50</MenuItem>
-                <MenuItem value={'77-79 or 2.75'}>77-79 or 2.75</MenuItem>
-                <MenuItem value={'75-76 or 3.00'}>75-76 or 3.00</MenuItem>
               </Select>
               {errors && <FormHelperText sx={{color: 'red'}}>{errors.gwa}</FormHelperText>}
             </FormControl></div>

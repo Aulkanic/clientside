@@ -41,6 +41,9 @@ export const CreatingRegistry = {
 export const FetchingTrivia = {
     FETCH_TRIVIA: () => axiosInstance.get(Endpoints.FETCH_TRIVIA)
 }
+export const FetchingUser = {
+    FETCH_USER: () => axiosInstance.get(Endpoints.FETCH_USER)
+}
 export const UploadingDocs = {
     UPLOAD_DOCS: (data) => axiosInstance.post(Endpoints.UPLOAD_REQUIREMENTS,data)
 }
@@ -54,5 +57,23 @@ export const EditSub = {
     EDIT_SUB: (data) => axiosInstance.patch(Endpoints.EDIT_SUBMITTED,data)
 }
 export const DeleteSub = {
-    DELETE_SUB: (data) => axiosInstance.delete(Endpoints.DELETE_SUBMITTED,data)
+    DELETE_SUB: (data) => axiosInstance.post(Endpoints.DELETE_SUBMITTED,data)
+}
+export const ApplyForm = {
+    CREATE_APPINFO: (data) => axiosInstance.post(Endpoints.CREATE_APPFORM,data)
+}
+export const FetchingFamily = {
+    FETCH_FAM: () => axiosInstance.get(Endpoints.FETCH_FAMLIST)
+}
+export const FetchingApplicantsInfo = {
+    FETCH_INFO: (data) => axiosInstance.get(Endpoints.FETCH_APPLICANTSINFO+data)
+}
+export const RegistryOtp = {
+    REGISTRY_OTP: (data) => axiosInstance.post(Endpoints.REGSITRY_OTP,data)
+}
+export const ResendOtp = {
+    RESEND_OTP: (data) => axiosInstance.post(Endpoints.RESEND_OTP,data)
+}
+export const ValidateOtp = {
+    VALIDATE_OTP: (data) => axiosInstance.post(Endpoints.VALIDATE_OTP,data)
 }

@@ -5,16 +5,33 @@ import InputLabel from '@mui/material/InputLabel';
 import { useContext } from 'react';
 import { multiStepContext } from './StepContext';
 import Select from '@mui/material/Select';
+import { FetchingFamily } from '../../Api/request';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { FormHelperText } from '@mui/material';
+import swal from 'sweetalert';
 import '../css/family.css'
 function Family() {
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
+    const [famlist, setFamlist] = useState([]);
+
+    useEffect(() =>{
+      async function fetch(){
+          const famdata = await FetchingFamily.FETCH_FAM();
+          console.log(famdata)
+          const datafam = famdata.data.Familylist;
+          console.log(datafam)
+          setFamlist(datafam)
+        }
+
+        fetch()
+    },[])
 
       function Check(){
         const errors = {};
+        let checkfammum = 0;
+        let checkfamdad = 0;
         if (userData.motherName === '') {
           errors.motherName = "This Field is required";
         } 
@@ -32,6 +49,9 @@ function Family() {
         }
          else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.motherName)) {
           errors.motherName = "First Letter must be Capital";
+        }
+        else if(famlist?.some((item) => item.motherName === userData.motherName)){
+          checkfammum += 1;
         }
         if (userData.motherlName === '') {
           errors.motherlName = "This Field is required";
@@ -51,6 +71,9 @@ function Family() {
          else if (userData.motherlName.charAt(0) !== userData.motherlName.charAt(0).toUpperCase()) {
           errors.motherlName = "First Letter must be Capital";
         }
+        else if(famlist?.some((item) => item.motherlName === userData.motherlName)){
+          checkfammum += 1;
+        }
         if (userData.mothermName === '') {
           errors.mothermName = "This Field is required";
         } 
@@ -68,6 +91,9 @@ function Family() {
         }
          else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.mothermName)) {
           errors.mothermName = "First Letter must be Capital";
+        }
+        else if(famlist?.some((item) => item.mothermName === userData.mothermName)){
+          checkfammum += 1;
         }
         if (userData.motherOccu === '') {
           errors.motherOccu = "This Field is required";
@@ -111,6 +137,10 @@ function Family() {
          else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.fatherName)) {
           errors.fatherName = "First Letter must be Capital";
         }
+        else if(famlist?.some((item) => item.fatherName === userData.fatherName)){
+          checkfamdad += 1;
+          console.log("1")
+        }
         if (userData.fatherlName === '') {
           errors.fatherlName = "This Field is required";
         } 
@@ -129,6 +159,10 @@ function Family() {
          else if (userData.fatherlName.charAt(0) !== userData.fatherlName.charAt(0).toUpperCase()) {
           errors.fatherlName = "First Letter must be Capital";
         }
+        else if(famlist?.some((item) => item.fatherlName === userData.fatherlName)){
+          checkfamdad += 1;
+          console.log("2")
+        }
         if (userData.fathermName === '') {
           errors.fathermName = "This Field is required";
         } 
@@ -146,6 +180,10 @@ function Family() {
         }
          else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.fathermName)) {
           errors.fathermName = "First Letter must be Capital";
+        }
+        else if(famlist?.some((item) => item.fathermname === userData.fathermName)){
+          checkfamdad += 1;
+          console.log("3")
         }
         if (userData.fatherOccu === '') {
           errors.fatherOccu = "This Field is required";
@@ -208,14 +246,15 @@ function Family() {
         }
         if (userData.famNum === '') {
           errors.famNum = "This Field is required";
-        } else if (userData.famNum < 0) {
-          errors.famNum = "Invalid data input";
-        } else if (/[a-zA-Z]/.test(userData.famNum)) {
-          errors.famNum = "Input must not contain letter value";
         }else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.famNum)) {
           errors.famNum = "Special characters are not allowed.";
         }
-
+        if(checkfammum === 3 && checkfamdad === 3){
+          errors.valid = 'Invalid'
+          swal("One Family Per head")
+        }
+        console.log(famlist)
+        console.log(checkfamdad,checkfammum)
         console.log(Object.keys(errors).length)
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
@@ -225,7 +264,7 @@ function Family() {
         setErrors('')
         setStep(5)
     }; 
-  
+
     return (
     <div className='Fam'>
         <div className="Famd">
@@ -414,16 +453,24 @@ function Family() {
              </div>
             </div>
             <div className='numsiblengthin'>
-            <TextField sx={{width: 400}}
-             label='Number of Family Members' 
-             value={userData['famNum']} 
-             onChange={(e) =>setUserData({...userData,"famNum" : e.target.value})} 
-             margin='normal' 
-             variant='outlined'
-             size='small'
-             error={!!errors.famNum}
-            helperText={errors.famNum}
-             color='secondary'/>  
+            <FormControl sx={{ minWidth: 150 }} size="small">
+            <InputLabel id="demo-simple-select-required-label">Numbers of Family Members</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-large"
+                value={userData['famNum']}
+                label="House Ownership"
+                error={!!errors.famNum}
+                helperText={errors.famNum}
+                onChange={(e) =>setUserData({...userData,"famNum" : e.target.value})}
+              >
+                <MenuItem value={'11 Members Above'}>11 Members Above</MenuItem>
+                <MenuItem value={'7 - 10 Members'}>7 - 10 Members</MenuItem>
+                <MenuItem value={'4 - 6 Members'}>4 - 6 Members</MenuItem>
+                <MenuItem value={'1 - 3 Members'}>1 - 3 Members</MenuItem>
+              </Select>
+              {errors && <FormHelperText sx={{color: 'red',m:2}}>{errors.famNum}</FormHelperText>}
+            </FormControl>
             </div>
             </div>
 

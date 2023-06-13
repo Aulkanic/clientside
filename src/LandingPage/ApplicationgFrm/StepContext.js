@@ -18,6 +18,7 @@ function StepContext() {
       birthPlace:'',
       caddress:'',
       citizenship:'',
+      checkemail:'',
       collegeAddress:'',
       collegeAward:'',
       collegeSchool:'',
@@ -61,7 +62,12 @@ function StepContext() {
       relationship:'',
       scholarID:'',
       typeSchool:'',
-      wereLive:''
+      wereLive:'',
+      Asinfo:[],
+      Esinfo:[],
+      Es1info:[],
+      AAsinfo:[],
+      YLsinfo:[],
     });
     console.log(userData)
     const [finalData, setFinalData] = useState([]);

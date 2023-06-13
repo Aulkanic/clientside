@@ -100,7 +100,8 @@ function Economic() {
                 helperText={errors.ownerShip}
                 onChange={(e) =>setUserData({...userData,"ownerShip" : e.target.value})}
               >
-                <MenuItem value={'Rent'}>Rent</MenuItem>
+                <MenuItem value={'Staying as a guest/Boarding'}>Staying as a guest/Boarding</MenuItem>
+                <MenuItem value={'Renting a House'}>Renting a House</MenuItem>
                 <MenuItem value={'Owned'}>Owned</MenuItem>
                 <MenuItem value={'Others'}>Others</MenuItem>
               </Select>
