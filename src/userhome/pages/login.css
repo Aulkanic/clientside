@@ -55,11 +55,9 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    background: rgba(0, 0, 0, 0.73);
-    background-image: url('../../userhome/assets/municipal.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    justify-content: center;
+    align-items: center;
+    background: rgba(1, 43, 18, 0.73);
 }
 .lgcon img{
     z-index: -100;
@@ -67,41 +65,22 @@
 .lgcon h1{
     margin: 0;
     padding: 20px 0px 10px 0px;
-    font-family: 'Inter', sans-serif;
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
     color: white;
     text-align: center;
-    background: rgba(1, 43, 18, 0.73);
-}
-.lgcon form{
-    background: rgba(1, 43, 18, 0.73);
-    color: white;
-    width: 100;
-    padding: 20px 40px 10px 40px;
-}
-.lgemail, .lpassw{
-    font-family: 'Inter', sans-serif;
-    width: 90%;
-    height: 20%;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-}
-.lgcon form .lgemail input,.lgcon form .lpassw input{
-    right: 0;
-    padding: 5px;
-    width: 100%;
-    height: 30px;
-    margin: 0;
-    border-radius: 10px;
-    border: none;
-}
-.lgcon form .lgemail label{
-    margin-right: 78px;
 
 }
-.lgcon label{
-    margin-right: 40px;
+.lgcon form{
+width: 80%;
+height: 100%;
+padding: 10px;
+padding-bottom: 18px;
+background-color: whitesmoke;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+border-radius: 15px;
 }
 .lgbtn{
     display: flex;
@@ -119,15 +98,107 @@
     background: green;
 }
 .loglink{
-    padding-top: 15%;
-    background: rgba(1, 43, 18, 0.73);
     height: 100%;
     display: flex;
     justify-content: space-around;
  
 }
 .lglink{
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
     color: white;
     text-decoration: none;
     font-size: 15px;
+}
+.findtocon{
+    width: 96%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(1, 43, 18, 0.73);
+    padding: 11.4px;
+}
+.findtocon h2{
+    margin: 0;
+    padding: 20px 0px 10px 0px;
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    color: white;
+    text-align: center;
+}
+.otpfform{
+    width: 80%;
+    padding: 10px;
+    padding-bottom: 15px;
+    height: auto;
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: whitesmoke;
+    border-radius: 10px;
+}
+.otpfnsc{
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+}
+.otpverifycon{
+    width: 96%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(1, 43, 18, 0.73);
+    padding: 11.4px;
+}
+.otpverifycon h2{
+    margin: 0;
+    padding: 20px 0px 10px 0px;
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    color: white;
+    text-align: center;
+}
+.formotpvalif{
+    width: 80%;
+    padding: 10px;
+    padding-bottom: 15px;
+    height: auto;
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: whitesmoke;
+    border-radius: 10px;
+}
+.restfrmpass{
+    width: 96%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(1, 43, 18, 0.73);
+    padding: 11.4px;
+}
+.restfrmpass h1{
+    margin: 0;
+    padding: 20px 0px 10px 0px;
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    color: white;
+    text-align: center;
+}
+.updatepassresfrm{
+    width: 80%;
+    padding: 10px;
+    padding-bottom: 15px;
+    height: auto;
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: whitesmoke;
+    border-radius: 10px;
 }

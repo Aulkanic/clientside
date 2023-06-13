@@ -7,23 +7,45 @@ import BMCC from '../assets/marisko.png'
 import Lheader from '../../LandingPage/components/header';
 import './register.css'
 import TextField from '@mui/material/TextField';
-import { useContext } from 'react';
-import Button from '@mui/material/Button';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
-import SaveIcon from '@mui/icons-material/Save';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import IconButton from '@mui/material/IconButton';
 import { CreatingRegistry, RegistryOtp,ResendOtp, ValidateOtp } from '../../Api/request';
-import LoopingRhombusesSpinner from '../loadingDesign/loading';
-
+import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import { alpha, styled } from '@mui/material/styles';
+import LockRoundedIcon from '@mui/icons-material/LockRounded';
+const CssTextField = styled(TextField)({
+  backgroundColor: 'white',
+  width: '400px',
+  '& label.Mui-focused': {
+    color: 'black',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#B2BAC2',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#E0E3E7',
+    },
+    '&:hover fieldset': {
+      borderColor: '#B2BAC2',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#6F7E8C',
+    },
+  },
+});
+const StyledFormControl = styled(FormControl)`
+  width: 400px;
+`;
+const StyledOutlinedInput = styled(OutlinedInput)`
+  background-color: white; 
+  font-size: 10px; 
+`;
 const Register = () => {
     const navigate = useNavigate();
     const [fname, setfname] = useState('');
@@ -33,17 +55,14 @@ const Register = () => {
     const [otp, setOtp] = useState('');
     const [step, setStep] = useState(1); 
     const [password, setPassword] = useState('');
-    const [loading,setLoading] = useState(false)
+    const [loading,setLoading] = useState(false);
+    const [loading1,setLoading1] = useState(false);
+    const [loading2,setLoading2] = useState(false);
     const [errors, setErrors] = useState({});
     const [remainingSeconds, setRemainingSeconds] = useState(60);
-    const [display,setDisplay] = useState(false);
     const [disabled,setDisabled] = useState(false);
-    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const handleMouseDownPassword = (event) => {
-      event.preventDefault();
-    };
     const handleRegisterClick = async (event) => {
       event.preventDefault();
       const errors = {};
@@ -92,9 +111,10 @@ const Register = () => {
         return () => clearInterval(timer);
       }
     }, [remainingSeconds]);
-    const handleVerifyClick = () => {
-
-      if(otp === ''){
+    const handleVerifyClick = (e) => {
+      e.preventDefault()
+      const errors = {}; 
+      if(!otp){
         errors.otp = 'This field is required'
       }
       if (Object.keys(errors).length > 0) {
@@ -250,6 +270,7 @@ const handlerNextInput = (e) => {
     return;
   }
   setStep(2)
+  setErrors('')
 }
 
   return (
@@ -274,21 +295,21 @@ const handlerNextInput = (e) => {
             </div>
           </div>
           <div className="registrationfrm">
-            <h1>Create Your Account</h1>
               <div className="regfrmcontainer">
-              {step === 1 && (
+      {step === 1 && (
         <div className='emailotpreg'>
           <h2>Registration</h2>
+          <p>Enter your Email address to create Account</p>
+          <p>We will send you one time password(OTP)</p>
           <TextField      
         id="input-with-icon-textfield"
         label="Email"
-        fullWidth
         value={email}
         onChange={handlerEmailInput}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <AccountCircle />
+              <EmailRoundedIcon />
             </InputAdornment>
           ),
         }}
@@ -301,30 +322,45 @@ const handlerNextInput = (e) => {
       />
      {errors && <FormHelperText sx={{color: 'red',m:2}}>{errors.email}</FormHelperText>}
           <br />
-          <LoadingButton
+          <div className="regbtnregnex">
+        <LoadingButton
         loading={loading}
         loadingPosition="start"
         endIcon={<SendIcon />}
-        variant="outlined"
+        variant="elevated"
         style={{
           margin: '10px', 
           cursor: 'pointer', 
+          fontWeight: '700',
+          background: 'rgba(43, 194, 106, 0.73)',
+          color: 'white',
+          fontSize:'10px',
+          letterSpacing:'2px',
+          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
         }}
         onClick={handleRegisterClick}
       >
         Register
       </LoadingButton>
-      <Button variant="outlined" 
+      <LoadingButton variant="elevated" 
               style={{
                 margin: '10px', 
                 cursor: 'pointer', 
+                fontWeight: '700',
+                background: 'rgba(43, 194, 106, 0.73)',
+                color: 'white',
+                fontSize:'10px',
+                letterSpacing:'2px',
+                fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
               }}
-              onClick={handlerNextInput}>Next</Button>
+              onClick={handlerNextInput}>
+                Next</LoadingButton>
+        </div>
         </div>
       )}
 
       {step === 2 && (
-        <div className='emailotpreg'>
+        <div className='otpfreg'>
           <h2>OTP Verification</h2>
           <p>An OTP has been sent to your email. Please enter it below:</p>
           <label>
@@ -332,45 +368,66 @@ const handlerNextInput = (e) => {
             <input
             maxLength={6}
                   style={{
-                    width: '100%',
+                    width: '90%',
                     height: '40px',
-                    fontSize: '18px',
+                    fontSize: '15px',
                     textAlign: 'center',
                     letterSpacing: '15px',
                     border: '1px solid #ccc',
                     borderRadius: '5px',
                     outline: 'none',
                   }} type="text" value={otp} onChange={handlerOtpInput} />
-                  {errors.otp ? (<p>{errors.otp}</p>) : (null)}
+                  {errors.otp ? (<p style={{fontSize: '10px',}}>{errors.otp}</p>) : (null)}
           </label>
           <br />
           <div className='bacreotp'>
             <div>
-            <Button variant="outlined" onClick={handlerBackInput}>Back</Button>
+            <LoadingButton 
+                          style={{
+                            cursor: 'pointer', 
+                            fontWeight: '700',
+                            background: 'rgba(43, 194, 106, 0.73)',
+                            color: 'white',
+                            fontSize:'10px',
+                            letterSpacing:'2px',
+                            fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+                          }}
+            variant="outlined" onClick={handlerBackInput}>Back</LoadingButton>
             </div>     
             <div>
             <LoadingButton
-        loading={loading}
+        loading={loading1}
         loadingPosition="start"
         variant="outlined"
+        fullWidth
         style={{
-          margin: '10px', 
           cursor: 'pointer', 
+          fontWeight: '700',
+          background: 'rgba(43, 194, 106, 0.73)',
+          color: 'white',
+          fontSize:'10px',
+          letterSpacing:'2px',
+          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
         }}
         onClick={handleResendClick}
       >
         Resend
       </LoadingButton>
-            </div>
+         </div>
 
       </div>
       <LoadingButton
-        loading={loading}
+        loading={loading2}
         loadingPosition="start"
         variant="outlined"
         style={{
-          margin: '10px', 
           cursor: 'pointer', 
+          fontWeight: '700',
+          background: 'rgba(43, 194, 106, 0.73)',
+          color: 'white',
+          fontSize:'10px',
+          letterSpacing:'2px',
+          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
         }}
         onClick={handleVerifyClick}
       >
@@ -381,12 +438,13 @@ const handlerNextInput = (e) => {
       )}
 
       {step === 3 && (
-        <div className='emailotpreg'>
-        <TextField      
+        <div className='createacccon'>
+          <h2>Create Account</h2>
+        <CssTextField      
         id="input-with-icon-textfield"
         label="First Name"
-        fullWidth
         value={fname}
+        size="small"
         onChange={handlerFnameInput}
         InputProps={{
           startAdornment: (
@@ -396,15 +454,11 @@ const handlerNextInput = (e) => {
           ),
         }}
         variant="outlined"
-        style={{
-          margin: '10px', 
-          cursor: 'pointer', 
-        }}
       />
-        <TextField      
+        <CssTextField      
         id="input-with-icon-textfield"
         label="Last Name"
-        fullWidth
+        size="small"
         value={lname}
         onChange={handlerLnameInput}
         InputProps={{
@@ -420,10 +474,10 @@ const handlerNextInput = (e) => {
           cursor: 'pointer', 
         }}
       />
-        <TextField      
+        <CssTextField      
         id="input-with-icon-textfield"
         label="Middle Name"
-        fullWidth
+        size="small"
         value={mname}
         onChange={handlerMnameInput}
         InputProps={{
@@ -439,38 +493,40 @@ const handlerNextInput = (e) => {
           cursor: 'pointer', 
         }}
       />
-          <br />
-          <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={showPassword ? 'text' : 'password'}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-            value={password}
-            onChange={handlerPasswordInput}
-          />
-        </FormControl>
-        <LoadingButton
-        loading={loading}
-        fullWidth
-        loadingPosition="start"
-        endIcon={<SendIcon />}
+        <CssTextField      
+        id="input-with-icon-textfield"
+        label="Password"
+        size="small"
+        value={password}
+        type='password'
+        onChange={handlerPasswordInput}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <LockRoundedIcon />
+            </InputAdornment>
+          )
+        }}
         variant="outlined"
         style={{
           margin: '10px', 
           cursor: 'pointer', 
+        }}
+      />
+        <LoadingButton
+        loading={loading}
+        loadingPosition="start"
+        endIcon={<SendIcon />}
+        variant="elevated"
+        style={{
+          margin:'10px',      
+          cursor: 'pointer', 
+          fontWeight: '700',
+          background: 'rgba(43, 194, 106, 0.73)',
+          color: 'white',
+          fontSize:'10px',
+          letterSpacing:'2px',
+          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
         }}
         onClick={handleSubmitReg}
       >

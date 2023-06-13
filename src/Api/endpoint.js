@@ -26,6 +26,10 @@ const Endpoints = {
     REGSITRY_OTP: 'OTP/RegistryOtp',
     RESEND_OTP: 'OTP/ResendOtp',
     VALIDATE_OTP: 'OTP/ValidateOtp',
+    VALIDATE_USEROTP: 'OTP/ValidateUserOtp',
+    FETCH_USERACCS: 'OTP/ForgotPassword/',
+    GENERATE_OTP: 'OTP/GenerateOtp',
+    CHANGE_PASSWORDBYOTP: 'OTP/ChangePassword',
 }
 
 export default Endpoints
