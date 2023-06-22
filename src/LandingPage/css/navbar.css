@@ -1,12 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 .lnav{
-    font-family: 'Inter', sans-serif;
     width: 100%;
-    background: yellow;
+    background: rgb(255, 238, 0);
     height: 45px;
 }
 .lnav ul{
-    font-family: 'Inter', sans-serif;
     padding-right: 50px;
     display: flex;
     font-size: 15px;
@@ -18,5 +15,5 @@
     text-decoration: none;
     color: green;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 1000;
 }

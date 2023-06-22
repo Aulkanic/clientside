@@ -19,10 +19,12 @@ const about = () => {
        animate="visible"
        variants={textVariants}
        transition={{ duration: 1 }}>
+
       <div className="latitle">
         <img src={BMCClogo} alt="" />
         <h1>BATANG MARILENYO COORDINATING CENTER</h1>
       </div>
+
       <div className="amv">
         <div className="amvp">
             <h1>MISSION</h1>
@@ -30,13 +32,16 @@ const about = () => {
               all the children of Marilao, efficiently utilizing all resources,
                and actively engaging all stakeholders. </p>
         </div>
+
         <div className="amvp">
         <h1>VISION</h1>
             <p>A community that actively provides care,
                development support, and protection to its most valued asset, the children.  </p>
         </div>
       </div>
+
       <div className="aabstract">BMCC OFFICIALS</div>
+      
       <div className="abmccmem">
           <img src={BMCCmem} alt="" />
       </div>
