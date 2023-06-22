@@ -2,6 +2,8 @@ import { FetchingTrivia } from "../../Api/request";
 import React from "react";
 import './trivia.css'
 import Homepage from '../components/Homepage'
+import { Box, Modal} from "@mui/material";
+import Card from '@mui/material/Card';
 
 export default function Trivia() {
   const [post, setPost] = React.useState([]);
@@ -12,10 +14,12 @@ export default function Trivia() {
       setPost(trivia.reverse());
     });
   }, []);
-console.log(post)
   const Trivia = post?.map((triv) => {
 
     return (
+      <>
+      <Box>
+    <Card>
     <div className='trivcard' key={triv.id}>
         <div className="triv">
           <div className="tri-img">
@@ -25,10 +29,11 @@ console.log(post)
               <div className="tri-title"><h1>{triv.title}</h1></div>
               <div className="tri-content">{triv.content}</div>
           </div>
-
         </div>
- 
     </div>
+    </Card>
+    </Box>
+    </>
     );
   });
 
@@ -38,9 +43,11 @@ console.log(post)
   return (
     <>
       <Homepage/>
+      <div className="trvdaycon">
       <h1 className="trivhead">Trivia of the Day</h1>
     <div className="tcard">
-      {Trivia}
+          {Trivia}
+      </div>
   </div>
   </>
   );

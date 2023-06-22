@@ -27,7 +27,6 @@ function App() {
 
   return (
     <>
-
     <Routes> 
 
       {/* <Route path='/' element={<Layout/>}/>
@@ -46,6 +45,7 @@ function App() {
 
          
         {/* Protective Route*/}
+
        <Route element={<RequireAuth/>}>
             <Route path='/home' element={<Home/>}/>
             <Route path='/account' element={<Account/>}/>
@@ -57,8 +57,8 @@ function App() {
             <Route path='/announcement' element={<Announcement/>}/>
             <Route path='/trivia' element={<Trivia/>}/>
         </Route>
-    </Routes> 
-    
+
+    </Routes>  
       </>
   );
 }

@@ -1,34 +1,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 
 .newsec{
-  display: block;
+  width: 100%;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 .newsheader{
   font-family: 'Inter', sans-serif;
-  margin-left: 40%;
 }
 .ncard {
-    background-color: white;
-    margin-top: 20px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding-bottom: 90px;
+  width: 80%;
+  height: 100%;
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(400px, 1fr));
+  grid-gap: 10px;
+  padding: 15px;
+  padding-bottom: 10%;
   }
   .newses{
     font-family: 'Inter', sans-serif;
     display: flex;
-    flex: 1fr 0.5fr;
-    width: 60%;
+    width: 90%;
     height: 100%;
     margin: 5px;
     border-radius: 15px;
-    padding: 10px 5px 20px 5px;
     overflow: hidden;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
   .pictit{
     display: flex;

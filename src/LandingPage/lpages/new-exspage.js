@@ -7,12 +7,12 @@ function newexspage() {
     <>
     <Lheader/>
     <div className='newexpage'>
-      <h1>CONTINUE AS .... </h1>
+      <h1>Login your Account in .... </h1>
         <div className='lexpage'>
-           <Link className='gotolog' to='/login'>EXISTING SCHOLAR</Link> 
+           <Link className='gotolog' to='/login'>WEBSITE APPLICATION</Link> 
         </div>
         <div className='lnewpage'>
-           <Link className='gotoreg' to='/register'>NEW APPLICANTS</Link>
+           <Link className='gotoreg' to='/register'>MOBILE APPLICATION</Link>
         </div>
     </div>
     </>

@@ -89,3 +89,12 @@ export const GenerateOtp = {
 export const ChangePassbyOtp = {
     CHANGEPASSWORD_BYOTP: (data) => axiosInstance.post(Endpoints.CHANGE_PASSWORDBYOTP,data)
 }
+export const FetchingBmccSchoinfo = {
+    FETCH_SCHOLARSINFO: (data) => axiosInstance.get(Endpoints.FETCH_BMCCSCHOLARINFO+data)
+}
+export const FetchingUserappoint = {
+    FETCH_USERAPPOINTMENT: (data) => axiosInstance.get(Endpoints.FETCH_USERAPPOINTMENT+data)
+}
+export const Logoutuser = {
+    USER_LOGOUT: (data) => axiosInstance.post(Endpoints.USER_LOGOUT,data)
+}

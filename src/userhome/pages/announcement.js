@@ -4,6 +4,9 @@ import axios from 'axios'
 import Announceimg from '../assets/announce.png'
 import Homepage from '../components/Homepage'
 import { FetchingAnnouncement } from '../../Api/request'
+import { Box, Modal} from "@mui/material";
+import Card from '@mui/material/Card';
+
 const Announcement = () => {
   const [anno, setAnnounced] = React.useState([]);
 
@@ -15,12 +18,18 @@ const Announcement = () => {
   }, []);
   const announced = anno.map((data) => {
     return (
+      <>
+      <Box>
+        <Card>
       <div className="announcements">
       <div className='anntitle'><h3>{data.title}</h3></div>
       <div className='anndate'>{data.date}</div>
       <div className='anncontent'>{data.content}</div>
       <div className='annto'><p>To All:</p><span><div className='towhom'><p>{data.announceTo}</p></div></span></div>
       </div>
+      </Card>
+      </Box>
+      </>
     );
   });
   return (

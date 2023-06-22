@@ -3,6 +3,11 @@
     font-family: 'Inter', sans-serif;
     display: flex;
     flex-direction: column;
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+}
+.containernavbar{
+    width: 100%;
+    display: flex;
 }
 .scho-info{
     display: flex;
@@ -12,25 +17,38 @@
     border: 2px solid black;
     border-top-right-radius: 25px;
     border-top-left-radius: 25px;
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+}
+.scho-info .profile{
+    margin: 15px;
+    margin-left: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .scho-info img{
-    margin: 10px 0 0 20px;
     width: 70px;
     height: 70px;
     border-radius: 35px;
 }
-
+.scho-info .info{
+    padding: 15px;
+}
 .scho-info .info .details{
     letter-spacing: 5px;
     margin: 0;
     font-size: 18px;
     text-decoration: none;
-    margin: 10px 0 0 50px;
 }
 .scho-info .info .details small .stat{
     font-style: bold;
     font-size: 15px;
     margin-left: 10px;
+}
+.scho-info .notific{
+    display: flex;
+    cursor: pointer;
+    background-color: grey;
 }
 .link{
     color: white;

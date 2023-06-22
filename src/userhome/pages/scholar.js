@@ -11,10 +11,14 @@ import { useNavigate } from 'react-router-dom'
 import Noimageprev from '../../userhome/assets/documenticon.png'
 import DefAvatar from '../../userhome/assets/defavatar.png'
 import { motion } from "framer-motion";
-//upload file in react axios?
+import { Box, Modal} from "@mui/material";
+import Card from '@mui/material/Card';
+import Skeleton from '@mui/material/Skeleton';
+import LoadingButton from '@mui/lab/LoadingButton';
+
 const Scholar = () => {
 
-const navigate = useNavigate()
+const navigate = useNavigate();
 const [docs, setDocs] = useState([]);
 const [submitted, setSubmittedDocs] = useState([]);
 const [submitted1, setSubmittedDocs1] = useState([]);
@@ -60,26 +64,42 @@ const handleFileChange1 = (index, event) => {
   }
   setFileNames(updatedFileNames);
 };
-const handleSubmit = (event) => {
+const handleSubmit = async (event) => {
   event.preventDefault();
-    setLoading(true)
-  fileValues.forEach((file, index) => {
-    const applicantNum = localStorage.getItem('ApplicantNum');
-    const docu = docs[index];
-    const formData = new FormData();
-    formData.append(`file`, file);
-    formData.append(`Reqname`, docu.requirementName);
-    formData.append(`applicantNum`, applicantNum);
-    UploadingDocs.UPLOAD_DOCS(formData).then(res => {
+  setLoading(true);
+  console.log(fileValues);
+  
+  try {
+    for (let index = 0; index < fileValues.length; index++) {
+      const file = fileValues[index];
+      
+      // Skip iteration if file is undefined
+      if (!file) {
+        continue;
+      }
+      
+      const applicantNum = localStorage.getItem('ApplicantNum');
+      const docu = docs[index];
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('Reqname', docu.requirementName);
+      formData.append('applicantNum', applicantNum);
+
+      const res = await UploadingDocs.UPLOAD_DOCS(formData);
       const updatedDisabledInputs = [...disabledInputs];
       updatedDisabledInputs[index] = true;
       setDisabledInputs(updatedDisabledInputs);
       setSubmittedDocs1(res.data.DocumentSubmitted);
-      setFileValues([]);
-      setImages([]);   
-      setLoading(false);
-    })
-  });
+    }
+    
+    setFileValues([]);
+    setImages([]);
+  } catch (error) {
+    // Handle the error
+    console.log('An error occurred during file submission:', error);
+  }
+
+  setLoading(false);
 };
 const DeleteReq = async (reqName,event) =>{
   const id = localStorage.getItem('ApplicantNum');
@@ -120,13 +140,15 @@ const EditReq = async (reqName,index,event) =>{
 useEffect(() => {
   const fetchData = async () => {
     try {
+      setLoadingPage(true)
       const response = await Promise.all([
         ListofReq.FETCH_REQUIREMENTS(),
         ListofSub.FETCH_SUB(applicantNum)
       ]);
-      setDocs(response[0].data.Requirements);
+      console.log(response[0].data.Requirements.results1[0])
+      setDocs(response[0].data.Requirements.results1);
       setSubmittedDocs1(response[1].data.Document);
-      
+      setLoadingPage(false)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -143,6 +165,7 @@ useEffect(() => {
             <>
             {req.File !== 'None' && <div key={index}>
               <div className="grid_container">
+
             <div className="docusibmitted">
               <div className="docusubprev">   
               {req.File ? (<img src={req.File} alt="" />) : (<img src={Noimageprev} alt="" />)}
@@ -169,6 +192,7 @@ useEffect(() => {
             </div>
             </div>
             </div>
+
             {(index + 1) % 3 === 0 && <br />}
             </div>
             </div>}
@@ -182,6 +206,8 @@ useEffect(() => {
             <>
             {req.File !== 'None' && <div key={index}>
               <div className="grid_container">
+            <Box>
+            <Card elevation={5}>
             <div className="docusibmitted">
               <div className="docusubprev">   
               {req.File ? (<img src={req.File} alt="" />) : (<img src={Noimageprev} alt="" />)}
@@ -207,7 +233,9 @@ useEffect(() => {
             </div>
             </div>
             </div>
-            {(index + 1) % 3 === 0 && <br />}
+            </Card>
+            </Box>
+
             </div>
             </div>}
             </>
@@ -219,9 +247,13 @@ useEffect(() => {
 const requirements = docs?.map((docu, index) => {
       const isDisabled = disabledInputs[index] || false;
       const valueToCheck = docu.requirementName;
+      console.log(submitted1)
       const hassubmit = submitted1.some((item) => item.requirement_Name === valueToCheck);
+
       return (
           <>
+          <Box>
+            <Card elevated={15}>
           <div className='reqlistcontainer' key={index}>
           <div className="requirelist">
             <div className="requireprev">   
@@ -239,6 +271,8 @@ const requirements = docs?.map((docu, index) => {
           </div>
           {(index + 1) % 4 === 0 && <br />}
           </div>
+          </Card>
+          </Box>
           </>
           )
  
@@ -247,21 +281,40 @@ const requirements = docs?.map((docu, index) => {
 return(
   <>
     <Homepage/>
-    {!loadingPage && <div className="userscho">
+  {loadingPage ? (<Skeleton animation="wave" variant="circular" width={'90%'} height={'100%'} />) : (<div className="userscho">
       <div className='schousercont'>
     <div className='reqheadtitle'>
     <h1>Requirements</h1>
     </div>
-    {!loading && <div className="userequirements">
-       {requirements}
-    </div>}{loading && 
     <div className="userequirements">
-      <div className="looping">
-      <LoopingRhombusesSpinner/>
-        </div></div>
-    }
+       {requirements}
+    </div>
     <div className='btnschoupreq'>
-    <button onClick={handleSubmit}>Submit</button>
+    <LoadingButton
+  loading={loading}
+  loadingPosition="end"
+  variant="elevated"
+  fullWidth
+  sx={{
+    margin: '10px',
+    cursor: 'pointer',
+    fontWeight: '700',
+    backgroundColor: 'rgba(43, 194, 106, 0.73)',
+    color: 'white',
+    fontSize: '15px',
+    letterSpacing: '2px',
+    transition: 'background 0.3s ease-in-out, clip-path 0.3s ease-in-out',
+    '&:hover': {
+      backgroundColor: 'radial-gradient(100% 100% at 100% 0%, #fdff89 0%, rgb(28, 147, 77) 100%)',
+    },
+    fontFamily:
+      'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+    width: '200px', // Add desired width
+  }}
+  onClick={handleSubmit}
+>
+  Submit
+</LoadingButton>
     </div>
 
     </div>
@@ -270,20 +323,17 @@ return(
       <div>
         <h1>Documents Submitted</h1>
       </div>
-      {!loading1 ? (<div className='usersbumtdoc'>
+      <div className='usersbumtdoc'>
       {submitted1.length > 0 ? (ViewsubDocs()) : 
       (<div className="docusibmitted">
         <div className='Nodocupost'> 
         <p>No Document Submitted</p>
         </div>
         </div>)}
-      </div>) : (<div className="usersbumtdoc">
-      <div className="looping">
-      <LoopingRhombusesSpinner/>
-        </div></div>)}
+      </div>
     </div>
     </div>
-    </div>}{loadingPage && <LoopingRhombusesSpinner/>}
+    </div>)}
 
   </>
 )

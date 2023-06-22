@@ -30,6 +30,9 @@ const Endpoints = {
     FETCH_USERACCS: 'OTP/ForgotPassword/',
     GENERATE_OTP: 'OTP/GenerateOtp',
     CHANGE_PASSWORDBYOTP: 'OTP/ChangePassword',
+    FETCH_BMCCSCHOLARINFO: 'BMCCScholar/SchoInfo/',
+    FETCH_USERAPPOINTMENT: 'Appointment/appointmentSched/',
+    USER_LOGOUT:'user/Logout',
 }
 
 export default Endpoints

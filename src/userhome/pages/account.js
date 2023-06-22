@@ -3,104 +3,519 @@ import './account.css'
 import Homepage from '../components/Homepage'
 import Image from '../assets/default-profile-picture1.jpg'
 import { Link } from 'react-router-dom'
-import { FetchingPersonal,FetchingProfileUser } from '../../Api/request'
-import {useState, useEffect } from 'react'
+import { FetchingPersonal,FetchingProfileUser,ChangingProfile, Change_Password,FetchingApplicantsInfo } from '../../Api/request'
+import {useState, useEffect } from 'react';
+import { styled } from '@mui/material/styles';
+import { Tabs, Tab, Box, Modal, Card, Typography } from "@mui/material"; 
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import { green, red } from '@mui/material/colors';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import Avatar from '@mui/material/Avatar';
+import LoadingButton from '@mui/lab/LoadingButton';
+import MuiAlert from '@mui/material/Alert';
+import LockRoundedIcon from '@mui/icons-material/LockRounded';
+import TextField from '@mui/material/TextField';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import EditIcon from '@mui/icons-material/Edit';
+import Fab from '@mui/material/Fab';
+import InputAdornment from '@mui/material/InputAdornment';
+import SendIcon from '@mui/icons-material/Send';
 
 
+const CssTextField = styled(TextField)({
+  backgroundColor: 'white',
+  width: '400px',
+  '& label.Mui-focused': {
+    color: 'black',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#B2BAC2',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#E0E3E7',
+    },
+    '&:hover fieldset': {
+      borderColor: '#B2BAC2',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#6F7E8C',
+    },
+  },
+});
 
 const Account = () => {
   const [post, setPost] = useState([]);
-  const [picture, setProfile] = React.useState([]);
-  const data = localStorage.getItem('ApplicantNum');
-  const data1 = localStorage.getItem('ApplicantionNumber');
+  const [userpicture, setProfileuser] = React.useState([]);
+  const applicantNum = localStorage.getItem('ApplicantNum');
+  const [value, setValue] = useState(0);
+  const [userprofile, setProfilepic] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [preview, setPreview] = useState();
+  const [currentpassword, setCurrent] = useState('');
+  const [newpassword, setNew] = useState('');
+  const [repass, setRepass] = useState('');
+  const [errors, setErrors] = useState({});
+  const [open, setOpen] = useState(false);
+  const [age,setAge] = useState('');
+  const [contactNum,setContactNum] = useState('');
+  const [caddress, setCaddress] = useState('');
+  const [currentSchool,setCschool] = useState('');
+  const [gwa,setGwa] = useState('');
 
-  useEffect(() => {
-    FetchingPersonal.FETCH_PERSONA(data).then((response) => {
-      setPost(response.data); 
-    });
-  });
 
-  useEffect(() => {
-    FetchingProfileUser.FETCH_PROFILEUSER(data).then((response) => {
-      console.log(response)
-      setProfile(response.data.Profile);   
-      
-    });
-  },[]);
+useEffect(() => {
+if (!userprofile) {
+    setPreview(undefined)
+    return
+}
 
-  const profile = picture?.map((data) =>{
-    return (
-      <>
-         <img src={data.profile} alt='' />
-      </>
-    );
-  });
-  const details = picture?.map((data) =>{
-    return (
-      <>
-        <th>Status</th>
-        <td>{data.status}</td>
-      </>
-    )
-  })
-  const email = picture?.map((data) =>{
-    return (
-      <>
-        <p><strong>Email:</strong>{data.email}</p>
-      </>
-    )
-  })
+const objectUrl = URL.createObjectURL(userprofile)
+setPreview(objectUrl)
+
+return () => URL.revokeObjectURL(objectUrl)
+}, [userprofile])
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const personalResponse = await FetchingApplicantsInfo.FETCH_INFO(applicantNum);
+      console.log(personalResponse)
+      setPost(personalResponse.data.results);
+
+      const profileUserResponse = await FetchingProfileUser.FETCH_PROFILEUSER(applicantNum);
+      setProfileuser(profileUserResponse.data.Profile[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchData();
+}, [applicantNum]);
+ console.log(post)
+ async function ChangeProf(event){
+    event.preventDefault();
+    setLoading(true)
+    const userprof = userprofile;
+    const details = {userprof,applicantNum};
+   await ChangingProfile.CHANGE_PROFILE(details)
+    .then(res => {
+      console.log(res)
+      setProfileuser(res.data.Result[0])
+      setLoading(false)
+    }
+     )
+    .catch(err => console.log(err));
+  }
+ async function ChangePassword(event){
+    event.preventDefault();
+    const errors = {};
+    if (!currentpassword) {
+      errors.currentpassword = "This Field is required";
+    }
+    if (!newpassword) {
+      errors.newpassword = "This Field is required";
+    } else if (newpassword.length < 8) {
+      errors.newpassword = "Password must be at least 8 characters long";
+    } else if (!/^[a-zA-Z0-9]*$/.test(newpassword)) {
+      errors.newpassword = "Password can only contain alphanumeric characters";
+    }
+    if (!repass) {
+      errors.repass = "This Field is required";
+    } else if (repass.length < 8) {
+      errors.repass = "Password must be at least 8 characters long";
+    } else if (!/^[a-zA-Z0-9]*$/.test(repass)) {
+      errors.repass = "Password can only contain alphanumeric characters";
+    }
+    console.log(Object.keys(errors).length)
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      console.log(errors)
+      return;
+    }
+    const email = userpicture.email
+    const formData = new FormData();
+    formData.append('Newpassword',newpassword);
+    formData.append('email',email)
+  await Change_Password.CHANGE_PASSWORD(formData)
+    .then(res => {
+        console.log(res.data)
+        if(res.data.success === 0){
+  
+        }
+        else{
+    setLoading(true)
+      setLoading(false)
+  
+    }
+    }
+     )
+    .catch(err => console.log(err));
+  }
+  const stylediv = {
+    width: '100%',
+    fontSize:'20px',
+    textAlign:'center'
+  };
+
+console.log(Array.isArray(post))
+const userinfor = Array.isArray(post)
+  ? post.map((data) => {
+    console.log(data)
+      return (
+        <>
+          <Card elevation={0} sx={{width:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+            <div className="aligninfo">
+              <h1>Personal Information</h1>
+            <Typography>
+              Name: {data?.Name}
+            </Typography>
+            <Typography>
+            Age: {data.age}
+            </Typography>
+            <Typography>
+            Contact Number: {data.contactNum}
+            </Typography>
+            <Typography>
+            Current Address: {data.caddress}
+            </Typography>
+            <Typography>
+            School Attended this Year: {data.currentSchool}
+            </Typography>
+            <Typography>
+            GWA last School Year Attended: {data.gwa}
+            </Typography>
+            </div>
+          </Card>
+        </>
+      );
+    })
+  : null;
+
+  const handleTabClick = (newValue) => {
+    setValue(newValue);
+  };
+  const handlerCPasswordInput = (e) => setCurrent(e.target.value)
+  const handlerNPasswordInput = (e) => setNew(e.target.value)
+  const handlerRPasswordInput = (e) => setRepass(e.target.value)
   return (
     <>
 
       <Homepage/>
-      <div className='acard'>
-    <div className='profile-card'>
-        <div className="prof-pic">
-          <div className='prof-img'>
-              {profile}
-              <div>
-              <Link to='/ChangeProfile'className='changeprof'>Change Profile</Link>
+      <div>
+        
+      </div>
+    <div className='acard'>
+          <Box>
+          <Card sx={{width:'100%'}}>
+          <div className='profile-card'>
+              <div className="prof-pic">
+                <div className='prof-img'>
+                  <div>
+                  <Avatar sx={{ width: '90%', height: '90%', borderRadius: '50%',border:'2px solid black' }}
+                 alt={''} src={userpicture.profile} />
+                  </div>
+
+                 <div>
+                 <p style={{margin:'0px'}}>{userpicture.Name}</p>
+                 </div>
+
+                </div>
+                <div className='prof-det'>
+                <List sx={stylediv} component="nav" aria-label="mailbox folders">
+              <ListItem button onClick={() => handleTabClick(0)}>
+                <ListItemText primary="Change Profile" />
+              </ListItem>
+              <Divider />
+              <ListItem button onClick={() => handleTabClick(1)}>
+                <ListItemText primary="Edit Information" />
+              </ListItem>
+              <Divider light />
+              <ListItem button onClick={() => handleTabClick(2)}>
+                <ListItemText primary="Change Password" />
+              </ListItem>
+            </List>
+                </div>
               </div>
-             
-          </div>
-          <div className='prof-det'>
-            <div className='prof-email'>
-              {email}
+              <div className="prof-accs">
+              {value === 0 && <div>
+                <Box sx={{width:'100%'}}>
+                <div className="Changeprofile">
+        <div className="chProf">
+            <div className="hprof"><h1>Change your Profile</h1></div>
+            <div className="prevprof">
+               <p>Preview</p>
+               {userprofile && 
+                                 <Avatar sx={{ width: '150px', height: '150px', borderRadius: '50%',border:'2px solid black', margin:'10px' }}
+                                 alt={''} src={preview} />}
             </div>
-            <div className='prof-password'>
-             <Link to='/ChangePassword'> <button>Change Password</button></Link>
+            <div className="frmprof">
+                <input type="file" onChange={e=> setProfilepic(e.target.files[0])} /><br></br>
+                <div className="btnprof">
+                <LoadingButton
+  loading={loading}
+  loadingPosition="end"
+  variant="elevated"
+  fullWidth
+  sx={{
+    cursor: 'pointer',
+    fontWeight: '700',
+    backgroundColor: 'rgba(43, 194, 106, 0.73)',
+    color: 'white',
+    fontSize: '15px',
+    letterSpacing: '2px',
+    transition: 'background 0.3s ease-in-out, clip-path 0.3s ease-in-out',
+    '&:hover': {
+      backgroundColor: 'radial-gradient(100% 100% at 100% 0%, #fdff89 0%, rgb(28, 147, 77) 100%)',
+    },
+    fontFamily:
+      'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+    width: '200px',
+  }}
+  onClick={ChangeProf}
+>
+  Submit
+</LoadingButton>
+                </div>
+                    </div>
+                    
+                </div>
             </div>
+            </Box>
+                </div>}
+                {value === 1 && <div className='editinfocon'>
+                  <div className='fabiconedit'>
+                <Fab sx={{width:'30px', height:'30px',backgroundColor:'green'}}  onClick={() => setOpen(!open)} color="secondary" aria-label="edit">
+                  <EditIcon/>
+                </Fab>
+                </div>
+                {open ? (
+                  <>
+            <Card elevation={0} sx={{width:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+            <div className="chngaligninfo">
+              <h1>Personal Information</h1>
+              <CssTextField      
+                id="input-with-icon-textfield"
+                label="Age"
+                size="small"
+                value={age}
+                type='number'
+                onChange={(e) => setAge(e.target.value)}
+                variant="outlined"
+                style={{ 
+                  margin:'10px',
+                  cursor: 'pointer', 
+                }}
+              />
+              <CssTextField      
+                id="input-with-icon-textfield"
+                label="Contact Number"
+                size="small"
+                value={contactNum}
+                type='number'
+                onChange={(e) => setContactNum(e.target.value)}
+                variant="outlined"
+                style={{ 
+                  margin:'10px',
+                  cursor: 'pointer', 
+                }}
+              />
+              <CssTextField      
+                id="input-with-icon-textfield"
+                label="Current Address"
+                size="small"
+                value={caddress}
+                type='text'
+                onChange={(e) => setCaddress(e.target.value)}
+                variant="outlined"
+                style={{ 
+                  margin:'10px',
+                  cursor: 'pointer', 
+                }}
+              />
+              <CssTextField      
+                id="input-with-icon-textfield"
+                label="School Attended this Year"
+                size="small"
+                value={currentSchool}
+                type='text'
+                onChange={(e) => setCaddress(e.target.value)}
+                variant="outlined"
+                style={{ 
+                  margin:'10px',
+                  cursor: 'pointer', 
+                }}
+              />
+              <CssTextField      
+                id="input-with-icon-textfield"
+                label="GWA last School Year Attended"
+                size="small"
+                value={gwa}
+                type='text'
+                onChange={(e) => setGwa(e.target.value)}
+                variant="outlined"
+                style={{ 
+                  margin:'10px',
+                  cursor: 'pointer', 
+                }}
+              />
+              <div style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>
+        <LoadingButton
+        loading={loading}
+        loadingPosition="end"
+        endIcon={loading ? (null) : (<SendIcon />)}
+        variant="elevated"
+        fullWidth
+        style={{
+          margin:'10px',      
+          cursor: 'pointer', 
+          fontWeight: '700',
+          background: 'rgba(43, 194, 106, 0.73)',
+          color: 'white',
+          fontSize:'10px',
+          letterSpacing:'2px',
+          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+        }}
+        onClick={ChangePassword}
+      >
+        Submit
+      </LoadingButton>
+      </div>
+            </div>
+          </Card>
+                  </>
+                ) : (<div className='infouserchng'>
+                  {userinfor}
+                </div>)}
+            </div>}
+              {value === 2 && <div>
+                <div className="ChangePassword">
+        <div className="chPass">
+            <div className="hpass"><h1>Change your Password</h1></div>
+            <div className="frmpass">
+            <CssTextField      
+        id="input-with-icon-textfield"
+        label="Current Password"
+        size="small"
+        value={currentpassword}
+        type='password'
+        onChange={handlerCPasswordInput}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <LockRoundedIcon />
+            </InputAdornment>
+          )
+        }}
+        variant="outlined"
+        style={{ 
+          margin:'10px',
+          cursor: 'pointer', 
+        }}
+      />
+   {errors.currentpassword && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '87%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.currentpassword}
+        </MuiAlert>} 
+        <CssTextField      
+        id="input-with-icon-textfield"
+        label="New Password"
+        size="small"
+        value={newpassword}
+        type='password'
+        onChange={handlerNPasswordInput}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <LockRoundedIcon />
+            </InputAdornment>
+          )
+        }}
+        variant="outlined"
+        style={{ 
+          margin:'10px',
+          cursor: 'pointer', 
+        }}
+      />
+   {errors.newpassword && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '87%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.newpassword}
+        </MuiAlert>} 
+        <CssTextField      
+        id="input-with-icon-textfield"
+        label="Re-type New Password"
+        size="small"
+        value={repass}
+        type='password'
+        onChange={handlerRPasswordInput}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <LockRoundedIcon />
+            </InputAdornment>
+          )
+        }}
+        variant="outlined"
+        style={{ 
+          margin:'10px',
+          cursor: 'pointer', 
+        }}
+      />
+   {errors.repass && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '87%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.repass}
+        </MuiAlert>} 
+                <div className="btnprof">
+        <LoadingButton
+        loading={loading}
+        loadingPosition="end"
+        endIcon={loading ? (null) : (<SendIcon />)}
+        variant="elevated"
+        fullWidth
+        style={{
+          margin:'10px',      
+          cursor: 'pointer', 
+          fontWeight: '700',
+          background: 'rgba(43, 194, 106, 0.73)',
+          color: 'white',
+          fontSize:'10px',
+          letterSpacing:'2px',
+          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+        }}
+        onClick={ChangePassword}
+      >
+        Submit
+      </LoadingButton>
+                </div>
+            </div> 
+        </div>
+    </div></div>}
+              </div>
           </div>
-        </div>
-        <div className="prof-accs">
-          <table>
-          <tr>
-            <th>Application Number</th>
-            <td>{data1}</td>
-            </tr>
-            <tr>
-            <th>Name</th>
-            <td>{post.FirstName} {post.MiddleName} {post.LastName}</td>
-            </tr>
-            <tr>
-            <th>Age</th>
-            <td>{post.Age}</td>
-            </tr>
-            <tr>
-            <th>Address</th>
-            <td>{post.CurrentAddress}</td>
-            </tr>
-            <tr>
-            <th>Contact Number</th>
-            <td>{post.Contact}</td>
-            </tr>
-            <tr>
-            {details}
-            </tr>
-          </table>
-        </div>
-    </div>
+          </Card>
+          </Box>
     </div>
 
 

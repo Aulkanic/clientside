@@ -4,8 +4,8 @@ import './news.css';
 import Homepage from '../components/Homepage'
 import { useSelector } from 'react-redux'
 import { selectCurrentToken } from '../../features/authenticate/authSlice'
-
-
+import { Box, Modal} from "@mui/material";
+import Card from '@mui/material/Card';
 
 const News = () => {
   const token = useSelector(selectCurrentToken)
@@ -23,6 +23,9 @@ console.log(post)
   const newsList = post?.map((contact) => {
 
     return (
+      <>
+      <Box>
+      <Card>
     <div className='newses' key={contact.id}>
       <div className="pictit">
       <img src={contact.picture} alt="" />
@@ -33,6 +36,9 @@ console.log(post)
         <div className='ndes'>{contact.description}</div>
       </div>
     </div>
+    </Card>
+    </Box>
+    </>
     );
   });
 console.log(post)

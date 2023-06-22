@@ -17,6 +17,9 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { CreatingRegistry, RegistryOtp,ResendOtp, ValidateOtp } from '../../Api/request';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import { alpha, styled } from '@mui/material/styles';
+import Snackbar from '@mui/material/Snackbar';
+import Slide from '@mui/material/Slide';
+import MuiAlert from '@mui/material/Alert';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 const CssTextField = styled(TextField)({
   backgroundColor: 'white',
@@ -39,13 +42,7 @@ const CssTextField = styled(TextField)({
     },
   },
 });
-const StyledFormControl = styled(FormControl)`
-  width: 400px;
-`;
-const StyledOutlinedInput = styled(OutlinedInput)`
-  background-color: white; 
-  font-size: 10px; 
-`;
+
 const Register = () => {
     const navigate = useNavigate();
     const [fname, setfname] = useState('');
@@ -61,8 +58,13 @@ const Register = () => {
     const [errors, setErrors] = useState({});
     const [remainingSeconds, setRemainingSeconds] = useState(60);
     const [disabled,setDisabled] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [resstat,setResstat] = useState('');
 
+    const handleSnackbarClose = () => {
+      setSnackbarOpen(false);
+    };
     const handleRegisterClick = async (event) => {
       event.preventDefault();
       const errors = {};
@@ -84,12 +86,16 @@ const Register = () => {
      .then(res => {
       console.log(res)
       if(res.data.success === 0){
-        swal(res.data.message);
+        setResstat('500')
+        setSnackbarMessage(res.data.message);
+        setSnackbarOpen(true); 
         setStep(1);
         setLoading(false)
       
       }else{
-        console.log('okay')
+        setResstat('200')
+        setSnackbarMessage('OTP was sent to your Email');
+        setSnackbarOpen(true); 
         setRemainingSeconds(60);
         setStep(2);
         setErrors('')
@@ -130,11 +136,17 @@ const Register = () => {
       .then(res => {
         console.log(res)
         if(res.data.success === 0){
-          swal(res.data.message);
+          setResstat('500')
+          setSnackbarMessage(res.data.message);
+          setSnackbarOpen(true); 
+          setRemainingSeconds(60);
           setStep(2);
           setLoading(false)
         
         }else{
+          setResstat('200')
+          setSnackbarMessage(res.data.message);
+          setSnackbarOpen(true); 
           setLoading(false)
           setStep(3);
         }
@@ -155,10 +167,10 @@ const Register = () => {
     } else if (/[!@#$%^&*(),.?":{}|<>]/.test(fname)) {
       errors.fname = "Special characters are not allowed.";
     } else if (!/^[A-Z][A-Za-z,\s]*$/.test(fname)) {
-      errors.fname = "Last Name must be in title case format";
+      errors.fname = "First Name must be in title case format";
     }
     if (!lname) {
-      errors.lname = "First Name is required";
+      errors.lname = "Last Name is required";
     } else if (lname.length === 1) {
       errors.lname = "Input must not contain a single letter.";
     } else if (/[0-9]/.test(lname)) {
@@ -169,7 +181,7 @@ const Register = () => {
       errors.lname = "Last Name must be in title case format";
     }
     if (!mname) {
-      errors.mname = "First Name is required";
+      errors.mname = "Middle Name is required";
     } else if (mname.length === 1) {
       errors.mname = "Input must not contain a single letter.";
     } else if (/[0-9]/.test(mname)) {
@@ -177,7 +189,7 @@ const Register = () => {
     } else if (/[!@#$%^&*(),.?":{}|<>]/.test(mname)) {
       errors.mname = "Special characters are not allowed.";
     } else if (!/^[A-Z][A-Za-z,\s]*$/.test(mname)) {
-      errors.mname = "Last Name must be in title case format";
+      errors.mname = "Middle Name must be in title case format";
     }
     if (!password) {
       errors.password = "Password is required";
@@ -197,13 +209,17 @@ const Register = () => {
     .then(res => {
       console.log(res)
       if(res.data.message === 'Created'){
-        swal(res.data.message);
+        setResstat('200')
+        setSnackbarMessage('Account Created');
+        setSnackbarOpen(true); 
         navigate('/ApplicationForm');
         localStorage.setItem('ApplicationNumber', res.data.data.applicantNum)
         setLoading(false)
       
       }else{
-        swal(res.data.message);
+        setResstat('500')
+        setSnackbarMessage(res.data.message);
+        setSnackbarOpen(true); 
         setLoading(false)
         navigate('/register')
       }
@@ -223,22 +239,26 @@ const Register = () => {
         console.log(errors)
         return;
       }
-      setLoading(true)
+      setLoading1(true)
       const formData = new FormData();
       formData.append('email', email);
       ResendOtp.RESEND_OTP(formData)
       .then(res => {
         console.log(res)
         if(res.data.success === 0){
-          swal(res.data.message);
-          setLoading(false)
+          setResstat('500')
+          setSnackbarMessage(res.data.message);
+          setSnackbarOpen(true); 
+          setLoading1(false)
           setErrors('')
           setStep(2);
         
         }else{
-          swal('An OTP has been sent to your email.')
-          setRemainingSeconds(60)
-          setLoading(false)
+          setResstat('200')
+          setSnackbarMessage('OTP was sent to your Email');
+          setSnackbarOpen(true); 
+          setRemainingSeconds(60);
+          setLoading1(false)
           setErrors('')
           setStep(2);
         }
@@ -275,6 +295,19 @@ const handlerNextInput = (e) => {
 
   return (
     <>
+      <Snackbar
+  open={snackbarOpen}
+  onClose={handleSnackbarClose}
+  autoHideDuration={3000}
+  TransitionComponent={Slide}
+  TransitionProps={{ direction: 'right' }}
+>
+{resstat === '200' ? (<MuiAlert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%',background:'green',color:'white' }}>
+{snackbarMessage}!
+</MuiAlert>) :(<MuiAlert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%',background:'red',color:'white' }}>
+          {snackbarMessage}!
+</MuiAlert>)}
+</Snackbar>
     <Lheader/>
   <div className="registration">
         <div className="registrationcon">
@@ -318,16 +351,29 @@ const handlerNextInput = (e) => {
           margin: '10px', 
           marginBottom: '0px',
           cursor: 'pointer', 
+          background:'white'
+        
         }}
       />
-     {errors && <FormHelperText sx={{color: 'red',m:2}}>{errors.email}</FormHelperText>}
+    {errors.email && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '89%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'12px',
+      height:'35px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.email}
+        </MuiAlert>}
           <br />
           <div className="regbtnregnex">
+            <div>
         <LoadingButton
         loading={loading}
-        loadingPosition="start"
-        endIcon={<SendIcon />}
+        loadingPosition="end"
+        endIcon={loading ? (null) : (<SendIcon />)}
         variant="elevated"
+        fullWidth
         style={{
           margin: '10px', 
           cursor: 'pointer', 
@@ -342,6 +388,8 @@ const handlerNextInput = (e) => {
       >
         Register
       </LoadingButton>
+      </div>
+      <div>
       <LoadingButton variant="elevated" 
               style={{
                 margin: '10px', 
@@ -355,6 +403,7 @@ const handlerNextInput = (e) => {
               }}
               onClick={handlerNextInput}>
                 Next</LoadingButton>
+                </div>
         </div>
         </div>
       )}
@@ -368,7 +417,7 @@ const handlerNextInput = (e) => {
             <input
             maxLength={6}
                   style={{
-                    width: '90%',
+                    width: '100%',
                     height: '40px',
                     fontSize: '15px',
                     textAlign: 'center',
@@ -377,7 +426,16 @@ const handlerNextInput = (e) => {
                     borderRadius: '5px',
                     outline: 'none',
                   }} type="text" value={otp} onChange={handlerOtpInput} />
-                  {errors.otp ? (<p style={{fontSize: '10px',}}>{errors.otp}</p>) : (null)}
+    {errors.otp && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '85%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.otp}
+        </MuiAlert>}
           </label>
           <br />
           <div className='bacreotp'>
@@ -397,7 +455,7 @@ const handlerNextInput = (e) => {
             <div>
             <LoadingButton
         loading={loading1}
-        loadingPosition="start"
+        loadingPosition="end"
         variant="outlined"
         fullWidth
         style={{
@@ -416,10 +474,12 @@ const handlerNextInput = (e) => {
          </div>
 
       </div>
+      <div>
       <LoadingButton
-        loading={loading2}
-        loadingPosition="start"
+        loading={loading}
+        loadingPosition="end"
         variant="outlined"
+        fullWidth
         style={{
           cursor: 'pointer', 
           fontWeight: '700',
@@ -433,7 +493,7 @@ const handlerNextInput = (e) => {
       >
         VERIFY
       </LoadingButton>
-          
+      </div>
         </div>
       )}
 
@@ -455,6 +515,16 @@ const handlerNextInput = (e) => {
         }}
         variant="outlined"
       />
+          {errors.fname && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '73%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.fname}
+        </MuiAlert>}
         <CssTextField      
         id="input-with-icon-textfield"
         label="Last Name"
@@ -470,10 +540,20 @@ const handlerNextInput = (e) => {
         }}
         variant="outlined"
         style={{
-          margin: '10px', 
+          margin:'10px',
           cursor: 'pointer', 
         }}
       />
+          {errors.lname && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '73%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.lname}
+        </MuiAlert>}
         <CssTextField      
         id="input-with-icon-textfield"
         label="Middle Name"
@@ -489,10 +569,20 @@ const handlerNextInput = (e) => {
         }}
         variant="outlined"
         style={{
-          margin: '10px', 
+          margin:'10px',
           cursor: 'pointer', 
         }}
       />
+  {errors.mname && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '73%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.mname}
+        </MuiAlert>}
         <CssTextField      
         id="input-with-icon-textfield"
         label="Password"
@@ -508,16 +598,28 @@ const handlerNextInput = (e) => {
           )
         }}
         variant="outlined"
-        style={{
-          margin: '10px', 
+        style={{ 
+          margin:'10px',
           cursor: 'pointer', 
         }}
       />
+   {errors.password && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '73%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.password}
+        </MuiAlert>} 
+        <div>  
         <LoadingButton
         loading={loading}
-        loadingPosition="start"
-        endIcon={<SendIcon />}
+        loadingPosition="end"
+        endIcon={loading ? (null) : (<SendIcon />)}
         variant="elevated"
+        fullWidth
         style={{
           margin:'10px',      
           cursor: 'pointer', 
@@ -532,6 +634,7 @@ const handlerNextInput = (e) => {
       >
         Submit
       </LoadingButton>
+      </div>  
         </div>
       )}
               </div>

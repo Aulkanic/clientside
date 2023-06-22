@@ -295,7 +295,7 @@ function Educational() {
           if(res.data.success === 1){
            
             setUserData('');
-            navigate('/login');
+            navigate('/Scho1');
             swal({
               title: "Success",
               text: "Successfully Submitted!",

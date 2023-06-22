@@ -1,77 +1,118 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 .acard {
     border-radius: 6px;
-    height: 100%;
-    margin: 0;
+    width: 100%;
+    height: 100vh;
+    margin-top: 20px;
     width: 100%;
     display: flex;
     justify-content: center;
     text-align: center;
-    align-self: flex-start;
-    padding: 0;
-    padding-top: 20px;
+
   }
 .profile-card{
-  position: absolute;
   border-radius: 10px;
-  width: 50%;
-  height: 50%;
-  background: linear-gradient(-90deg, rgba(235,239,247,1) 0%, rgba(115,244,177,1) 0%, rgba(140,238,191,1) 0%, rgba(88,141,120,1) 0%, rgba(67,195,178,1) 0%, rgba(255,255,255,1) 0%, rgba(6,135,9,1) 100%);
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   display: flex;
+  width: 90vw;
+  height: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
-
+}
+.frmprof input[type="file"] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333;
+  font-size: 16px;
+  width: 100%;
 }
 .prof-pic{
-  width: 40%;
+  width: 30%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
+.editbtnacc{
+  width: 100%;
+  padding: 5px;
 
+}
+.editbtnacc button{
+  float: left;
+
+}
 .prof-img{
-  padding-top: 10px;
-  height: 75%;
-}
-
-.prof-img img{
-  margin-top: 30px;
-  width: 60%;
-  height: 60%;
-  border: 2px solid black;
-  border-radius: 50%;
-  margin-bottom: 10px;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .prof-img button{
   margin-top: 10px;
 }
-.prof-accs{
-  width: 60%;
-  height: 100%;
 
+.profile-card .prof-accs{
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center ;
 }
-.prof-accs table{
-  font-family: 'Inter', sans-serif;
-  padding: 10px;
-  width: 100%;
-  height: 100%;  
-  background: none;
-}
-
-.prof-accs table td{
-  background: none;
-  text-align: left;
-  margin: 0;
-}
-.prof-accs table th{
-  font-weight: 600;
-  text-align: left;
-}
-.prof-det{
+.prof-accs button{
+  float: right;
   margin: 5px;
 }
+
 .changeprof{
   color: white;
   text-decoration: none;
+}
+.Changeprofile{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+
+}
+.chProf{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.frmpass{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.editinfocon{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.infouserchng{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: left;
+}
+.aligninfo{
+   text-align: left;
+
+}
+.fabiconedit{
+  margin: 30px 0px 0px 0px;
+  padding-right: 30px;
+}
+.chngaligninfo{
+  padding: 10px;
 }
 
 

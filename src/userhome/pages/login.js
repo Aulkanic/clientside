@@ -22,6 +22,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
 
+
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -50,6 +51,7 @@ const CssTextField = styled(TextField)({
     },
   },
 });
+
 const Login = () => {
 
     const [email, setEmail] = useState('');
@@ -67,6 +69,7 @@ const Login = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [otp, setOtp] = useState('');
     const [remainingSeconds, setRemainingSeconds] = useState(60);
+    const [resstat,setResstat] = useState('');
 
     const handleSnackbarClose = () => {
       setSnackbarOpen(false);
@@ -98,11 +101,13 @@ const Login = () => {
           console.log(errors)
           return;
         }
+        setErrors('')  
         setLoading(true)
         loginUserAcc.USER_LOGIN({email,password})
         .then(res => {
           console.log(res)
-          if(res.data.message === 'login'){
+          if(res.data.message === 'Login Successfully'){
+            setResstat('200')
             setSnackbarMessage(res.data.message);
             setSnackbarOpen(true); 
             localStorage.setItem('LoggedIn',true);
@@ -114,8 +119,9 @@ const Login = () => {
             }, 2500);
           }else{
             localStorage.setItem('LoggedIn',false);
+            setResstat('500')
             setSnackbarMessage(res.data.message);
-            setSnackbarOpen(true);
+            setSnackbarOpen(true); 
             navigate('/login')
             setLoading(false)
             setErrors('')
@@ -136,12 +142,15 @@ const Login = () => {
           console.log(errors)
           return;
         }
+        setErrors('')
         setLoading1(true)
        await GetUserAcc.FETCH_USERACCS(fpemail)
         .then(res => {
           console.log(res)
           if(res.data.success === 0){
-            swal(res.data.message);
+            setResstat('500')
+            setSnackbarMessage(res.data.message);
+            setSnackbarOpen(true); 
             setStep(1);
             setLoading1(false)
           
@@ -152,17 +161,19 @@ const Login = () => {
             .then(response => {
               console.log(response)
               if(response.data.success === 0){
+                setResstat('500')
                 setSnackbarMessage(res.data.message);
-                setSnackbarOpen(true);
+                setSnackbarOpen(true); 
                 setStep(1);
                 setLoading1(false)
+                setErrors('')
               
               }else{
-
                 setRemainingSeconds(60);
                 setStep(2);
                 setErrors('')
                 setLoading1(false)
+                setResstat('200')
                 setSnackbarMessage('OTP is sent into your Email Account');
                 setSnackbarOpen(true); 
               }
@@ -192,8 +203,9 @@ const Login = () => {
         .then(res => {
           console.log(res)
           if(res.data.success === 0){
+            setResstat('500')
             setSnackbarMessage(res.data.message);
-            setSnackbarOpen(true);
+            setSnackbarOpen(true); 
             setStep(2);
             setLoading2(false)
             setErrors('')
@@ -201,8 +213,9 @@ const Login = () => {
           }else{
             setLoading2(false)
             setStep(3);
+            setResstat('200')
             setSnackbarMessage(res.data.message);
-            setSnackbarOpen(true);
+            setSnackbarOpen(true); 
             setErrors('')
           }
       
@@ -228,15 +241,17 @@ const Login = () => {
         .then(res => {
           console.log(res)
           if(res.data.success === 0){
+            setResstat('500')
             setSnackbarMessage(res.data.message);
-            setSnackbarOpen(true);
+            setSnackbarOpen(true); 
             setLoading(false)
             setErrors('')
             setStep(2);
           
           }else{
+            setResstat('200')
             setSnackbarMessage(res.data.message);
-            setSnackbarOpen(true);
+            setSnackbarOpen(true); 
             setRemainingSeconds(60)
             setLoading(false)
             setErrors('')
@@ -258,7 +273,7 @@ const Login = () => {
           errors.newpassword = "Password can only contain alphanumeric characters";
         }
         if(renewpassword === ''){
-          errors.renewpassword = 'Please enter a new password';
+          errors.renewpassword = 'This Field is required';
         } else if (renewpassword.length < 8) {
           errors.renewpassword = "Password must be at least 8 characters long";
         } else if (!/^[a-zA-Z0-9]*$/.test(renewpassword)) {
@@ -280,8 +295,9 @@ const Login = () => {
         .then(res => {
           console.log(res)
           if(res.data.success === 0){
+            setResstat('500')
             setSnackbarMessage(res.data.message);
-            setSnackbarOpen(true);
+            setSnackbarOpen(true); 
             setLoading(false)
             setErrors('')
             setStep(2);
@@ -290,8 +306,9 @@ const Login = () => {
             setLoading(false)
             setErrors('')
             setStep(0);
+            setResstat('200')
             setSnackbarMessage(res.data.message);
-            setSnackbarOpen(true);
+            setSnackbarOpen(true); 
           }
       
         }
@@ -314,11 +331,11 @@ const Login = () => {
     <Snackbar
   open={snackbarOpen}
   onClose={handleSnackbarClose}
-  autoHideDuration={3000} // Adjust the duration as needed
-  TransitionComponent={Slide} // Use the Slide transition
-  TransitionProps={{ direction: 'right' }} // Slide from left to right
+  autoHideDuration={3000}
+  TransitionComponent={Slide}
+  TransitionProps={{ direction: 'right' }}
 >
-{snackbarMessage === 'login' || snackbarMessage === 'OTP is sent into your Email Account' || snackbarMessage === 'Verification Success'
+{snackbarMessage === 'Login Successfully' || snackbarMessage === 'OTP is sent into your Email Account' || snackbarMessage === 'Verification Success'
  || snackbarMessage === 'Password Changed Successfully' ? (<Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
 {snackbarMessage}!
 </Alert>) :(<Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
@@ -357,8 +374,10 @@ const Login = () => {
                         cursor: 'pointer', 
                       }}
                     />
+                    {errors.email && <Alert variant='outlined' style={{ width: '77%', margin: '10px', color:'red', fontSize:'12px',height:'35px' }} elevation={0} severity="error">
+                        {errors.email}
+                      </Alert>}
                     <div>
-                    {errors.email && <FormHelperText sx={{color: 'red',m:2}}>{errors.email}</FormHelperText>}
                     <CssTextField      
                       id="input-with-icon-textfield"
                       label="Password"
@@ -379,7 +398,9 @@ const Login = () => {
                         cursor: 'pointer', 
                       }}
                     />
-                  {errors.password && <FormHelperText sx={{color: 'red',m:2}}>{errors.password}</FormHelperText>}
+                    {errors.password && <Alert variant='outlined' style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'35px' }} elevation={0} severity="error">
+                        {errors.password}
+                      </Alert>}
                         </div>
                         </form>
                         <div className="lgbtn">
@@ -389,15 +410,20 @@ const Login = () => {
         variant="elevated"
         endIcon={loading ? (null) : (<LoginTwoToneIcon />)}
         fullWidth
-        style={{
-          margin: '10px', 
-          cursor: 'pointer', 
+        sx={{
+          margin: '10px',
+          cursor: 'pointer',
           fontWeight: '700',
-          background: 'rgba(43, 194, 106, 0.73)',
+          backgroundColor: 'green',
           color: 'white',
-          fontSize:'15px',
-          letterSpacing:'2px',
-          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+          fontSize: '15px',
+          letterSpacing: '2px',
+          transition: 'background 0.3s ease-in-out, clip-path 0.3s ease-in-out',
+          '&:hover': {
+            backgroundColor: 'rgba(43, 194, 106, 0.73)',
+          },
+          fontFamily:
+            'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
         }}
         onClick={handleSubmit}
       >
@@ -434,7 +460,17 @@ const Login = () => {
         }}
       />
       </div>
-     {errors && <FormHelperText sx={{color: 'red',m:2}}>{errors.email}</FormHelperText>}
+     {errors.fpemail && (<Alert
+         style={{ 
+          width: '73%', 
+          margin: '10px', 
+          color:'red', 
+          fontSize:'10px',
+          height:'30px',
+          background:'white' }}
+           variant="outlined" severity="error">
+        {errors.fpemail}
+      </Alert>)}
      <div className="otpfnsc">
       <div>
       <LoadingButton
@@ -495,7 +531,18 @@ const Login = () => {
                     borderRadius: '5px',
                     outline: 'none',
                   }} type="text" value={otp} onChange={handlerOtpInput}/>
-                  {errors.otp ? (<p>{errors.otp}</p>) : (null)}
+     {errors.otp && (<Alert
+         style={{ 
+          width: '73%', 
+          margin: '10px', 
+          color:'red', 
+          fontSize:'10px',
+          height:'30px',
+          background:'white',
+          boxShadow:'none' }}
+           variant="outlined" severity="error">
+        {errors.otp}
+      </Alert>)}
           </label>
           </div>
           <div className='bacreotp'>
@@ -586,7 +633,18 @@ const Login = () => {
                       }}
                     />
           </div>
-          {errors.newpassword && <FormHelperText sx={{color: 'red',m:2}}>{errors.newpassword}</FormHelperText>}
+          {errors.newpassword && (<Alert
+         style={{ 
+          width: '79%', 
+          margin: '10px', 
+          color:'red', 
+          fontSize:'10px',
+          height:'30px',
+          background:'white',
+          boxShadow:'none' }}
+           variant="outlined" severity="error">
+        {errors.newpassword}
+      </Alert>)}
           <div>
           <CssTextField      
                       id="input-with-icon-textfield"
@@ -609,7 +667,18 @@ const Login = () => {
                       }}
                     />
           </div>
-          {errors.renewpassword && <FormHelperText sx={{color: 'red',m:2}}>{errors.renewpassword}</FormHelperText>}
+          {errors.renewpassword && (<Alert
+         style={{ 
+          width: '79%', 
+          margin: '10px', 
+          color:'red', 
+          fontSize:'10px',
+          height:'30px',
+          background:'white',
+          boxShadow:'none' }}
+           variant="outlined" severity="error">
+        {errors.renewpassword}
+      </Alert>)}
           </div>
           <div>
         <LoadingButton
