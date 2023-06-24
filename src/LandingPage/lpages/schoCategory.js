@@ -18,7 +18,8 @@ function SchoCategory() {
 
   const schoCat = post?.map((contact, index) => {
     return (
-      <div className='grid-container'>
+      <>
+      {contact.status === 'Under Evaluation' ? (null) : (<div className='grid-container'>
     <div className='schoCat' key={index}>
       <div className="schoIcon">
       <img src={contact.icon} alt="" />
@@ -26,12 +27,13 @@ function SchoCategory() {
       <div className="schoDet">
         <div className='ntitle'><h4>{contact.name}</h4></div>
         <div className='ndate'><h6>{contact.description}</h6></div>
-        {contact.status === 'open' || contact.status === 'Open' ? (<Button variant="contained"><Link className='linkingscho' to='/register' >{contact.status}</Link></Button>) :
-          (<Button sx={{color:'red'}} variant="contained" disabled>{contact.status}</Button>)}
+        {contact.status === 'open' || contact.status === 'Open' ? (<Button variant="contained"><Link className='linkingscho' to='/register' >{contact.status}</Link></Button>)
+        : (<Button variant="contained" disabled><Link className='linkingscho' >{contact.status}</Link></Button>)}
       </div>
     </div>
     {(index + 1) % 2 === 0 && <br />}
-    </div>
+    </div>)}
+    </>
     );
   });
   

@@ -56,6 +56,9 @@ export const ListofSub = {
 export const EditSub = {
     EDIT_SUB: (data) => axiosInstance.patch(Endpoints.EDIT_SUBMITTED,data)
 }
+export const EditUserinfo = {
+    EDIT_USERINFO: (data) => axiosInstance.patch(Endpoints.UPDATE_USERINFO,data)
+}
 export const DeleteSub = {
     DELETE_SUB: (data) => axiosInstance.post(Endpoints.DELETE_SUBMITTED,data)
 }
@@ -97,4 +100,7 @@ export const FetchingUserappoint = {
 }
 export const Logoutuser = {
     USER_LOGOUT: (data) => axiosInstance.post(Endpoints.USER_LOGOUT,data)
+}
+export const APK = {
+    APK: (data) => axiosInstance.post(Endpoints.APK,data)
 }

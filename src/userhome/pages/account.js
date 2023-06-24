@@ -3,7 +3,7 @@ import './account.css'
 import Homepage from '../components/Homepage'
 import Image from '../assets/default-profile-picture1.jpg'
 import { Link } from 'react-router-dom'
-import { FetchingPersonal,FetchingProfileUser,ChangingProfile, Change_Password,FetchingApplicantsInfo } from '../../Api/request'
+import { FetchingPersonal,FetchingProfileUser,ChangingProfile, Change_Password,FetchingApplicantsInfo,EditUserinfo } from '../../Api/request'
 import {useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Tabs, Tab, Box, Modal, Card, Typography } from "@mui/material"; 
@@ -24,6 +24,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import Fab from '@mui/material/Fab';
 import InputAdornment from '@mui/material/InputAdornment';
 import SendIcon from '@mui/icons-material/Send';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
 
 
 const CssTextField = styled(TextField)({
@@ -66,6 +70,8 @@ const Account = () => {
   const [caddress, setCaddress] = useState('');
   const [currentSchool,setCschool] = useState('');
   const [gwa,setGwa] = useState('');
+  const [typeSchool,setTypeschool] = useState('');
+  const [currentYear,setCurrentYear] = useState('')
 
 
 useEffect(() => {
@@ -96,7 +102,6 @@ useEffect(() => {
 
   fetchData();
 }, [applicantNum]);
- console.log(post)
  async function ChangeProf(event){
     event.preventDefault();
     setLoading(true)
@@ -156,16 +161,61 @@ useEffect(() => {
      )
     .catch(err => console.log(err));
   }
+  async function Editinfo(event){
+    event.preventDefault()
+      let errors = {};
+      console.log(post[0].age)
+      const upage = age || post[0].age;
+      if(/[a-zA-Z]/.test(upage)){
+        errors.age = "Input must not contain letter value";
+      }else if(upage < post[0].age){
+        errors.age = 'Age must be greater than your previous age if you want to update'
+      }
+      const contact = contactNum || post[0].contactNum
+      if(!/^09\d{9}$/.test(contact)){
+        errors.contactNum = "Invalid phone number.";
+      }
+    const addressc = caddress || post[0].caddress
+    const school = currentSchool || post[0].currentSchool
+    const schoyear = currentYear || post[0].currentYear;
+    const schotype = typeSchool || post[0].typeSchool;
+    const schogwa = gwa || post[0].gwa
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      console.log(errors)
+      return;
+    }
+    setLoading(true)
+    const formData = new FormData();
+    formData.append('age',upage)
+    formData.append('contactNum',contact)
+    formData.append('caddress',addressc)
+    formData.append('currentSchool',school)
+    formData.append('currentYear',schoyear)
+    formData.append('typeSchool',schotype)
+    formData.append('gwa',schogwa)
+    formData.append('applicantNum',post[0].applicantNum)
+   const response = await EditUserinfo.EDIT_USERINFO(formData);
+   if(response.data.success === 1){
+    console.log(response)
+    setPost(response.data.result)
+    setLoading(false)
+    setErrors('')
+   }
+   else{
+    console.log(response)
+    setLoading(false)
+   }
+
+  }
   const stylediv = {
     width: '100%',
     fontSize:'20px',
     textAlign:'center'
   };
 
-console.log(Array.isArray(post))
 const userinfor = Array.isArray(post)
   ? post.map((data) => {
-    console.log(data)
       return (
         <>
           <Card elevation={0} sx={{width:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
@@ -302,6 +352,7 @@ const userinfor = Array.isArray(post)
                 id="input-with-icon-textfield"
                 label="Age"
                 size="small"
+                placeholder={post[0].age}
                 value={age}
                 type='number'
                 onChange={(e) => setAge(e.target.value)}
@@ -311,6 +362,16 @@ const userinfor = Array.isArray(post)
                   cursor: 'pointer', 
                 }}
               />
+               {errors.age && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '87%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.age}
+        </MuiAlert>}            
               <CssTextField      
                 id="input-with-icon-textfield"
                 label="Contact Number"
@@ -324,6 +385,16 @@ const userinfor = Array.isArray(post)
                   cursor: 'pointer', 
                 }}
               />
+          {errors.contactNum && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '87%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.contactNum}
+        </MuiAlert>}            
               <CssTextField      
                 id="input-with-icon-textfield"
                 label="Current Address"
@@ -350,19 +421,90 @@ const userinfor = Array.isArray(post)
                   cursor: 'pointer', 
                 }}
               />
-              <CssTextField      
-                id="input-with-icon-textfield"
-                label="GWA last School Year Attended"
-                size="small"
+              <div className='editinfconedc'>
+              <div>
+              <FormControl sx={{ minWidth: 150 }} size="small">
+            <InputLabel id="demo-simple-select-required-label">Year Level</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={currentYear}
+                label="Year Level"
+                error={!!errors.currentYear}
+                helperText={errors.currentYear}
+                onChange={(e) =>setCurrentYear(e.target.value)}
+              >
+                <MenuItem value={'Elementary'}>Elementary</MenuItem>
+                <MenuItem value={'Highschool'}>Highschool</MenuItem>
+                <MenuItem value={'College'}>College</MenuItem>
+              </Select>
+              {errors.currentpassword && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '87%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.currentpassword}
+        </MuiAlert>}
+            </FormControl>
+              </div>
+              <div><FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+              <InputLabel id="demo-simple-select-required-label">Type of School</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={typeSchool}
+                label="Type of School"
+                onChange={(e) =>setTypeschool(e.target.value)}
+              >
+                <MenuItem value={'Public'}>Public</MenuItem>
+                <MenuItem value={'Private'}>Private</MenuItem>
+                <MenuItem value={'ALS'}>ALS</MenuItem>
+                <MenuItem value={'Private(Scholarship,Voucher,Sponsored)'}>Private(Scholarship,Voucher,Sponsored)</MenuItem>
+                <MenuItem value={'Public(Scholarship,Voucher,Sponsored)'}>Public(Scholarship,Voucher,Sponsored)</MenuItem>
+                <MenuItem value={'Out of School Children'}>Out of School Children</MenuItem>
+              </Select>
+              {errors.currentpassword && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '87%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.currentpassword}
+        </MuiAlert>} 
+            </FormControl></div>
+            </div>
+            <div><FormControl sx={{margin:'5px', minWidth: 120,width:'90%' }} size="small">
+              <InputLabel id="demo-simple-select-required-label">General Weighted Average</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
                 value={gwa}
-                type='text'
-                onChange={(e) => setGwa(e.target.value)}
-                variant="outlined"
-                style={{ 
-                  margin:'10px',
-                  cursor: 'pointer', 
-                }}
-              />
+                fullWidth
+                label="General Weighted Average"
+                onChange={(e) =>setGwa(e.target.value)}
+              >
+                <MenuItem value={'90-100 or 1.00'}>90-100 or 1.00</MenuItem>
+                <MenuItem value={'91-95 or 1.25'}>91-95 or 1.25</MenuItem>
+                <MenuItem value={'86-90 or 2.00'}>86-90 or 2.00</MenuItem>
+                <MenuItem value={'81-85 or 2.25'}>81-85 or 2.25</MenuItem>
+                <MenuItem value={'80-82 or 2.50'}>80-82 or 2.50</MenuItem>
+              </Select>
+              {errors.currentpassword && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '87%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.currentpassword}
+        </MuiAlert>} 
+            </FormControl></div>
               <div style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>
         <LoadingButton
         loading={loading}
@@ -380,7 +522,7 @@ const userinfor = Array.isArray(post)
           letterSpacing:'2px',
           fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
         }}
-        onClick={ChangePassword}
+        onClick={Editinfo}
       >
         Submit
       </LoadingButton>

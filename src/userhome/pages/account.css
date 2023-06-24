@@ -108,11 +108,24 @@
 
 }
 .fabiconedit{
-  margin: 30px 0px 0px 0px;
+  margin: 20px 0px 0px 0px;
   padding-right: 30px;
 }
 .chngaligninfo{
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.editinfconedc{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+.editinfconedc div{
+  width: 95%;
+
 }
 
 

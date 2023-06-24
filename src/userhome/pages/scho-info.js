@@ -22,18 +22,7 @@ const Schoinfo = () => {
       const [appointuser,setAppointment] = useState([]);
 
   const navigate = useNavigate();
-  function UpdateSubmit(event){
-      event.preventDefault();
-      setLoading(true);
-      axios.patch(`http://localhost:3006/api/v1/personalinfo/update`,{age,contactNum,caddress,applicantNum})
-      .then(res => {
-        setLoading(false);
-        navigate('/account')
-        
-      }
-       )
-      .catch(err => console.log(err));
-  }
+
   const stylediv = {
     width: '100%',
     fontSize:'20px',
@@ -52,16 +41,19 @@ const Schoinfo = () => {
   Fetch()
     });
   }, []);
-  const formatDate = () => {
-    const specificDate = new Date('2023-06-21');
-    return specificDate.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  };
+
 
     const applicantdetails = appointuser?.map((data) =>{
+      const formatDate = () => {
+        console.log(data.schedDate)
+        const specificDate = new Date(data.schedDate);
+        return specificDate.toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        });
+      };
+      const appointDays = formatDate()
         return (
             <>
      <Box sx={{ flexGrow: 1, display:'flex',justifyContent:'center',alignItems:'center' }}>
@@ -70,7 +62,7 @@ const Schoinfo = () => {
             <div className='appointscon'>
             <div className="calendar">
           <div className="text">
-            <span>{formatDate()}</span>
+            <span>{appointDays}</span>
           </div>
             </div>
             <div className='appointdetails'>
