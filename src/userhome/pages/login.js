@@ -53,7 +53,7 @@ const CssTextField = styled(TextField)({
 });
 
 const Login = () => {
-
+console.log(process.env.REACT_APP_API_URL)
     const [email, setEmail] = useState('');
     const [fpemail, setFPEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -103,6 +103,7 @@ const Login = () => {
         }
         setErrors('')  
         setLoading(true)
+        
         loginUserAcc.USER_LOGIN({email,password})
         .then(res => {
           console.log(res)
