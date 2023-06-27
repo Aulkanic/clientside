@@ -93,6 +93,9 @@ function Persona() {
           errors.age = "Not Qualified";
           swal('You are not Qualify to Apply Scholarship.Only 21 below must considered.')
           setStep(2);
+        }else if(userData.age <=5){
+          errors.age = 'Minimum age for application is five years old';
+          
         }
         if (userData.birthPlace === '') {
           errors.birthPlace = "Birth of Place is required";
@@ -130,14 +133,38 @@ function Persona() {
         setErrors('')
         setStep(3)
     };
-    
-  //   useEffect(()=>{
-  //     const timer = setTimeout(()=>{
-  //         Check()
-  //     },1000)
+    const calculateAge = (birthday) => {
+      const today = new Date();
+      const birthDate = new Date(birthday);
+      const yearDiff = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      const dayDiff = today.getDate() - birthDate.getDate();
+  
+      if (
+        yearDiff > 0 ||
+        (yearDiff === 0 && monthDiff > 0) ||
+        (yearDiff === 0 && monthDiff === 0 && dayDiff >= 0)
+      ) {
+        let age = yearDiff;
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+          age--;
+        }
+        return age;
+      } else {
+        return 0; // Return 0 if the entered birthday is in the current year or a future year
+      }
+    };
+    useEffect(() => {
+      const { birthday } = userData;
+      const age = calculateAge(birthday);
+      console.log(age)
+      setUserData((prevData) => ({ ...prevData, age: age.toString() }));
+    }, [userData.birthday]);
 
-  //     return ()=> clearTimeout(timer)
-  // },[userData])
+    const handleInputChange = (e) => {
+      setUserData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }));
+    };
+
   const today = new Date().toISOString().split('T')[0];
     return (
     <div className='Persona'>
@@ -209,31 +236,34 @@ function Persona() {
             error={!!errors.citizenship}
             helperText={errors.citizenship} 
             color='secondary'/>
-            <div className='birthpick'>
-        <FormControl> 
-        <label className='birthlabel' htmlFor="dateofbirth">Date Of Birth</label>
-        <input className='datein' 
-        type="date" 
-        error={!!errors.birthday}
-        name="dateofbirth" 
-        id="dateofbirth"
-        max={today}
-        value={userData['birthday']} 
-        onChange={(e) =>setUserData({...userData,"birthday" : e.target.value})} 
-        />
-    {errors && <FormHelperText sx={{color: 'red'}}>{errors.birthday}</FormHelperText>}
-    </FormControl> 
-            </div>
-            <TextField
-             label='Age' 
-             size='small'
-             value={userData['age']} 
-             onChange={(e) =>setUserData({...userData,"age" : e.target.value})} 
-             margin='normal' 
-             error={!!errors.age}
-             helperText={errors.age} 
-             variant='outlined' 
-             color='secondary'/>
+      <div className='birthpick'>
+        <FormControl>
+          <label className='birthlabel' htmlFor="dateofbirth">Date Of Birth</label>
+          <input
+            className='datein'
+            type="date"
+            error={!!errors.birthday}
+            name="birthday"
+            id="dateofbirth"
+            max={today}
+            value={userData['birthday']}
+            onChange={handleInputChange}
+          />
+          {errors.birthday && <FormHelperText sx={{ color: 'red' }}>{errors.birthday}</FormHelperText>}
+        </FormControl>
+      </div>
+      <TextField
+        label='Age'
+        size='small'
+        value={userData['age']}
+        onChange={handleInputChange}
+        margin='normal'
+        error={!!errors.age}
+        helperText={errors.age}
+        variant='outlined'
+        color='secondary'
+        disabled
+      />
             <TextField
              label='Birth of Place'
              size='small'

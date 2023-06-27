@@ -46,7 +46,7 @@ function Newexspage() {
     <div className='newexpage'>
       <h1>Login your Account in .... </h1>
         <div className='lexpage'>
-           <Link className='gotolog' to='/login'>WEBSITE APPLICATION</Link> 
+           <Link className='gotolog' to='/login'>REDIRECT TO LOGIN PAGE</Link> 
         </div>
         <div className='lnewpage'>
         <Button variant="none" onClick={handleClickOpen}><Link className='gotoreg'>MOBILE APPLICATION</Link></Button>
