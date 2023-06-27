@@ -15,6 +15,7 @@ import { Box, Modal} from "@mui/material";
 import Card from '@mui/material/Card';
 import Skeleton from '@mui/material/Skeleton';
 import LoadingButton from '@mui/lab/LoadingButton';
+import MuiAlert from '@mui/material/Alert';
 
 const Scholar = () => {
 
@@ -33,6 +34,8 @@ const [images1, setImages1] = useState([]);
 const [disabledInputs, setDisabledInputs] = useState([]);
 const [userFiles, setUserFiles] = useState([]);
 const applicantNum = localStorage.getItem('ApplicantNum');
+const [errors,setErrors] = useState([]);
+
 
 const handleFileChange = (index, event) => {
   const files = [...fileValues];
@@ -68,6 +71,7 @@ const handleSubmit = async (event) => {
   event.preventDefault();
   setLoading(true);
   console.log(fileValues);
+  let errors ={};
   
   try {
     for (let index = 0; index < fileValues.length; index++) {
@@ -75,6 +79,14 @@ const handleSubmit = async (event) => {
       
       // Skip iteration if file is undefined
       if (!file) {
+        continue;
+      }
+      const fileSizeInBytes = file.size;
+      const maxSizeInBytes = 5 * 1024 * 1024; // 5MB in bytes
+      
+      if (fileSizeInBytes > maxSizeInBytes) {
+        // Display an error message or handle the validation error accordingly
+        errors.filesize[index] = 'File size exceeds the limit of 5MB.'
         continue;
       }
       
@@ -145,7 +157,7 @@ useEffect(() => {
         ListofReq.FETCH_REQUIREMENTS(),
         ListofSub.FETCH_SUB(applicantNum)
       ]);
-      console.log(response[0].data.Requirements.results1[0])
+      console.log(response[0].data.Requirements.results1)
       setDocs(response[0].data.Requirements.results1);
       setSubmittedDocs1(response[1].data.Document);
       setLoadingPage(false)
@@ -249,34 +261,55 @@ const requirements = docs?.map((docu, index) => {
       const valueToCheck = docu.requirementName;
       console.log(submitted1)
       const hassubmit = submitted1.some((item) => item.requirement_Name === valueToCheck);
-
+      const deadline = new Date(docu.deadline); // Convert the deadline string to a Date object
+      const currentDate = new Date(); // Get the current date
+    
+      const isPastDue = currentDate > deadline && !hassubmit;
+    
       return (
-          <>
+        <React.Fragment key={index}>
           <Box>
             <Card elevated={15}>
-          <div className='reqlistcontainer' key={index}>
-          <div className="requirelist">
-            <div className="requireprev">   
-            {images[index] ? (<img src={images[index]} alt='No Image'/>) :(<img src={Noimageprev} alt='No Image'/>)}
-            </div>
-            <div className='userlistreq'>
-          <label htmlFor="">{docu.requirementName}</label>
-          {!isDisabled && !hassubmit ? (<input 
-          type="file" 
-          name={`${docu.requirementName}`} 
-          disabled={isDisabled} 
-          onChange={(event) => handleFileChange(index, event)} />)
-          :(<p>Already Submitted</p>)}   
-          </div>
-          </div>
-          {(index + 1) % 4 === 0 && <br />}
-          </div>
-          </Card>
+              <div className='reqlistcontainer'>
+                <div className="requirelist">
+                  <div className="requireprev">
+                    {images[index] ? (<img src={images[index]} alt='No Image' />) : (<img src={Noimageprev} alt='No Image' />)}
+                  </div>
+                  <div className='userlistreq'>
+                    <label htmlFor="">{docu.requirementName}</label>
+                    <span>Deadline: {docu.deadline}</span>
+                    {isPastDue ? (
+                      <p>Past due: Document submission is no longer possible.</p>
+                    ) : (
+                      !isDisabled && !hassubmit ? (
+                        <input
+                          type="file"
+                          name={`${docu.requirementName}`}
+                          disabled={isDisabled}
+                          onChange={(event) => handleFileChange(index, event)}
+                        />
+                      ) : (
+                        <p>Already Submitted</p>
+                      )
+                    )}
+                  </div>
+                </div>
+                {(index + 1) % 4 === 0 && <br />}
+              </div>
+            </Card>
+            {/* {errors.filesize[index] && <MuiAlert variant='outlined' 
+    style={{ 
+      width: '85%', 
+      margin: '10px', 
+      color:'red', 
+      fontSize:'10px',
+      height:'30px',
+      background:'white' }} elevation={0} severity="error">
+          {errors.filesize[index]}
+        </MuiAlert>} */}
           </Box>
-          </>
-          )
- 
-
+        </React.Fragment>
+      );
     });
 return(
   <>
