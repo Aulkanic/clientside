@@ -378,7 +378,7 @@ const handlerNextInput = (e) => {
           margin: '10px', 
           cursor: 'pointer', 
           fontWeight: '700',
-          background: '#005427',
+          background: 'rgba(43, 194, 106, 0.73)',
           color: 'white',
           fontSize:'10px',
           letterSpacing:'2px',
@@ -395,7 +395,7 @@ const handlerNextInput = (e) => {
                 margin: '10px', 
                 cursor: 'pointer', 
                 fontWeight: '700',
-                background: '#005427',
+                background: 'rgba(43, 194, 106, 0.73)',
                 color: 'white',
                 fontSize:'10px',
                 letterSpacing:'2px',
@@ -408,25 +408,24 @@ const handlerNextInput = (e) => {
         </div>
       )}
 
-  {step === 2 && (
-   <div className='otpfreg'>
-      <h2>OTP Verification</h2>
-        <p>An OTP has been sent to your email. Please enter it below:</p>
+      {step === 2 && (
+        <div className='otpfreg'>
+          <h2>OTP Verification</h2>
+          <p>An OTP has been sent to your email. Please enter it below:</p>
           <label>
             OTP:
             <input
             maxLength={6}
-             style={{
-             width: '100%',
-             height: '30px',
-             fontSize: '15px',
-             textAlign: 'center',
-             letterSpacing: '15px',
-             border: '1px solid #005427',
-             borderRadius: '10px',
-             outline: 'none',
-
-    }} type="text" value={otp} onChange={handlerOtpInput} />
+                  style={{
+                    width: '100%',
+                    height: '40px',
+                    fontSize: '15px',
+                    textAlign: 'center',
+                    letterSpacing: '15px',
+                    border: '1px solid #ccc',
+                    borderRadius: '5px',
+                    outline: 'none',
+                  }} type="text" value={otp} onChange={handlerOtpInput} />
     {errors.otp && <MuiAlert variant='outlined' 
     style={{ 
       width: '85%', 
@@ -434,34 +433,27 @@ const handlerNextInput = (e) => {
       color:'red', 
       fontSize:'10px',
       height:'30px',
-      borderRadius: '10px',
-      display: 'flex',
-      alignItems: 'center',
-      textAlign: 'center',
-      justifyContent: 'center',
       background:'white' }} elevation={0} severity="error">
           {errors.otp}
         </MuiAlert>}
           </label>
           <br />
-
           <div className='bacreotp'>
             <div>
             <LoadingButton 
-              style={{
-               cursor: 'pointer', 
-                fontWeight: '700',
-                background: '#005427',
-                color: 'white',
-                fontSize:'10px',
-                letterSpacing:'2px',
-                fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+                          style={{
+                            cursor: 'pointer', 
+                            fontWeight: '700',
+                            background: 'rgba(43, 194, 106, 0.73)',
+                            color: 'white',
+                            fontSize:'10px',
+                            letterSpacing:'2px',
+                            fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
                           }}
-            variant="outlined" onClick={handlerBackInput}> Back </LoadingButton>
-            </div>    
-
-    <div>
-     <LoadingButton
+            variant="outlined" onClick={handlerBackInput}>Back</LoadingButton>
+            </div>     
+            <div>
+            <LoadingButton
         loading={loading1}
         loadingPosition="end"
         variant="outlined"
@@ -469,17 +461,19 @@ const handlerNextInput = (e) => {
         style={{
           cursor: 'pointer', 
           fontWeight: '700',
-          background: '#005427',
+          background: 'rgba(43, 194, 106, 0.73)',
           color: 'white',
           fontSize:'10px',
           letterSpacing:'2px',
           fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
         }}
-        className='resendBtn'
-        onClick={handleResendClick}> Resend </LoadingButton>
+        onClick={handleResendClick}
+      >
+        Resend
+      </LoadingButton>
          </div>
 
-      
+      </div>
       <div>
       <LoadingButton
         loading={loading}
@@ -489,7 +483,7 @@ const handlerNextInput = (e) => {
         style={{
           cursor: 'pointer', 
           fontWeight: '700',
-          background: '#005427',
+          background: 'rgba(43, 194, 106, 0.73)',
           color: 'white',
           fontSize:'10px',
           letterSpacing:'2px',
@@ -501,15 +495,12 @@ const handlerNextInput = (e) => {
       </LoadingButton>
       </div>
         </div>
-        </div>
       )}
 
       {step === 3 && (
         <div className='createacccon'>
           <h2>Create Account</h2>
-
-      <CssTextField     
-        className='input' 
+        <CssTextField      
         id="input-with-icon-textfield"
         label="First Name"
         value={fname}
@@ -534,9 +525,7 @@ const handlerNextInput = (e) => {
       background:'white' }} elevation={0} severity="error">
           {errors.fname}
         </MuiAlert>}
-
         <CssTextField      
-        className='input'
         id="input-with-icon-textfield"
         label="Last Name"
         size="small"
@@ -547,17 +536,15 @@ const handlerNextInput = (e) => {
             <InputAdornment position="start">
               <AccountCircle />
             </InputAdornment>
-          ), }}
+          ),
+        }}
         variant="outlined"
         style={{
-          borderRadius: '10px',
           margin:'10px',
           cursor: 'pointer', 
-          outline: 'none'
         }}
       />
           {errors.lname && <MuiAlert variant='outlined' 
-
     style={{ 
       width: '73%', 
       margin: '10px', 
@@ -567,9 +554,7 @@ const handlerNextInput = (e) => {
       background:'white' }} elevation={0} severity="error">
           {errors.lname}
         </MuiAlert>}
-
-        <CssTextField     
-        className='input' 
+        <CssTextField      
         id="input-with-icon-textfield"
         label="Middle Name"
         size="small"
@@ -598,7 +583,6 @@ const handlerNextInput = (e) => {
       background:'white' }} elevation={0} severity="error">
           {errors.mname}
         </MuiAlert>}
-
         <CssTextField      
         id="input-with-icon-textfield"
         label="Password"
@@ -629,7 +613,6 @@ const handlerNextInput = (e) => {
       background:'white' }} elevation={0} severity="error">
           {errors.password}
         </MuiAlert>} 
-
         <div>  
         <LoadingButton
         loading={loading}
@@ -641,7 +624,7 @@ const handlerNextInput = (e) => {
           margin:'10px',      
           cursor: 'pointer', 
           fontWeight: '700',
-          background: '#005427',
+          background: 'rgba(43, 194, 106, 0.73)',
           color: 'white',
           fontSize:'10px',
           letterSpacing:'2px',

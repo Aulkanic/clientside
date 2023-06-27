@@ -48,7 +48,6 @@ const Faqs = () => {
           Who Is Eligible To Apply For A Scholarship?
           </Typography>
         </AccordionSummary>
-        
         <AccordionDetails className='FaqsAnswer'>
           <Typography>
           1. Permanent resident of Marilao, Bulacan <br/>

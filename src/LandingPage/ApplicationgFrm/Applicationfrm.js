@@ -15,10 +15,9 @@ import { styled } from '@mui/material/styles';
 function Applicationfrm() {
     const CustomStepLabel = styled(StepLabel)({
         '& .MuiStepLabel-label': {
-          color: '#fff', // Change the color value to the desired color
+          color: 'white', // Change the color value to the desired color
         },
       });
-      
     const { currentStep, finalData} = useContext(multiStepContext);
     function showStep(step){
         switch(step){  
@@ -38,17 +37,14 @@ function Applicationfrm() {
     <>
     <Lheader/>
     <div className='stepdiv'>
-
     <div className="backgroundstep">
         <h1>BMCC APPLICATION FORM</h1>
-
     <div className='stepper'>
-        <Stepper className='headBmcc' alternativeLabel style={{width:'90%', color:'white'}} activeStep={currentStep - 1} orientation='horizontal'>
-            
-             <Step className='choose'>
+        <Stepper alternativeLabel style={{width:'90%', color:'white'}} activeStep={currentStep - 1} orientation='horizontal'>
+             <Step>
                 <CustomStepLabel>Choose Scholarship</CustomStepLabel>
             </Step>
-            <Step >
+            <Step>
                 <CustomStepLabel>Personal Information</CustomStepLabel>
             </Step>
             <Step>
@@ -62,7 +58,6 @@ function Applicationfrm() {
             </Step>
         </Stepper>
     </div>
-    
     <form action="">
     {showStep(currentStep)}
     </form>

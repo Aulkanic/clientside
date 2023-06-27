@@ -169,15 +169,12 @@ function Persona() {
     return (
     <div className='Persona'>
         <div className="personad"> 
-
            <form>
             <div className="ribbon-header">
               <div className="ribbon-header-text"><h2>Personal Information</h2></div>
             </div>
-
             <div className="personfrmcon">
-            <div className="frmpcard">
-                   
+            <div className="frmpcard">     
             <TextField
              label='First Name' 
              value={userData['firstName']} 
@@ -188,7 +185,6 @@ function Persona() {
              error={!!errors.firstName}
             helperText={errors.firstName}
              color='secondary'/>
-
             <TextField 
             label='Last Name' 
             value={userData['lastName']} 
@@ -199,7 +195,6 @@ function Persona() {
             helperText={errors.lastName}
             variant='outlined' 
             color='secondary'/>
-
             <TextField 
             label='Middle Name' 
             value={userData['middleName']} 
@@ -210,9 +205,8 @@ function Persona() {
             error={!!errors.middleName}
             helperText={errors.middleName}
             color='secondary'/>
-
             <div className='selectgend'>
-            <FormControl sx={{ minWidth: 265 }} size="small">
+            <FormControl sx={{ minWidth: 325 }} size="small">
             <InputLabel id="demo-simple-select-required-label">Gender</InputLabel>
               <Select
                 labelId="demo-select-small-label"
@@ -231,7 +225,6 @@ function Persona() {
             </FormControl>
             </div>
               </div>
-
             <div className="frmpcard">
             <TextField 
             label='Citizenship'
@@ -243,13 +236,11 @@ function Persona() {
             error={!!errors.citizenship}
             helperText={errors.citizenship} 
             color='secondary'/>
-
       <div className='birthpick'>
         <FormControl>
           <label className='birthlabel' htmlFor="dateofbirth">Date Of Birth</label>
           <input
             className='datein'
-            label='BirthDate'
             type="date"
             error={!!errors.birthday}
             name="birthday"
@@ -284,7 +275,6 @@ function Persona() {
               variant='outlined' 
               color='secondary'/>
             </div>
-            
             <div className="frmpcard">
             <TextField
              label='Contact Number'
@@ -296,7 +286,6 @@ function Persona() {
              helperText={errors.contactNum} 
              variant='outlined' 
              color='secondary'/>
-
             <TextField 
             type='email' 
             label='Email' 
@@ -307,7 +296,6 @@ function Persona() {
             error={!!errors.email}
             helperText={errors.email}
             color='secondary'/>
-
             <TextField 
             label='Permanent Address (Complete Address) '
             size='small' 
@@ -318,7 +306,6 @@ function Persona() {
             error={!!errors.paddress}
             helperText={errors.paddress} 
             color='secondary'/>
-
             <TextField 
             label='Current Address (Complete Address) ' 
             size='small'
@@ -331,10 +318,9 @@ function Persona() {
             color='secondary'/>
             </div>
             </div>
-
             <div className='btnfrmn'>
-            <button className="prevBtn" onClick={() => setStep(1)}>Previous</button>
-            <button className='nextBtn' onClick={Check}>Next</button>
+            <Button sx={{backgroundColor:'red'}} variant="contained" onClick={() => setStep(1)}>Previous</Button>
+            <Button variant="contained" onClick={Check}>Next</Button>
             </div>
             </form>
         </div>
