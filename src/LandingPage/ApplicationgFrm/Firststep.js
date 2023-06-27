@@ -168,8 +168,11 @@ function Firststep() {
           <div className="form">
           <div className='FFcon'>
           <div className="FFcard">
-        <div>
+
+        <div className='createAndchoose'>
+
         <TextField
+             className='createAccEmail'
              label='Created Account Email' 
              value={userData['checkemail']} 
              onChange={(e) =>setUserData({...userData,"checkemail" : e.target.value})} 
@@ -179,6 +182,7 @@ function Firststep() {
              error={!!errors.checkemail}
             helperText={errors.checkemail}
              color='secondary'/>
+
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel sx={{color:'green'}} id="demo-simple-select-label">Choose Scholarship Category</InputLabel>
             <Select
@@ -199,6 +203,7 @@ function Firststep() {
                     },
                   },
                 }}
+              className='createAccEmail'
               autoWidth
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -215,9 +220,11 @@ function Firststep() {
             </Select>
             {errors && <FormHelperText sx={{color: 'red'}}>{errors.scholarID}</FormHelperText>}
          </FormControl> 
-         </div>             
+         </div>  
+
           </div>
           </div>
+
           <div className="checkboxcontainer">
           {userData.scholarID === 'Academic Scholarship' && <div className='checkbox'>
           <p>{userData.scholarID}(Elementary & Highschool)</p>

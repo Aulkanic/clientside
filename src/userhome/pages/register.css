@@ -14,11 +14,8 @@
 .registrationcon{
     width: 80%;
     height: 70%;
-    border-radius: 8px;
     display: flex;
-    box-shadow: 0px 1px 7px 9px rgba(234,218,218,0.57);
-    -webkit-box-shadow: 0px 1px 7px 9px rgba(234,218,218,0.57);
-    -moz-box-shadow: 0px 1px 7px 9px rgba(234,218,218,0.57);
+    
 }
 .registrationimg{
     width: 40%;
@@ -28,9 +25,8 @@
     background-position: 50%;
     background-attachment: scroll;
     background-size: cover;
-    box-shadow: -25px 1px 1px -4px rgba(218,211,211,0.62) inset;
-    -webkit-box-shadow: -25px 1px 1px -4px rgba(218,211,211,0.62) inset;
-    -moz-box-shadow: -25px 1px 1px -4px rgba(218,211,211,0.62) inset;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 .sloganreg{
     width: 100%;
@@ -40,41 +36,54 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    background: rgba(43, 194, 106, 0.73);
+    background: rgba(135, 233, 176, 0.73);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 .sloganreglogo{
     flex-basis: 10%;
+    
 }
 .sloganreg img{
     width: 15%;
+    padding: 10px;
+    margin: 40px;
 }
 .sloganregcontainer{
     display: flex;
     flex-basis: 80%;
     align-items: top;
     justify-content: top;
+    padding: 20px;
+    text-align: center;
+
 }
 .sloganreg div{
     height: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    
 }
+
 .sloganreg h1{
     margin: 0;
     margin-top: 20px;
-    color: white;
     font-weight: 700;
+    color: #005427;
 }
 .sloganreg p, .sloganreg span{
     margin: 0;
-    color: white;
+    color: rgb(23, 97, 26);
     font-weight:400;
+    font-size: 20px;
 }
 .registrationfrm{
     width: 60%;
     font-family: 'Inter', sans-serif;
     background: white;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 .registrationfrm form{
     display: flex;
@@ -87,6 +96,8 @@
     margin: 0;
     margin-top: 20px;
     text-align: center;
+    color: #005427;
+    font-weight: 600 ;
 }
 .regfrmcontainer{
     width: 100%;
@@ -116,9 +127,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: whitesmoke;
-    border-radius: 5px;
+    background-color: rgb(231, 240, 229);
+    border-radius: 10px;
     flex-direction: column;
+    text-align: center;
 }
 .createacccon{
     width: 70%;
@@ -126,10 +138,29 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: whitesmoke;
-    border-radius: 5px;
+    background-color: rgb(200, 252, 173);
+    border-radius: 10px;
     flex-direction: column;
 }
+
+.createacccon h2{
+    color: #005427;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.createacccon input{
+    color: #005427;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+.createacccon label{
+    color: #005427;
+    font-weight: 600;
+}
+
 .otpfreg h2{
     font-size: 36px;
     color: darkgreen;
@@ -161,5 +192,6 @@
     display: flex;
     width: 90%;
     justify-content: space-between;
-
+    padding: 10px;
+    margin: 10px;
 }

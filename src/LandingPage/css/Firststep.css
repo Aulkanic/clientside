@@ -3,6 +3,7 @@
     width: 80%;
     margin-left: 10%;
     height: 100vh;
+    
 }
 .FFd{
     display: flex;
@@ -63,4 +64,14 @@
     display: grid;
     grid-template-columns: repeat(auto-fit,minmax(400px, 1fr));
     grid-gap: 10px;
+}
+
+.createAndchoose{
+    color: #005427;
+    font-weight: 600;
+}
+
+.createAccEmail{
+    color: #005427;
+    
 }
