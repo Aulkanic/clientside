@@ -157,7 +157,7 @@ useEffect(() => {
         ListofReq.FETCH_REQUIREMENTS(),
         ListofSub.FETCH_SUB(applicantNum)
       ]);
-      console.log(response[0].data.Requirements.results1)
+      console.log(response)
       setDocs(response[0].data.Requirements.results1);
       setSubmittedDocs1(response[1].data.Document);
       setLoadingPage(false)
