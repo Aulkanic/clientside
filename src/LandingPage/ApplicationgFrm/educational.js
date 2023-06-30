@@ -523,7 +523,7 @@ function Educational() {
                 label="General Weighted Average"
                 onChange={(e) =>setUserData({...userData,"gwa" : e.target.value})}
               >
-                <MenuItem value={'90-100 or 1.00'}>90-100 or 1.00</MenuItem>
+                <MenuItem value={'96-100 or 1.00'}>96-100 or 1.00</MenuItem>
                 <MenuItem value={'91-95 or 1.25'}>91-95 or 1.25</MenuItem>
                 <MenuItem value={'86-90 or 2.00'}>86-90 or 2.00</MenuItem>
                 <MenuItem value={'81-85 or 2.25'}>81-85 or 2.25</MenuItem>
