@@ -70,28 +70,32 @@ const handleFileChange1 = (index, event) => {
 const handleSubmit = async (event) => {
   event.preventDefault();
   setLoading(true);
-  console.log(fileValues);
-  let errors ={};
   
   try {
     for (let index = 0; index < fileValues.length; index++) {
       const file = fileValues[index];
-      
+      const docu = docs[index];
+      const Name = docu.requirementName
       // Skip iteration if file is undefined
       if (!file) {
         continue;
       }
+      if (!file.type.startsWith('image/') || (file.type !== 'image/png' && file.type !== 'image/jpeg')) {
+        // Display an error message or handle the validation error accordingly
+        errors.push({ Name, message: 'Only PNG and JPG image files are allowed.' });
+        continue;
+      }
+
       const fileSizeInBytes = file.size;
       const maxSizeInBytes = 5 * 1024 * 1024; // 5MB in bytes
       
       if (fileSizeInBytes > maxSizeInBytes) {
         // Display an error message or handle the validation error accordingly
-        errors.filesize[index] = 'File size exceeds the limit of 5MB.'
+        errors.push({ Name, message: 'File size exceeds the limit of 5MB.' });
         continue;
       }
       
       const applicantNum = localStorage.getItem('ApplicantNum');
-      const docu = docs[index];
       const formData = new FormData();
       formData.append('file', file);
       formData.append('Reqname', docu.requirementName);
@@ -112,6 +116,13 @@ const handleSubmit = async (event) => {
   }
 
   setLoading(false);
+  if (errors.length > 0) {
+    const errorMessages = errors.map((err) => `${err.Name}: ${err.message}`);
+    swal(errorMessages.join("\n"));
+  }
+  setErrors([])
+  
+
 };
 const DeleteReq = async (reqName,event) =>{
   const id = localStorage.getItem('ApplicantNum');
@@ -157,7 +168,6 @@ useEffect(() => {
         ListofReq.FETCH_REQUIREMENTS(),
         ListofSub.FETCH_SUB(applicantNum)
       ]);
-      console.log(response)
       setDocs(response[0].data.Requirements.results1);
       setSubmittedDocs1(response[1].data.Document);
       setLoadingPage(false)
@@ -263,7 +273,7 @@ const requirements = docs?.map((docu, index) => {
       const hassubmit = submitted1.some((item) => item.requirement_Name === valueToCheck);
       const deadline = new Date(docu.deadline); // Convert the deadline string to a Date object
       const currentDate = new Date(); // Get the current date
-    
+      const error = errors[index];
       const isPastDue = currentDate > deadline && !hassubmit;
     
       return (
@@ -297,16 +307,6 @@ const requirements = docs?.map((docu, index) => {
                 {(index + 1) % 4 === 0 && <br />}
               </div>
             </Card>
-            {/* {errors.filesize[index] && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '85%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'10px',
-      height:'30px',
-      background:'white' }} elevation={0} severity="error">
-          {errors.filesize[index]}
-        </MuiAlert>} */}
           </Box>
         </React.Fragment>
       );
