@@ -4,7 +4,7 @@ import DeleteBtn from '../Button/deletebutton'
 import Button from '@mui/material/Button';
 import Homepage from '../components/Homepage'
 import Axios from 'axios'
-import { UploadingDocs, ListofReq, ListofSub, EditSub, DeleteSub } from '../../Api/request';
+import { UploadingDocs, ListofReq, ListofSub, EditSub, DeleteSub,FetchingApplicantsInfo } from '../../Api/request';
 import swal from 'sweetalert';
 import LoopingRhombusesSpinner from '../loadingDesign/loading'
 import { useNavigate } from 'react-router-dom'
@@ -34,6 +34,7 @@ const [images1, setImages1] = useState([]);
 const [disabledInputs, setDisabledInputs] = useState([]);
 const [userFiles, setUserFiles] = useState([]);
 const applicantNum = localStorage.getItem('ApplicantNum');
+const [userInfo,setUserInfo] = useState([]);
 const [errors,setErrors] = useState([]);
 
 
@@ -70,7 +71,16 @@ const handleFileChange1 = (index, event) => {
 const handleSubmit = async (event) => {
   event.preventDefault();
   setLoading(true);
-  
+  if(userInfo.status === 'For Evaluation'){
+    alert("You cannot submit your evaluation request until you have been evaluated by a faculty member.")
+    swal({
+      text: 'You cannot submit your Documents until you have been evaluated by a BMCC.',
+      timer: 2000,
+      buttons: false,
+      icon: "error",
+    })
+    return
+  }
   try {
     for (let index = 0; index < fileValues.length; index++) {
       const file = fileValues[index];
@@ -166,9 +176,14 @@ useEffect(() => {
       setLoadingPage(true)
       const response = await Promise.all([
         ListofReq.FETCH_REQUIREMENTS(),
-        ListofSub.FETCH_SUB(applicantNum)
+        ListofSub.FETCH_SUB(applicantNum),
+        FetchingApplicantsInfo.FETCH_INFO(applicantNum)
       ]);
-      setDocs(response[0].data.Requirements.results1);
+
+      const schoCat = response[2].data.results[0].SchoIarshipApplied
+      const RequireDocs = response[0].data.Requirements.results1?.filter(docs => docs.schoName === schoCat)
+      setDocs(RequireDocs);
+      setUserInfo(response[2].data.results[0])
       setSubmittedDocs1(response[1].data.Document);
       setLoadingPage(false)
     } catch (error) {
