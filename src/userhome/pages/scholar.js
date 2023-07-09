@@ -85,7 +85,9 @@ const handleSubmit = async (event) => {
     for (let index = 0; index < fileValues.length; index++) {
       const file = fileValues[index];
       const docu = docs[index];
-      const Name = docu.requirementName
+      const Name = docu.requirementName;
+      const docsFor = docu.docsfor
+      console.log(docu)
       // Skip iteration if file is undefined
       if (!file) {
         continue;
@@ -110,6 +112,7 @@ const handleSubmit = async (event) => {
       formData.append('file', file);
       formData.append('Reqname', docu.requirementName);
       formData.append('applicantNum', applicantNum);
+      formData.append('docsFor', docsFor);
 
       const res = await UploadingDocs.UPLOAD_DOCS(formData);
       const updatedDisabledInputs = [...disabledInputs];
@@ -286,8 +289,8 @@ const requirements = docs?.map((docu, index) => {
       const valueToCheck = docu.requirementName;
       console.log(submitted1)
       const hassubmit = submitted1.some((item) => item.requirement_Name === valueToCheck);
-      const deadline = new Date(docu.deadline); // Convert the deadline string to a Date object
-      const currentDate = new Date(); // Get the current date
+      const deadline = new Date(docu.deadline);
+      const currentDate = new Date(); 
       const error = errors[index];
       const isPastDue = currentDate > deadline && !hassubmit;
     
@@ -303,6 +306,7 @@ const requirements = docs?.map((docu, index) => {
                   <div className='userlistreq'>
                     <label htmlFor="">{docu.requirementName}</label>
                     <span>Deadline: {docu.deadline}</span>
+                    <span>For: {docu.docsfor}</span>
                     {isPastDue ? (
                       <p>Past due: Document submission is no longer possible.</p>
                     ) : (

@@ -35,6 +35,8 @@ const Endpoints = {
     FETCH_BMCCSCHOLARINFO: 'BMCCScholar/SchoInfo/',
     FETCH_USERAPPOINTMENT: 'Appointment/appointmentSched/',
     USER_LOGOUT:'user/Logout',
+    FFETCH_COLOR:'Dynamic/Colorslist',
+    FETCH_WEBSITE:"admin/WebImg",
 }
 
 export default Endpoints

@@ -1,15 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 .lconthome{
     width: 100%;
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
 
 .lapply{
     width: 100%;
-    height: 70%;
-    background-image: url('../../userhome/assets/home.jpg');
+    height: 400px;
     background-repeat: no-repeat;
     background-position: 50%;
     background-attachment: scroll;
@@ -82,7 +81,7 @@
     width: 100%;
     height: 50%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
 }
 .limgcard{
     width: 25%;
@@ -104,5 +103,8 @@
     border: 1px solid rgb(53, 48, 48);
     margin-top: 40px;
     margin-bottom: 40px;
+}
+.Carou{
+    width: 50%;
 }
 

@@ -104,3 +104,9 @@ export const Logoutuser = {
 export const APK = {
     APK: (data) => axiosInstance.post(Endpoints.APK,data)
 }
+export const Colorlist = {
+    FETCH_COLOR: () => axiosInstance.get(Endpoints.FFETCH_COLOR)
+}
+export const WebImg = {
+    FETCH_WEB: () => axiosInstance.get(Endpoints.FETCH_WEBSITE)
+}

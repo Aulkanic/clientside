@@ -43,17 +43,15 @@
 }
 
 h1{
-    color: #005427;
+    color: black;
     font-weight: 1000;
     font-size: 30px;
-    text-shadow: 1px 2px 1px #1a9252;
+
 }
 
 p{
     font-size: 16px;
-    font-style: italic;
-    color: #005427;
-    font-weight: 600;
+
 }
 
 .aabstract{

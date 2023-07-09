@@ -5,20 +5,37 @@ import LNav from '../components/navbar'
 import {Link} from 'react-router-dom'
 import limgda from '../../userhome/assets/da.jpg'
 import { motion } from "framer-motion";
+import { WebImg } from '../../Api/request'
+import { useState } from 'react'
+import { useEffect } from 'react'
+import { Carousel } from 'react-responsive-carousel';
+import { Card,Typography } from '@mui/material'
 
-function lhomepage() {
+function Lhomepage() {
+  const [imgList,setImglist] = useState([]);
+  const [loading,Setloading] = useState(false)
+
+  useEffect(() =>{
+    async function Fetch(){
+      Setloading(true)
+      const img = await WebImg.FETCH_WEB()
+      setImglist(img.data.result)
+      
+      Setloading(false)
+      console.log(img)
+    }
+    Fetch()
+  },[])
   const fadeInVariant = {
     hidden: { opacity: 0 },
     visible: { opacity: 1 }
     
   };
-  
-  return (
-    <>
-    <LHeader/>
-    <LNav/>
-    <div className='lconthome'>
-      <div className="lapply">
+  const content = () =>{
+    const imgUrl = imgList[0]?.File;
+      return (
+        <>
+       <div className="lapply" style={{backgroundImage: `url(${imgUrl})`}}>
         <div className="lslogan">
             <motion.h1
              initial={{ opacity: 0 }}
@@ -34,43 +51,59 @@ function lhomepage() {
           <motion.button whileHover={{
               scale: 1.2,
               transition: { duration: 0.5 },
-  }}
-
-  whileTap={{ scale: 0.9 }}>APPLY NOW</motion.button></Link>
+            }}
+          whileTap={{ scale: 0.9 }}>
+          APPLY NOW
+          </motion.button></Link>
         </div>
-     </div>
+     </div>       
+        </>
+      )
+  }
+  const imagelist = imgList?.map((image, index) => {
 
-      <div className='lhr'> </div>
-        <div className="lcarou">
-           <motion.div 
-            initial={{ x: -1000 }} // Initial position outside the viewport
-            animate={{ x: 0 }} // Animate to position 0 (left)
-            transition={{ duration: 0.5 }} // Animation duration
-
-          className="limgcard">
-              <img src={limgda} alt="" />
-          </motion.div>
-          
-          <motion.div 
-           initial={{ x: -1000 }} // Initial position outside the viewport
-           animate={{ x: 0 }} // Animate to position 0 (left)
-           transition={{ duration: 0.5 }} // Animation duration
-          className="limgcard">
-              <img src={limgda} alt="" />
-          </motion.div>
-
-          <motion.div 
-           initial={{ x: -1000 }} // Initial position outside the viewport
-           animate={{ x: 0 }} // Animate to position 0 (left)
-           transition={{ duration: 0.5 }} // Animation duration
-
-          className="limgcard">
-              <img src={limgda} alt="" />
-          </motion.div>
-      </div>
+    return (
+    <div key={index} className="carousel-slide">
+      <img style={{width: '100%',height:'300px'}} src={image.File} alt={`Carousel Image ${index}`} />
     </div>
+    )
+})
+  
+  return (
+    <>
+    <LHeader/>
+    <LNav/>
+
+    {loading ? (<p>Loading</p>) : (<div className='lconthome'>
+    {content()}
+      <div className='lhr'> </div>
+      
+        <div className="lcarou" style={{width:'100%'}}>
+          <div style={{width:'47%',margin:'0px 10px 0px 0px'}}>
+            <Card sx={{padding:'10px'}}>
+              <Typography sx={{fontSize:'30px'}}>What is Pondo Para sa Iskolar ng Bayan</Typography>
+              <Typography sx={{fontSize:'20px'}}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tortor at auctor urna nunc. Aliquet porttitor lacus luctus accumsan. Nulla aliquet enim tortor at. Semper risus in hendrerit gravida rutrum. Phasellus egestas tellus rutrum tellus pellentesque. Condimentum id venenatis a condimentum vitae sapien. Vel orci porta non pulvinar neque laoreet suspendisse interdum. Ac felis donec et odio pellentesque. Urna id volutpat lacus laoreet. Platea dictumst vestibulum rhoncus est.
+              </Typography>
+            </Card>
+          </div>
+        <Carousel
+            className='Carou'
+            autoPlay
+            infiniteLoop
+            interval={2000}
+            showArrows={true}
+            showStatus={false}
+            showThumbs={false}
+            transitionTime={1000}
+            swipeable={true}
+          >
+            {imagelist}
+          </Carousel>
+      </div>
+    </div>)}
     </>
   )
 }
 
-export default lhomepage
+export default Lhomepage

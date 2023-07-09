@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react'
 import LHeader from '../components/header'
 import LNav from '../components/navbar'
+import { Colorlist,WebImg } from '../../Api/request'
 import '../css/lcontact.css'
 import { motion } from "framer-motion";
 import { Carousel } from 'react-responsive-carousel';
@@ -16,7 +17,22 @@ const GreenButton = styled(Button)({
   },
 });
 function Contact() {
+  const [color,setColor] = useState([]);
+  const [imgList,setImglist] = useState([]);
+  const [loading,Setloading] = useState(false)
 
+  useEffect(() => {
+    async function Fetch(){
+      Setloading(true)
+      const img = await WebImg.FETCH_WEB()
+      const req = await Colorlist.FETCH_COLOR()
+      setColor(req.data.result[0])
+      setImglist(img.data.result)
+      
+      Setloading(false)
+    }
+    Fetch()
+  },[]);
   const images = [
     'https://drive.google.com/uc?id=1scIY0erYiuFBBXdLCF1_mYBnyOA0c1Nh',
     'https://drive.google.com/uc?id=1bkdJFYPWz6RQEZ-RKNa8dn0-IdB-YkSI',
@@ -26,14 +42,14 @@ function Contact() {
     hidden: { opacity: 0, x: -70 },
     visible: { opacity: 1, x: 0 }
   };
-const imagelist = images.map((image, index) => {
+const imagelist = imgList?.map((image, index) => {
 
-  return (
-  <div key={index} className="carousel-slide">
-    <img style={{width: '100%'}} src={image} alt={`Carousel Image ${index}`} />
-  </div>
-  )
-  })
+        return (
+        <div key={index} className="carousel-slide">
+          <img style={{width: '100%'}} src={image.File} alt={`Carousel Image ${index}`} />
+        </div>
+        )
+    })
   return (
     <>
     <LHeader/>
@@ -53,7 +69,7 @@ const imagelist = images.map((image, index) => {
       {imagelist}
     </Carousel>
     </div>
-    <div className="hrhead">CONTACT US</div>
+    <div className="hrhead" style={{backgroundColor:color.bgColor,color:color.bgColor1}}>CONTACT US</div>
     <motion.div className='lcontact'
            initial="hidden"
            animate="visible"
