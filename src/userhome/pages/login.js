@@ -16,11 +16,12 @@ import swal from 'sweetalert';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import { alpha, styled } from '@mui/material/styles';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
-import {loginUserAcc, GetUserAcc, GenerateOtp, ValidateUserOtp, ChangePassbyOtp} from '../../Api/request'
-import Lheader from '../../LandingPage/components/header'
+import {loginUserAcc, GetUserAcc, GenerateOtp, ValidateUserOtp, ChangePassbyOtp,Colorlist} from '../../Api/request'
+import Lheader from '../../LandingPage/components/navbar'
 import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
+import { color } from 'framer-motion'
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -53,7 +54,6 @@ const CssTextField = styled(TextField)({
 });
 
 const Login = () => {
-console.log(process.env.REACT_APP_API_URL)
     const [email, setEmail] = useState('');
     const [fpemail, setFPEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -70,11 +70,19 @@ console.log(process.env.REACT_APP_API_URL)
     const [otp, setOtp] = useState('');
     const [remainingSeconds, setRemainingSeconds] = useState(60);
     const [resstat,setResstat] = useState('');
+    const [colorlist,setColorlist] = useState([])
+
+    useEffect(() =>{
+      async function Fetch(){
+        const res = await Colorlist.FETCH_COLOR()
+        setColorlist(res.data.result[0])
+      }
+      Fetch()
+    })
 
     const handleSnackbarClose = () => {
       setSnackbarOpen(false);
     };
-
 
     useEffect(() => {
       if (remainingSeconds > 0) {
@@ -347,12 +355,12 @@ console.log(process.env.REACT_APP_API_URL)
     <Lheader/>
     <div className="loginpage">
                 <div className="lgform">
-                    <div className="logbmcc">
+                    <div className="logbmcc"  style={{backgroundColor:colorlist.bgColor1}}>
                         <img  src={BMCC} alt="" />
                     </div>
                     
                     {step === 0 && (<div className="lgcon">
-                        <h1>Login your Account</h1>
+                        <h1 style={{color:colorlist.bgColor}}>Login your Account</h1>
                         <form action="">
 
                       <CssTextField      
@@ -437,7 +445,7 @@ console.log(process.env.REACT_APP_API_URL)
                     </div>)}
                     {step === 1 && (
         <div className='findtocon'>
-          <h2>Find your account</h2>
+          <h2 style={{color:colorlist.bgColor}}>Find your account</h2>
           <div className="otpfform">
           <p>Enter your e-mail address below to reset your password.</p>
           <CssTextField      
@@ -516,7 +524,7 @@ console.log(process.env.REACT_APP_API_URL)
                       )}
                     {step === 2 && (
         <div className='otpverifycon'>
-          <h2>OTP VERIFICATION</h2>
+          <h2 style={{color:colorlist.bgColor}}>OTP VERIFICATION</h2>
           <div className="formotpvalif">
           <p>An OTP has been sent to your email. Please enter it below:</p>
           <label>
@@ -610,7 +618,7 @@ console.log(process.env.REACT_APP_API_URL)
                        )}
                     {step === 3 && (
         <div className='restfrmpass'>
-          <h1>Reset your Password</h1>
+          <h1 style={{color:colorlist.bgColor}}>Reset your Password</h1>
           <div className="updatepassresfrm">
           <div>
           <CssTextField      
@@ -692,8 +700,8 @@ console.log(process.env.REACT_APP_API_URL)
           margin: '10px', 
           cursor: 'pointer', 
           fontWeight: '700',
-          background: 'rgba(43, 194, 106, 0.73)',
-          color: 'white',
+          background: colorlist.btnColor,
+          color: colorlist.btnTextColor,
           fontSize:'15px',
           letterSpacing:'5px',
           fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 

@@ -168,18 +168,20 @@ function Firststep() {
           <div className="form">
           <div className='FFcon'>
           <div className="FFcard">
-        <div>
+        <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+          <div>
         <TextField
              label='Created Account Email' 
              value={userData['checkemail']} 
              onChange={(e) =>setUserData({...userData,"checkemail" : e.target.value})} 
              margin='normal' 
              variant='outlined'
-             size='small'
+             size='large'
              error={!!errors.checkemail}
             helperText={errors.checkemail}
-             color='secondary'/>
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
+             color='secondary'/></div>
+             <div>
+          <FormControl sx={{minWidth: 120 }}>
             <InputLabel sx={{color:'green'}} id="demo-simple-select-label">Choose Scholarship Category</InputLabel>
             <Select
                  MenuProps={{
@@ -214,7 +216,7 @@ function Firststep() {
                 ))}
             </Select>
             {errors && <FormHelperText sx={{color: 'red'}}>{errors.scholarID}</FormHelperText>}
-         </FormControl> 
+         </FormControl></div>
          </div>             
           </div>
           </div>

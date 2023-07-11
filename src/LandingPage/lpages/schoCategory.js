@@ -1,19 +1,24 @@
-import React from 'react'
-import LHeader from '../components/header'
+import React, { useState } from 'react'
+import LHeader from '../components/navbar'
 import '../css/schoCategory.css'
-import { ScholarCategory } from '../../Api/request.js'
+import { ScholarCategory,Colorlist } from '../../Api/request.js'
 import axios from "axios";
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 
 function SchoCategory() {
   const [post, setPost] = React.useState([]);
-  
+  const [colorlist,setColorlist] = useState([])
   React.useEffect(() => {
     ScholarCategory.ScholarshipProgram().then((res) =>{
-      console.log(res.data)
       setPost(res.data.SchoCat);
     })
+    async function Fetch(){
+      const res = await Colorlist.FETCH_COLOR()
+      setColorlist(res.data.result[0])
+    }
+    Fetch()
   }, []);
 
   const schoCat = post?.map((contact, index) => {
@@ -22,7 +27,11 @@ function SchoCategory() {
       {contact.status === 'Under Evaluation' ? (null) : (<div className='grid-container'>
     <div className='schoCat' key={index}>
       <div className="schoIcon">
-      <img src={contact.icon} alt="" />
+      <Avatar
+        alt="Remy Sharp"
+        src={contact.icon}
+        sx={{ width: 56, height: 56 }}
+      />
       </div>
       <div className="schoDet">
         <div className='ntitle'><h4>{contact.name}</h4></div>
@@ -40,7 +49,7 @@ function SchoCategory() {
   return (
     <>
     <LHeader/>
-    <h1 className='schohp'>Scholarship Program</h1>
+    <h1 className='schohp' style={{backgroundColor:colorlist.bgColor,color:colorlist.bgColor1}}>Scholarship Program</h1>
     <div className='lschoCat'>
         {schoCat}
     </div>

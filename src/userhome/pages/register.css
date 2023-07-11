@@ -16,65 +16,15 @@
     height: 70%;
     border-radius: 8px;
     display: flex;
-    box-shadow: 0px 1px 7px 9px rgba(234,218,218,0.57);
-    -webkit-box-shadow: 0px 1px 7px 9px rgba(234,218,218,0.57);
-    -moz-box-shadow: 0px 1px 7px 9px rgba(234,218,218,0.57);
-}
-.registrationimg{
-    width: 40%;
-    height: 100%;
-    background-image: url('../../userhome/assets/home.jpg');
-    background-repeat: no-repeat;
-    background-position: 50%;
-    background-attachment: scroll;
-    background-size: cover;
-    box-shadow: -25px 1px 1px -4px rgba(218,211,211,0.62) inset;
-    -webkit-box-shadow: -25px 1px 1px -4px rgba(218,211,211,0.62) inset;
-    -moz-box-shadow: -25px 1px 1px -4px rgba(218,211,211,0.62) inset;
-}
-.sloganreg{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    font-family: 'Inter', sans-serif;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    background: rgba(43, 194, 106, 0.73);
-}
-.sloganreglogo{
-    flex-basis: 10%;
-}
-.sloganreg img{
-    width: 15%;
-}
-.sloganregcontainer{
-    display: flex;
-    flex-basis: 80%;
-    align-items: top;
-    justify-content: top;
-}
-.sloganreg div{
-    height: 50%;
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
 }
-.sloganreg h1{
-    margin: 0;
-    margin-top: 20px;
-    color: white;
-    font-weight: 700;
-}
-.sloganreg p, .sloganreg span{
-    margin: 0;
-    color: white;
-    font-weight:400;
-}
+
 .registrationfrm{
     width: 60%;
     font-family: 'Inter', sans-serif;
-    background: white;
+    border-radius: 8px;
+
 }
 .registrationfrm form{
     display: flex;
@@ -82,6 +32,10 @@
     height: 80%;
     flex-direction: column;
     justify-content: space-around;
+    background-color: rgba(255, 255, 255, 0.178);
+    backdrop-filter: blur(2px); 
+    border-radius: 8px;
+
 }
 .registrationfrm h1{
     margin: 0;
@@ -95,6 +49,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: rgba(255, 255, 255, 0.178);
+    backdrop-filter: blur(2px); 
+    padding: 30px 10px 30px 10px;
 }
 
 .btnregsbmt{
@@ -103,10 +60,12 @@
     background: radial-gradient(100% 100% at 100% 0%, #fdff89 0%, rgb(28, 147, 77) 100%);
 }
 .emailotpreg{
+    padding: 20px;
     width: 70%;
     height: auto;
     display: flex;
-    background-color: whitesmoke;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(2px); 
     border-radius: 5px;
     flex-direction: column;
 }

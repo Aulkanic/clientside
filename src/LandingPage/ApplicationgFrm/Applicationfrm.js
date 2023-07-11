@@ -9,7 +9,7 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import '../css/ApplicationFrm.css'
 import { multiStepContext } from './StepContext';
-import Lheader from '../components/header'
+import Lheader from '../components/navbar'
 import { styled } from '@mui/material/styles';
 
 function Applicationfrm() {

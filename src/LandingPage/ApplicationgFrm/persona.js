@@ -9,7 +9,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { FormHelperText } from '@mui/material';
 import swal from 'sweetalert';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import '../css/persona.css'
+import dayjs from 'dayjs';
 
 function Persona() {
     const { setStep, userData, setUserData} = useContext(multiStepContext);
@@ -134,6 +139,7 @@ function Persona() {
         setStep(3)
     };
     const calculateAge = (birthday) => {
+      console.log(birthday)
       const today = new Date();
       const birthDate = new Date(birthday);
       const yearDiff = today.getFullYear() - birthDate.getFullYear();
@@ -161,11 +167,20 @@ function Persona() {
       setUserData((prevData) => ({ ...prevData, age: age.toString() }));
     }, [userData.birthday]);
 
-    const handleInputChange = (e) => {
-      setUserData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }));
+    const handleInputChange = (date) => {
+      const formattedDate = date ? date.toISOString() : ''; 
+      const formattedBirthday = new Date(formattedDate).toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      });
+      setUserData((prevData) => ({ ...prevData, birthday: formattedBirthday }));
     };
 
-  const today = new Date().toISOString().split('T')[0];
+    const today = dayjs().toDate();
+    const isDateDisabled = (date) => {
+      return dayjs(date).isAfter(today, 'day');
+    };
     return (
     <div className='Persona'>
         <div className="personad"> 
@@ -206,7 +221,7 @@ function Persona() {
             helperText={errors.middleName}
             color='secondary'/>
             <div className='selectgend'>
-            <FormControl sx={{ minWidth: 325 }} size="small">
+            <FormControl sx={{ minWidth: 293 }} size="small">
             <InputLabel id="demo-simple-select-required-label">Gender</InputLabel>
               <Select
                 labelId="demo-select-small-label"
@@ -236,19 +251,21 @@ function Persona() {
             error={!!errors.citizenship}
             helperText={errors.citizenship} 
             color='secondary'/>
-      <div className='birthpick'>
-        <FormControl>
-          <label className='birthlabel' htmlFor="dateofbirth">Date Of Birth</label>
-          <input
-            className='datein'
-            type="date"
-            error={!!errors.birthday}
-            name="birthday"
-            id="dateofbirth"
-            max={today}
-            value={userData['birthday']}
-            onChange={handleInputChange}
-          />
+      <div>
+        <FormControl sx={{ minWidth: 400, minHeight: 50 }} size='small'>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker']}>
+                  <DatePicker
+                  
+                   label="Birthday" 
+                   error={!!errors.birthday}
+                   id="dateofbirth"
+                   shouldDisableDate={isDateDisabled}
+                   value={userData['birthday']}
+                   onChange={handleInputChange}                   
+                   />
+                </DemoContainer>
+              </LocalizationProvider>
           {errors.birthday && <FormHelperText sx={{ color: 'red' }}>{errors.birthday}</FormHelperText>}
         </FormControl>
       </div>
