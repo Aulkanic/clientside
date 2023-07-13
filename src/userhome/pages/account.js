@@ -28,7 +28,7 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-
+import '../Button/buttonstyle.css'
 
 const CssTextField = styled(TextField)({
   backgroundColor: 'white',
@@ -218,9 +218,9 @@ const userinfor = Array.isArray(post)
   ? post.map((data) => {
       return (
         <>
-          <Card elevation={0} sx={{width:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+          <Card elevation={0} sx={{width:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'top'}}>
             <div className="aligninfo">
-              <h1>Personal Information</h1>
+              <h1 style={{color:'#666'}}>Personal Information</h1>
             <Typography>
               Name: {data?.Name}
             </Typography>
@@ -260,20 +260,17 @@ const userinfor = Array.isArray(post)
         
       </div>
     <div className='acard'>
-          <Box>
-          <Card sx={{width:'100%'}}>
+          <Card sx={{width:'70%'}}>
           <div className='profile-card'>
               <div className="prof-pic">
                 <div className='prof-img'>
                   <div>
-                  <Avatar sx={{ width: '90%', height: '90%', borderRadius: '50%',border:'2px solid black' }}
+                  <Avatar sx={{ width: '80%', height: '80%', borderRadius: '50%',border:'2px solid black' }}
                  alt={''} src={userpicture.profile} />
                   </div>
-
                  <div>
                  <p style={{margin:'0px'}}>{userpicture.Name}</p>
                  </div>
-
                 </div>
                 <div className='prof-det'>
                 <List sx={stylediv} component="nav" aria-label="mailbox folders">
@@ -295,59 +292,46 @@ const userinfor = Array.isArray(post)
               {value === 0 && <div>
                 <Box sx={{width:'100%'}}>
                 <div className="Changeprofile">
-        <div className="chProf">
-            <div className="hprof"><h1>Change your Profile</h1></div>
-            <div className="prevprof">
-               <p>Preview</p>
-               {userprofile && 
-                                 <Avatar sx={{ width: '150px', height: '150px', borderRadius: '50%',border:'2px solid black', margin:'10px' }}
-                                 alt={''} src={preview} />}
-            </div>
-            <div className="frmprof">
-                <input type="file" onChange={e=> setProfilepic(e.target.files[0])} /><br></br>
-                <div className="btnprof">
-                <LoadingButton
-  loading={loading}
-  loadingPosition="end"
-  variant="elevated"
-  fullWidth
-  sx={{
-    cursor: 'pointer',
-    fontWeight: '700',
-    backgroundColor: 'rgba(43, 194, 106, 0.73)',
-    color: 'white',
-    fontSize: '15px',
-    letterSpacing: '2px',
-    transition: 'background 0.3s ease-in-out, clip-path 0.3s ease-in-out',
-    '&:hover': {
-      backgroundColor: 'radial-gradient(100% 100% at 100% 0%, #fdff89 0%, rgb(28, 147, 77) 100%)',
-    },
-    fontFamily:
-      'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-    width: '200px',
-  }}
-  onClick={ChangeProf}
->
-  Submit
-</LoadingButton>
-                </div>
+                <Card sx={{padding:'10px'}}>
+                  <div className="chProf">
+                    <div><h1 style={{color:'#666'}}>Change your Profile</h1></div>
+                    <div className="prevprof">
+                      <p>Preview</p>
+                      {userprofile && 
+                                        <Avatar sx={{ width: '150px', height: '150px', borderRadius: '50%',border:'2px solid black', margin:'10px' }}
+                                        alt={''} src={preview} />}
                     </div>
-                    
+                    <div className="frmprof">
+                        <input type="file" onChange={e=> setProfilepic(e.target.files[0])} /><br></br>
+                        <div style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>
+                        <LoadingButton
+                            loading={loading}
+                            loadingPosition="end"
+                            variant="elevated"
+                            className='myButton1'
+                            sx={{color:'white'}}
+                            onClick={ChangeProf}
+                          >
+                            Submit
+                          </LoadingButton>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            </Box>
+                </Card>
+                </div>
+                </Box>
                 </div>}
-                {value === 1 && <div className='editinfocon'>
-                  <div className='fabiconedit'>
-                <Fab sx={{width:'30px', height:'30px',backgroundColor:'green'}}  onClick={() => setOpen(!open)} color="secondary" aria-label="edit">
-                  <EditIcon/>
-                </Fab>
+              {value === 1 && <div className='editinfocon'>
+                <div className='fabiconedit'>
+                    <Fab sx={{width:'30px', height:'30px',backgroundColor:'green'}}  onClick={() => setOpen(!open)} color="secondary" aria-label="edit">
+                      <EditIcon/>
+                    </Fab>
                 </div>
                 {open ? (
                   <>
             <Card elevation={0} sx={{width:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
             <div className="chngaligninfo">
-              <h1>Personal Information</h1>
+              <h1 style={{color:'#666'}}>Personal Information</h1>
               <CssTextField      
                 id="input-with-icon-textfield"
                 label="Age"
@@ -363,15 +347,15 @@ const userinfor = Array.isArray(post)
                 }}
               />
                {errors.age && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '87%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'10px',
-      height:'30px',
-      background:'white' }} elevation={0} severity="error">
-          {errors.age}
-        </MuiAlert>}            
+                  style={{ 
+                    width: '87%', 
+                    margin: '10px', 
+                    color:'red', 
+                    fontSize:'10px',
+                    height:'30px',
+                    background:'white' }} elevation={0} severity="error">
+                        {errors.age}
+              </MuiAlert>}            
               <CssTextField      
                 id="input-with-icon-textfield"
                 label="Contact Number"
@@ -385,16 +369,16 @@ const userinfor = Array.isArray(post)
                   cursor: 'pointer', 
                 }}
               />
-          {errors.contactNum && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '87%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'10px',
-      height:'30px',
-      background:'white' }} elevation={0} severity="error">
-          {errors.contactNum}
-        </MuiAlert>}            
+              {errors.contactNum && <MuiAlert variant='outlined' 
+              style={{ 
+                width: '87%', 
+                margin: '10px', 
+                color:'red', 
+                fontSize:'10px',
+                height:'30px',
+                background:'white' }} elevation={0} severity="error">
+                    {errors.contactNum}
+                  </MuiAlert>}            
               <CssTextField      
                 id="input-with-icon-textfield"
                 label="Current Address"
@@ -439,15 +423,15 @@ const userinfor = Array.isArray(post)
                 <MenuItem value={'College'}>College</MenuItem>
               </Select>
               {errors.currentpassword && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '87%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'10px',
-      height:'30px',
-      background:'white' }} elevation={0} severity="error">
-          {errors.currentpassword}
-        </MuiAlert>}
+              style={{ 
+                width: '87%', 
+                margin: '10px', 
+                color:'red', 
+                fontSize:'10px',
+                height:'30px',
+                background:'white' }} elevation={0} severity="error">
+                    {errors.currentpassword}
+              </MuiAlert>}
             </FormControl>
               </div>
               <div><FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -467,15 +451,15 @@ const userinfor = Array.isArray(post)
                 <MenuItem value={'Out of School Children'}>Out of School Children</MenuItem>
               </Select>
               {errors.currentpassword && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '87%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'10px',
-      height:'30px',
-      background:'white' }} elevation={0} severity="error">
-          {errors.currentpassword}
-        </MuiAlert>} 
+                style={{ 
+                  width: '87%', 
+                  margin: '10px', 
+                  color:'red', 
+                  fontSize:'10px',
+                  height:'30px',
+                  background:'white' }} elevation={0} severity="error">
+                      {errors.currentpassword}
+               </MuiAlert>} 
             </FormControl></div>
             </div>
             <div><FormControl sx={{margin:'5px', minWidth: 120,width:'90%' }} size="small">
@@ -495,169 +479,149 @@ const userinfor = Array.isArray(post)
                 <MenuItem value={'80-82 or 2.50'}>80-82 or 2.50</MenuItem>
               </Select>
               {errors.currentpassword && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '87%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'10px',
-      height:'30px',
-      background:'white' }} elevation={0} severity="error">
-          {errors.currentpassword}
-        </MuiAlert>} 
+              style={{ 
+                width: '87%', 
+                margin: '10px', 
+                color:'red', 
+                fontSize:'10px',
+                height:'30px',
+                background:'white' }} elevation={0} severity="error">
+                    {errors.currentpassword}
+              </MuiAlert>} 
             </FormControl></div>
               <div style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>
-        <LoadingButton
-        loading={loading}
-        loadingPosition="end"
-        endIcon={loading ? (null) : (<SendIcon />)}
-        variant="elevated"
-        fullWidth
-        style={{
-          margin:'10px',      
-          cursor: 'pointer', 
-          fontWeight: '700',
-          background: 'rgba(43, 194, 106, 0.73)',
-          color: 'white',
-          fontSize:'10px',
-          letterSpacing:'2px',
-          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-        }}
-        onClick={Editinfo}
-      >
-        Submit
-      </LoadingButton>
-      </div>
+                <LoadingButton
+                loading={loading}
+                variant="elevated"
+                className='myButton1'
+                sx={{color:'white'}}
+                onClick={Editinfo}
+              >
+                Submit
+              </LoadingButton>
             </div>
-          </Card>
+                  </div>
+              </Card>
                   </>
                 ) : (<div className='infouserchng'>
                   {userinfor}
                 </div>)}
-            </div>}
+                </div>}
               {value === 2 && <div>
                 <div className="ChangePassword">
         <div className="chPass">
-            <div className="hpass"><h1>Change your Password</h1></div>
+            <div className="hpass"><h1 style={{color:'#666',marginLeft:'10px'}}>Change your Password</h1></div>
             <div className="frmpass">
-            <CssTextField      
-        id="input-with-icon-textfield"
-        label="Current Password"
-        size="small"
-        value={currentpassword}
-        type='password'
-        onChange={handlerCPasswordInput}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <LockRoundedIcon />
-            </InputAdornment>
-          )
-        }}
-        variant="outlined"
-        style={{ 
-          margin:'10px',
-          cursor: 'pointer', 
-        }}
-      />
-   {errors.currentpassword && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '87%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'10px',
-      height:'30px',
-      background:'white' }} elevation={0} severity="error">
-          {errors.currentpassword}
-        </MuiAlert>} 
-        <CssTextField      
-        id="input-with-icon-textfield"
-        label="New Password"
-        size="small"
-        value={newpassword}
-        type='password'
-        onChange={handlerNPasswordInput}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <LockRoundedIcon />
-            </InputAdornment>
-          )
-        }}
-        variant="outlined"
-        style={{ 
-          margin:'10px',
-          cursor: 'pointer', 
-        }}
-      />
-   {errors.newpassword && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '87%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'10px',
-      height:'30px',
-      background:'white' }} elevation={0} severity="error">
-          {errors.newpassword}
-        </MuiAlert>} 
-        <CssTextField      
-        id="input-with-icon-textfield"
-        label="Re-type New Password"
-        size="small"
-        value={repass}
-        type='password'
-        onChange={handlerRPasswordInput}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <LockRoundedIcon />
-            </InputAdornment>
-          )
-        }}
-        variant="outlined"
-        style={{ 
-          margin:'10px',
-          cursor: 'pointer', 
-        }}
-      />
-   {errors.repass && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '87%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'10px',
-      height:'30px',
-      background:'white' }} elevation={0} severity="error">
-          {errors.repass}
-        </MuiAlert>} 
-                <div className="btnprof">
-        <LoadingButton
-        loading={loading}
-        loadingPosition="end"
-        endIcon={loading ? (null) : (<SendIcon />)}
-        variant="elevated"
-        fullWidth
-        style={{
-          margin:'10px',      
-          cursor: 'pointer', 
-          fontWeight: '700',
-          background: 'rgba(43, 194, 106, 0.73)',
-          color: 'white',
-          fontSize:'10px',
-          letterSpacing:'2px',
-          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-        }}
-        onClick={ChangePassword}
-      >
-        Submit
-      </LoadingButton>
+                <CssTextField      
+                    id="input-with-icon-textfield"
+                    label="Current Password"
+                    size="small"
+                    value={currentpassword}
+                    type='password'
+                    onChange={handlerCPasswordInput}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockRoundedIcon />
+                        </InputAdornment>
+                      )
+                    }}
+                    variant="outlined"
+                    style={{ 
+                      margin:'10px',
+                      cursor: 'pointer', 
+                    }}
+                  />
+                    {errors.currentpassword && <MuiAlert variant='outlined' 
+                style={{ 
+                  width: '87%', 
+                  margin: '10px', 
+                  color:'red', 
+                  fontSize:'10px',
+                  height:'30px',
+                  background:'white' }} elevation={0} severity="error">
+                      {errors.currentpassword}
+                    </MuiAlert>} 
+                <CssTextField      
+                    id="input-with-icon-textfield"
+                    label="New Password"
+                    size="small"
+                    value={newpassword}
+                    type='password'
+                    onChange={handlerNPasswordInput}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockRoundedIcon />
+                        </InputAdornment>
+                      )
+                    }}
+                    variant="outlined"
+                    style={{ 
+                      margin:'10px',
+                      cursor: 'pointer', 
+                    }}
+                  />
+                    {errors.newpassword && <MuiAlert variant='outlined' 
+                    style={{ 
+                      width: '87%', 
+                      margin: '10px', 
+                      color:'red', 
+                      fontSize:'10px',
+                      height:'30px',
+                      background:'white' }} elevation={0} severity="error">
+                          {errors.newpassword}
+                    </MuiAlert>} 
+                <CssTextField      
+                    id="input-with-icon-textfield"
+                      label="Re-type New Password"
+                      size="small"
+                      value={repass}
+                      type='password'
+                      onChange={handlerRPasswordInput}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LockRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                      variant="outlined"
+                      style={{ 
+                        margin:'10px',
+                        cursor: 'pointer', 
+                    }}
+                  />
+                    {errors.repass && <MuiAlert variant='outlined' 
+              style={{ 
+                width: '87%', 
+                margin: '10px', 
+                color:'red', 
+                fontSize:'10px',
+                height:'30px',
+                background:'white' }} elevation={0} severity="error">
+                    {errors.repass}
+                    </MuiAlert>} 
+                <div style={{display:'flex',justifyContent:'center'}}>
+                <LoadingButton
+                loading={loading}
+                loadingPosition="end"
+                endIcon={loading ? (null) : (<SendIcon />)}
+                variant="elevated"
+                className='myButton1'
+                sx={{color:'white'}}
+                onClick={ChangePassword}
+              >
+                Submit
+                </LoadingButton>
                 </div>
             </div> 
         </div>
-    </div></div>}
+    </div>
+                </div>}
               </div>
           </div>
           </Card>
-          </Box>
     </div>
 
 

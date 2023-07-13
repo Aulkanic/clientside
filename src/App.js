@@ -21,7 +21,7 @@ import FlippableCard from './Experiment/card/flippable-card'
 import { Route, Routes} from 'react-router-dom';
 import RequireAuth from './features/authenticate/RequireAuth';
 import { io } from "socket.io-client";
-import { Colorlist,WebImg } from './Api/request'
+import { Colorlist,WebImg,Logos } from './Api/request'
 import { useEffect } from 'react'
 import { createContext } from 'react';
 import { useState } from 'react'
@@ -32,23 +32,25 @@ export const color = createContext();
 function App() {
   const colorstore = JSON.parse(localStorage.getItem('Color'));
   const imgstore = JSON.parse(localStorage.getItem('Image'));
+  const logostore = JSON.parse(localStorage.getItem('Logo'));
   const [colorlist, setColorcode] = useState(colorstore || null);
   const [imgList,setImglist] = useState(imgstore || null);
+  const [logolist,setLogolist] = useState(logostore || null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() =>{
     async function Fetch(){
       try {
-        console.log('Fetching data...');
         const res = await Colorlist.FETCH_COLOR();
         const img = await WebImg.FETCH_WEB();
-        console.log('Fetched img:', img);
+        const req = await Logos.LOGOS()
         setImglist(img.data.result);
-        console.log('Updated imgList:', imgList);
         setColorcode(res.data.result[0]);
+        setLogolist(req.data.result)
         setLoading(false);
         localStorage.setItem('Image', JSON.stringify(img.data.result));
-        localStorage.setItem('Color', JSON.stringify(colorlist));
+        localStorage.setItem('Logo', JSON.stringify(req.data.result));
+        localStorage.setItem('Color', JSON.stringify(res.data.result[0]));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -68,7 +70,7 @@ function App() {
 
   return (
     <>
-    <color.Provider value={{ colorlist,imgList }}>
+    <color.Provider value={{ colorlist,imgList,logolist }}>
     <Routes> 
 
       {/* <Route path='/' element={<Layout/>}/>

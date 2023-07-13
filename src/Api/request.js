@@ -110,3 +110,9 @@ export const Colorlist = {
 export const WebImg = {
     FETCH_WEB: () => axiosInstance.get(Endpoints.FETCH_WEBSITE)
 }
+export const Logos = {
+    LOGOS: (data) => axiosInstance.patch(Endpoints.LOGOS,data)
+}
+export const UserCango = {
+    Cango: (data) => axiosInstance.post(Endpoints.CANGO,data)
+}

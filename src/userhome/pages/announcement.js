@@ -25,7 +25,6 @@ const Announcement = () => {
       <div className='anntitle'><h3>{data.title}</h3></div>
       <div className='anndate'>{data.date}</div>
       <div className='anncontent'>{data.content}</div>
-      <div className='annto'><p>To All:</p><span><div className='towhom'><p>{data.announceTo}</p></div></span></div>
       </div>
       </Card>
       </Box>

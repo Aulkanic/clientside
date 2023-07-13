@@ -9,18 +9,15 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { Colorlist } from '../../Api/request'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import { useContext } from "react";
+import { color } from "../../App";
 
 const Footer = () => {
-    const [color,setColor] = useState([])
+    const { colorlist,imgList } = useContext(color);
 
-    useEffect(() => {
-      Colorlist.FETCH_COLOR().then((res) =>{
-          setColor(res.data.result[0])
-      })
-    },[]);
   return (
     <div>
-        <div className='footer' style={{backgroundColor:color.bgColor}}>
+        <div className='footer' style={{backgroundColor:colorlist.bgColor}}>
             <div className='copyr'>
                 <p>Terms of Service</p>
             </div>

@@ -37,6 +37,8 @@ const Endpoints = {
     USER_LOGOUT:'user/Logout',
     FFETCH_COLOR:'Dynamic/Colorslist',
     FETCH_WEBSITE:"admin/WebImg",
+    LOGOS:'Dynamic/Logo',
+    CANGO:'Appointment/Cango',
 }
 
 export default Endpoints

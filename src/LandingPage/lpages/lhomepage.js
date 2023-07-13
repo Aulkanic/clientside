@@ -17,7 +17,7 @@ import { color } from "../../App";
 
 function Lhomepage() {
   const { colorlist,imgList } = useContext(color);
-  const [loadingScreen,setLoadingScreen] = useState(false)
+
 
   const content = () =>{
     const imgUrl = imgList[0]?.File;
@@ -36,7 +36,7 @@ function Lhomepage() {
         <div className="lbtnapp">
           <Link to='/ScholarshipProgram' 
                 className='llinkapp'>
-          <motion.button whileHover={{
+          <motion.button style={{backgroundColor:colorlist.bgColor,color:colorlist.bgColor1}} whileHover={{
               scale: 1.2,
               transition: { duration: 0.5 },
             }}

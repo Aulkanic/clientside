@@ -355,7 +355,7 @@ const Login = () => {
     <Lheader/>
     <div className="loginpage">
                 <div className="lgform">
-                    <div className="logbmcc"  style={{backgroundColor:colorlist.bgColor1}}>
+                    <div className="logbmcc"  style={{backgroundColor:colorlist.bgColor}}>
                         <img  src={BMCC} alt="" />
                     </div>
                     

@@ -4,16 +4,22 @@ import '../css/Bmcc-header.css'
 import marilao from './../assets/marilao.jpg'
 import mayor from './../assets/hl.png'
 import Avatar from '@mui/material/Avatar';
-const header = () => {
+import { useContext } from "react";
+import { color } from "../../App";
+import LoopingRhombusesSpinner from '../loadingDesign/loading'
+const Header = () => {
+  const { colorlist,imgList,logolist } = useContext(color);
+
   return (
-    <div className='Header'>
+    <>
+    {logolist ? (<div className='Header'>
       <div className='BMCC'>
         <div className='bmcc'>
-        <Avatar alt="" src={BMCC} sx={{width: 60, height: 60}} />
+        <Avatar alt="" src={logolist[0].logo} sx={{width: 60, height: 60}} />
         </div>
       
         <div>
-        <p className='title'>MARISKO</p>
+        <p className='title' style={{color:colorlist.bgColor}}>MARISKO</p>
       </div>
       </div>
     
@@ -22,14 +28,20 @@ const header = () => {
         <Avatar alt="" src={marilao} sx={{width: 60, height: 60}} />
         </div>
     <div className='mayor'>
-         <Avatar alt="" src={mayor} sx={{width: 60, height: 60}} />
+         <Avatar alt="" src={logolist[1].logo} sx={{width: 60, height: 60}} />
     </div>
     
   
       </div>
-    </div>
-    
+    </div>) : (
+      <>
+      <div style={{width:'100vw',height:'100vh'}}>
+        <LoopingRhombusesSpinner/>
+      </div>
+    </>
+    )}
+    </>
   )
 }
 
-export default header
+export default Header

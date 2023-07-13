@@ -7,25 +7,19 @@ import BMCC from '../../userhome/assets/logo.jpg'
 import Avatar from '@mui/material/Avatar';
 import marilao from '../../userhome/assets/marilao.jpg'
 import mayor from '../../userhome/assets/hl.png'
-<div style={{margin:'2px'}}>
-<Avatar
-alt="Remy Sharp"
-src={marilao}
-sx={{ width: 56, height: 56 }}
-/>
-</div>
+import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading';
 
 function Navbar() {
-  const { colorlist } = useContext(color);
-  console.log(colorlist)
+  const { colorlist,logolist } = useContext(color);
+
   return (
     <>
-    <div style={{display:'flex'}}>
+    {colorlist && logolist ? (<div style={{display:'flex'}}>
         <div className='lheadbmcc' style={{backgroundColor:colorlist.bgColor}}>
             <div className="lheadlogo" style={{margin:'2px'}}>
             <Avatar
         alt="Remy Sharp"
-        src={BMCC}
+        src={logolist[0].logo}
         sx={{ width: 56, height: 56 }}
             />
             </div>
@@ -54,14 +48,20 @@ function Navbar() {
             <div style={{margin:'2px'}}>
                   <Avatar
                     alt="Remy Sharp"
-                    src={mayor}
+                    src={logolist[1].logo}
                     sx={{ width: 56, height: 56 }}
                   />
             </div>
             </div>
         </div>
 
-    </div>
+    </div>) :(
+      <>
+      <div style={{width:'100vw',height:'100vh'}}>
+        <LoopingRhombusesSpinner/>
+      </div>
+    </>
+    )}
     </>
   )
 }

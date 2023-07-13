@@ -16,6 +16,7 @@ import Card from '@mui/material/Card';
 import Skeleton from '@mui/material/Skeleton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MuiAlert from '@mui/material/Alert';
+import '../Button/buttonstyle.css'
 
 const Scholar = () => {
 
@@ -226,8 +227,8 @@ useEffect(() => {
             setUserFiles(updatedFiles);
           }}
         />
-        <button onClick={() =>EditReq(req.requirement_Name,index)}>Save Changes</button>
-        <button onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button>
+        <button className='myButton1' onClick={() =>EditReq(req.requirement_Name,index)}>Save Changes</button>
+        <button className='myButton2' onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button>
               
             </div>
             </div>
@@ -247,29 +248,30 @@ useEffect(() => {
             {req.File !== 'None' && <div key={index}>
               <div className="grid_container">
             <Box>
-            <Card elevation={5}>
+            <Card elevation={5} sx={{height:'100%'}}>
             <div className="docusibmitted">
               <div className="docusubprev">   
               {req.File ? (<img src={req.File} alt="" />) : (<img src={Noimageprev} alt="" />)}
               </div>
               <div className='userdocsubstat'>
-            <p>{req.requirement_Name}</p>
+            <p style={{fontSize:'18px',fontWeight:'700'}}>{req.requirement_Name}</p>
             <p>{req.Status}</p>
             <p>{req.Comments}</p>
-            <div>
+            <div className='inputsub'>
             <input
-          key={index}
-          type="file"
-          value={req[index]}
-          onChange={e => {
-            // Update the corresponding file in the state
-            const updatedFiles = [...userFiles];
-            updatedFiles[index] = e.target.files[0];
-            setUserFiles(updatedFiles);
-          }}
-        />
-        <button onClick={() =>EditReq(req.requirement_Name,index)}>Save Changes</button>
-            <button onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button><br />
+                key={index}
+                type="file"
+                value={req[index]}
+                onChange={e => {
+                  const updatedFiles = [...userFiles];
+                  updatedFiles[index] = e.target.files[0];
+                  setUserFiles(updatedFiles);
+                }}
+            />
+            <div>
+              <button style={{marginRight:'10px'}} className='myButton1' onClick={() =>EditReq(req.requirement_Name,index)}>Save Changes</button>
+              <button className='myButton2' onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button>
+            </div>
             </div>
             </div>
             </div>
@@ -335,39 +337,24 @@ return(
     <Homepage/>
   {loadingPage ? (<Skeleton animation="wave" variant="circular" width={'90%'} height={'100%'} />) : (<div className="userscho">
       <div className='schousercont'>
-    <div className='reqheadtitle'>
-    <h1>Requirements</h1>
-    </div>
-    <div className="userequirements">
-       {requirements}
-    </div>
-    <div className='btnschoupreq'>
-    <LoadingButton
-  loading={loading}
-  loadingPosition="end"
-  variant="elevated"
-  fullWidth
-  sx={{
-    margin: '10px',
-    cursor: 'pointer',
-    fontWeight: '700',
-    backgroundColor: 'rgba(43, 194, 106, 0.73)',
-    color: 'white',
-    fontSize: '15px',
-    letterSpacing: '2px',
-    transition: 'background 0.3s ease-in-out, clip-path 0.3s ease-in-out',
-    '&:hover': {
-      backgroundColor: 'radial-gradient(100% 100% at 100% 0%, #fdff89 0%, rgb(28, 147, 77) 100%)',
-    },
-    fontFamily:
-      'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-    width: '200px', // Add desired width
-  }}
-  onClick={handleSubmit}
->
-  Submit
-</LoadingButton>
-    </div>
+              <div className='reqheadtitle'>
+              <h1>Requirements</h1>
+              </div>
+              <div className="userequirements">
+                {requirements}
+              </div>
+              <div className='btnschoupreq'>
+              <LoadingButton
+            loading={loading}
+            loadingPosition="end"
+            variant="elevated"
+            sx={{color:'white'}}
+            className='myButton1'
+            onClick={handleSubmit}
+          >
+            Submit
+          </LoadingButton>
+              </div>
 
     </div>
     <div className="userdocusub">

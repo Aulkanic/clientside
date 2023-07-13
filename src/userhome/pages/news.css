@@ -2,75 +2,50 @@
 
 .newsec{
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  padding-bottom: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+
 }
 .newsheader{
   font-family: 'Inter', sans-serif;
 }
 .ncard {
-  width: 80%;
+  width: 100%;
   height: 100%;
   border-radius: 6px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(400px, 1fr));
-  grid-gap: 10px;
-  padding: 15px;
-  padding-bottom: 10%;
+  display: flex;
   }
-  .newses{
-    font-family: 'Inter', sans-serif;
-    display: flex;
-    width: 90%;
-    height: 100%;
-    margin: 5px;
-    border-radius: 15px;
-    overflow: hidden;
-  }
-  .pictit{
-    display: flex;
-    flex-direction: column;
-    width: 20%;
-    height: 100%;
+ .latestnews{
+  width: 49%;
+  height: 100%;
+  padding: 10px;
+ }
+ .news{
+  width: 50%;
+  height: 100vh;
+  overflow: auto;
+ }
+ .imgnews{
+   width: 100%;
+   height: 50%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin-bottom: 20px;
+   margin-top: 10px;
+ }
+ .imgnews img{
+  width: 100%;
+  height: 90%;
+ }
+ .newscon{
+    width: 95%;
+    height: 200px;
     padding: 10px;
-
-  }
-  .ndat{
-    margin: 10px 10px 0 30px;
-  }
-
-  .pictit img{
-    width: 100%;
-    margin: 0;
-    height: 90%;
-    border: 2px solid black;
-  }
-  .desdat{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  .desdat h3,h6{
     margin: 5px;
-    font-size: 12px;
-  }
-.ndes{
-  font-size: 12px;
-}
-.desdat .ntitle h3{
-    font-size: 20px;
-    font-weight: bold;
-    color: green;
-}
-.NoNews{
-  font-size: 20px;
-  font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-  font-style: italic;
-}
-
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
+ }

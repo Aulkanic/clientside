@@ -7,15 +7,16 @@ import { FetchingProfileUser, Logoutuser,Colorlist } from '../../Api/request'
 import LoopingRhombusesSpinner from '../loadingDesign/loading'
 import Avatar from '@mui/material/Avatar';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useContext } from "react";
+import { color } from "../../App";
 
 const Navbar = () => {
-
+    const { colorlist,imgList,logolist } = useContext(color);
     const data = localStorage.getItem('ApplicantNum');
     const value = JSON.parse(data);
     const data1 = localStorage.getItem('ApplicantionNumber');
     const [picture, setProfile] = React.useState([]);
     const [loading,Setloading] = useState(false);
-    const [color,setColor] = useState([])
 
     useEffect(() => {
       Setloading(true)
@@ -23,9 +24,6 @@ const Navbar = () => {
         setProfile(response.data.Profile);
         Setloading(false)       
       });
-      Colorlist.FETCH_COLOR().then((res) =>{
-          setColor(res.data.result[0])
-      })
     },[]);
     const profile = picture?.map((data) =>{
   
@@ -60,27 +58,27 @@ const Navbar = () => {
   }
   return (
     <React.Fragment>
-    <div className='scho-info' style={{backgroundColor:color.bgColor,border:'2px solid black'}}>
+    <div className='scho-info' style={{backgroundColor:colorlist.bgColor,border:'2px solid black'}}>
     {profile}
     </div>
     <div className='navbar'>
-            <div className='navsec' style={{backgroundColor:color.bgColor1}}>
+            <div className='navsec' style={{backgroundColor:colorlist.bgColor1}}>
                 <ul>
-                    <Link to='/home' className='link' style={{color:color.bgColor,textDecoration:'none'}}>HOME</Link>
-                    <Link to='/account' className='link' style={{color:color.bgColor,textDecoration:'none'}}>ACCOUNTS</Link>
-                    <Link to='/scholar' className='link' style={{color:color.bgColor,textDecoration:'none'}}>
+                    <Link to='/home' className='link' style={{color:colorlist.bgColor,textDecoration:'none'}}>HOME</Link>
+                    <Link to='/account' className='link' style={{color:colorlist.bgColor,textDecoration:'none'}}>ACCOUNTS</Link>
+                    <Link to='/scholar' className='link' style={{color:colorlist.bgColor,textDecoration:'none'}}>
                     <div className="dropdown">
-                    <Link to='/scholar' className='droptbn' style={{color: color.bgColor, textDecoration: 'none'}}>SCHOLAR</Link>
-                    <div className="dropdown-content" style={{backgroundColor:color.bgColor1}}>
-                     <Link to='/scholar' className='link' style={{color:color.bgColor,textDecoration:'none'}}>Document</Link>
-                     <Link to='/scholar/info' className='link' style={{color:color.bgColor,textDecoration:'none'}}>Appointment</Link>
+                    <Link to='/scholar' className='droptbn' style={{color: colorlist.bgColor, textDecoration: 'none'}}>SCHOLAR</Link>
+                    <div className="dropdown-content" style={{backgroundColor:colorlist.bgColor1}}>
+                     <Link to='/scholar' className='link' style={{color:colorlist.bgColor,textDecoration:'none'}}>Document</Link>
+                     <Link to='/scholar/info' className='link' style={{color:colorlist.bgColor,textDecoration:'none'}}>Appointment</Link>
                     </div>
                     </div>
                       </Link>
-                     <Link to='/news' style={{color:color.bgColor,textDecoration:'none'}}>NEWS</Link>
-                     <Link to='/announcement' style={{color:color.bgColor,textDecoration:'none'}}>ANNOUNCEMENT</Link>
-                     <Link to='/trivia' style={{color:color.bgColor,textDecoration:'none'}}>TRIVIA</Link>
-                     <Link to='/' onClick={signout} style={{color:color.bgColor,textDecoration:'none'}}>LOGOUT</Link>
+                     <Link to='/news' style={{color:colorlist.bgColor,textDecoration:'none'}}>NEWS</Link>
+                     <Link to='/announcement' style={{color:colorlist.bgColor,textDecoration:'none'}}>ANNOUNCEMENT</Link>
+                     <Link to='/trivia' style={{color:colorlist.bgColor,textDecoration:'none'}}>TRIVIA</Link>
+                     <Link to='/' onClick={signout} style={{color:colorlist.bgColor,textDecoration:'none'}}>LOGOUT</Link>
                 </ul>
             </div>
     </div>
