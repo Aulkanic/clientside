@@ -6,20 +6,23 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
+import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
+import { useContext } from "react";
+import { color } from "../../App";
 
 function SchoCategory() {
   const [post, setPost] = React.useState([]);
-  const [colorlist,setColorlist] = useState([])
+  const { colorlist,imgList } = useContext(color);
+  const [loadingScreen,setLoadingScreen] = useState(false)
   React.useEffect(() => {
-    ScholarCategory.ScholarshipProgram().then((res) =>{
-      setPost(res.data.SchoCat);
-    })
+
     async function Fetch(){
-      const res = await Colorlist.FETCH_COLOR()
-      setColorlist(res.data.result[0])
+      const req = await ScholarCategory.ScholarshipProgram()
+      setPost(req.data.SchoCat)
     }
     Fetch()
-  }, []);
+
+  }, [post]);
 
   const schoCat = post?.map((contact, index) => {
     return (
@@ -48,10 +51,12 @@ function SchoCategory() {
   
   return (
     <>
+    <div>
     <LHeader/>
     <h1 className='schohp' style={{backgroundColor:colorlist.bgColor,color:colorlist.bgColor1}}>Scholarship Program</h1>
     <div className='lschoCat'>
         {schoCat}
+    </div>
     </div>
     </>
   )

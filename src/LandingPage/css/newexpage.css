@@ -19,6 +19,8 @@
     justify-content: center;
     margin-bottom: 40px;
     border: 2px solid black;
+    background-color: white;
+    border-radius: 20px;
 }
 .lnewpage{
     width: 60%;
@@ -28,6 +30,8 @@
     justify-content: center;
     margin-bottom: 40px;
     border: 2px solid black;
+    background-color: white;
+    border-radius: 20px;
 }
 .gotolog, .gotoreg{
     font-family: 'Inter', sans-serif;

@@ -14,14 +14,25 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import '../css/persona.css'
+import '../css/buttonStyle.css'
 import dayjs from 'dayjs';
+import { styled, ThemeProvider, createTheme } from '@mui/material';
+
+const theme = createTheme();
+
+const StyledDatePicker = styled(DatePicker)(({ theme }) => ({
+  color:'black',
+  width: '290px',
+  marginTop: theme.spacing(2),
+
+}));
 
 function Persona() {
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
+    const today = dayjs();
 
       function Check(){
-        console.log(userData);
         const errors = {};
         if (userData.firstName === '') {
           errors.firstName = "First Name is required";
@@ -168,19 +179,16 @@ function Persona() {
     }, [userData.birthday]);
 
     const handleInputChange = (date) => {
-      const formattedDate = date ? date.toISOString() : ''; 
-      const formattedBirthday = new Date(formattedDate).toLocaleString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      });
-      setUserData((prevData) => ({ ...prevData, birthday: formattedBirthday }));
+
+      setUserData((prevData) => ({ ...prevData, birthday: date }));
     };
 
-    const today = dayjs().toDate();
-    const isDateDisabled = (date) => {
-      return dayjs(date).isAfter(today, 'day');
-    };
+    // const isDateDisabled = (date) => {
+    //   const cutoffDate = dayjs(date); // July 12, 2012
+    //   const today = dayjs().startOf('day'); // Get today's date
+    
+    //   return dayjs(date).isAfter(cutoffDate, 'day') || dayjs(date).isAfter(today, 'day') || isBeforeDay(dayjs(date), comparingDate);
+    // };
     return (
     <div className='Persona'>
         <div className="personad"> 
@@ -251,18 +259,23 @@ function Persona() {
             error={!!errors.citizenship}
             helperText={errors.citizenship} 
             color='secondary'/>
-      <div>
-        <FormControl sx={{ minWidth: 400, minHeight: 50 }} size='small'>
+      <div >
+        <FormControl sx={{ minWidth: 450, minHeight: 50 }} size='small' fullWidth>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DatePicker']}>
-                  <DatePicker
-                  
+                  <StyledDatePicker                
                    label="Birthday" 
                    error={!!errors.birthday}
                    id="dateofbirth"
-                   shouldDisableDate={isDateDisabled}
-                   value={userData['birthday']}
-                   onChange={handleInputChange}                   
+                   value={userData['birthday']} 
+                   onChange={handleInputChange}  
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        error={!!errors.birthday}
+                      />
+                    )}                 
                    />
                 </DemoContainer>
               </LocalizationProvider>
@@ -336,8 +349,8 @@ function Persona() {
             </div>
             </div>
             <div className='btnfrmn'>
-            <Button sx={{backgroundColor:'red'}} variant="contained" onClick={() => setStep(1)}>Previous</Button>
-            <Button variant="contained" onClick={Check}>Next</Button>
+            <Button className='myButton' variant="contained" onClick={() => setStep(1)}>Previous</Button>
+            <Button className='myButton1' variant="contained" onClick={Check}>Next</Button>
             </div>
             </form>
         </div>

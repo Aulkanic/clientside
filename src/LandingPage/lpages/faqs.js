@@ -10,6 +10,8 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Announceimg from '../../userhome/assets/announce.png'
 import { motion } from "framer-motion";
+import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
+
 const Faqs = () => {
   const textVariants = {
     hidden: { opacity: 0, x: -70 },

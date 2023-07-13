@@ -16,9 +16,29 @@
 .loadingcontent{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 10px;
 }
 .loadingcontent h1{
-    color: green;
+    color: rgb(4, 89, 92);
     margin-right: 40px;
 }
+
+.spinner {
+    border: 8px solid #ccc; /* Set the border color and width */
+    border-top: 8px solid #22ff2d; /* Set the color of the spinner */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 3s linear infinite; /* Apply a rotation animation */
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }

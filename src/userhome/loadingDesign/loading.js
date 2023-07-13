@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import './loading.css'
+import Avatar from '@mui/material/Avatar';
+import BMCC from './../assets/logo.jpg'
 
 const LoadingRhombus = styled.div`
   width: ${(props) => props.size * 4}px;
@@ -75,17 +77,20 @@ const LoopingRhombusesSpinner = ({
     <div className='loadings'>
         <div className="loadingcontainer">
         <div className='loadingcontent'>
-        <h1>Loading</h1>
-    <LoadingRhombus
-      size={size}
-      color={color}
-      animationDuration={animationDuration}
-      className={`looping-rhombuses-spinner${className ? ' ' + className : ''}`}
-      style={style}
-      {...props}
-    >
-      {generateSpinners(num)}
-    </LoadingRhombus>
+        <div style={{display:'flex',justifyContent:'center',alignItems:'center',margin:'10px',flexDirection:'row-reverse'}}>
+          <h1 style={{margin:'0px',marginLeft:'5px'}}>BMCC</h1>
+        <Avatar alt="" src={BMCC} sx={{width: 80, height: 80}} />
+        </div>
+        <LoadingRhombus
+          size={size}
+          color={color}
+          animationDuration={animationDuration}
+          className={`looping-rhombuses-spinner${className ? ' ' + className : ''}`}
+          style={style}
+          {...props}
+        >
+          {generateSpinners(num)}
+        </LoadingRhombus>
     </div>
     </div>
     </div>

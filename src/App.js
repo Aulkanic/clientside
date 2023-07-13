@@ -21,12 +21,54 @@ import FlippableCard from './Experiment/card/flippable-card'
 import { Route, Routes} from 'react-router-dom';
 import RequireAuth from './features/authenticate/RequireAuth';
 import { io } from "socket.io-client";
+import { Colorlist,WebImg } from './Api/request'
 import { useEffect } from 'react'
+import { createContext } from 'react';
+import { useState } from 'react'
+import LoopingRhombusesSpinner
+ from './userhome/loadingDesign/loading'
+export const color = createContext();
+
 function App() {
-  const isloggin = localStorage.getItem('LoggedIn');
+  const colorstore = JSON.parse(localStorage.getItem('Color'));
+  const imgstore = JSON.parse(localStorage.getItem('Image'));
+  const [colorlist, setColorcode] = useState(colorstore || null);
+  const [imgList,setImglist] = useState(imgstore || null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() =>{
+    async function Fetch(){
+      try {
+        console.log('Fetching data...');
+        const res = await Colorlist.FETCH_COLOR();
+        const img = await WebImg.FETCH_WEB();
+        console.log('Fetched img:', img);
+        setImglist(img.data.result);
+        console.log('Updated imgList:', imgList);
+        setColorcode(res.data.result[0]);
+        setLoading(false);
+        localStorage.setItem('Image', JSON.stringify(img.data.result));
+        localStorage.setItem('Color', JSON.stringify(colorlist));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    Fetch()
+  },[])
+
+  
+
+  if (loading) {
+    return (
+      <div style={{ width: '100vw', height: '100vh' }}>
+        <LoopingRhombusesSpinner />
+      </div>
+    );
+  }
 
   return (
     <>
+    <color.Provider value={{ colorlist,imgList }}>
     <Routes> 
 
       {/* <Route path='/' element={<Layout/>}/>
@@ -59,6 +101,7 @@ function App() {
         </Route>
 
     </Routes>  
+    </color.Provider>
       </>
   );
 }

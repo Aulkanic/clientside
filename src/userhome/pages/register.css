@@ -71,12 +71,13 @@
 }
 .otpfreg{
     width: 80%;
-    height: auto;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: whitesmoke;
     border-radius: 5px;
+    padding: 10px;
     flex-direction: column;
 }
 .createacccon{

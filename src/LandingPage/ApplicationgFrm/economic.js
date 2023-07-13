@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { FormHelperText } from '@mui/material';
 import '../css/economic.css'
+import '../css/buttonStyle.css'
 
 
 function Economic() {
@@ -175,8 +176,8 @@ function Economic() {
             </div>
             </div>
             <div className='frmbtnec'>
-            <Button sx={{backgroundColor:'red'}} variant="contained" onClick={() => setStep(2)}>Previous</Button>
-            <Button variant="contained" onClick={Check}>Next</Button>
+            <Button className='myButton' variant="contained" onClick={() => setStep(2)}>Previous</Button>
+            <Button className='myButton1' variant="contained" onClick={Check}>Next</Button>
             </div>
             </div>
            

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import '../css/navbar.css'
 import {Link} from 'react-router-dom'
-import { Colorlist } from '../../Api/request'
+import { useContext } from "react";
+import { color } from "../../App";
 import BMCC from '../../userhome/assets/logo.jpg'
 import Avatar from '@mui/material/Avatar';
 import marilao from '../../userhome/assets/marilao.jpg'
@@ -15,15 +16,8 @@ sx={{ width: 56, height: 56 }}
 </div>
 
 function Navbar() {
-  const [colorlist,setColorlist] = useState([])
-
-  useEffect(() =>{
-    async function Fetch(){
-      const res = await Colorlist.FETCH_COLOR()
-      setColorlist(res.data.result[0])
-    }
-    Fetch()
-  })
+  const { colorlist } = useContext(color);
+  console.log(colorlist)
   return (
     <>
     <div style={{display:'flex'}}>

@@ -14,6 +14,7 @@ import { FetchingUser } from '../../Api/request.js';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from "axios";
 import '../css/Firststep.css'
+import '../css/buttonStyle.css'
 function Firststep() {
   const { setStep, userData, setUserData} = useContext(multiStepContext);
   const [errors, setErrors] = useState({}); 
@@ -327,7 +328,7 @@ function Firststep() {
          </div>}
          </div>
           <div className='frmbtnec'>
-          <Button variant="contained" onClick={Check}>Next</Button>
+          <Button className='myButton' variant="contained" onClick={Check}>Next</Button>
           </div>
           </div>
       </div>

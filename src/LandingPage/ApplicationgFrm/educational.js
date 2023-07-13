@@ -13,6 +13,7 @@ import { FormHelperText } from '@mui/material';
 import { ApplyForm } from '../../Api/request';
 import '../css/educational.css'
 import { useNavigate } from 'react-router-dom';
+import '../css/buttonStyle.css'
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading';
 function Educational() {
   const [loading, setLoading] = useState(false);
@@ -90,6 +91,11 @@ function Educational() {
     const scholarID = userData.scholarID
     const typeSchool = userData.typeSchool
     const wereLive = userData.wereLive
+    const AAsinfo = userData.AAsinfo;
+    const Asinfo = userData.Asinfo;
+    const Eslinfo = userData.Eslinfo
+    const Esinfo = userData.Esinfo
+    const YLsinfo = userData.YLsinfo
 
     function submitData(){
       const errors = {};
@@ -158,7 +164,9 @@ function Educational() {
 
         if (userData.elemYear === '') {
           errors.elemYear = "This Field is required";
-        } 
+        }else if(!/^\d{4}-\d{4}$/.test(userData.elemYear)){
+          errors.elemYear = "Invalid format";
+        }
         if (userData.elemAward === '') {
           errors.elemAward = "This Field is required";
         } 
@@ -228,68 +236,84 @@ function Educational() {
         if (userData.gwa === '') {
           errors.gwa = "This Field is required";
         }
-
-        console.log(Object.keys(errors).length)
+        let formattedDate = '';
+        let formattedBirthday = '';
+        
+        if (userData.birthday) {
+          formattedDate = userData.birthday.toISOString();
+          formattedBirthday = new Date(formattedDate).toLocaleString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+          });
+        }
+        
+        let birthdayValue = formattedBirthday;
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
           console.log(errors)
           return;
         }
+        const formData = new FormData();
+        formData.append('applicantNum', applicantNum);
+        formData.append('address', address);
+        formData.append('age', age);
+        formData.append('baranggay', baranggay);
+        formData.append('birthday', birthdayValue);
+        formData.append('birthPlace', birthPlace);
+        formData.append('caddress', caddress);
+        formData.append('citizenship', citizenship);
+        formData.append('collegeAddress', collegeAddress);
+        formData.append('collegeAward', collegeAward);
+        formData.append('collegeSchool', collegeSchool);
+        formData.append('collegeYear', collegeYear);
+        formData.append('contactNum', contactNum);
+        formData.append('course', course);
+        formData.append('currentSchool', currentSchool);
+        formData.append('currentYear', currentYear);
+        formData.append('elemAddress', elemAddress);
+        formData.append('elemAward', elemAward);
+        formData.append('elemSchool', elemSchool);
+        formData.append('elemYear', elemYear);
+        formData.append('email', email);
+        formData.append('fatherEduc', fatherEduc);
+        formData.append('fatherName', fatherName);
+        formData.append('fatherlName', fatherlName);
+        formData.append('fathermName', fathermName);
+        formData.append('fatherOccu', fatherOccu);
+        formData.append('financialSupport', financialSupport);
+        formData.append('firstName', firstName);
+        formData.append('gender', gender);
+        formData.append('guardianContact', guardianContact);
+        formData.append('guardianName', guardianName);
+        formData.append('gwa', gwa);
+        formData.append('highAddress', highAddress);
+        formData.append('highAward', highAward);
+        formData.append('highSchool', highSchool);
+        formData.append('highYear', highYear);
+        formData.append('howLong', howLong);
+        formData.append('lastName', lastName);
+        formData.append('middleName', middleName);
+        formData.append('monthIncome', monthIncome);
+        formData.append('motherEduc', motherEduc);
+        formData.append('motherName', motherName);
+        formData.append('motherlName', motherlName);
+        formData.append('mothermName', mothermName);
+        formData.append('motherOccu', motherOccu);
+        formData.append('famNum', famNum);
+        formData.append('ownerShip', ownerShip);
+        formData.append('paddress', paddress);
+        formData.append('relationship', relationship);
+        formData.append('scholarID', scholarID);
+        formData.append('typeSchool', typeSchool);
+        formData.append('wereLive', wereLive);
+        formData.append('AAsinfo', AAsinfo);
+        formData.append('Asinfo', Asinfo);
+        formData.append('Eslinfo', Eslinfo);
+        formData.append('Esinfo', Esinfo);
+        formData.append('YLsinfo', YLsinfo);
       setLoading(true)
-      ApplyForm.CREATE_APPINFO({
-        applicantNum,
-        address,
-        age,
-        baranggay,
-        birthday,
-        birthPlace,
-        caddress,
-        citizenship,
-        collegeAddress,
-        collegeAward,
-        collegeSchool,
-        collegeYear,
-        contactNum,
-        course,
-        currentSchool,
-        currentYear,
-        elemAddress,
-        elemAward,
-        elemSchool,
-        elemYear,
-        email,
-        fatherEduc,
-        fatherName,
-        fatherlName,
-        fathermName,
-        fatherOccu,
-        financialSupport,
-        firstName,
-        gender,
-        guardianContact,
-        guardianName,
-        gwa,
-        highAddress,
-        highAward,
-        highSchool,
-        highYear,
-        howLong,
-        lastName,
-        middleName,
-        monthIncome,
-        motherEduc,
-        motherName,
-        motherlName,
-        mothermName,
-        motherOccu,
-        famNum,
-        ownerShip,
-        paddress,
-        relationship,
-        scholarID,
-        typeSchool,
-        wereLive
-        })
+      ApplyForm.CREATE_APPINFO(formData)
       .then(res => {
           console.log(res.data)
           if(res.data.success === 1){
@@ -361,7 +385,7 @@ function Educational() {
               </Select>
               {errors && <FormHelperText sx={{color: 'red'}}>{errors.typeSchool}</FormHelperText>}
             </FormControl></div>
-            <div><FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <div style={{width:'100%'}}><FormControl sx={{ minWidth: '100%' }} size="small">
               <InputLabel id="demo-simple-select-required-label">Degree Program/Course (Priority Course)</InputLabel>
               <Select
                MenuProps={{
@@ -376,7 +400,7 @@ function Educational() {
                 },
                 PaperProps: {
                   style: {
-                    maxHeight: 250, // Adjust the maximum height of the menu
+                    maxHeight: 250,
                   },
                 },
               }}
@@ -386,6 +410,7 @@ function Educational() {
                 label="Degree Program/Course (Priority Course)"
                 onChange={(e) =>setUserData({...userData,"course" : e.target.value})}
               >
+                <MenuItem value={'None'}>None</MenuItem>
                 <MenuItem value={'Bachelor fo Science in Respiratory Therapy'}>Bachelor fo Science in Respiratory Therapy</MenuItem>
                 <MenuItem value={'Bachelor in Landscape Architecture'}>Bachelor in Landscape Architecture</MenuItem>
                 <MenuItem value={'Bachelor in Secondary Education Major in Mathematics'}>Bachelor in Secondary Education Major in Mathematics</MenuItem>
@@ -587,6 +612,7 @@ function Educational() {
              <div> 
             <TextField
              label='School Year' 
+             placeholder='ex.2002-2004'
              value={userData['elemYear']} 
              onChange={(e) =>setUserData({...userData,"elemYear" : e.target.value})} 
              margin='normal' 
@@ -621,7 +647,7 @@ function Educational() {
             <div> 
             <TextField
             disabled={switchState}
-             label='High School' 
+             label='School Name' 
              value={userData['highSchool']} 
              onChange={(e) =>setUserData({...userData,"highSchool" : e.target.value})} 
              margin='normal' 
@@ -655,7 +681,7 @@ function Educational() {
              variant='outlined'
              size='small'
              error={!!errors.highYear}
-            helperText={errors.highYear}
+             helperText={errors.highYear}
              color='secondary'/>
              </div>
              <div> 
@@ -684,7 +710,7 @@ function Educational() {
             <div> 
             <TextField
             disabled={switchState1}
-             label='College School' 
+             label='School Name' 
              value={userData['collegeSchool']} 
              onChange={(e) =>setUserData({...userData,"collegeSchool" : e.target.value})} 
              margin='normal' 
@@ -737,8 +763,8 @@ function Educational() {
             </div>
             </div>
             <div className="frmedcbtn">
-            <Button className='frmedcbtn1' sx={{backgroundColor:'red'}} variant="contained" onClick={() => setStep(4)}>Previous</Button>
-            <Button sx={{backgroundColor:'green'}} variant="contained" onClick={submitData}>Submit</Button>
+            <Button className='myButton' variant="contained" onClick={() => setStep(4)}>Previous</Button>
+            <Button className='myButton1' variant="contained" onClick={submitData}>Submit</Button>
             </div>
             </div>
         </div>

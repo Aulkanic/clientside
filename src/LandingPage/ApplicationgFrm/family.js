@@ -11,6 +11,7 @@ import FormControl from '@mui/material/FormControl';
 import { FormHelperText } from '@mui/material';
 import swal from 'sweetalert';
 import '../css/family.css'
+import '../css/buttonStyle.css'
 function Family() {
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
@@ -453,7 +454,7 @@ function Family() {
              </div>
             </div>
             <div className='numsiblengthin'>
-            <FormControl sx={{ minWidth: 150 }} size="small">
+            <FormControl sx={{ minWidth: 350 }} size="small">
             <InputLabel id="demo-simple-select-required-label">Numbers of Family Members</InputLabel>
               <Select
                 labelId="demo-select-small-label"
@@ -521,8 +522,8 @@ function Family() {
             </div>
             </div>
             <div className='frmbtnfm'>
-            <Button sx={{backgroundColor:'red'}} variant="contained" onClick={() => setStep(3)}>Previous</Button>
-            <Button variant="contained" onClick={Check}>Next</Button>
+            <Button className='myButton' variant="contained" onClick={() => setStep(3)}>Previous</Button>
+            <Button className='myButton1' variant="contained" onClick={Check}>Next</Button>
             </div>
             </div>
 

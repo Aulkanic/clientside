@@ -10,27 +10,15 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { Carousel } from 'react-responsive-carousel';
 import { Card,Typography } from '@mui/material'
+import LoadingCircle from '../LoadingScreen/skcircle'
+import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
+import { useContext } from "react";
+import { color } from "../../App";
 
 function Lhomepage() {
-  const [imgList,setImglist] = useState([]);
-  const [loading,Setloading] = useState(false)
+  const { colorlist,imgList } = useContext(color);
+  const [loadingScreen,setLoadingScreen] = useState(false)
 
-  useEffect(() =>{
-    async function Fetch(){
-      Setloading(true)
-      const img = await WebImg.FETCH_WEB()
-      setImglist(img.data.result)
-      
-      Setloading(false)
-      console.log(img)
-    }
-    Fetch()
-  },[])
-  const fadeInVariant = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 }
-    
-  };
   const content = () =>{
     const imgUrl = imgList[0]?.File;
       return (
@@ -68,13 +56,12 @@ function Lhomepage() {
     </div>
     )
 })
-  
   return (
     <>
+    {colorlist && imgList ? (<div>
     <LHeader/>
     <LNav/>
-
-    {loading ? (<p>Loading</p>) : (<div className='lconthome'>
+    <div className='lconthome'>
     {content()}
       <div className='lhr'> </div>
       
@@ -101,7 +88,13 @@ function Lhomepage() {
             {imagelist}
           </Carousel>
       </div>
-    </div>)}
+    </div>
+    </div>)
+    : (<>
+      <div style={{width:'100vw',height:'100vh'}}>
+        <LoopingRhombusesSpinner/>
+      </div>
+    </>)}
     </>
   )
 }

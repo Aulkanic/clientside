@@ -6,21 +6,26 @@ import BMCCmem from '../../userhome/assets/bmccmem.png'
 import { Colorlist } from '../../Api/request'
 import { motion } from "framer-motion";
 import '../css/labout.css'
+import LoadingCircle from '../LoadingScreen/skcircle'
+import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
+import { useContext } from "react";
+import { color } from "../../App";
 const About = () => {
-  const [color,setColor] = useState([])
-
-  useEffect(() => {
-    Colorlist.FETCH_COLOR().then((res) =>{
-        setColor(res.data.result[0])
-    })
-  },[]);
-
+  const [loadingScreen,setLoadingScreen] = useState(false)
+  const { colorlist } = useContext(color);
   const textVariants = {
     hidden: { opacity: 0, x: -70 },
     visible: { opacity: 1, x: 0 }
   };
+  useEffect(() => {
+    setLoadingScreen(false);
+  }, []);
+
+
+
   return (
     <>
+    {colorlist && <div>
     <LHeader/>
     <LNav/>
     <motion.div className='labout'
@@ -49,12 +54,17 @@ const About = () => {
         </div>
       </div>
 
-      <div className="aabstract" style={{backgroundColor:color.bgColor,color:color.bgColor1}}>BMCC OFFICIALS</div>
+      <div className="aabstract" style={{backgroundColor:colorlist.bgColor,color:colorlist.bgColor1}}>BMCC OFFICIALS</div>
       
       <div className="abmccmem">
           <img src={BMCCmem} alt="" />
       </div>
     </motion.div>
+    </div>}{!colorlist && <>
+    <div style={{width:'100vw',height:'100vh'}}>
+      <LoopingRhombusesSpinner />
+    </div>
+    </>}
     </>
   )
 }
