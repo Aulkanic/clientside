@@ -11,7 +11,6 @@ import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading';
 
 function Navbar() {
   const { colorlist,logolist } = useContext(color);
-
   return (
     <>
     {colorlist && logolist ? (<div style={{display:'flex'}}>

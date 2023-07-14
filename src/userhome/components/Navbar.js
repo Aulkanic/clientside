@@ -12,15 +12,14 @@ import { color } from "../../App";
 
 const Navbar = () => {
     const { colorlist,imgList,logolist } = useContext(color);
-    const data = localStorage.getItem('ApplicantNum');
-    const value = JSON.parse(data);
-    const data1 = localStorage.getItem('ApplicantionNumber');
+    const detail = JSON.parse(localStorage.getItem('User'));
+    const data = detail.applicantNum;
     const [picture, setProfile] = React.useState([]);
     const [loading,Setloading] = useState(false);
-
     useEffect(() => {
       Setloading(true)
-      FetchingProfileUser.FETCH_PROFILEUSER(value).then((response) => {
+      FetchingProfileUser.FETCH_PROFILEUSER(data).then((response) => {
+        console.log(response)
         setProfile(response.data.Profile);
         Setloading(false)       
       });
@@ -33,7 +32,7 @@ const Navbar = () => {
                 <Avatar
                   alt="No Image"
                   src={data.profile}
-                  sx={{ width: '100%', height: '100%' }}
+                  sx={{ width: '80px', height: '80px' }}
                 />
                 </div>
                 <div className='info'>
@@ -48,7 +47,7 @@ const Navbar = () => {
       );
     });
  async function signout() {
-    const applicantNum = value;
+    const applicantNum = data;
     const formData = new FormData();
     formData.append('applicantNum',applicantNum)
      const response = await Logoutuser.USER_LOGOUT(formData)

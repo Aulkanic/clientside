@@ -29,6 +29,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import '../Button/buttonstyle.css'
+import swal from 'sweetalert'
 
 const CssTextField = styled(TextField)({
   backgroundColor: 'white',
@@ -55,7 +56,8 @@ const CssTextField = styled(TextField)({
 const Account = () => {
   const [post, setPost] = useState([]);
   const [userpicture, setProfileuser] = React.useState([]);
-  const applicantNum = localStorage.getItem('ApplicantNum');
+  const detail = JSON.parse(localStorage.getItem('User'));
+  const applicantNum = detail.applicantNum
   const [value, setValue] = useState(0);
   const [userprofile, setProfilepic] = useState('');
   const [loading, setLoading] = useState(false);
@@ -136,6 +138,9 @@ useEffect(() => {
     } else if (!/^[a-zA-Z0-9]*$/.test(repass)) {
       errors.repass = "Password can only contain alphanumeric characters";
     }
+    if(repass !== newpassword){
+      errors.newpassword = 'New Password did not Match'
+    }
     console.log(Object.keys(errors).length)
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
@@ -144,18 +149,30 @@ useEffect(() => {
     }
     const email = userpicture.email
     const formData = new FormData();
-    formData.append('Newpassword',newpassword);
+    formData.append('newpassword',newpassword);
+    formData.append('Currentpassword',currentpassword);
     formData.append('email',email)
+    setLoading(true)
   await Change_Password.CHANGE_PASSWORD(formData)
     .then(res => {
         console.log(res.data)
         if(res.data.success === 0){
-  
+          setLoading(false)
+          swal({
+            text: res.data.message,
+            timer: 2000,
+            buttons: false,
+            icon: "error",
+          })
         }
         else{
-    setLoading(true)
-      setLoading(false)
-  
+          setLoading(false)
+          swal({
+            text: res.data.message,
+            timer: 2000,
+            buttons: false,
+            icon: "success",
+          })
     }
     }
      )
@@ -197,13 +214,17 @@ useEffect(() => {
     formData.append('applicantNum',post[0].applicantNum)
    const response = await EditUserinfo.EDIT_USERINFO(formData);
    if(response.data.success === 1){
-    console.log(response)
     setPost(response.data.result)
     setLoading(false)
     setErrors('')
+    swal({
+      text: 'Updated Successfully',
+      timer: 2000,
+      buttons: false,
+      icon: "success",
+    })
    }
    else{
-    console.log(response)
     setLoading(false)
    }
 
@@ -604,6 +625,7 @@ const userinfor = Array.isArray(post)
                     </MuiAlert>} 
                 <div style={{display:'flex',justifyContent:'center'}}>
                 <LoadingButton
+                fullWidth
                 loading={loading}
                 loadingPosition="end"
                 endIcon={loading ? (null) : (<SendIcon />)}

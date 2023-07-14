@@ -22,6 +22,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
 import { color } from 'framer-motion'
+import { createContext } from 'react';
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -54,6 +55,7 @@ const CssTextField = styled(TextField)({
 });
 
 const Login = () => {
+
     const [email, setEmail] = useState('');
     const [fpemail, setFPEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -119,9 +121,9 @@ const Login = () => {
             setResstat('200')
             setSnackbarMessage(res.data.message);
             setSnackbarOpen(true); 
+            const user = res.data.result[0]
             localStorage.setItem('LoggedIn',true);
-            localStorage.setItem('ApplicantNum',res.data.ApplicantID);
-            localStorage.setItem('ApplicantionNumber',res.data.ApplicationNumber);
+            localStorage.setItem('User', JSON.stringify(user));
             setErrors('')  
             setTimeout(() => {
               navigate('/home');

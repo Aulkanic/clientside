@@ -11,17 +11,11 @@ import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { useContext } from "react";
 import { color } from "../../App";
 const About = () => {
-  const [loadingScreen,setLoadingScreen] = useState(false)
   const { colorlist } = useContext(color);
   const textVariants = {
     hidden: { opacity: 0, x: -70 },
     visible: { opacity: 1, x: 0 }
   };
-  useEffect(() => {
-    setLoadingScreen(false);
-  }, []);
-
-
 
   return (
     <>

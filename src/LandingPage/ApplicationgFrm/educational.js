@@ -552,7 +552,7 @@ function Educational() {
                 <MenuItem value={'91-95 or 1.25'}>91-95 or 1.25</MenuItem>
                 <MenuItem value={'86-90 or 2.00'}>86-90 or 2.00</MenuItem>
                 <MenuItem value={'81-85 or 2.25'}>81-85 or 2.25</MenuItem>
-                <MenuItem value={'80-82 or 2.50'}>80-82 or 2.50</MenuItem>
+                <MenuItem value={'80 below or 2.50 below'}>80 below or 2.50 below</MenuItem>
               </Select>
               {errors && <FormHelperText sx={{color: 'red'}}>{errors.gwa}</FormHelperText>}
             </FormControl></div>

@@ -50,7 +50,7 @@ function App() {
         setLoading(false);
         localStorage.setItem('Image', JSON.stringify(img.data.result));
         localStorage.setItem('Logo', JSON.stringify(req.data.result));
-        localStorage.setItem('Color', JSON.stringify(res.data.result[0]));
+        localStorage.setItem('Color', JSON.stringify(colorlist));
       } catch (error) {
         console.error('Error fetching data:', error);
       }

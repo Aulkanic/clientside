@@ -19,9 +19,9 @@ import '../Button/buttonstyle.css'
 
 
 const Schoinfo = () => {
-    const data = localStorage.getItem('ApplicantNum');
+  const detail = JSON.parse(localStorage.getItem('User'));
       const [PA, setPA] = useState([]);
-      var applicantNum = data;
+      var applicantNum = detail.applicantNum;
       const currentDate = new Date();
       const [open, setOpen] = React.useState(false);
       const [appointuser,setAppointment] = useState([]);
@@ -147,9 +147,15 @@ const Schoinfo = () => {
         <Homepage/>
         <h1 className='appointheader'>Appointment Schedule</h1>
         <div className="contappoint">
-        <div className='sicard'>
+        {appointuser.length > 0 ? (<div className='sicard'>
         {applicantdetails}
-          </div>
+          </div>) : (
+            <div className='sicard'>
+                <div style={{textAlign:'center',width:'100%',height:'100%'}}>
+                <p style={{fontSize:'30px',fontStyle:'italic'}}>No Appointment Scheduled for now</p>
+                </div>
+              </div>
+          )}
           </div>
     </>
   )

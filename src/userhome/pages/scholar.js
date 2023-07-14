@@ -16,7 +16,26 @@ import Card from '@mui/material/Card';
 import Skeleton from '@mui/material/Skeleton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MuiAlert from '@mui/material/Alert';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 import '../Button/buttonstyle.css'
+import { styled } from '@mui/material/styles';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+
+const StyledTab = styled(Tab)(({ theme }) => ({
+  fontWeight: 'bold',
+  '&.Mui-selected': {
+    color: 'white',
+    backgroundColor:'black'
+  },
+}));
+
+const StyledTabList = styled(TabList)(({ theme }) => ({
+  borderBottom: `1px solid ${theme.palette.divider}`,
+
+}));
 
 const Scholar = () => {
 
@@ -34,9 +53,15 @@ const [images, setImages] = useState([]);
 const [images1, setImages1] = useState([]);
 const [disabledInputs, setDisabledInputs] = useState([]);
 const [userFiles, setUserFiles] = useState([]);
-const applicantNum = localStorage.getItem('ApplicantNum');
+const detail = JSON.parse(localStorage.getItem('User'))
+const applicantNum = detail.applicantNum;
 const [userInfo,setUserInfo] = useState([]);
 const [errors,setErrors] = useState([]);
+const [value, setValue] = React.useState('1');
+
+const handleChange = (event, newValue) => {
+  setValue(newValue);
+};
 
 
 const handleFileChange = (index, event) => {
@@ -73,13 +98,13 @@ const handleSubmit = async (event) => {
   event.preventDefault();
   setLoading(true);
   if(userInfo.status === 'For Evaluation'){
-    alert("You cannot submit your evaluation request until you have been evaluated by a faculty member.")
     swal({
       text: 'You cannot submit your Documents until you have been evaluated by a BMCC.',
       timer: 2000,
       buttons: false,
       icon: "error",
     })
+    setLoading(false);
     return
   }
   try {
@@ -88,7 +113,6 @@ const handleSubmit = async (event) => {
       const docu = docs[index];
       const Name = docu.requirementName;
       const docsFor = docu.docsfor
-      console.log(docu)
       // Skip iteration if file is undefined
       if (!file) {
         continue;
@@ -108,7 +132,8 @@ const handleSubmit = async (event) => {
         continue;
       }
       
-      const applicantNum = localStorage.getItem('ApplicantNum');
+      const detail = JSON.parse(localStorage.getItem('User'));
+      const applicantNum = detail.applicantNum;
       const formData = new FormData();
       formData.append('file', file);
       formData.append('Reqname', docu.requirementName);
@@ -121,11 +146,9 @@ const handleSubmit = async (event) => {
       setDisabledInputs(updatedDisabledInputs);
       setSubmittedDocs1(res.data.DocumentSubmitted);
     }
-    
     setFileValues([]);
     setImages([]);
   } catch (error) {
-    // Handle the error
     console.log('An error occurred during file submission:', error);
   }
 
@@ -139,7 +162,8 @@ const handleSubmit = async (event) => {
 
 };
 const DeleteReq = async (reqName,event) =>{
-  const id = localStorage.getItem('ApplicantNum');
+  const detail = JSON.parse(localStorage.getItem('User'));
+  const id = detail.applicantNum;
   const requirement_Name = reqName;
   const formData = new FormData();
   formData.append('id', id);
@@ -149,26 +173,27 @@ const DeleteReq = async (reqName,event) =>{
   .then(res => {
     console.log(res)
     setLoading1(false)
-    setSubmittedDocs1(res.data.Document);
+    setSubmittedDocs1(res.data.result);
+    const schoCat = userInfo.SchoIarshipApplied
+    const Batch = userInfo.Batch
+    const RequireDocs = res.data.documentlist.results1?.filter(docs => docs.schoName === schoCat && docs.batch === Batch)
+    setDocs(RequireDocs);
   }
    )
   .catch(err => console.log(err));
 }
-const EditReq = async (reqName,index,event) =>{
-  console.log(userFiles)
-  const applicantNum = localStorage.getItem('ApplicantNum');
-  const requirement_Name = reqName;
-  console.log(userFiles[index],requirement_Name,applicantNum)
+const EditReq = async (data,index) =>{
+  const applicantNum = data.applicantId;
+  const requirement_Name = data.requirement_Name;
   const formData = new FormData();
-    formData.append(`file`, userFiles[index]);
+    formData.append(`file`, userFiles[index] || data.File);
     formData.append(`Reqname`, requirement_Name);
     formData.append(`applicantNum`, applicantNum);
   setLoading1(true)
   EditSub.EDIT_SUB(formData)
   .then(res => {
-    setSubmittedDocs1(res.data.Document);
-    setUserFiles([]);
-    window.location.reload();   
+    setSubmittedDocs1(res.data.result);
+    setUserFiles([]); 
     setLoading1(false)
   }
    )
@@ -183,9 +208,9 @@ useEffect(() => {
         ListofSub.FETCH_SUB(applicantNum),
         FetchingApplicantsInfo.FETCH_INFO(applicantNum)
       ]);
-
       const schoCat = response[2].data.results[0].SchoIarshipApplied
-      const RequireDocs = response[0].data.Requirements.results1?.filter(docs => docs.schoName === schoCat)
+      const Batch = response[2].data.results[0].Batch
+      const RequireDocs = response[0].data.Requirements.results1?.filter(docs => docs.schoName === schoCat && docs.batch === Batch)
       setDocs(RequireDocs);
       setUserInfo(response[2].data.results[0])
       setSubmittedDocs1(response[1].data.Document);
@@ -243,6 +268,7 @@ useEffect(() => {
         return documentsubmitted  
       }else{
         const documentsubmitted1 = submitted1?.map((req, index) => {
+          console.log(req)
           return (
             <>
             {req.File !== 'None' && <div key={index}>
@@ -269,7 +295,7 @@ useEffect(() => {
                 }}
             />
             <div>
-              <button style={{marginRight:'10px'}} className='myButton1' onClick={() =>EditReq(req.requirement_Name,index)}>Save Changes</button>
+              <button style={{marginRight:'10px'}} className='myButton1' onClick={() =>EditReq(req,index)}>Save Changes</button>
               <button className='myButton2' onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button>
             </div>
             </div>
@@ -289,7 +315,6 @@ useEffect(() => {
 const requirements = docs?.map((docu, index) => {
       const isDisabled = disabledInputs[index] || false;
       const valueToCheck = docu.requirementName;
-      console.log(submitted1)
       const hassubmit = submitted1.some((item) => item.requirement_Name === valueToCheck);
       const deadline = new Date(docu.deadline);
       const currentDate = new Date(); 
@@ -310,7 +335,7 @@ const requirements = docs?.map((docu, index) => {
                     <span>Deadline: {docu.deadline}</span>
                     <span>For: {docu.docsfor}</span>
                     {isPastDue ? (
-                      <p>Past due: Document submission is no longer possible.</p>
+                      <p style={{margin:0}}>Past due: Document submission is no longer possible.</p>
                     ) : (
                       !isDisabled && !hassubmit ? (
                         <input
@@ -320,7 +345,7 @@ const requirements = docs?.map((docu, index) => {
                           onChange={(event) => handleFileChange(index, event)}
                         />
                       ) : (
-                        <p>Already Submitted</p>
+                        <p style={{margin:0}}>Already Submitted</p>
                       )
                     )}
                   </div>
@@ -335,44 +360,66 @@ const requirements = docs?.map((docu, index) => {
 return(
   <>
     <Homepage/>
-  {loadingPage ? (<Skeleton animation="wave" variant="circular" width={'90%'} height={'100%'} />) : (<div className="userscho">
-      <div className='schousercont'>
-              <div className='reqheadtitle'>
-              <h1>Requirements</h1>
-              </div>
-              <div className="userequirements">
-                {requirements}
-              </div>
-              <div className='btnschoupreq'>
+  <div>
+  <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <StyledTabList onChange={handleChange} aria-label="lab API tabs example">
+            <StyledTab label="Requirements List" value="1" />
+            <StyledTab label="Requirements Submitted" value="2" />
+          </StyledTabList>
+        </Box>
+        <TransitionGroup>
+        <CSSTransition key={value} classNames="fade" timeout={300}>
+        <TabPanel value="1">
+            <div className='schousercont'>
+          <div className='reqheadtitle'>
+            <h1 style={{margin:'0px'}}>Requirements</h1>
+          </div>
+          <div className="userequirements">
+              {requirements}
+          </div>
+          <div>
               <LoadingButton
-            loading={loading}
-            loadingPosition="end"
-            variant="elevated"
-            sx={{color:'white'}}
-            className='myButton1'
-            onClick={handleSubmit}
-          >
-            Submit
-          </LoadingButton>
+                loading={loading}
+                loadingPosition="end"
+                variant="elevated"
+                fullWidth
+                sx={{color:'white'}}
+                className='myButton1'
+                onClick={handleSubmit}
+              >
+                Submit
+              </LoadingButton>
+          </div>
+            </div>
+        </TabPanel>
+        </CSSTransition>
+      </TransitionGroup>
+      <TransitionGroup>
+        <CSSTransition key={value} classNames="fade" timeout={300}>
+        <TabPanel value="2">
+          <div className="userdocusub">
+            <div className="userschocont">
+            <div>
+              <h1>Documents Submitted</h1>
+            </div>
+            <div className='usersbumtdoc'>
+            {submitted1.length > 0 ? (ViewsubDocs()) : 
+            (<div className="docusibmitted">
+              <div className='Nodocupost'> 
+              <p>No Document Submitted</p>
               </div>
+              </div>)}
+            </div>
+          </div>
+          </div>
+        </TabPanel>
+        </CSSTransition>
+      </TransitionGroup>
+      </TabContext>
+
 
     </div>
-    <div className="userdocusub">
-      <div className="userschocont">
-      <div>
-        <h1>Documents Submitted</h1>
-      </div>
-      <div className='usersbumtdoc'>
-      {submitted1.length > 0 ? (ViewsubDocs()) : 
-      (<div className="docusibmitted">
-        <div className='Nodocupost'> 
-        <p>No Document Submitted</p>
-        </div>
-        </div>)}
-      </div>
-    </div>
-    </div>
-    </div>)}
 
   </>
 )
