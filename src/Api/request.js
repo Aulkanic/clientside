@@ -116,3 +116,6 @@ export const Logos = {
 export const UserCango = {
     Cango: (data) => axiosInstance.post(Endpoints.CANGO,data)
 }
+export const FetchFaqs = {
+    FETCH_FAQS: () => axiosInstance.get(Endpoints.FETCH_FAQS)
+}

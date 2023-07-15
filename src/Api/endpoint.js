@@ -39,6 +39,7 @@ const Endpoints = {
     FETCH_WEBSITE:"admin/WebImg",
     LOGOS:'Dynamic/Logo',
     CANGO:'Appointment/Cango',
+    FETCH_FAQS:'Faqs/Fetch',
 }
 
 export default Endpoints

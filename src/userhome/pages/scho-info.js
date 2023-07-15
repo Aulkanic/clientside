@@ -77,6 +77,7 @@ const Schoinfo = () => {
     }
 
     const applicantdetails = appointuser?.map((data) =>{
+      console.log(data)
       const formatDate = () => {
         const specificDate = new Date(data.schedDate);
         return specificDate.toLocaleDateString('en-US', {
@@ -104,14 +105,18 @@ const Schoinfo = () => {
                   <p>Agenda: {data.Reason}</p>
                   <p>Location: {data.Location}</p>
                   <p>Time: {data.timeStart} - {data.timeEnd}</p>
-                  <div>
+                  {data.statusApp === 'Ongoing' && data.isInterview === 'No' ? (<div>
                   <button style={{marginRight:'10px'}} className='myButton1' onClick={() =>willgo(data,'Yes')}>
                     Will Go
                   </button>
                   <button className='myButton2' onClick={() =>handleClickOpen(data)}>
                     Cannot Go
                   </button>
-                  </div>
+                  </div>) : data.isInterview === 'Reappoint' ? (<>
+                  <p>You've been Re-Appointed</p>
+                  </>) : data.isPassed !== 'Pending' ? (<p>
+                    <p>{data.isPassed}</p>
+                  </p>) : null}
                 </div>
                 </div>
               </Card>
@@ -140,8 +145,8 @@ const Schoinfo = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button className='myButton' onClick={handleClose}>CANCEL</Button>
-          <Button className='myButton1' onClick={Cannotgo}>SUBMIT</Button>
+          <Button className='myButton' sx={{color:'white'}} onClick={handleClose}>CANCEL</Button>
+          <Button className='myButton1' sx={{color:'white'}} onClick={Cannotgo}>SUBMIT</Button>
         </DialogActions>
       </Dialog>
         <Homepage/>

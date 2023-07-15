@@ -1,18 +1,68 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import LHeader from '../components/header'
 import LNav from '../components/navbar'
 import '../css/faqs.css'
 import FAQSImg from '../../userhome/assets/faqs.png'
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import MuiAccordion from '@mui/material/Accordion';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Announceimg from '../../userhome/assets/announce.png'
 import { motion } from "framer-motion";
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
+import { FetchFaqs } from '../../Api/request'
+import Typography from '@mui/material/Typography';
+
+
+const Accordion = styled((props) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  '&:not(:last-child)': {
+    borderBottom: 0,
+  },
+  '&:before': {
+    display: 'none',
+  },
+}));
+
+const AccordionSummary = styled((props) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === 'dark'
+      ? 'rgba(255, 255, 255, .5)'
+      : 'rgba(0, 0, 0, .03)',
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(-90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
+  },
+}));
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: '1px solid rgba(0, 0, 0, .125)',
+}));
+
 
 const Faqs = () => {
+  const [faqs,setFaqs] = useState([]);
+
+  useEffect(() =>{
+      async function Fetch(){
+        const res = await FetchFaqs.FETCH_FAQS()
+        setFaqs(res.data.result)
+      }
+      Fetch()
+  },[faqs])
   const textVariants = {
     hidden: { opacity: 0, x: -70 },
     visible: { opacity: 1, x: 0 }
@@ -38,70 +88,33 @@ const Faqs = () => {
       </div>
       <div className="faqs-accordion">
         <div>
-      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-        <AccordionSummary
-         className='FaqsQuestions'
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-          sx={{ background:'darkgreen'}}
-        >
-          <Typography sx={{ width: '33%', flexShrink: 0, color:'white' }}>
-          Who Is Eligible To Apply For A Scholarship?
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails className='FaqsAnswer'>
-          <Typography>
-          1. Permanent resident of Marilao, Bulacan <br/>
-                  2. Not more than 21 year's old at the time of Application<br/>
-                  3. Must be enrolled and registered on any public or private schools and accredited instuitions<br/>
-                  4. Of good moral character as certified by the School Principal/School Head or Guidance Counselor<br/>
-                  5. General Weighted Average
-                      <li>Elementary - 90% or more</li>
-                      <li>High School - 90% or more</li>
-                      <li>College - General Weighted Average (GWA) of at least 85% with no final grade
-                        lower than 80% in any subject or graduated valedictorian or salutatorian for incoming
-                         freshmen applicants; with GWA of at least 2.5 with no delinquent final grade nor a grade
-                         of 3.0 in any subject for applicants from other year levels;
-                      </li>
-                  6. No derogatory record.<br/>
-                  7. Must comply with the documentary requirements and submit them on or before the deadline set by the
-                  Scholarship Board thru the implementating office;The Batang Marilenyo Coordinating Center
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-        <AccordionSummary
-         className='FaqsQuestions'
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-          sx={{ background:'darkgreen'}}
-        >
-          <Typography sx={{ width: '33%', flexShrink: 0, color:'white' }}>
-          Who Is Eligible To Apply For A Scholarship?
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails className='FaqsAnswer'>
-          <Typography>
-          1. Permanent resident of Marilao, Bulacan <br/>
-                  2. Not more than 21 year's old at the time of Application<br/>
-                  3. Must be enrolled and registered on any public or private schools and accredited instuitions<br/>
-                  4. Of good moral character as certified by the School Principal/School Head or Guidance Counselor<br/>
-                  5. General Weighted Average
-                      <li>Elementary - 90% or more</li>
-                      <li>High School - 90% or more</li>
-                      <li>College - General Weighted Average (GWA) of at least 85% with no final grade
-                        lower than 80% in any subject or graduated valedictorian or salutatorian for incoming
-                         freshmen applicants; with GWA of at least 2.5 with no delinquent final grade nor a grade
-                         of 3.0 in any subject for applicants from other year levels;
-                      </li>
-                  6. No derogatory record.<br/>
-                  7. Must comply with the documentary requirements and submit them on or before the deadline set by the
-                  Scholarship Board thru the implementating office;The Batang Marilenyo Coordinating Center
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+          {faqs?.map((data,index) =>{
+              console.log(data,index)
+            return(
+              <>
+              <div style={{margin:'5px'}} key={index}>
+              <Accordion expanded={expanded === `panel${index}`} onChange={handleChange(`panel${index}`)}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+                
+              >
+                <Typography sx={{ width: '33%', flexShrink: 0, color:'black' }}>
+                {data.faqsQuestions}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                {data.faqsAnswers}
+                </Typography>
+              </AccordionDetails>
+              </Accordion>
+              </div>
+              </>
+            )
+          })}
+
       </div>
       
       </div>
