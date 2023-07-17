@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Switch, TextField } from '@mui/material';
+import { Switch, TextField,CircularProgress } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useContext } from 'react';
 import { multiStepContext } from './StepContext';
@@ -9,19 +9,64 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import swal from 'sweetalert';
 import Axios from 'axios'
-import { FormHelperText } from '@mui/material';
+import { FormHelperText,Typography } from '@mui/material';
 import { ApplyForm } from '../../Api/request';
 import '../css/educational.css'
 import { useNavigate } from 'react-router-dom';
 import '../css/buttonStyle.css'
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Link from '@mui/material/Link';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { styled } from '@mui/material/styles';
+import Checkbox from '@mui/material/Checkbox';
+
 function Educational() {
   const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
+
   const [errors, setErrors] = useState({}); 
   const navigate = useNavigate();
   const [applicantNum, setApplicantNum] = useState('');
   const [switchState, setSwitchState] = useState(false);
   const [switchState1, setSwitchState1] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [scroll, setScroll] = React.useState('paper');
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleButtonClick = () => {
+    setIsChecked(true);
+    setOpen(false)
+    console.log(isChecked)
+  };
+  const handleCheckboxChange = () => {
+    setIsChecked((prevChecked) => !prevChecked);
+  };
+
+  const handleClickOpen = (scrollType) => () => {
+    setOpen(true);
+    setScroll(scrollType);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const descriptionElementRef = React.useRef(null);
+  React.useEffect(() => {
+    if (open) {
+      const { current: descriptionElement } = descriptionElementRef;
+      if (descriptionElement !== null) {
+        descriptionElement.focus();
+      }
+    }
+  }, [open]);
 
   const HighhandleSwitchChange = () => {
     setSwitchState(!switchState);
@@ -33,12 +78,10 @@ function Educational() {
   };
 
   useEffect(() => {
-    // Retrieve the item from localStorage
     const item = localStorage.getItem('ApplicationNumber');
-
-    // Do something with the retrieved item
     setApplicantNum(item);
   }, []);
+
     const { setStep, userData, setUserData,SubmitData} = useContext(multiStepContext);
     const address = userData.address
     const age = userData.age
@@ -246,8 +289,7 @@ function Educational() {
             day: 'numeric',
             year: 'numeric',
           });
-        }
-        
+        }       
         let birthdayValue = formattedBirthday;
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
@@ -312,7 +354,7 @@ function Educational() {
         formData.append('Eslinfo', Eslinfo);
         formData.append('Esinfo', Esinfo);
         formData.append('YLsinfo', YLsinfo);
-      setLoading(true)
+      setLoading1(true)
       ApplyForm.CREATE_APPINFO(formData)
       .then(res => {
           console.log(res.data)
@@ -326,20 +368,26 @@ function Educational() {
               icon: "success",
               button: "OK",
             });
-            setLoading(false)
+            setLoading1(false)
           }
           else{
-      swal('FAILED');;
-        setLoading(false)
+            swal({
+              title: "Success",
+              text: "Something Went Wrong!",
+              icon: "success",
+              button: "OK",
+            });
+        setLoading1(false)
         navigate('/ApplicationForm');
       }
       }
        )
       .catch(err => console.log(err));
-      setLoading(false)
+      setLoading1(false)
       }
   return (
     <>
+    
     {!loading && <div className='Educ'>
         <div className="Educd">
             <div className="form">
@@ -762,9 +810,81 @@ function Educational() {
              </div>
             </div>
             </div>
+            <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+            <FormControlLabel control={<Checkbox checked={isChecked} onChange={handleCheckboxChange} />} label="" />
+            <Link href="#" underline="hover" onClick={handleClickOpen('paper')}>
+              {'Terms and Conditions'}
+            </Link>
+            <Dialog
+        open={open}
+        onClose={handleClose}
+        scroll={scroll}
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+      >
+        <DialogTitle id="scroll-dialog-title">TERMS AND CONDITIONS</DialogTitle>
+        <DialogContent dividers={scroll === 'paper'}>
+          <DialogContentText
+            id="scroll-dialog-description"
+            ref={descriptionElementRef}
+            tabIndex={-1}
+          >
+   <Typography component="div" variant="body1">
+    By filling out the form, you agree to the following terms and conditions:
+    <br />
+    <br />
+    1. Accuracy of Information: You agree to provide accurate, complete, and up-to-date information in the form. Any false or misleading information provided may result in the rejection of your submission or termination of any subsequent agreement or relationship.
+    <br />
+    <br />
+    2. Consent for Data Collection: By submitting the form, you consent to the collection, storage, and processing of the information provided in accordance with applicable privacy laws and the stated purpose of the form.
+    <br />
+    <br />
+    3. Purpose of Data Usage: The information you provide in the form may be used for the intended purpose stated in the form, such as processing your request, evaluating your eligibility for a service, or contacting you regarding the matter in question.
+    <br />
+    <br />
+    4. Data Protection: Reasonable measures will be taken to protect the confidentiality and security of the information you provide. However, please note that no method of transmission or storage over the internet is completely secure, and there is always a risk of unauthorized access or data breaches.
+    <br />
+    <br />
+    5. Third-Party Sharing: In some cases, your information may be shared with third parties, such as service providers or partners, to fulfill the purpose of the form. However, your information will not be sold or rented to third parties for marketing purposes without your explicit consent.
+    <br />
+    <br />
+    6. Retention of Information: The information you provide may be retained for as long as necessary to fulfill the purpose of the form or as required by applicable laws or regulations.
+    <br />
+    <br />
+    7. Right to Access and Update Information: You have the right to access, update, and correct any personal information you have provided in the form. You may also have the right to request the deletion of your information, subject to applicable legal requirements.
+    <br />
+    <br />
+    8. Limitation of Liability: The organization or entity collecting the information through the form will not be liable for any direct, indirect, incidental, or consequential damages arising from the use or misuse of the information provided, or any errors, omissions, or delays in the processing of the information.
+    <br />
+    <br />
+    9. Changes to Terms and Conditions: The terms and conditions for filling out the form may be updated or modified from time to time. By continuing to use the form, you agree to be bound by the most recent version of the terms and conditions.
+    <br />
+    <br />
+    It is important to carefully review and understand the terms and conditions before filling out the form. If you have any questions or concerns, you should seek clarification from the organization or entity responsible for the form.
+  </Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleButtonClick}>Agree</Button>
+        </DialogActions>
+            </Dialog>
+            </div>
             <div className="frmedcbtn">
             <Button className='myButton' variant="contained" onClick={() => setStep(4)}>Previous</Button>
-            <Button className='myButton1' variant="contained" onClick={submitData}>Submit</Button>
+            
+            <LoadingButton
+                loading={loading1}
+                loadingPosition="end"
+                variant="elevated"
+                fullWidth
+                sx={{color:'white',width:'max-Content'}}
+                className='myButton1'
+                onClick={submitData}
+                disabled={!isChecked}
+              >
+                Submit
+              </LoadingButton>
             </div>
             </div>
         </div>

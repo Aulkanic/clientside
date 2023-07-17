@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 .loginpage{
+    top: 150px;
+    position: relative;
     width: 100%;
     height: 100vh;
     display: flex;

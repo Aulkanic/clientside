@@ -29,6 +29,40 @@
     width: 100%;
     margin-left: 20px;
 }
+.ribbon-header {
+    background-color: blue;
+    border: none;
+    position: relative;
+    margin: 0px 0px 20px 0px;
+  }
+  
+  .ribbon-header::before,
+  .ribbon-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20.5px;
+    width: 0;
+    height: 0;
+    border: 21px solid transparent;
+  }
+  
+  .ribbon-header::before {
+    height: 79px;
+    left: -41px;
+    border-right-color: blue;
+  
+  }
+  
+  .ribbon-header::after {
+    height: 79px;
+    right: -41px;
+    border-left-color: blue;
+  
+  }
+  .ribbon-header-text {
+    position: relative;
+    border: none;
+  }
 .Econd .form h2{
     padding: 10px;
     font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";

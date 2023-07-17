@@ -40,6 +40,7 @@ const Endpoints = {
     LOGOS:'Dynamic/Logo',
     CANGO:'Appointment/Cango',
     FETCH_FAQS:'Faqs/Fetch',
+    FETCH_RULE:'Dynamic/Rulelist',
 }
 
 export default Endpoints

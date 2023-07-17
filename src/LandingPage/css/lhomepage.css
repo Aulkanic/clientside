@@ -8,7 +8,7 @@
 
 .lapply{
     width: 100%;
-    height: 600px;
+    height: 700px;
     background-repeat: no-repeat;
     background-position: 50%;
     background-attachment: scroll;
@@ -33,7 +33,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 40%;
+    height: 400px;
 }
 .lslogan h1{
     margin: 0;
@@ -77,33 +77,26 @@
     align-items: center;
 }
 .lcarou{
-    width: 100%;
-    height: 50%;
+    width: 95%;
+    height: 60%;
     display: flex;
+    padding: 10px;
     justify-content: center;
 }
-.limgcard{
-    width: 25%;
-    border-radius: 10px;
-    height: 80%;
-    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-    box-shadow: 2px 4px 10px 1px rgba(65, 61, 61, 0.47);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-.limgcard img{
-    border-radius: 15px;
-    width: 100%;
-    height: 100%;
-}
 
-.lhr{
-    border: 1px solid rgb(53, 48, 48);
-    margin-top: 40px;
-    margin-bottom: 40px;
-}
-.Carou{
-    width: 50%;
-}
+.carousel-image {
+    margin: 15px;
+    height: 100%;
+    width:75%;
+    object-fit: cover;
+  }
+  .lfooter{
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    z-index: 10;
+    background-color: aqua;
+  }
+
 

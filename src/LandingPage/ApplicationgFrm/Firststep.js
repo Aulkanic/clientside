@@ -7,10 +7,10 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import { FormHelperText } from '@mui/material';
+import { Card, FormHelperText } from '@mui/material';
 import { ScholarCategory} from '../../Api/request.js'
 import { Checkbox } from '@mui/material';
-import { FetchingUser } from '../../Api/request.js';
+import { FetchingUser,Rulelist,UserProflist } from '../../Api/request.js';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from "axios";
 import '../css/Firststep.css'
@@ -25,7 +25,9 @@ function Firststep() {
   const [checkedValues2, setCheckedValues2] = useState([]);
   const [checkedValues3, setCheckedValues3] = useState([]);
   const [checkedValues4, setCheckedValues4] = useState([]);
-
+  const [rule,setRule] = useState([])
+  const [userlist,setUserlist] = useState([])
+ 
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
     if (event.target.checked) {
@@ -131,6 +133,10 @@ function Firststep() {
         const scholist = await ScholarCategory.ScholarshipProgram();
         const resdata = response.data.UserAccount;
         const schodata = scholist.data.SchoCat;
+        const rul = await Rulelist.FETCH_RULE()
+        const user = await UserProflist.FETCH_USER()
+        setUserlist(user.data.UserAccounts)
+        setRule(rul.data.result[0])
         setUserAcc(resdata);
         setScholarProg(schodata);
       } catch (error) {
@@ -141,7 +147,7 @@ function Firststep() {
     fetchData();
 
   }, []);
-  console.log(usersAcc)
+
   function Check(){
     const errors = {};
     if (userData.scholarID === '') {
@@ -153,10 +159,19 @@ function Firststep() {
     else if(!usersAcc.some((item) => item.email === userData.checkemail)){
       errors.checkemail = "This email is not registered";
     }
-    console.log(Object.keys(errors).length)
+    const scho = userlist.filter(
+      (item) =>
+        item.email === userData.checkemail &&
+        item.ScholarshipApplied === userData.scholarID &&
+        item.status !== 'Revoke' &&
+        item.status !== 'Failed'
+    );
+    if(scho.length > rule.schoNum){
+      errors.checkemail = `Only ${rule.schoNum} Scholarship Grant per Applicants/Scholars`;
+ 
+    }
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
-      console.log(errors)
       return;
     }
     setErrors('')
@@ -222,30 +237,39 @@ function Firststep() {
           </div>
           </div>
           <div className="checkboxcontainer">
-          {userData.scholarID === 'Academic Scholarship' && <div className='checkbox'>
+          {userData.scholarID === 'Academic Scholarship' && 
+          <>
+          <Card className='pcard' elevation={0}>
           <p>{userData.scholarID}(Elementary & Highschool)</p>
+          </Card>
+          <div className='checkbox'>
           <div className='gridcheckbox'>
-          {Asoptions.map((option) => (
-         
-        <FormControlLabel
-          key={option.value}
-          control={
-            <Checkbox
-              checked={checkedValues.includes(option.value)}
-              onChange={handleCheckboxChange}
-              value={option.value}
+          {Asoptions.map((option) => (   
+            <FormControlLabel
+              key={option.value}
+              control={
+                <Checkbox
+                  checked={checkedValues.includes(option.value)}
+                  onChange={handleCheckboxChange}
+                  value={option.value}
+                />
+          
+              }
+              label={option.label}
             />
-       
-          }
-          label={option.label}
-        />
-             
-      ))}
-      </div>
-         </div>}
-         {userData.scholarID === 'Economic Scholarship' && <div className='checkbox'>
+              ))}
+            </div>
+         </div></>}
+         {userData.scholarID === 'Economic Scholarship' && 
+         <>
+          <Card className='pcard' elevation={0}>
           <p>{userData.scholarID}</p>
+          </Card>
+
+         <div className='checkbox'>
+         <Card className='pqcard' elevation={0}>
           <p>Do you belong to any of the following?</p>
+          </Card>
           <div className='gridcheckbox'>
           {Esoptions.map((option) => (
             <>
@@ -262,52 +286,67 @@ function Firststep() {
           label={option.label}
         />
         </>
-      ))}
+            ))}
             </div>
+          <Card className='pqcard' elevation={0}>
           <p>Do your Parents belong to any of the following?</p>
+          </Card>
           <div className='gridcheckbox'>
           {Esoptions1.map((option) => (
             <>
            
-        <FormControlLabel
-          key={option.value}
-          control={
-            <Checkbox
-              checked={checkedValues2.includes(option.value)}
-              onChange={handleCheckboxChange2}
-              value={option.value}
-            />
-          }
-          label={option.label}
-        />
-        </>
-      ))}
-</div>
-         </div>}
-         {userData.scholarID === 'Athletic and Arts Scholarship' && <div className='checkbox'>
+              <FormControlLabel
+                key={option.value}
+                control={
+                  <Checkbox
+                    checked={checkedValues2.includes(option.value)}
+                    onChange={handleCheckboxChange2}
+                    value={option.value}
+                  />
+                }
+                label={option.label}
+              />
+              </>
+             ))}
+              </div>
+          </div>
+          </>}
+         {userData.scholarID === 'Athletic and Arts Scholarship' && 
+         <>
+          <Card className='pcard' elevation={0}>
           <p>{userData.scholarID}</p>
-          <p>Accepted Award/Details:</p>
+          </Card>
+         <div className='checkbox'>
+         <Card className='pqcard' elevation={0}>
+         <p>Accepted Award/Details:</p>
+          </Card>
           <div className="gridcheckbox">
           {AAoptions.map((option) => (
             <>
-        <FormControlLabel
-          key={option.value}
-          control={
-            <Checkbox
-              checked={checkedValues3.includes(option.value)}
-              onChange={handleCheckboxChange3}
-              value={option.value}
-            />
-          }
-          label={option.label}
-        />
-        </>
-      ))}
-      </div>
-         </div>}
-         {userData.scholarID === 'Youth Leadership Scholarship' && <div className='checkbox'>
+          <FormControlLabel
+            key={option.value}
+            control={
+              <Checkbox
+                checked={checkedValues3.includes(option.value)}
+                onChange={handleCheckboxChange3}
+                value={option.value}
+              />
+            }
+            label={option.label}
+              />
+              </>
+            ))}
+            </div>
+         </div></>}
+         {userData.scholarID === 'Youth Leadership Scholarship' && 
+         <>
+          <Card className='pcard' elevation={0}>
           <p>{userData.scholarID}</p>
-          <p>Accepted Award/Details:</p>
+          </Card>
+         <div className='checkbox'>
+         <Card className='pqcard' elevation={0}>
+         <p>Accepted Award/Details:</p>
+          </Card>
           <div className="gridcheckbox">
           {YLoptions.map((option) => (
             <>
@@ -325,7 +364,7 @@ function Firststep() {
         </>
       ))}
       </div>
-         </div>}
+         </div></>}
          </div>
           <div className='frmbtnec'>
           <Button className='myButton' variant="contained" onClick={Check}>Next</Button>

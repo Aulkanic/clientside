@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import { useContext } from 'react';
 import { multiStepContext } from './StepContext';
 import Select from '@mui/material/Select';
-import { FetchingFamily } from '../../Api/request';
+import { FetchingFamily,Rulelist } from '../../Api/request';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { FormHelperText } from '@mui/material';
@@ -16,19 +16,20 @@ function Family() {
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
     const [famlist, setFamlist] = useState([]);
+    const [rule,setRule] = useState([])
 
     useEffect(() =>{
       async function fetch(){
           const famdata = await FetchingFamily.FETCH_FAM();
-          console.log(famdata)
           const datafam = famdata.data.Familylist;
-          console.log(datafam)
+          const rul = await Rulelist.FETCH_RULE()
+          setRule(rul.data.result[0])
           setFamlist(datafam)
         }
 
         fetch()
     },[])
-
+        console.log(rule)
       function Check(){
         const errors = {};
         let checkfammum = 0;
@@ -140,7 +141,6 @@ function Family() {
         }
         else if(famlist?.some((item) => item.fatherName === userData.fatherName)){
           checkfamdad += 1;
-          console.log("1")
         }
         if (userData.fatherlName === '') {
           errors.fatherlName = "This Field is required";
@@ -162,7 +162,6 @@ function Family() {
         }
         else if(famlist?.some((item) => item.fatherlName === userData.fatherlName)){
           checkfamdad += 1;
-          console.log("2")
         }
         if (userData.fathermName === '') {
           errors.fathermName = "This Field is required";
@@ -184,7 +183,6 @@ function Family() {
         }
         else if(famlist?.some((item) => item.fathermname === userData.fathermName)){
           checkfamdad += 1;
-          console.log("3")
         }
         if (userData.fatherOccu === '') {
           errors.fatherOccu = "This Field is required";
@@ -250,16 +248,18 @@ function Family() {
         }else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.famNum)) {
           errors.famNum = "Special characters are not allowed.";
         }
-        if(checkfammum === 3 && checkfamdad === 3){
+        const famrule = 3 * rule.famNum
+        if(checkfammum === famrule && checkfamdad === famrule){
           errors.valid = 'Invalid'
-          swal("One Family Per head")
+          swal({
+            title: "Warning",
+            text: 'One Family Per head',
+            icon: "warning",
+            button: "OK",
+          });
         }
-        console.log(famlist)
-        console.log(checkfamdad,checkfammum)
-        console.log(Object.keys(errors).length)
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
-          console.log(errors)
           return;
         }
         setErrors('')

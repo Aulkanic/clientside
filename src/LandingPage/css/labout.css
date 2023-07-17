@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 .labout{
-    display: flex;
-    flex-direction: column;
+    top: 200px;
+    position: relative;
     width: 100%;
     height: 100%;
 }

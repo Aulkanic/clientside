@@ -13,10 +13,10 @@
     background-size: cover;
 }
 .lheadbmcc{
-    width: 20%;
+    width: 100%;
     height: 65px;
     display: flex;
-    background-color: green;
+    background-color: white;
 }
 
 
@@ -27,8 +27,7 @@
     font-style: normal;
     font-weight: 900;
     font-size: 20px; 
-    color: #FFF627;
-    
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";  
 }
 
 .bmccslog h2{

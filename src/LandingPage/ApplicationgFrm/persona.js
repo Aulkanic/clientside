@@ -16,6 +16,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import '../css/persona.css'
 import '../css/buttonStyle.css'
 import dayjs from 'dayjs';
+import { Rulelist } from '../../Api/request';
 import { styled, ThemeProvider, createTheme } from '@mui/material';
 
 const theme = createTheme();
@@ -31,8 +32,17 @@ function Persona() {
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
     const today = dayjs();
+    const [rule,setRule] = useState([])
 
-      function Check(){
+    useEffect(() =>{
+          async function Fetch(){
+            const rul = await Rulelist.FETCH_RULE()
+            setRule(rul.data.result[0])
+          }
+          Fetch()
+    },[])
+
+    function Check(){
         const errors = {};
         if (userData.firstName === '') {
           errors.firstName = "First Name is required";
@@ -105,9 +115,14 @@ function Persona() {
           errors.age = "Input must not contain letter value";
         }else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.age)) {
           errors.age = "Special characters are not allowed.";
-        }else if (userData.age > 21) {
+        }else if (userData.age > rule.ageNum) {
           errors.age = "Not Qualified";
-          swal('You are not Qualify to Apply Scholarship.Only 21 below must considered.')
+          swal({
+            title: "Warning",
+            text: `You are not Qualify to Apply Scholarship.Only ${rule.ageNum} below must considered.`,
+            icon: "warning",
+            button: "OK",
+          });
           setStep(2);
         }else if(userData.age <=5){
           errors.age = 'Minimum age for application is five years old';

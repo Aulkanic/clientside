@@ -119,3 +119,9 @@ export const UserCango = {
 export const FetchFaqs = {
     FETCH_FAQS: () => axiosInstance.get(Endpoints.FETCH_FAQS)
 }
+export const Rulelist = {
+    FETCH_RULE: () => axiosInstance.get(Endpoints.FETCH_RULE)
+}
+export const UserProflist = {
+    FETCH_USER: () => axiosInstance.get(Endpoints.FETCH_ACCOUNTS)
+}

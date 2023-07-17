@@ -1,10 +1,12 @@
 .stepdiv{
+    top: 150px;
+    position: relative;
     background-image: url('../../userhome/assets/municipal.jpg');
     background-repeat: no-repeat;
     background-position: 50%;
     background-attachment: scroll;
     background-size: cover;
-    height: 100%;
+    height: max-content;
     border: none;
 }
 .stepdiv h1{

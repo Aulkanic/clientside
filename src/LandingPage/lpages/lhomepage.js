@@ -8,16 +8,16 @@ import { motion } from "framer-motion";
 import { WebImg } from '../../Api/request'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { Carousel } from 'react-responsive-carousel';
 import { Card,Typography } from '@mui/material'
 import LoadingCircle from '../LoadingScreen/skcircle'
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { useContext } from "react";
 import { color } from "../../App";
+import Carousel from 'react-bootstrap/Carousel';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Lhomepage() {
   const { colorlist,imgList } = useContext(color);
-
 
   const content = () =>{
     const imgUrl = imgList[0]?.File;
@@ -48,22 +48,12 @@ function Lhomepage() {
         </>
       )
   }
-  const imagelist = imgList?.map((image, index) => {
-
-    return (
-    <div key={index} className="carousel-slide">
-      <img style={{width: '100%',height:'300px'}} src={image.File} alt={`Carousel Image ${index}`} />
-    </div>
-    )
-})
   return (
     <>
-    {colorlist && imgList ? (<div>
-    <LHeader/>
+    {colorlist && imgList ? (<div style={{display:'flex',flexDirection:'column'}}>
     <LNav/>
     <div className='lconthome'>
     {content()}
-      <div className='lhr'> </div>
       
         <div className="lcarou" style={{width:'100%'}}>
           <div style={{width:'47%',margin:'0px 10px 0px 0px'}}>
@@ -74,20 +64,43 @@ function Lhomepage() {
               </Typography>
             </Card>
           </div>
-        <Carousel
-            className='Carou'
-            autoPlay
-            infiniteLoop
-            interval={2000}
-            showArrows={true}
-            showStatus={false}
-            showThumbs={false}
-            transitionTime={1000}
-            swipeable={true}
-          >
-            {imagelist}
+          <Carousel>
+      <Carousel.Item style={{width:'100%'}}>
+        <img
+          className="d-block w-100 carousel-image"
+          src={imgList[1].File}
+          alt="First slide"
+        />
+        <Carousel.Caption>
+        </Carousel.Caption>
+      </Carousel.Item>
+      <Carousel.Item>
+        <img
+          className="d-block w-100 carousel-image"
+          src={imgList[3].File}
+          alt="Second slide"
+        />
+
+        <Carousel.Caption>
+
+        </Carousel.Caption>
+      </Carousel.Item>
+      <Carousel.Item>
+        <img
+          className="d-block w-100 carousel-image"
+          src={imgList[2].File}
+          alt="Third slide"
+        />
+
+        <Carousel.Caption>
+
+        </Carousel.Caption>
+      </Carousel.Item>
           </Carousel>
       </div>
+    </div>
+    <div className="lfooter">
+
     </div>
     </div>)
     : (<>

@@ -27,22 +27,22 @@
 .ribbon-header::after {
   content: '';
   position: absolute;
-  bottom: -18.5px;
+  bottom: -15.5px;
   width: 0;
   height: 0;
   border: 21px solid transparent;
 }
 
 .ribbon-header::before {
-  height: 40px;
+  height: 70px;
   left: -41px;
   border-right-color: blue;
 
 }
 
 .ribbon-header::after {
-  height: 40px;
-  right: -40px;
+  height: 70px;
+  right: -41px;
   border-left-color: blue;
 
 }

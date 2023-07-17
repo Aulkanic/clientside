@@ -84,7 +84,7 @@ const Faqs = () => {
            transition={{ duration: 1 }}>
       <div className="faqs-card">
       <div className="faqs-header">
-       <img src={FAQSImg} alt="" />
+       <img style={{width:'100%'}} src={FAQSImg} alt="" />
       </div>
       <div className="faqs-accordion">
         <div>
