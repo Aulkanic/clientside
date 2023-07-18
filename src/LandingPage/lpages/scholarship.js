@@ -4,6 +4,7 @@ import LNav from '../components/navbar'
 import '../css/scholarship.css'
 import {Link} from 'react-router-dom'
 import { motion } from "framer-motion";
+import { Card, Typography } from '@mui/material'
 function scholarship() {
   const textVariants = {
     hidden: { opacity: 0, x: -70 },
@@ -18,13 +19,70 @@ function scholarship() {
                animate="visible"
                variants={textVariants}
                transition={{ duration: 1 }}>
+        <Card 
+        elevation={0}
+        sx={{padding:'10px',width:'90%',height:'150px',margin:'15px',overflow:'visible',backgroundColor:'transparent'}}>
+          <Typography sx={{fontSize:'20px',fontWeight:'700'}}>SCHOLARSHIP COVERAGE</Typography>
+          <Typography>This grant will only be available to poor but deserving Elementary, Highschool and College Students residing permanently
+            in the Municipality of Marilao,whose application and subsequent grant shall be governed by policies and guidelines to be set by the Scholarship Board.
+          </Typography>
+        </Card>
+        <Card 
+        elevation={0}
+        sx={{padding:'10px',width:'90%',height:'100%',margin:'15px',overflow:'visible',backgroundColor:'transparent'}}>
+          <Typography sx={{fontSize:'20px',fontWeight:'700'}}>SCHOLARSHIP CATEGORY</Typography>
+          <Typography>I. ACADEMIC SCHOLARSHIP
+            <ul>
+              <li>Must be a completer with an academic honor, overall Rank 1 to 10</li>
+              <li>Must maintain a General Weighted Average of atleast 1.5 or equivalent for Academic Overall Rank 1 & 2
+                and atleast 1.75 or its equivalent for Academic Overall Rank 3 to 10
+              </li>
+            </ul>
+          </Typography>
+          <Typography>II. ECONOMIC SCHOLARSHIP
+            <ul>
+              <li>No Failing or Delinquent Grades</li>
+              <li>Must Apply with/maintain a General Weighted Average of atleast 2.5 or its equivalent
+              </li>
+              <li>Must belong to any of the Following groups: indigent families,displaced/relocated families and vulnerable and marginalized sectors (PWD's Kasambahay
+                , ALS graduates, solo parents, children in conflict with law, families of tricycle drivers and operators)
+              </li>
+            </ul>
+          </Typography>
+          <Typography>III. ATHLETIC AND ARTS SCHOLARSHIP
+            <ul>
+              <li>Must be a recipient of a top individual award/recognition for sports and cultural arts in the most recent
+                school year / school term / playing season given by recognized institutions.
+              </li>
+              <li>Must maintain a General Weighted Average of atleast 2.5 or equivalent
+              </li>
+            </ul>
+          </Typography>
+          <Typography>IV. YOUTH LEADERS SCHOLARSHIP
+            <ul>
+              <li>Must be a recipient of leadership award given by the city or serve as Sangguniang Kabataam/Supreme Student Council
+                member or a president/vice president of (or equivalent) of Marilao registered youth organizations
+              </li>
+              <li>Must maintain a General Weighted Average of atleast 2.5 or equivalent 
+              </li>
+            </ul>
+          </Typography>
+        </Card>
         <div className="aschohead">
           <h1>REQUIREMENTS</h1>
           <h2>The following are the Eligibility and Documentary Requirements<br/>
               For Applying this Scholarship Program</h2>
         </div>
         <div className="requireascho">
-          <div className="ascho-card">
+          <motion.Card
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{
+                            duration: 0.8,
+                            delay: 0.5,
+                            ease: [0, 0.71, 0.2, 1.01]
+                          }}
+          className="ascho-card">
             <div className="hascho">
                 <h1>Eligibility Requirements</h1>
             </div>
@@ -47,8 +105,16 @@ function scholarship() {
                   Scholarship Board thru the implementating office;The Batang Marilenyo Coordinating Center
                 </p>
             </div>
-          </div>
-          <div className="ascho-card">
+          </motion.Card>
+          <motion.Card
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.5,
+                  ease: [0, 0.71, 0.2, 1.01]
+                }}
+          className="ascho-card">
             <div className="hascho">
                 <h1>Documentary Requirements</h1>
             </div>
@@ -68,12 +134,12 @@ function scholarship() {
                   11. Parents' consent form for applicants below 18 year' old
                 </p>
             </div>
-          </div>
+          </motion.Card>
         </div>
         <div className="aruqua">
           <h1>Are you Qualified to be a Scholar of Marilao?</h1>
           <Link to='/ScholarshipProgram' className='alinkapp'>Click APPLY NOW</Link>
-      </div>
+        </div>
     </motion.div>
 
     </>

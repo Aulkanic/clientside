@@ -13,6 +13,9 @@ import LoadingCircle from '../LoadingScreen/skcircle'
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { useContext } from "react";
 import { color } from "../../App";
+import PlaceIcon from '@mui/icons-material/Place';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import LanguageIcon from '@mui/icons-material/Language';
 import Carousel from 'react-bootstrap/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -99,8 +102,23 @@ function Lhomepage() {
           </Carousel>
       </div>
     </div>
-    <div className="lfooter">
-
+    <div className="lfooter" style={{backgroundColor:colorlist.bgColor1}}>
+    <div>
+        <div style={{display:'flex',width:'100%',justifyContent:'space-around',alignItems:'center',height:'100px'}}>
+            <div className='copyr'>
+                <p>Terms of Service</p>
+            </div>
+            <div className='location'>
+                <PlaceIcon/><span>Tabing Ilog Marilao, Bulacan</span>
+            </div>
+            <div className='contact'>
+                <LocalPhoneIcon /><span>0922343232</span>
+            </div>
+            <div className='url'>
+                <LanguageIcon /><span>http://Marisko.com</span>
+            </div>
+        </div>
+    </div>
     </div>
     </div>)
     : (<>
