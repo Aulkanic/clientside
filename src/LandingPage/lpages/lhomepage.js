@@ -112,7 +112,7 @@ function Lhomepage() {
                 <PlaceIcon/><span>Tabing Ilog Marilao, Bulacan</span>
             </div>
             <div className='contact'>
-                <LocalPhoneIcon /><span>0922343232</span>
+                <LocalPhoneIcon /><span>{colorlist.telephone}</span>
             </div>
             <div className='url'>
                 <LanguageIcon /><span>http://Marisko.com</span>

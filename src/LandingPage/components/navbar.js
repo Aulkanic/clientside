@@ -35,9 +35,15 @@ function Navbar() {
           {currentDateTime}
         </div>
         <div style={{display:'flex',justifyContent:'space-between',width:'100px',alignItems:'center',marginRight:'20px',color:'white'}}>
-          <FacebookIcon/>
-          <YouTubeIcon/>
-          <MailOutlineIcon/>
+        <a href={colorlist.fblink} target="_blank" rel="noopener noreferrer">
+           <FacebookIcon sx={{color:'blue'}} />
+        </a>
+        <a href={colorlist.ytlink} target="_blank" rel="noopener noreferrer">
+          <YouTubeIcon sx={{color:'red'}}/>
+        </a>
+        <a href={`mailto:${colorlist.email}`}>
+          <MailOutlineIcon sx={{color:'red'}}/>
+        </a>
         </div>
       </div>
         <div className='lheadbmcc' style={{display:'flex',justifyContent:'space-between'}}>

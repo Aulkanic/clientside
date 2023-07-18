@@ -17,7 +17,7 @@ const Home = () => {
       <Homepage/>
       <div className='hcard' style={{backgroundImage: `url(${new URL(imgList[0].File)})`}}>
       <div className="grad">
-      <h2 className="text-title">FINANCIAL ASSISTANCE FOR ISKOLAR NG BAYAN NG MARILAO</h2>
+      <h2 className="text-title">PONDO PARA SA ISKOLAR NG BAYAN NG MARILAO</h2>
       <p className="text-box">
       </p>
       </div>

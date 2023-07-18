@@ -274,7 +274,7 @@ useEffect(() => {
             {req.File !== 'None' && <div key={index}>
               <div className="grid_container">
             <Box>
-            <Card elevation={5} sx={{height:'100%'}}>
+            <Card elevation={5} sx={{height:'100%',maxWidth:'600px'}}>
             <div className="docusibmitted">
               <div className="docusubprev">   
               {req.File ? (<img src={req.File} alt="" />) : (<img src={Noimageprev} alt="" />)}
@@ -323,8 +323,8 @@ const requirements = docs?.map((docu, index) => {
     
       return (
         <React.Fragment key={index}>
-          <Box>
-            <Card elevated={15}>
+          <Box sx={{height:'200px'}}>
+            <Card elevated={15} sx={{height:'100%'}}>
               <div className='reqlistcontainer'>
                 <div className="requirelist">
                   <div className="requireprev">

@@ -15,6 +15,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from "axios";
 import '../css/Firststep.css'
 import '../css/buttonStyle.css'
+import swal from 'sweetalert';
 function Firststep() {
   const { setStep, userData, setUserData} = useContext(multiStepContext);
   const [errors, setErrors] = useState({}); 
@@ -159,6 +160,10 @@ function Firststep() {
     else if(!usersAcc.some((item) => item.email === userData.checkemail)){
       errors.checkemail = "This email is not registered";
     }
+    const appem = userlist.filter(
+      (data) =>
+          data.email === userData.checkemail
+      )
     const scho = userlist.filter(
       (item) =>
         item.email === userData.checkemail &&
@@ -166,10 +171,31 @@ function Firststep() {
         item.status !== 'Revoke' &&
         item.status !== 'Failed'
     );
-    if(scho.length > rule.schoNum){
-      errors.checkemail = `Only ${rule.schoNum} Scholarship Grant per Applicants/Scholars`;
- 
+    if(appem.length !== rule.schoNum){
+      if(scho.length === rule.schoNum){
+        swal({
+          title: "Success",
+          text: `${userData.checkemail}, You have already applied for this scholarship  Program`,
+          icon: "warning",
+          button: "OK",
+        });
+        setErrors('')
+        setStep(1)
+        return
+      }
+
+    }else{
+      swal({
+        title: "Success",
+        text: `Only ${rule.schoNum} Scholarship Grant per Applicants/Scholars`,
+        icon: "warning",
+        button: "OK",
+      });
+      setErrors('')
+      setStep(1)
+      return
     }
+
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;

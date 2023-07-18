@@ -5,11 +5,27 @@ import '../css/scholarship.css'
 import {Link} from 'react-router-dom'
 import { motion } from "framer-motion";
 import { Card, Typography } from '@mui/material'
-function scholarship() {
+import { useContext } from "react";
+import { color } from "../../App";
+import { useState } from 'react'
+import { useEffect } from 'react'
+import { Rulelist } from '../../Api/request'
+
+function Scholarship() {
+  const [rule,setRule] = useState([])
+  const { colorlist,imgList } = useContext(color);
   const textVariants = {
     hidden: { opacity: 0, x: -70 },
     visible: { opacity: 1, x: 0 }
   };
+  useEffect(() =>{
+    async function Fetch(){
+      const res = await Rulelist.FETCH_RULE()
+      setRule(res.data.result[0])
+    }
+    Fetch()
+  },[])
+  console.log(rule)
   return (
     <>
     <LHeader/>
@@ -25,6 +41,18 @@ function scholarship() {
           <Typography sx={{fontSize:'20px',fontWeight:'700'}}>SCHOLARSHIP COVERAGE</Typography>
           <Typography>This grant will only be available to poor but deserving Elementary, Highschool and College Students residing permanently
             in the Municipality of Marilao,whose application and subsequent grant shall be governed by policies and guidelines to be set by the Scholarship Board.
+          </Typography>
+        </Card>
+        <Card 
+        elevation={0}
+        sx={{padding:'10px',width:'90%',height:'100px',margin:'15px',overflow:'visible',backgroundColor:'transparent'}}>
+          <Typography sx={{fontSize:'20px',fontWeight:'700'}}>SCHOLARSHIP PRIVILEGE</Typography>
+          <Typography>
+            <ul>
+              <li><Typography>Elementary - {rule.priv1}</Typography></li>
+              <li><Typography>Highschool - {rule.priv2}</Typography></li>
+              <li><Typography>College - {rule.priv3}</Typography></li>
+            </ul>
           </Typography>
         </Card>
         <Card 
@@ -146,4 +174,4 @@ function scholarship() {
   )
 }
 
-export default scholarship
+export default Scholarship

@@ -144,7 +144,9 @@ function Persona() {
           errors.email = "Email is required";
         } else if (!/^[A-Za-z0-9._%+-]+@gmail\.com$/.test(userData.email)) {
            errors.email = "Email is invalid";
-        }
+        }else if (userData.email !== userData.checkemail) {
+          errors.email = "Use your registered email";
+       }
         if (userData.paddress === '') {
           errors.paddress = "Permanent Address is required";
         }else if (/[!@#$%^&*/_()?":{}|<>]/.test(userData.paddress)) {

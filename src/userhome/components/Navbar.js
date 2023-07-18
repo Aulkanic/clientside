@@ -60,8 +60,8 @@ const Navbar = () => {
     <div className='scho-info' style={{backgroundColor:colorlist.bgColor,border:'2px solid black'}}>
     {profile}
     </div>
-    <div className='navbar'>
-            <div className='navsec' style={{backgroundColor:colorlist.bgColor1}}>
+    <div className='navbarh'>
+            <div className='navsec' style={{backgroundColor:colorlist.bgColor1,margin:'0px'}}>
                 <ul>
                     <Link to='/home' className='link' style={{color:colorlist.bgColor,textDecoration:'none'}}>HOME</Link>
                     <Link to='/account' className='link' style={{color:colorlist.bgColor,textDecoration:'none'}}>ACCOUNTS</Link>

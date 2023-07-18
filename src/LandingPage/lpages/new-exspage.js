@@ -26,16 +26,26 @@ function Newexspage() {
   const sendEmail = (event) =>{
     event.preventDefault();
     if(!email){
-      alert('Please enter email address')
+      swal({
+        text: 'Please enter email address',
+        timer: 2000,
+        buttons: false,
+        icon: "error",
+      })
       return
     }
       var data = new FormData();
       data.append("email",email);
       APK.APK(data)
       .then(res => {
-        console.log(res)
-        swal(res.data.Message)
         handleClose()
+        swal({
+          text: res.data.Message,
+          timer: 2000,
+          buttons: false,
+          icon: "success",
+        })
+
       }
        )
       .catch(err => console.log(err));

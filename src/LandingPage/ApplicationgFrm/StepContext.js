@@ -8,7 +8,7 @@ import { Axios } from 'axios';
 export const multiStepContext = React.createContext();
 function StepContext() {
   const navigate = useNavigate();
-    const [currentStep, setStep] = useState(2);
+    const [currentStep, setStep] = useState(1);
     const [userData, setUserData] = useState({
       applicantNum:'',
       address:'',
@@ -72,7 +72,6 @@ function StepContext() {
     console.log(userData)
     const [finalData, setFinalData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState({});
 
     function SubmitData(){
       setFinalData(finalData => [...finalData,userData])
