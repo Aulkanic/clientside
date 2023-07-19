@@ -68,11 +68,11 @@ function StepContext() {
       Es1info:[],
       AAsinfo:[],
       YLsinfo:[],
+      Fdeceased: false,
+      Mdeceased: false,
     });
-    console.log(userData)
     const [finalData, setFinalData] = useState([]);
     const [loading, setLoading] = useState(false);
-
     function SubmitData(){
       setFinalData(finalData => [...finalData,userData])
       setUserData('');

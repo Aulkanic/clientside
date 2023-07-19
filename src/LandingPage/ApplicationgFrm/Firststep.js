@@ -136,10 +136,11 @@ function Firststep() {
         const schodata = scholist.data.SchoCat;
         const rul = await Rulelist.FETCH_RULE()
         const user = await UserProflist.FETCH_USER()
+        const schoav = schodata.filter(data => data.status === 'Open')
         setUserlist(user.data.UserAccounts)
         setRule(rul.data.result[0])
         setUserAcc(resdata);
-        setScholarProg(schodata);
+        setScholarProg(schoav);
       } catch (error) {
         console.error(error);
       }

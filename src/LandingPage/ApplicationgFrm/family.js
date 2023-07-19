@@ -9,6 +9,9 @@ import { FetchingFamily,Rulelist } from '../../Api/request';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { FormHelperText } from '@mui/material';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import swal from 'sweetalert';
 import '../css/family.css'
 import '../css/buttonStyle.css'
@@ -17,19 +20,38 @@ function Family() {
     const [errors, setErrors] = useState({}); 
     const [famlist, setFamlist] = useState([]);
     const [rule,setRule] = useState([])
+    const [isMDeceased, setIsMDeceased] = useState(false);
+    const [isFDeceased, setIsFDeceased] = useState(false);
+
+    const handleSwitchChange = (event) => {
+      setIsMDeceased(event.target.checked);
+      setUserData({ ...userData, 'Mdeceased': event.target.checked });
+    };
+    const handleSwitchChange1 = (event) => {
+      setIsFDeceased(event.target.checked);
+      setUserData({ ...userData, 'Fdeceased': event.target.checked });
+    };
+
 
     useEffect(() =>{
       async function fetch(){
           const famdata = await FetchingFamily.FETCH_FAM();
           const datafam = famdata.data.Familylist;
           const rul = await Rulelist.FETCH_RULE()
+          const famrecord = datafam?.filter(data => 
+            data.motherName !== 'None' &&
+            data.motherlName !== 'None' &&
+            data.mothermName !== 'None' &&
+            data.fatherName !== 'None' &&
+            data.fatherlName !== 'None' &&
+            data.fathermName !== 'None'     
+            )
           setRule(rul.data.result[0])
-          setFamlist(datafam)
+          setFamlist(famrecord)
         }
 
         fetch()
     },[])
-        console.log(rule)
       function Check(){
         const errors = {};
         let checkfammum = 0;
@@ -275,7 +297,12 @@ function Family() {
               <div className="ribbon-header-text"><h2>Family Information</h2></div>
             </div>
             <div className="fammf">
+            <div style={{width:'100%',display:'flex',justifyContent:'space-around',padding:'0px 125px 0px 45px'}}>
             <h3>Mother Information</h3>
+            <div>
+            <FormControlLabel control={<Switch checked={isMDeceased} onChange={handleSwitchChange} />} label="Deceased" />
+            </div>
+            </div>
             <div className="frmfamcard">
               <div>         
             <TextField
@@ -364,7 +391,12 @@ function Family() {
             </div>
              </div>
             </div>
+            <div style={{width:'100%',display:'flex',justifyContent:'space-around',padding:'0px 125px 0px 45px'}}>
             <h3>Father Information</h3>
+            <div>
+            <FormControlLabel control={<Switch checked={isFDeceased} onChange={handleSwitchChange1} />} label="Deceased" />
+            </div>
+            </div>
             <div className="frmfamcard">
               <div>
             <TextField
