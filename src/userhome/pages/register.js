@@ -7,15 +7,21 @@ import BMCC from '../assets/marisko.png'
 import Lheader from '../../LandingPage/components/navbar';
 import './register.css'
 import TextField from '@mui/material/TextField';
+import { Button } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
 import SendIcon from '@mui/icons-material/Send';
 import { CreatingRegistry, RegistryOtp,ResendOtp, ValidateOtp,Colorlist } from '../../Api/request';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import { alpha, styled } from '@mui/material/styles';
 import Snackbar from '@mui/material/Snackbar';
-import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 const CssTextField = styled(TextField)({
@@ -39,6 +45,9 @@ const CssTextField = styled(TextField)({
     },
   },
 });
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const Register = () => {
     const navigate = useNavigate();
@@ -59,6 +68,15 @@ const Register = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [resstat,setResstat] = useState('');
     const [colorlist,setColorlist] = useState([])
+    const [open, setOpen] = React.useState(true);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
 
     useEffect(() =>{
       async function Fetch(){
@@ -301,6 +319,26 @@ const handlerNextInput = (e) => {
 
   return (
     <>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle> Step#1: Creating Account</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+
+            *Please Create your account first and use your valid email address.This 
+            Account will serve as your Applicants to Scholar Account in which you can see your status
+            of application and where you will submitted the documents.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Ok</Button>
+        </DialogActions>
+      </Dialog>
       <Snackbar
         open={snackbarOpen}
         onClose={handleSnackbarClose}

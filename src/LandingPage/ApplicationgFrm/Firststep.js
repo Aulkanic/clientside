@@ -6,6 +6,12 @@ import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
 import FormControl from '@mui/material/FormControl';
 import { Card, FormHelperText } from '@mui/material';
 import { ScholarCategory} from '../../Api/request.js'
@@ -16,6 +22,11 @@ import axios from "axios";
 import '../css/Firststep.css'
 import '../css/buttonStyle.css'
 import swal from 'sweetalert';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 function Firststep() {
   const { setStep, userData, setUserData} = useContext(multiStepContext);
   const [errors, setErrors] = useState({}); 
@@ -28,6 +39,16 @@ function Firststep() {
   const [checkedValues4, setCheckedValues4] = useState([]);
   const [rule,setRule] = useState([])
   const [userlist,setUserlist] = useState([])
+  const [open, setOpen] = React.useState(true);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
  
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
@@ -163,7 +184,9 @@ function Firststep() {
     }
     const appem = userlist.filter(
       (data) =>
-          data.email === userData.checkemail
+          data.email === userData.checkemail &&
+          data.status !== 'Revoke' &&
+          data.status !== 'Failed'
       )
     const scho = userlist.filter(
       (item) =>
@@ -172,6 +195,7 @@ function Firststep() {
         item.status !== 'Revoke' &&
         item.status !== 'Failed'
     );
+    console.log(appem)
     if(appem.length !== rule.schoNum){
       if(scho.length === rule.schoNum){
         swal({
@@ -260,6 +284,30 @@ function Firststep() {
 };
 
   return (
+    <>
+    <Dialog
+    open={open}
+    TransitionComponent={Transition}
+    keepMounted
+    onClose={handleClose}
+    aria-describedby="alert-dialog-slide-description"
+  >
+    <DialogTitle> Step#2: Fill up the Application Form</DialogTitle>
+    <DialogContent>
+      <DialogContentText id="alert-dialog-slide-description">
+
+        *Completely accomplish the online application form. Once done, you will 
+        received an email that your Application form was sent and we will inform you 
+        when it is reviewed and evaluated .<br/>
+        Note: Please fill out all required fields with accurate information and if it not applicable please input 'None' instead.<br/><br/>
+        
+
+      </DialogContentText>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleClose}>Ok</Button>
+    </DialogActions>
+  </Dialog>
   <div className='FirstepFrm'>
       <div className="FFd">
           <div className="form">
@@ -453,6 +501,7 @@ function Firststep() {
           </div>
       </div>
   </div>
+  </>
 )
 }
 

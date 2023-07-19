@@ -136,9 +136,11 @@ function Educational() {
     const wereLive = userData.wereLive
     const AAsinfo = userData.AAsinfo;
     const Asinfo = userData.Asinfo;
-    const Eslinfo = userData.Eslinfo
+    const Es1info = userData.Eslinfo
     const Esinfo = userData.Esinfo
     const YLsinfo = userData.YLsinfo
+    const Fdeceased = userData.Fdeceased
+    const Mdeceased = userData.Mdeceased
 
     function submitData(){
       const errors = {};
@@ -296,6 +298,16 @@ function Educational() {
           console.log(errors)
           return;
         }
+        let otherinfo = ''
+        if(userData.scholarID === 'Academic Scholarship'){
+            otherinfo = userData.Asinfo
+        }else if(userData.scholarID === 'Economic Scholarship'){
+          otherinfo = [...userData.Esinfo,...userData.Es1info];
+        }else if(userData.scholarID === 'Athletic and Arts Scholarship'){
+          otherinfo = userData.AAsinfo
+        }else if(userData.scholarID === 'Youth Leadership Scholarship'){
+          otherinfo = userData.YLsinfo
+        }
         const formData = new FormData();
         formData.append('applicantNum', applicantNum);
         formData.append('address', address);
@@ -351,9 +363,12 @@ function Educational() {
         formData.append('wereLive', wereLive);
         formData.append('AAsinfo', AAsinfo);
         formData.append('Asinfo', Asinfo);
-        formData.append('Eslinfo', Eslinfo);
+        formData.append('Eslinfo', Es1info);
         formData.append('Esinfo', Esinfo);
         formData.append('YLsinfo', YLsinfo);
+        formData.append('otherinfo', otherinfo);
+        formData.append('Mdeceased', Mdeceased);
+        formData.append('Fdeceased', Fdeceased);
       setLoading1(true)
       ApplyForm.CREATE_APPINFO(formData)
       .then(res => {
