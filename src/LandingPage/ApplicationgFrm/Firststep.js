@@ -196,6 +196,29 @@ function Firststep() {
       setStep(1)
       return
     }
+    if(userData.scholarID === 'Academic Scholarship'){
+      if(userData.Asinfo.length === 0){
+        errors["Asinfo"] = "This Field is required";
+      }
+    }
+    if(userData.scholarID === 'Economic Scholarship'){
+      if(userData.Esinfo.length === 0){
+        errors["Esinfo"] = "This Field is required";
+      }
+      if(userData.Es1info.length === 0){
+        errors["Es1info"] = "This Field is required";
+      }
+    }
+    if(userData.scholarID === 'Athletic and Arts Scholarship'){
+      if(userData.AAsinfo.length === 0){
+        errors["AAsinfo"] = "This Field is required";
+      }
+    }
+    if(userData.scholarID === 'Youth Leadership Scholarship'){
+      if(userData.YLsinfo.length === 0){
+        errors["YLsinfo"] = "This Field is required";
+      }
+    }
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
