@@ -105,7 +105,8 @@ const Schoinfo = () => {
                   <p>Agenda: {data.Reason}</p>
                   <p>Location: {data.Location}</p>
                   <p>Time: {data.timeStart} - {data.timeEnd}</p>
-                  {data.statusApp === 'Ongoing' && data.isInterview === 'No' ? (<div>
+                  {data.statusApp === 'Ongoing' && data.isInterview === 'No' ? 
+                  (<div>
                   <button style={{marginRight:'10px'}} className='myButton1' onClick={() =>willgo(data,'Yes')}>
                     Will Go
                   </button>
