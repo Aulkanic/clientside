@@ -196,27 +196,58 @@ function Firststep() {
       setStep(1)
       return
     }
+    console.log(userData.Asinfo)
     if(userData.scholarID === 'Academic Scholarship'){
       if(userData.Asinfo.length === 0){
-        errors["Asinfo"] = "This Field is required";
+        swal({
+          title: "Warning",
+          text: 'Please check some of the choices',
+          icon: "warning",
+          button: "OK",
+        });
+        return setStep(1)
       }
     }
     if(userData.scholarID === 'Economic Scholarship'){
       if(userData.Esinfo.length === 0){
-        errors["Esinfo"] = "This Field is required";
+        swal({
+          title: "Warning",
+          text: 'Please check some of the choices',
+          icon: "warning",
+          button: "OK",
+        });
+        return setStep(1)
       }
       if(userData.Es1info.length === 0){
-        errors["Es1info"] = "This Field is required";
+        swal({
+          title: "Warning",
+          text: 'Please check some of the choices',
+          icon: "warning",
+          button: "OK",
+        });
+        return setStep(1)
       }
     }
     if(userData.scholarID === 'Athletic and Arts Scholarship'){
       if(userData.AAsinfo.length === 0){
-        errors["AAsinfo"] = "This Field is required";
+        swal({
+          title: "Warning",
+          text: 'Please check some of the choices',
+          icon: "warning",
+          button: "OK",
+        });
+        return setStep(1)
       }
     }
     if(userData.scholarID === 'Youth Leadership Scholarship'){
       if(userData.YLsinfo.length === 0){
-        errors["YLsinfo"] = "This Field is required";
+        swal({
+          title: "Warning",
+          text: 'Please check some of the choices',
+          icon: "warning",
+          button: "OK",
+        });
+        return setStep(1)
       }
     }
 

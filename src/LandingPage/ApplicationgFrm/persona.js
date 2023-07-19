@@ -157,7 +157,6 @@ function Persona() {
         }else if (/[!@#$%^&*/_()?":{}|<>]/.test(userData.caddress)) {
           errors.caddress = "Special characters are not allowed.";
         }
-        console.log(Object.keys(errors).length)
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
           console.log(errors)
@@ -167,7 +166,6 @@ function Persona() {
         setStep(3)
     };
     const calculateAge = (birthday) => {
-      console.log(birthday)
       const today = new Date();
       const birthDate = new Date(birthday);
       const yearDiff = today.getFullYear() - birthDate.getFullYear();
@@ -191,7 +189,6 @@ function Persona() {
     useEffect(() => {
       const { birthday } = userData;
       const age = calculateAge(birthday);
-      console.log(age)
       setUserData((prevData) => ({ ...prevData, age: age.toString() }));
     }, [userData.birthday]);
 
@@ -199,13 +196,6 @@ function Persona() {
 
       setUserData((prevData) => ({ ...prevData, birthday: date }));
     };
-
-    // const isDateDisabled = (date) => {
-    //   const cutoffDate = dayjs(date); // July 12, 2012
-    //   const today = dayjs().startOf('day'); // Get today's date
-    
-    //   return dayjs(date).isAfter(cutoffDate, 'day') || dayjs(date).isAfter(today, 'day') || isBeforeDay(dayjs(date), comparingDate);
-    // };
     return (
     <div className='Persona'>
         <div className="personad"> 
