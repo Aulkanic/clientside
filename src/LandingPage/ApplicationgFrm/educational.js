@@ -827,8 +827,8 @@ function Educational() {
             </div>
             <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
             <FormControlLabel control={<Checkbox checked={isChecked} onChange={handleCheckboxChange} />} label="" />
-            <Link href="#" underline="hover" onClick={handleClickOpen('paper')}>
-              {'Terms and Conditions'}
+            <Link href="#" underline="hover" sx={{color:'black'}} onClick={handleClickOpen('paper')}>
+              {' I hereby attest to the accuracy of the information supplied in the form. I understand that giving false information will make me ineligible for application.'}
             </Link>
             <Dialog
         open={open}
