@@ -155,7 +155,7 @@ const Login = () => {
         }
         setErrors('')
         const formData = new FormData()
-        formData.append('email',fpemail)
+        formData.append('fpemail',fpemail)
         setLoading1(true)
        await GetUserAcc.FETCH_USERACCS(formData)
         .then(res => {
@@ -363,10 +363,11 @@ const Login = () => {
                         <img  src={BMCC} alt="" />
                     </div>
                     
-                    {step === 0 && (<div className="lgcon">
-                        <h1 style={{color:colorlist.bgColor}}>Login your Account</h1>
-                        <form action="">
-
+                    {step === 0 && (
+                    <div className="lgcon">
+                    <h1 style={{color:colorlist.bgColor}}>Login your Account</h1>
+                  <form action="">
+                    <div style={{marginBottom:'20px'}}>
                       <CssTextField      
                       id="input-with-icon-textfield"
                       label="Email"
@@ -382,14 +383,15 @@ const Login = () => {
                       }}
                       variant="outlined"
                       style={{
-                        margin: '10px', 
-                        marginBottom: '0px',
                         cursor: 'pointer', 
                       }}
                     />
-                    {errors.email && <Alert variant='outlined' style={{ width: '77%', margin: '10px', color:'red', fontSize:'12px',height:'35px' }} elevation={0} severity="error">
+                    {errors.email && <Alert variant='outlined' 
+                    style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }}
+                     elevation={0} severity="error">
                         {errors.email}
                       </Alert>}
+                    </div>
                     <div>
                     <CssTextField      
                       id="input-with-icon-textfield"
@@ -406,43 +408,43 @@ const Login = () => {
                       }}
                       variant="outlined"
                       style={{
-                        margin: '10px', 
-                        marginBottom: '0px',
                         cursor: 'pointer', 
                       }}
                     />
-                    {errors.password && <Alert variant='outlined' style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'35px' }} elevation={0} severity="error">
+                    {errors.password && <Alert variant='outlined' 
+                    style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }} 
+                    elevation={0} severity="error">
                         {errors.password}
                       </Alert>}
-                        </div>
-                        </form>
+                    </div>
+                  </form>
                         <div className="lgbtn">
-        <LoadingButton
-        loading={loading}
-        loadingPosition="end"
-        variant="elevated"
-        endIcon={loading ? (null) : (<LoginTwoToneIcon />)}
-        fullWidth
-        sx={{
-          margin: '10px',
-          cursor: 'pointer',
-          fontWeight: '700',
-          backgroundColor: 'green',
-          color: 'white',
-          fontSize: '15px',
-          letterSpacing: '2px',
-          transition: 'background 0.3s ease-in-out, clip-path 0.3s ease-in-out',
-          '&:hover': {
-            backgroundColor: 'rgba(43, 194, 106, 0.73)',
-          },
-          fontFamily:
-            'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-        }}
-        onClick={handleSubmit}
-      >
-        Login
-      </LoadingButton>
-                            </div>
+                            <LoadingButton
+                            loading={loading}
+                            loadingPosition="end"
+                            variant="elevated"
+                            endIcon={loading ? (null) : (<LoginTwoToneIcon />)}
+                            fullWidth
+                            sx={{
+                              margin: '10px',
+                              cursor: 'pointer',
+                              fontWeight: '700',
+                              backgroundColor: 'green',
+                              color: 'white',
+                              fontSize: '15px',
+                              letterSpacing: '2px',
+                              transition: 'background 0.3s ease-in-out, clip-path 0.3s ease-in-out',
+                              '&:hover': {
+                                backgroundColor: 'rgba(43, 194, 106, 0.73)',
+                              },
+                              fontFamily:
+                                'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                            }}
+                            onClick={handleSubmit}
+                          >
+                            Login
+                          </LoadingButton>
+                        </div>
                         <div className="loglink">
                             <Link className='lglink' onClick={handlerForgotPasswordLink}>Forgot your Password?</Link>
                         </div>
@@ -467,8 +469,6 @@ const Login = () => {
         }}
         variant="outlined"
         style={{
-          margin: '10px', 
-          marginBottom: '0px',
           cursor: 'pointer', 
         }}
       />
@@ -478,8 +478,8 @@ const Login = () => {
           width: '73%', 
           margin: '10px', 
           color:'red', 
-          fontSize:'10px',
-          height:'30px',
+          fontSize:'13px',
+          height:'max-Content',
           background:'white' }}
            variant="outlined" severity="error">
         {errors.fpemail}
@@ -546,11 +546,11 @@ const Login = () => {
                   }} type="text" value={otp} onChange={handlerOtpInput}/>
      {errors.otp && (<Alert
          style={{ 
-          width: '73%', 
+          width: '83%', 
           margin: '10px', 
           color:'red', 
           fontSize:'10px',
-          height:'30px',
+          height:'max-Content',
           background:'white',
           boxShadow:'none' }}
            variant="outlined" severity="error">
@@ -652,7 +652,7 @@ const Login = () => {
           margin: '10px', 
           color:'red', 
           fontSize:'10px',
-          height:'30px',
+          height:'max-Content',
           background:'white',
           boxShadow:'none' }}
            variant="outlined" severity="error">
@@ -686,7 +686,7 @@ const Login = () => {
           margin: '10px', 
           color:'red', 
           fontSize:'10px',
-          height:'30px',
+          height:'max-Content',
           background:'white',
           boxShadow:'none' }}
            variant="outlined" severity="error">

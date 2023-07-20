@@ -887,7 +887,6 @@ function Educational() {
             </div>
             <div className="frmedcbtn">
             <Button className='myButton' variant="contained" onClick={() => setStep(4)}>Previous</Button>
-            
             <LoadingButton
                 loading={loading1}
                 loadingPosition="end"

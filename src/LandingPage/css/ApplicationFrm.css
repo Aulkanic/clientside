@@ -1,11 +1,12 @@
 .stepdiv{
-    top: 150px;
-    position: relative;
+    top: 10%;
+    position: absolute;
     background-image: url('../../userhome/assets/municipal.jpg');
     background-repeat: no-repeat;
     background-position: 50%;
     background-attachment: scroll;
     background-size: cover;
+    width: 100%;
     height: max-content;
     border: none;
 }
@@ -17,7 +18,7 @@
     color: white;
 }
 .backgroundstep{
-    height: 100%;
+    height: max-content;
     background: rgba(58, 59, 59, 0.73);
 }
 .stepper{

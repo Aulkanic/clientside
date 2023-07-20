@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 .loginpage{
-    top: 150px;
-    position: relative;
+    top: 10%;
+    position: absolute;
     width: 100%;
     height: 100vh;
     display: flex;
@@ -21,7 +21,7 @@
 }
 .lgform{
     width: 40%;
-    height: 70%;
+    height: max-content;
     display: flex;
     flex-direction: column;
     border-top-right-radius: 25px;
@@ -49,12 +49,12 @@
 }
 .lgcon{
     width: 100%;
-    height: 100%;
+    height: max-content;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    padding: 10px;
 }
 .lgcon img{
     z-index: -100;
@@ -69,14 +69,13 @@
 .lgcon form{
 width: 80%;
 height: 100%;
-padding: 10px;
-padding-bottom: 18px;
 background-color: whitesmoke;
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
 border-radius: 15px;
+padding: 10px;
 }
 .lgbtn{
     display: flex;
@@ -106,7 +105,7 @@ border-radius: 15px;
     font-size: 15px;
 }
 .findtocon{
-    width: 96%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -143,7 +142,7 @@ border-radius: 15px;
     justify-content: space-around;
 }
 .otpverifycon{
-    width: 96%;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -174,7 +173,7 @@ border-radius: 15px;
     border-radius: 10px;
 }
 .restfrmpass{
-    width: 96%;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;

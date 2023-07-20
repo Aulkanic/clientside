@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 .registration{
-    top: 150px;
-    position: relative;
+    top: 10%;
+    position: absolute;
     width: 100%;
     height: 100vh;
     display: flex;
-    align-items: top;
+    align-items: center;
     justify-content: center;
     background-image: url('../../userhome/assets/municipal.jpg');
     background-position: center;

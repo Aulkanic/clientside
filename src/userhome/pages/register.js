@@ -56,7 +56,7 @@ const Register = () => {
     const [mname, setmname] = useState('');
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
-    const [step, setStep] = useState(1); 
+    const [step, setStep] = useState(3); 
     const [password, setPassword] = useState('');
     const [loading,setLoading] = useState(false);
     const [loading1,setLoading1] = useState(false);
@@ -389,7 +389,7 @@ const handlerNextInput = (e) => {
       margin: '10px', 
       color:'red', 
       fontSize:'12px',
-      height:'45px',
+      height:'max-Content',
       background:'white'}} elevation={0} severity="error">
           {errors.email}
         </MuiAlert>}
@@ -460,7 +460,7 @@ const handlerNextInput = (e) => {
       margin: '10px', 
       color:'red', 
       fontSize:'10px',
-      height:'30px',
+      height:'max-Content',
       background:'white' }} elevation={0} severity="error">
           {errors.otp}
         </MuiAlert>}
@@ -532,7 +532,7 @@ const handlerNextInput = (e) => {
         id="input-with-icon-textfield"
         label="First Name"
         value={fname}
-        size="small"
+        size="large"
         onChange={handlerFnameInput}
         InputProps={{
           startAdornment: (
@@ -546,17 +546,17 @@ const handlerNextInput = (e) => {
           {errors.fname && <MuiAlert variant='outlined' 
     style={{ 
       width: '73%', 
-      margin: '10px', 
+      margin: '5px', 
       color:'red', 
-      fontSize:'10px',
-      height:'30px',
+      fontSize:'15px',
+      height:'max-Content',
       background:'white' }} elevation={0} severity="error">
           {errors.fname}
         </MuiAlert>}
         <CssTextField      
         id="input-with-icon-textfield"
         label="Last Name"
-        size="small"
+        size="large"
         value={lname}
         onChange={handlerLnameInput}
         InputProps={{
@@ -577,15 +577,15 @@ const handlerNextInput = (e) => {
       width: '73%', 
       margin: '10px', 
       color:'red', 
-      fontSize:'10px',
-      height:'100%',
+      fontSize:'15px',
+      height:'max-Content',
       background:'white' }} elevation={0} severity="error">
           {errors.lname}
         </MuiAlert>}
         <CssTextField      
         id="input-with-icon-textfield"
         label="Middle Name"
-        size="small"
+        size="large"
         value={mname}
         onChange={handlerMnameInput}
         InputProps={{
@@ -604,17 +604,17 @@ const handlerNextInput = (e) => {
   {errors.mname && <MuiAlert variant='outlined' 
     style={{ 
       width: '73%', 
-      margin: '10px', 
+      margin: '5px', 
       color:'red', 
-      fontSize:'10px',
-      height:'30px',
+      fontSize:'15px',
+      height:'max-Content',
       background:'white' }} elevation={0} severity="error">
           {errors.mname}
         </MuiAlert>}
         <CssTextField      
         id="input-with-icon-textfield"
         label="Password"
-        size="small"
+        size="large"
         value={password}
         type='password'
         onChange={handlerPasswordInput}
@@ -634,10 +634,10 @@ const handlerNextInput = (e) => {
    {errors.password && <MuiAlert variant='outlined' 
     style={{ 
       width: '73%', 
-      margin: '10px', 
+      margin: '5px', 
       color:'red', 
-      fontSize:'10px',
-      height:'30px',
+      fontSize:'15px',
+      height:'max-Content',
       background:'white' }} elevation={0} severity="error">
           {errors.password}
         </MuiAlert>} 
