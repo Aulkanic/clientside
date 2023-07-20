@@ -56,7 +56,7 @@ const Register = () => {
     const [mname, setmname] = useState('');
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
-    const [step, setStep] = useState(3); 
+    const [step, setStep] = useState(1); 
     const [password, setPassword] = useState('');
     const [loading,setLoading] = useState(false);
     const [loading1,setLoading1] = useState(false);
