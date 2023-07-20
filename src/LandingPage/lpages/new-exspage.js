@@ -3,7 +3,7 @@ import Lheader from '../components/navbar'
 import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { APK } from '../../Api/request';
+import { APKSEND } from '../../Api/request';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -34,9 +34,9 @@ function Newexspage() {
       })
       return
     }
-      var data = new FormData();
-      data.append("email",email);
-      APK.APK(data)
+      const formData = new FormData();
+      formData.append("email",email);
+      APK.APKSEND(formData)
       .then(res => {
         handleClose()
         swal({

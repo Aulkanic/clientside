@@ -30,7 +30,7 @@ const Endpoints = {
     VALIDATE_USEROTP: 'OTP/ValidateUserOtp',
     FETCH_USERACCS: 'OTP/ForgotPassword',
     GENERATE_OTP: 'OTP/GenerateOtp',
-    APK: 'OTP/EmailAPK',
+    APKEmail: 'OTP/EmailAPK',
     CHANGE_PASSWORDBYOTP: 'OTP/ChangePassword',
     FETCH_BMCCSCHOLARINFO: 'BMCCScholar/SchoInfo/',
     FETCH_USERAPPOINTMENT: 'Appointment/appointmentSched/',

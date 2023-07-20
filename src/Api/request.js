@@ -102,7 +102,7 @@ export const Logoutuser = {
     USER_LOGOUT: (data) => axiosInstance.post(Endpoints.USER_LOGOUT,data)
 }
 export const APK = {
-    APK: (data) => axiosInstance.post(Endpoints.APK,data)
+    APKSEND: (data) => axiosInstance.post(Endpoints.APKEmail,data)
 }
 export const Colorlist = {
     FETCH_COLOR: () => axiosInstance.get(Endpoints.FFETCH_COLOR)
