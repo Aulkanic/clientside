@@ -268,7 +268,6 @@ useEffect(() => {
         return documentsubmitted  
       }else{
         const documentsubmitted1 = submitted1?.map((req, index) => {
-          console.log(req)
           return (
             <>
             {req.File !== 'None' && <div key={index}>

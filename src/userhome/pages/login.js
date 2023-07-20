@@ -154,8 +154,10 @@ const Login = () => {
           return;
         }
         setErrors('')
+        const formData = new FormData()
+        formData.append('fpemail',fpemail)
         setLoading1(true)
-       await GetUserAcc.FETCH_USERACCS(fpemail)
+       await GetUserAcc.FETCH_USERACCS(formData)
         .then(res => {
           console.log(res)
           if(res.data.success === 0){

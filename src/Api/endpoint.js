@@ -28,7 +28,7 @@ const Endpoints = {
     RESEND_OTP: 'OTP/ResendOtp',
     VALIDATE_OTP: 'OTP/ValidateOtp',
     VALIDATE_USEROTP: 'OTP/ValidateUserOtp',
-    FETCH_USERACCS: 'OTP/ForgotPassword/',
+    FETCH_USERACCS: 'OTP/ForgotPassword',
     GENERATE_OTP: 'OTP/GenerateOtp',
     APK: 'OTP/EmailAPK',
     CHANGE_PASSWORDBYOTP: 'OTP/ChangePassword',

@@ -84,7 +84,7 @@ export const ValidateUserOtp = {
     VALIDATE_USEROTP: (data) => axiosInstance.post(Endpoints.VALIDATE_USEROTP,data)
 }
 export const GetUserAcc = {
-    FETCH_USERACCS: (data) => axiosInstance.get(Endpoints.FETCH_USERACCS+data)
+    FETCH_USERACCS: (data) => axiosInstance.get(Endpoints.FETCH_USERACCS,data)
 }
 export const GenerateOtp = {
     GENERATE_OTP: (data) => axiosInstance.post(Endpoints.GENERATE_OTP,data)
