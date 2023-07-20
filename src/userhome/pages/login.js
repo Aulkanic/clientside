@@ -263,7 +263,7 @@ const Login = () => {
           
           }else{
             setResstat('200')
-            setSnackbarMessage(res.data.message);
+            setSnackbarMessage('OTP is sent into your Email Account');
             setSnackbarOpen(true); 
             setRemainingSeconds(60)
             setLoading(false)
@@ -595,30 +595,29 @@ const Login = () => {
         Resend
       </LoadingButton>
             </div>
-
-      </div>
-      <div>
-      <LoadingButton
-        loading={loading2}
-        loadingPosition="end"
-        variant="outlined"
-        fullWidth
-        style={{
-          margin: '10px', 
-          cursor: 'pointer', 
-          fontWeight: '700',
-          background: 'rgba(43, 194, 106, 0.73)',
-          color: 'white',
-          fontSize:'15px',
-          letterSpacing:'2px',
-          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-        }}
-        onClick={ValidateOtp}
-      >
-        VERIFY
-      </LoadingButton>
-      </div>
-        </div>
+          </div>
+            <div>
+            <LoadingButton
+              loading={loading2}
+              loadingPosition="end"
+              variant="outlined"
+              fullWidth
+              style={{
+                margin: '10px', 
+                cursor: 'pointer', 
+                fontWeight: '700',
+                background: 'rgba(43, 194, 106, 0.73)',
+                color: 'white',
+                fontSize:'15px',
+                letterSpacing:'2px',
+                fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+              }}
+              onClick={ValidateOtp}
+            >
+              VERIFY
+            </LoadingButton>
+            </div>
+              </div>
                        )}
                     {step === 3 && (
         <div className='restfrmpass'>
