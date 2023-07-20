@@ -385,12 +385,12 @@ const handlerNextInput = (e) => {
       />
     {errors.email && <MuiAlert variant='outlined' 
     style={{ 
-      width: '89%', 
+      width: '92%', 
       margin: '10px', 
       color:'red', 
       fontSize:'12px',
-      height:'35px',
-      background:'white' }} elevation={0} severity="error">
+      height:'45px',
+      background:'white'}} elevation={0} severity="error">
           {errors.email}
         </MuiAlert>}
           <br />
@@ -578,7 +578,7 @@ const handlerNextInput = (e) => {
       margin: '10px', 
       color:'red', 
       fontSize:'10px',
-      height:'30px',
+      height:'100%',
       background:'white' }} elevation={0} severity="error">
           {errors.lname}
         </MuiAlert>}

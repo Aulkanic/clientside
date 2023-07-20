@@ -3,7 +3,7 @@ import Lheader from '../components/navbar'
 import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { APKSEND } from '../../Api/request';
+import { APK } from '../../Api/request';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';

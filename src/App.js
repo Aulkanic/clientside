@@ -36,11 +36,12 @@ function App() {
   const [colorlist, setColorcode] = useState(colorstore || null);
   const [imgList,setImglist] = useState(imgstore || null);
   const [logolist,setLogolist] = useState(logostore || null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() =>{
     async function Fetch(){
       try {
+        setLoading(true);
         const res = await Colorlist.FETCH_COLOR();
         const img = await WebImg.FETCH_WEB();
         const req = await Logos.LOGOS()
