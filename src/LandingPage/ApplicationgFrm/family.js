@@ -239,7 +239,7 @@ function Family() {
         else if (/[0-9]/.test(userData.guardianName)) {
           errors.guardianName = "Input must not contain numeric value.";
         }
-        else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.guardianName)) {
+        else if (/[!@#$%^&*/_()?":{}|<>]/.test(userData.guardianName)) {
           errors.guardianName = "Special characters are not allowed.";
         }
          else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.guardianName)) {

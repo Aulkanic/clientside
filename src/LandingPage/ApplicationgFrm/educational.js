@@ -165,10 +165,6 @@ function Educational() {
           errors.currentSchool = "This Field is required";
         } else if (userData.currentSchool.length === 1) {
           errors.currentSchool = "Input must not contain a single letter.";
-        }else if (/[!@#$%^&*(),.?":{}|<>]/.test(userData.currentSchool)) {
-          errors.currentSchool = "Special characters are not allowed.";
-        } else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.currentSchool)) {
-          errors.currentSchool = "Fields must be in title case format";
         }
         if (userData.address === '') {
           errors.address = "This Field is required";
