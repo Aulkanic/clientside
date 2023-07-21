@@ -46,12 +46,12 @@ function App() {
         const img = await WebImg.FETCH_WEB();
         const req = await Logos.LOGOS()
         setImglist(img.data.result);
-        setColorcode(res.data.result[0]);
+        setColorcode(res.data.result);
         setLogolist(req.data.result)
         setLoading(false);
         localStorage.setItem('Image', JSON.stringify(img.data.result));
         localStorage.setItem('Logo', JSON.stringify(req.data.result));
-        localStorage.setItem('Color', JSON.stringify(colorlist));
+        localStorage.setItem('Color', JSON.stringify(res.data.result));
       } catch (error) {
         console.error('Error fetching data:', error);
       }

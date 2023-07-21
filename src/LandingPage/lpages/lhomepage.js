@@ -39,7 +39,7 @@ function Lhomepage() {
         <div className="lbtnapp">
           <Link to='/ScholarshipProgram' 
                 className='llinkapp'>
-          <motion.button style={{backgroundColor:colorlist.bgColor,color:colorlist.bgColor1}} whileHover={{
+          <motion.button style={{backgroundColor:colorlist[0].bgColor,color:colorlist[0].bgColor1}} whileHover={{
               scale: 1.2,
               transition: { duration: 0.5 },
             }}
@@ -102,7 +102,7 @@ function Lhomepage() {
           </Carousel>
       </div>
     </div>
-    <div className="lfooter" style={{backgroundColor:colorlist.bgColor1}}>
+    <div className="lfooter" style={{backgroundColor:colorlist[0].bgColor1}}>
     <div>
         <div style={{display:'flex',width:'100%',justifyContent:'space-around',alignItems:'center',height:'100px'}}>
             <div className='copyr'>
@@ -112,7 +112,7 @@ function Lhomepage() {
                 <PlaceIcon/><span>Tabing Ilog Marilao, Bulacan</span>
             </div>
             <div className='contact'>
-                <LocalPhoneIcon /><span>{colorlist.telephone}</span>
+                <LocalPhoneIcon /><span>{colorlist[0].telephone}</span>
             </div>
             <div className='url'>
                 <LanguageIcon /><span>http://Marisko.com</span>

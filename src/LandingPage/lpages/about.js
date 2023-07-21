@@ -81,7 +81,7 @@ const About = () => {
       </CSSTransition>
     </motion.div>
 
-      <div className="aabstract" style={{backgroundColor:colorlist.bgColor,color:colorlist.bgColor1}}>BMCC OFFICIALS</div>
+      <div className="aabstract" style={{backgroundColor:colorlist[0].bgColor,color:colorlist[0].bgColor1}}>BMCC OFFICIALS</div>
       
       <div className="abmccmem">
           <img src={BMCCmem} alt="" />

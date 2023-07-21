@@ -17,7 +17,7 @@ const Footer = () => {
 
   return (
     <div>
-        <div className='footer' style={{backgroundColor:colorlist.bgColor}}>
+        <div className='footer' style={{backgroundColor:colorlist[0].bgColor}}>
             <div className='copyr'>
                 <p>Terms of Service</p>
             </div>

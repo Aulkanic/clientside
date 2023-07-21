@@ -10,12 +10,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import '../css/newexpage.css'
+import LoadingButton from '@mui/lab/LoadingButton';
 import swal from 'sweetalert';
 import { useState } from 'react';
 function Newexspage() {
   const [open, setOpen] = React.useState(false);
   const [email,setEmail] = useState('')
-
+  const [loading,setLoading] = useState(false)
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -36,8 +37,10 @@ function Newexspage() {
     }
       const formData = new FormData();
       formData.append("email",email);
+      setLoading(true)
       APK.APKSEND(formData)
       .then(res => {
+        setLoading(false)
         handleClose()
         swal({
           text: res.data.Message,
@@ -79,8 +82,20 @@ function Newexspage() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={sendEmail}>SEND</Button>
+          <Button className='myButton' sx={{color:'white',marginRight:'10px'}} onClick={handleClose}>Cancel</Button>
+          <div>
+          <LoadingButton
+                loading={loading}
+                loadingPosition="end"
+                variant="elevated"
+                fullWidth
+                sx={{color:'white'}}
+                className='myButton1'
+                onClick={sendEmail}
+              >
+                Send
+          </LoadingButton>
+          </div>
         </DialogActions>
       </Dialog>
     </div>

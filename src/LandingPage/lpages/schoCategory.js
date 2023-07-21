@@ -53,7 +53,7 @@ function SchoCategory() {
     <>
     <div>
     <LHeader/>
-    <h1 className='schohp' style={{backgroundColor:colorlist.bgColor,color:colorlist.bgColor1}}>Scholarship Program</h1>
+    <h1 className='schohp' style={{backgroundColor:colorlist[0].bgColor,color:colorlist[0].bgColor1}}>Scholarship Program</h1>
     <div className='lschoCat'>
         {schoCat}
     </div>

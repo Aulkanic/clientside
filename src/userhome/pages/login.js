@@ -21,8 +21,8 @@ import Lheader from '../../LandingPage/components/navbar'
 import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
-import { color } from 'framer-motion'
-import { createContext } from 'react';
+import { useContext } from "react";
+import { color } from "../../App";
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -55,7 +55,7 @@ const CssTextField = styled(TextField)({
 });
 
 const Login = () => {
-
+    const { colorlist,imgList } = useContext(color);
     const [email, setEmail] = useState('');
     const [fpemail, setFPEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -72,15 +72,6 @@ const Login = () => {
     const [otp, setOtp] = useState('');
     const [remainingSeconds, setRemainingSeconds] = useState(60);
     const [resstat,setResstat] = useState('');
-    const [colorlist,setColorlist] = useState([])
-
-    useEffect(() =>{
-      async function Fetch(){
-        const res = await Colorlist.FETCH_COLOR()
-        setColorlist(res.data.result[0])
-      }
-      Fetch()
-    })
 
     const handleSnackbarClose = () => {
       setSnackbarOpen(false);
@@ -359,13 +350,13 @@ const Login = () => {
     <Lheader/>
     <div className="loginpage">
                 <div className="lgform">
-                    <div className="logbmcc"  style={{backgroundColor:colorlist.bgColor}}>
+                    <div className="logbmcc"  style={{backgroundColor:colorlist[0].bgColor}}>
                         <img  src={BMCC} alt="" />
                     </div>
                     
                     {step === 0 && (
                     <div className="lgcon">
-                    <h1 style={{color:colorlist.bgColor}}>Login your Account</h1>
+                    <h1 style={{color:colorlist[0].bgColor}}>Login your Account</h1>
                   <form action="">
                     <div style={{marginBottom:'20px'}}>
                       <CssTextField      
@@ -451,7 +442,7 @@ const Login = () => {
                     </div>)}
                     {step === 1 && (
         <div className='findtocon'>
-          <h2 style={{color:colorlist.bgColor}}>Find your account</h2>
+          <h2 style={{color:colorlist[0].bgColor}}>Find your account</h2>
           <div className="otpfform">
           <p>Enter your e-mail address below to reset your password.</p>
           <CssTextField      
@@ -528,7 +519,7 @@ const Login = () => {
                       )}
                     {step === 2 && (
         <div className='otpverifycon'>
-          <h2 style={{color:colorlist.bgColor}}>OTP VERIFICATION</h2>
+          <h2 style={{color:colorlist[0].bgColor}}>OTP VERIFICATION</h2>
           <div className="formotpvalif">
           <p>An OTP has been sent to your email. Please enter it below:</p>
           <label>
@@ -621,7 +612,7 @@ const Login = () => {
                        )}
                     {step === 3 && (
         <div className='restfrmpass'>
-          <h1 style={{color:colorlist.bgColor}}>Reset your Password</h1>
+          <h1 style={{color:colorlist[0].bgColor}}>Reset your Password</h1>
           <div className="updatepassresfrm">
           <div>
           <CssTextField      
@@ -703,8 +694,8 @@ const Login = () => {
           margin: '10px', 
           cursor: 'pointer', 
           fontWeight: '700',
-          background: colorlist.btnColor,
-          color: colorlist.btnTextColor,
+          background: colorlist[0].btnColor,
+          color: colorlist[0].btnTextColor,
           fontSize:'15px',
           letterSpacing:'5px',
           fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 

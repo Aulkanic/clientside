@@ -19,7 +19,7 @@ const Header = () => {
         </div>
       
         <div>
-        <p className='title' style={{color:colorlist.bgColor}}>MARISKO</p>
+        <p className='title' style={{color:colorlist[0].bgColor}}>MARISKO</p>
       </div>
       </div>
     

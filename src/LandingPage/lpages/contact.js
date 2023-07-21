@@ -55,7 +55,7 @@ const imagelist = imgList?.map((image, index) => {
       {imagelist}
     </Carousel>
     </div>
-    <div className="hrhead" style={{backgroundColor:colorlist.bgColor,color:colorlist.bgColor1}}>CONTACT US</div>
+    <div className="hrhead" style={{backgroundColor:colorlist[0].bgColor,color:colorlist[0].bgColor1}}>CONTACT US</div>
     <motion.div className='lcontact'
            initial="hidden"
            animate="visible"

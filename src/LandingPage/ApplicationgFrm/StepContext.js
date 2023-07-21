@@ -8,7 +8,7 @@ import { Axios } from 'axios';
 export const multiStepContext = React.createContext();
 function StepContext() {
   const navigate = useNavigate();
-    const [currentStep, setStep] = useState(5);
+    const [currentStep, setStep] = useState(1);
     const [userData, setUserData] = useState({
       applicantNum:'',
       address:'',

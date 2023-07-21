@@ -30,18 +30,18 @@ function Navbar() {
   return (
     <>
     {colorlist && logolist ? (<div className='headnavfont' style={{display:'flex',flexDirection:'column'}}>
-      <div style={{width:'100%',height:'40px',backgroundColor:colorlist.bgColor,display:'flex',justifyContent:'space-between'}}>
+      <div style={{width:'100%',height:'40px',backgroundColor:colorlist[0].bgColor,display:'flex',justifyContent:'space-between'}}>
         <div style={{display:'flex',justifyContent:'center',alignItems:'center',color:'white',marginLeft:'20px'}}>
           {currentDateTime}
         </div>
         <div style={{display:'flex',justifyContent:'space-between',width:'100px',alignItems:'center',marginRight:'20px',color:'white'}}>
-        <a href={colorlist.fblink} target="_blank" rel="noopener noreferrer">
+        <a href={colorlist[0].fblink} target="_blank" rel="noopener noreferrer">
            <FacebookIcon sx={{color:'blue'}} />
         </a>
-        <a href={colorlist.ytlink} target="_blank" rel="noopener noreferrer">
+        <a href={colorlist[0].ytlink} target="_blank" rel="noopener noreferrer">
           <YouTubeIcon sx={{color:'red'}}/>
         </a>
-        <a href={`mailto:${colorlist.email}`}>
+        <a href={`mailto:${colorlist[0].email}`}>
           <MailOutlineIcon sx={{color:'red'}}/>
         </a>
         </div>
@@ -57,7 +57,7 @@ function Navbar() {
                 />
             </div>
             <div className='bmccslog'>
-                <h1 style={{color:colorlist.bgColor,margin:'10px'}}>Pondo para sa Iskolar ng Bayan<br/> ng Marilao</h1>
+                <h1 style={{color:colorlist[0].bgColor,margin:'10px'}}>Pondo para sa Iskolar ng Bayan<br/> ng Marilao</h1>
             </div>
             </div>
           
@@ -78,7 +78,7 @@ function Navbar() {
             </div>
             </div>
         </div>
-        <div style={{width:'100%',height:'55px',backgroundColor: colorlist.bgColor,fontFamily:'"Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+        <div style={{width:'100%',height:'55px',backgroundColor: colorlist[0].bgColor,fontFamily:'"Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
                   display:'flex',justifyContent:'space-around',justifyContent:'center',alignItems:'center'}}>
             <ul style={{display:'flex',listStyleType:'none',justifyContent:'space-around',alignItems:'center',width:'100%',margin:0}}>
                 <li><Link style={{color:'white',fontWeight:1000,textDecoration:'none'}} to='/'> HOME </Link></li>

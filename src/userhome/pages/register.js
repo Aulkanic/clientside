@@ -24,6 +24,9 @@ import { alpha, styled } from '@mui/material/styles';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
+import { useContext } from "react";
+import { color } from "../../App";
+
 const CssTextField = styled(TextField)({
   backgroundColor: 'white',
   width: '400px',
@@ -51,6 +54,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Register = () => {
     const navigate = useNavigate();
+    const { colorlist,imgList } = useContext(color);
     const [fname, setfname] = useState('');
     const [lname, setlname] = useState('');
     const [mname, setmname] = useState('');
@@ -67,7 +71,6 @@ const Register = () => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [resstat,setResstat] = useState('');
-    const [colorlist,setColorlist] = useState([])
     const [open, setOpen] = React.useState(true);
 
     const handleClickOpen = () => {
@@ -78,13 +81,6 @@ const Register = () => {
       setOpen(false);
     };
 
-    useEffect(() =>{
-      async function Fetch(){
-        const res = await Colorlist.FETCH_COLOR()
-        setColorlist(res.data.result[0])
-      }
-      Fetch()
-    })
 
     const handleSnackbarClose = () => {
       setSnackbarOpen(false);
@@ -359,7 +355,7 @@ const handlerNextInput = (e) => {
               <div className="regfrmcontainer">
       {step === 1 && (
         <div className='emailotpreg'>
-          <h2 style={{color:colorlist.bgColor}}>Registration</h2>
+          <h2 style={{color:colorlist[0].bgColor}}>Registration</h2>
           <p>Enter your Email address to create Account</p>
           <p>We will send you one time password(OTP)</p>
           <TextField      
@@ -406,8 +402,8 @@ const handlerNextInput = (e) => {
           margin: '10px', 
           cursor: 'pointer', 
           fontWeight: '700',
-          background: colorlist.btnColor,
-          color: colorlist.btnTextColor,
+          background: colorlist[0].btnColor,
+          color: colorlist[0].btnTextColor,
           fontSize:'10px',
           letterSpacing:'2px',
           fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
@@ -423,8 +419,8 @@ const handlerNextInput = (e) => {
                 margin: '10px', 
                 cursor: 'pointer', 
                 fontWeight: '700',
-                background: colorlist.btnColor,
-                color: colorlist.btnTextColor,
+                background: colorlist[0].btnColor,
+                color: colorlist[0].btnTextColor,
                 fontSize:'10px',
                 letterSpacing:'2px',
                 fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
@@ -472,8 +468,8 @@ const handlerNextInput = (e) => {
                           style={{
                             cursor: 'pointer', 
                             fontWeight: '700',
-                            background: colorlist.btnColor,
-                            color: colorlist.btnTextColor,
+                            background: colorlist[0].btnColor,
+                            color: colorlist[0].btnTextColor,
                             fontSize:'10px',
                             letterSpacing:'2px',
                             fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
@@ -489,8 +485,8 @@ const handlerNextInput = (e) => {
         style={{
           cursor: 'pointer', 
           fontWeight: '700',
-          background: colorlist.btnColor,
-          color: colorlist.btnTextColor,
+          background: colorlist[0].btnColor,
+          color: colorlist[0].btnTextColor,
           fontSize:'10px',
           letterSpacing:'2px',
           fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
@@ -511,8 +507,8 @@ const handlerNextInput = (e) => {
         style={{
           cursor: 'pointer', 
           fontWeight: '700',
-          background: colorlist.btnColor,
-          color: colorlist.btnTextColor,
+          background: colorlist[0].btnColor,
+          color: colorlist[0].btnTextColor,
           fontSize:'10px',
           letterSpacing:'2px',
           fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
@@ -652,8 +648,8 @@ const handlerNextInput = (e) => {
           margin:'10px',      
           cursor: 'pointer', 
           fontWeight: '700',
-          background: colorlist.btnColor,
-          color: colorlist.btnTextColor,
+          background: colorlist[0].btnColor,
+          color: colorlist[0].btnTextColor,
           fontSize:'10px',
           letterSpacing:'2px',
           fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
