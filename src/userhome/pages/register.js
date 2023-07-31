@@ -348,7 +348,6 @@ const handlerNextInput = (e) => {
           {snackbarMessage}!
 </MuiAlert>)}
       </Snackbar>
-    <Lheader/>
   <div className="registration">
         <div className="registrationcon">
           <div className="registrationfrm">
@@ -375,92 +374,85 @@ const handlerNextInput = (e) => {
           margin: '10px', 
           marginBottom: '0px',
           cursor: 'pointer', 
-          background:'white'
-        
         }}
       />
-    {errors.email && <MuiAlert variant='outlined' 
+    {errors.email && <p variant='outlined' 
     style={{ 
       width: '92%', 
       margin: '10px', 
       color:'red', 
       fontSize:'12px',
       height:'max-Content',
-      background:'white'}} elevation={0} severity="error">
+     }}>
           {errors.email}
-        </MuiAlert>}
+        </p>}
           <br />
-          <div className="regbtnregnex">
-            <div>
-        <LoadingButton
-        loading={loading}
-        loadingPosition="end"
-        endIcon={loading ? (null) : (<SendIcon />)}
-        variant="elevated"
-        fullWidth
-        style={{
-          margin: '10px', 
-          cursor: 'pointer', 
-          fontWeight: '700',
-          background: colorlist[0].btnColor,
-          color: colorlist[0].btnTextColor,
-          fontSize:'10px',
-          letterSpacing:'2px',
-          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-        }}
-        onClick={handleRegisterClick}
-      >
-        Register
-      </LoadingButton>
-      </div>
-      <div>
-      <LoadingButton variant="elevated" 
-              style={{
-                margin: '10px', 
-                cursor: 'pointer', 
-                fontWeight: '700',
-                background: colorlist[0].btnColor,
-                color: colorlist[0].btnTextColor,
-                fontSize:'10px',
-                letterSpacing:'2px',
-                fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-              }}
-              onClick={handlerNextInput}>
-                Next</LoadingButton>
-                </div>
+        <div className="regbtnregnex">
+          <div>
+            <LoadingButton
+            loading={loading}
+            loadingPosition="end"
+            variant="elevated"
+            fullWidth
+            style={{
+              margin: '10px', 
+              cursor: 'pointer', 
+              fontWeight: '700',
+              background: colorlist[0].btnColor,
+              color: 'white',
+              fontSize:'10px',
+              textTransform:'capitalize',
+              fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+            }}
+            onClick={handleRegisterClick}
+          >
+            Register
+          </LoadingButton>
+          </div>
+          <div>
+          <LoadingButton variant="elevated" 
+                  style={{
+                    margin: '10px', 
+                    cursor: 'pointer', 
+                    fontWeight: '700',
+                    background: colorlist[0].btnColor,
+                    color: 'white',
+                    fontSize:'10px',
+                    textTransform:'capitalize',
+                    fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+                  }}
+                  onClick={handlerNextInput}>
+                    Next</LoadingButton>
+          </div>
         </div>
         </div>
       )}
 
       {step === 2 && (
         <div className='otpfreg'>
-          <h2>OTP Verification</h2>
+          <h2 style={{color:colorlist[0].bgColor}}>OTP Verification</h2>
           <p>An OTP has been sent to your email. Please enter it below:</p>
-          <label>
-            OTP:
             <input
             maxLength={6}
                   style={{
-                    width: '100%',
+                    width: '90%',
                     height: '40px',
                     fontSize: '15px',
                     textAlign: 'center',
-                    letterSpacing: '15px',
+                    letterSpacing: '35px',
                     border: '1px solid #ccc',
                     borderRadius: '5px',
                     outline: 'none',
                   }} type="text" value={otp} onChange={handlerOtpInput} />
-    {errors.otp && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '85%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'10px',
-      height:'max-Content',
-      background:'white' }} elevation={0} severity="error">
-          {errors.otp}
-        </MuiAlert>}
-          </label>
+              {errors.otp && <p variant='outlined' 
+              style={{ 
+                width: '85%', 
+                margin: '10px', 
+                color:'red', 
+                fontSize:'12px',
+                height:'max-Content'}}>
+                    {errors.otp}
+                  </p>}
           <br />
           <div className='bacreotp'>
             <div>

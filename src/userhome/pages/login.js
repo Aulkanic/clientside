@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import './login.css'
 import { useNavigate, Link } from 'react-router-dom'
-import { useLoginMutation } from '../../features/authenticate/authApiSlice'
 import BMCC from '../assets/marisko.png'
-import EmailIcon from '@mui/icons-material/Email';
-import LockIcon from '@mui/icons-material/Lock';
 import TextField from '@mui/material/TextField';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import LoginTwoToneIcon from '@mui/icons-material/LoginTwoTone';
-import FormHelperText from '@mui/material/FormHelperText';
-import swal from 'sweetalert';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import { alpha, styled } from '@mui/material/styles';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import {loginUserAcc, GetUserAcc, GenerateOtp, ValidateUserOtp, ChangePassbyOtp,Colorlist} from '../../Api/request'
-import Lheader from '../../LandingPage/components/navbar'
 import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
+import ErrorIcon from '@mui/icons-material/Error';
 import { useContext } from "react";
 import { color } from "../../App";
+import { Card } from '@mui/material'
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -55,7 +51,7 @@ const CssTextField = styled(TextField)({
 });
 
 const Login = () => {
-    const { colorlist,imgList } = useContext(color);
+    const { colorlist,imgList,logolist } = useContext(color);
     const [email, setEmail] = useState('');
     const [fpemail, setFPEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -76,6 +72,7 @@ const Login = () => {
     const handleSnackbarClose = () => {
       setSnackbarOpen(false);
     };
+
 
     useEffect(() => {
       if (remainingSeconds > 0) {
@@ -235,7 +232,6 @@ const Login = () => {
         }
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
-          console.log(errors)
           return;
         }
         setLoading(true)
@@ -333,30 +329,30 @@ const Login = () => {
   return(
     <>
     <Snackbar
-  open={snackbarOpen}
-  onClose={handleSnackbarClose}
-  autoHideDuration={3000}
-  TransitionComponent={Slide}
-  TransitionProps={{ direction: 'right' }}
->
-{snackbarMessage === 'Login Successfully' || snackbarMessage === 'OTP is sent into your Email Account' || snackbarMessage === 'Verification Success'
- || snackbarMessage === 'Password Changed Successfully' ? (<Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
-{snackbarMessage}!
-</Alert>) :(<Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
-          {snackbarMessage}!
-</Alert>)}
-</Snackbar>
+      open={snackbarOpen}
+      onClose={handleSnackbarClose}
+      autoHideDuration={3000}
+      TransitionComponent={Slide}
+      TransitionProps={{ direction: 'right' }}
+    >
+        {snackbarMessage === 'Login Successfully' || snackbarMessage === 'OTP is sent into your Email Account' || snackbarMessage === 'Verification Success'
+        || snackbarMessage === 'Password Changed Successfully' ? (<Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+        {snackbarMessage}!
+        </Alert>) :(<Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+                  {snackbarMessage}!
+        </Alert>)}
+    </Snackbar>
 
-    <Lheader/>
     <div className="loginpage">
                 <div className="lgform">
                     <div className="logbmcc"  style={{backgroundColor:colorlist[0].bgColor}}>
                         <img  src={BMCC} alt="" />
+                        <p>PONDO PARA SA ISKOLAR NG BAYAN <br />NG MARILAO</p>
                     </div>
                     
                     {step === 0 && (
                     <div className="lgcon">
-                    <h1 style={{color:colorlist[0].bgColor}}>Login your Account</h1>
+
                   <form action="">
                     <div style={{marginBottom:'20px'}}>
                       <CssTextField      
@@ -371,17 +367,22 @@ const Login = () => {
                             <EmailRoundedIcon />
                           </InputAdornment>
                         ),
+                        endAdornment:(
+                          <InputAdornment position="end">
+                          {errors.email && <ErrorIcon sx={{color:'red'}}/>}
+                          </InputAdornment>   
+                        )
                       }}
                       variant="outlined"
                       style={{
                         cursor: 'pointer', 
                       }}
                     />
-                    {errors.email && <Alert variant='outlined' 
+                    {errors.email && <p
                     style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }}
-                     elevation={0} severity="error">
+                     >
                         {errors.email}
-                      </Alert>}
+                      </p>}
                     </div>
                     <div>
                     <CssTextField      
@@ -396,19 +397,25 @@ const Login = () => {
                             <LockRoundedIcon />
                           </InputAdornment>
                         ),
+                        endAdornment:(
+                          <InputAdornment position="end">
+                          {errors.password && <ErrorIcon sx={{color:'red'}}/>}
+                          </InputAdornment>   
+                        )
                       }}
                       variant="outlined"
                       style={{
                         cursor: 'pointer', 
                       }}
                     />
-                    {errors.password && <Alert variant='outlined' 
+                    {errors.password && <p 
                     style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }} 
-                    elevation={0} severity="error">
+                    >
                         {errors.password}
-                      </Alert>}
+                      </p>}
                     </div>
                   </form>
+                  <div className='signforgot'>
                         <div className="lgbtn">
                             <LoadingButton
                             loading={loading}
@@ -424,6 +431,7 @@ const Login = () => {
                               color: 'white',
                               fontSize: '15px',
                               letterSpacing: '2px',
+                              textTransform:'capitalize',
                               transition: 'background 0.3s ease-in-out, clip-path 0.3s ease-in-out',
                               '&:hover': {
                                 backgroundColor: 'rgba(43, 194, 106, 0.73)',
@@ -439,82 +447,81 @@ const Login = () => {
                         <div className="loglink">
                             <Link className='lglink' onClick={handlerForgotPasswordLink}>Forgot your Password?</Link>
                         </div>
+                  </div>
+
                     </div>)}
                     {step === 1 && (
         <div className='findtocon'>
           <h2 style={{color:colorlist[0].bgColor}}>Find your account</h2>
           <div className="otpfform">
-          <p>Enter your e-mail address below to reset your password.</p>
+          <p>Enter your email here to send a confirmation for a password reset.</p>
           <CssTextField      
-        id="input-with-icon-textfield"
-        label="Email"
-        fullWidth
-        value={fpemail}
-        onChange={handlerFPEmailInput}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <AccountCircle />
-            </InputAdornment>
-          ),
-        }}
-        variant="outlined"
-        style={{
-          cursor: 'pointer', 
-        }}
-      />
-      </div>
-     {errors.fpemail && (<Alert
-         style={{ 
-          width: '73%', 
-          margin: '10px', 
-          color:'red', 
-          fontSize:'13px',
-          height:'max-Content',
-          background:'white' }}
-           variant="outlined" severity="error">
-        {errors.fpemail}
-      </Alert>)}
-     <div className="otpfnsc">
-      <div>
-      <LoadingButton
-        loading={loading1}
-        loadingPosition="end"
-        endIcon={loading ? (null) : (<SendIcon />)}
-        variant="elevated"
-        fullWidth
-        style={{
-          margin: '10px', 
-          cursor: 'pointer', 
-          fontWeight: '700',
-          background: 'rgba(43, 194, 106, 0.73)',
-          color: 'white',
-          fontSize:'10px',
-          letterSpacing:'2px',
-          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-        }}
-        onClick={findUser}
-      >
-        SUBMIT
-      </LoadingButton>
-      </div>
-      <div>
-      <LoadingButton variant="elevated" 
-              style={{
-                margin: '10px', 
-                cursor: 'pointer', 
-                fontWeight: '700',
-                background: 'rgba(43, 194, 106, 0.73)',
-                color: 'white',
-                fontSize:'10px',
-                letterSpacing:'2px',
-                fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-              }}
-              onClick={handlerBackInput}
-              >CANCEL
-      </LoadingButton>
-      </div>
-      </div>
+            id="input-with-icon-textfield"
+            label="Email"
+            fullWidth
+            value={fpemail}
+            onChange={handlerFPEmailInput}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              ),
+              endAdornment:(
+                <InputAdornment position="end">
+                {errors.fpemail && <ErrorIcon sx={{color:'red'}}/>}
+                </InputAdornment>   
+              )
+            }}
+            variant="outlined"
+            style={{
+              cursor: 'pointer', 
+            }}
+          />
+          {errors.fpemail && (<p style={{ width: '100%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }}>
+            {errors.fpemail}
+          </p>)}
+          </div>
+
+        <div className="otpfnsc">
+          <div>
+          <LoadingButton
+            loading={loading1}
+            loadingPosition="end"
+            endIcon={loading ? (null) : (<SendIcon />)}
+            variant="elevated"
+            fullWidth
+            sx={{
+              '&:hover': {
+                background: colorlist[0].bgColor,
+                transform: 'scale(1.1)'
+              },
+              background: colorlist[0].bgColor,
+              color: 'white',
+              marginLeft:'10px',
+              textTransform:'capitalize'
+            }}
+            onClick={findUser}
+          >
+            Submit
+          </LoadingButton>
+          </div>
+          <div>
+          <LoadingButton variant="elevated" 
+                  sx={{
+                    background: colorlist[0].bgColor,
+                    color: 'white',
+                    textTransform:'capitalize',
+                    '&:hover': {
+                      background: colorlist[0].bgColor,
+                      transform: 'scale(1.1)'
+                    },
+                  }}
+                  onClick={handlerBackInput}
+                  >Cancel
+          </LoadingButton>
+          </div>
+        </div>
         </div>
                       )}
                     {step === 2 && (
@@ -530,12 +537,12 @@ const Login = () => {
                     height: '40px',
                     fontSize: '18px',
                     textAlign: 'center',
-                    letterSpacing: '15px',
+                    letterSpacing: '25px',
                     border: '1px solid #ccc',
                     borderRadius: '5px',
                     outline: 'none',
                   }} type="text" value={otp} onChange={handlerOtpInput}/>
-     {errors.otp && (<Alert
+     {errors.otp && (<p
          style={{ 
           width: '83%', 
           margin: '10px', 
@@ -544,41 +551,30 @@ const Login = () => {
           height:'max-Content',
           background:'white',
           boxShadow:'none' }}
-           variant="outlined" severity="error">
+          >
         {errors.otp}
-      </Alert>)}
+      </p>)}
           </label>
           </div>
-          <div className='bacreotp'>
-            <div>
-            <LoadingButton 
-                          style={{
-                            margin: '10px', 
-                            cursor: 'pointer', 
-                            fontWeight: '700',
-                            background: 'rgba(43, 194, 106, 0.73)',
-                            color: 'white',
-                            fontSize:'15px',
-                            letterSpacing:'2px',
-                            fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-                          }}
-                          onClick={handlerBackInput}
-            variant="outlined" >Back</LoadingButton>
-            </div>     
+          <div className='bacreotp'>    
             <div>
             <LoadingButton
         loading={loading1}
         loadingPosition="end"
         variant="outlined"
-        fullWidth
-        style={{
+        sx={{
+          '&:hover': {
+            background: colorlist[0].bgColor,
+            transform: 'scale(1.1)'
+          },
+          background: colorlist[0].bgColor,
           margin: '10px', 
           cursor: 'pointer', 
           fontWeight: '700',
-          background: 'rgba(43, 194, 106, 0.73)',
           color: 'white',
           fontSize:'15px',
-          letterSpacing:'2px',
+          textTransform:'capitalize',
+          width:'90%',
           fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
         }}
         onClick={handleResendClick}
@@ -586,7 +582,6 @@ const Login = () => {
         Resend
       </LoadingButton>
             </div>
-          </div>
             <div>
             <LoadingButton
               loading={loading2}
@@ -594,21 +589,27 @@ const Login = () => {
               variant="outlined"
               fullWidth
               style={{
+                '&:hover': {
+                  background: colorlist[0].bgColor,
+                  transform: 'scale(1.1)'
+                },
+                background: colorlist[0].bgColor,
                 margin: '10px', 
                 cursor: 'pointer', 
                 fontWeight: '700',
-                background: 'rgba(43, 194, 106, 0.73)',
                 color: 'white',
                 fontSize:'15px',
-                letterSpacing:'2px',
+                textTransform:'capitalize',
+                width:'90%',
                 fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
               }}
               onClick={ValidateOtp}
             >
-              VERIFY
+              Verify
             </LoadingButton>
             </div>
-              </div>
+            </div>
+        </div>
                        )}
                     {step === 3 && (
         <div className='restfrmpass'>
@@ -636,7 +637,7 @@ const Login = () => {
                       }}
                     />
           </div>
-          {errors.newpassword && (<Alert
+          {errors.newpassword && (<p
          style={{ 
           width: '79%', 
           margin: '10px', 
@@ -647,8 +648,8 @@ const Login = () => {
           boxShadow:'none' }}
            variant="outlined" severity="error">
         {errors.newpassword}
-      </Alert>)}
-          <div>
+      </p>)}
+          <div style={{marginTop:'10px'}}>
           <CssTextField      
                       id="input-with-icon-textfield"
                       label="Re-Type New Password"
@@ -670,7 +671,7 @@ const Login = () => {
                       }}
                     />
           </div>
-          {errors.renewpassword && (<Alert
+          {errors.renewpassword && (<p
          style={{ 
           width: '79%', 
           margin: '10px', 
@@ -681,7 +682,7 @@ const Login = () => {
           boxShadow:'none' }}
            variant="outlined" severity="error">
         {errors.renewpassword}
-      </Alert>)}
+      </p>)}
           </div>
           <div>
         <LoadingButton
@@ -690,14 +691,18 @@ const Login = () => {
         loadingPosition="end"
         endIcon={loading ? (null) : (<SendIcon />)}
         variant="elevated"
-        style={{
+        sx={{
+          '&:hover': {
+            background: colorlist[0].bgColor,
+            transform: 'scale(1.1)'
+          },
           margin: '10px', 
           cursor: 'pointer', 
           fontWeight: '700',
           background: colorlist[0].btnColor,
-          color: colorlist[0].btnTextColor,
+          color: 'white',
           fontSize:'15px',
-          letterSpacing:'5px',
+          textTransform:'capitalize',
           fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
         }}
         onClick={UpdateUserPass}
@@ -708,7 +713,7 @@ const Login = () => {
         </div>
       )}
                 </div>
-            </div>
+    </div>
     </>
     ) 
 }

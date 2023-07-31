@@ -55,7 +55,6 @@ function Newexspage() {
   }
   return (
     <>
-    <Lheader/>
     <div className='newexpage'>
       <h1>Login your Account in .... </h1>
         <div className='lexpage'>

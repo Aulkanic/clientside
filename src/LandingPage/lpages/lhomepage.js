@@ -13,9 +13,7 @@ import LoadingCircle from '../LoadingScreen/skcircle'
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { useContext } from "react";
 import { color } from "../../App";
-import PlaceIcon from '@mui/icons-material/Place';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import LanguageIcon from '@mui/icons-material/Language';
+
 import Carousel from 'react-bootstrap/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -28,12 +26,9 @@ function Lhomepage() {
         <>
        <div className="lapply" style={{backgroundImage: `url(${imgUrl})`}}>
         <div className="lslogan">
-            <motion.h1
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1,fontSize:1600 }}
-             transition={{ delay: 0.5 }} >
+            <h1>
               BATANG MARILENYO PROTEKTADO
-              </motion.h1>
+            </h1>
             <p>Be part of our Scholarship Program</p>
         </div>
         <div className="lbtnapp">
@@ -53,15 +48,14 @@ function Lhomepage() {
   }
   return (
     <>
-    {colorlist && imgList ? (<div style={{display:'flex',flexDirection:'column'}}>
-    <LNav/>
+    {colorlist && imgList ? (<div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',width:'100vw'}}>
     <div className='lconthome'>
     {content()}
       
         <div className="lcarou" style={{width:'100%'}}>
-          <div style={{width:'47%',margin:'0px 10px 0px 0px'}}>
+          <div className='definescho'>
             <Card sx={{padding:'10px'}}>
-              <Typography sx={{fontSize:'30px'}}>What is Pondo Para sa Iskolar ng Bayan</Typography>
+              <Typography sx={{fontSize:'25px'}}>What is Pondo Para sa Iskolar ng Bayan?</Typography>
               <Typography sx={{fontSize:'20px'}}>
               The Iskolar ng bayan ng Marilao is an ordinance started by Juanito "Tito" Santiago as mayor of the Philippines from 2013-2019. 
               The scholarship program is written by Counselor Willie Diaz and was started in 2014.
@@ -104,24 +98,6 @@ function Lhomepage() {
       </Carousel.Item>
           </Carousel>
       </div>
-    </div>
-    <div className="lfooter" style={{backgroundColor:colorlist[0].bgColor1}}>
-    <div>
-        <div style={{display:'flex',width:'100%',justifyContent:'space-around',alignItems:'center',height:'100px'}}>
-            <div className='copyr'>
-                <p>Terms of Service</p>
-            </div>
-            <div className='location'>
-                <PlaceIcon/><span>Tabing Ilog Marilao, Bulacan</span>
-            </div>
-            <div className='contact'>
-                <LocalPhoneIcon /><span>{colorlist[0].telephone}</span>
-            </div>
-            <div className='url'>
-                <LanguageIcon /><span>http://Marisko.com</span>
-            </div>
-        </div>
-    </div>
     </div>
     </div>)
     : (<>

@@ -10,6 +10,8 @@ import { color } from "../../App";
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { Rulelist } from '../../Api/request'
+import { useInView } from 'react-intersection-observer'
+import { useAnimation } from 'framer-motion'
 
 function Scholarship() {
   const [rule,setRule] = useState([])
@@ -25,11 +27,32 @@ function Scholarship() {
     }
     Fetch()
   },[])
-  console.log(rule)
+
+  const {ref,inView} = useInView({
+    threshold:0.2
+  });
+
+  const animation = useAnimation();
+  useEffect(() =>{
+    console.log(inView)
+      if(inView){
+        animation.start({
+          opacity: 1, 
+          scale: 1,
+          transition: {
+            duration: 0.8,
+            delay: 0.5,
+            ease: [0, 0.71, 0.2, 1.01]
+          }
+        })
+      }
+      if(!inView){
+        animation.start({opacity: 0,scale:0.5})
+      }
+  },[inView])
   return (
-    <>
-    <LHeader/>
-    <LNav/>
+    <div >
+    <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
     <motion.div className='ascholarship'
                initial="hidden"
                animate="visible"
@@ -37,7 +60,7 @@ function Scholarship() {
                transition={{ duration: 1 }}>
         <Card 
         elevation={0}
-        sx={{padding:'10px',width:'90%',height:'150px',margin:'15px',overflow:'visible',backgroundColor:'transparent'}}>
+        sx={{padding:'10px',width:'80%',height:'max-Content',margin:'15px',overflow:'visible'}}>
           <Typography sx={{fontSize:'20px',fontWeight:'700'}}>SCHOLARSHIP COVERAGE</Typography>
           <Typography>This grant will only be available to poor but deserving Elementary, Highschool and College Students residing permanently
             in the Municipality of Marilao,whose application and subsequent grant shall be governed by policies and guidelines to be set by the Scholarship Board.
@@ -45,7 +68,7 @@ function Scholarship() {
         </Card>
         <Card 
         elevation={0}
-        sx={{padding:'10px',width:'90%',height:'100px',margin:'15px',overflow:'visible',backgroundColor:'transparent'}}>
+        sx={{padding:'10px',width:'80%',height:'max-Content',margin:'15px',overflow:'visible',backgroundColor:'transparent'}}>
           <Typography sx={{fontSize:'20px',fontWeight:'700'}}>SCHOLARSHIP PRIVILEGE</Typography>
           <Typography>
             <ul>
@@ -57,7 +80,8 @@ function Scholarship() {
         </Card>
         <Card 
         elevation={0}
-        sx={{padding:'10px',width:'90%',height:'100%',margin:'15px',overflow:'visible',backgroundColor:'transparent'}}>
+        sx={{padding:'10px',width:'80%',height:'max-Content',margin:'15px',overflow:'visible',
+        backgroundColor:'transparent',display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
           <Typography sx={{fontSize:'20px',fontWeight:'700'}}>SCHOLARSHIP CATEGORY</Typography>
           <Typography>I. ACADEMIC SCHOLARSHIP
             <ul>
@@ -101,15 +125,9 @@ function Scholarship() {
           <h2>The following are the Eligibility and Documentary Requirements<br/>
               For Applying this Scholarship Program</h2>
         </div>
-        <div className="requireascho">
-          <motion.Card
-                          initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{
-                            duration: 0.8,
-                            delay: 0.5,
-                            ease: [0, 0.71, 0.2, 1.01]
-                          }}
+        <div ref={ref} className="requireascho">
+          <motion.div
+          animate={animation}
           className="ascho-card">
             <div className="hascho">
                 <h1>Eligibility Requirements</h1>
@@ -133,15 +151,9 @@ function Scholarship() {
                   Scholarship Board thru the implementating office;The Batang Marilenyo Coordinating Center
                 </p>
             </div>
-          </motion.Card>
-          <motion.Card
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.5,
-                  ease: [0, 0.71, 0.2, 1.01]
-                }}
+          </motion.div>
+          <motion.div
+            animate={animation}
           className="ascho-card">
             <div className="hascho">
                 <h1>Documentary Requirements</h1>
@@ -162,15 +174,15 @@ function Scholarship() {
                   11. Parents' consent form for applicants below 18 year' old
                 </p>
             </div>
-          </motion.Card>
+          </motion.div>
         </div>
         <div className="aruqua">
           <h1>Are you Qualified to be a Scholar of Marilao?</h1>
           <Link to='/ScholarshipProgram' className='alinkapp'>Click APPLY NOW</Link>
         </div>
     </motion.div>
-
-    </>
+    </div>
+    </div>
   )
 }
 

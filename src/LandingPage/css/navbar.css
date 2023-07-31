@@ -4,17 +4,356 @@
     left: 0;
     width: 100%;
     z-index: 100;
+    height: max-content;
+    background-color: white;
     font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";  
+}
+.lheadbmcc{
+    width: 97%;
+}
+.leftlogo{
+    width: 50%;
+    display: flex;
+    background-color: white;
+}
+.bmccslog{
+    width: 100%;
+    margin: 0px;
+    margin-right: 10px;
+    margin-left: 50px;
+}
+.bmccslog h1{
+    font-size: 18px;
+    margin: 0px;
+    margin-left: 50px;
 }
 .lheadlogo{
     width: 20%;
+    padding: 2px;
+    border-radius: 45%;
 }
-.lheadlogo .bmccava{
-    position: absolute;
-    top:40px ;
-    left: 30px;
+.lheadlogo img{
+    width: 100px;
+    height: 80px;
     background-color: white;
     padding: 5px;
     border-radius: 45%;
 }
+.menu{
+    display: none;
+}
+.rightlogo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+@media (min-width: 376px) {
+    .bmccslog{
+        width: 80%;
+        margin: 0px;
+    }
+    .bmccslog h1{
+        font-size: 18px;
+        margin: 0px;
+    }
+    .lheadlogo{
+        width: 20%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .lheadlogo .bmccava{
+        
+        height: 60px;
+        display: flex;
+        background-color: white;
+    }
+    .timelink{
+        content: '';
+    }
+    .lheadbmcc{
+        width: 100%;
+        height: max-content;
+    }
+
+    .navstabs ul{
+        display: none;
+        content: '';
+    }
+    .navstabs{
+        width: 100%;
+        height: max-content;
+        padding: 5px 0px 5px 0px;
+        display: flex;
+    }
+    .navstabs .menu{   
+        display: flex;
+        width: 100%;
+        margin-left: 20px;
+    }
+    .leftlogo{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .rightlogo{
+        display: none;
+        content: '';
+    }
+  }
+@media (max-width: 376px) {
+    .bmccslog{
+        width: 80%;
+        margin: 0px;
+        margin-right: 10px;
+    }
+    .bmccslog h1{
+        font-size: 18px;
+        margin: 0px;
+    }
+    .lheadlogo{
+        width: 20%;
+        left: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .lheadlogo .bmccava{
+        width: 70px;
+        height: 70px;
+        display: flex;
+        background-color: white;
+    }
+    .timelink{
+        content: '';
+    }
+    .lheadbmcc{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: max-content;
+    }
+
+    .navstabs ul{
+        display: none;
+        content: '';
+    }
+    .navstabs{
+        width: 100%;
+        height: max-content;
+        padding: 5px 0px 5px 0px;
+        display: flex;
+    }
+    .navstabs .menu{   
+        display: flex;
+        width: 100%;
+        margin-left: 20px;
+    }
+    .leftlogo{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+    .rightlogo{
+        display: none;
+        content: '';
+    }
+  }
+@media (min-width: 426px) {
+    .bmccslog{
+        width: 50%;
+        margin: 0px;
+        margin-right: 10px;
+    }
+    .bmccslog h1{
+        font-size: 15px;
+        margin: 0px;
+        margin-right: 10px;
+    }
+    .lheadlogo{
+        width: 20%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        border-radius: 0px;
+    }
+    .lheadlogo .bmccava{
+        width: 70px;
+        height: 60px;
+        display: flex;
+        background-color: white;
+    }
+    .lheadbmcc{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: max-content;
+    }
+    .navstabs ul {
+        display: none;
+        content: '';
+    }
+    .navstabs ul li{
+        display: none;
+        content: '';
+    }
+    .navstabs{
+        width: 100%;
+        height: max-content;
+        padding: 5px 0px 5px 0px;
+        display: flex;
+    }
+    .navstabs .menu{   
+        display: flex;
+        width: 100%;
+        margin-left: 20px;
+    }
+    .leftlogo{
+        width: 60%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .rightlogo{
+        display: flex;
+    }
+  }
+@media (min-width: 768px) {
+    .bmccslog{
+        width: 100%;
+        margin: 0px;
+        margin-left: 110px;
+    }
+    .bmccslog h1{
+        font-size: 28px;
+        margin: 0px;
+    }
+    .lheadlogo{
+        width: max-content;
+        left: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2px;
+        border-radius: 45%;
+        z-index: 10px;
+        margin-right: 10px;
+    }
+    .lheadlogo .bmccava{
+        position: absolute;
+        left: 20px;
+        top: 65px;
+        width: 90px;
+        height: 90px;
+        display: flex;
+        background-color: white;
+    }
+    .timelink{
+        content: '';
+    }
+    .lheadbmcc{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        height: max-content;
+    }
+    .navstabs ul{
+        display: flex;
+    }
+    .navstabs ul li{
+        display: flex;
+        font-size: 15px;
+       
+    }
+    .navstabs{
+        width: 100%;
+        height: max-content;
+        padding: 15px 0px 15px 0px;
+        display: flex;
+    }
+    .navstabs .menu{   
+        display: none;
+        width: 100%;
+        margin-left: 20px;
+    }
+    .leftlogo{
+        width: 40%;
+        display: flex;
+    }
+    .rightlogo{
+        display: flex;
+    }
+  }
+  @media (min-width: 800px) {
+    .bmccslog{
+        width: 100%;
+        margin: 0px;
+        margin-left: 110px;
+    }
+    .bmccslog h1{
+        width: 100%;
+        font-size: 20px;
+        margin: 0px;
+    }
+    .lheadlogo{
+        width: max-content;
+        left: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2px;
+        border-radius: 45%;
+        z-index: 10px;
+        margin-right: 10px;
+    }
+    .lheadlogo .bmccava{
+        position: absolute;
+        left: 20px;
+        top: 55px;
+        width: 90px;
+        height: 90px;
+        display: flex;
+        background-color: white;
+    }
+    .timelink{
+        content: '';
+    }
+    .lheadbmcc{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        height: max-content;
+    }
+    .navstabs ul{
+        display: flex;
+        padding-left: 60px;
+    }
+    .navstabs ul li{
+        display: flex;
+        font-size: 15px;
+       
+    }
+    .navstabs{
+        width: 100%;
+        height: max-content;
+        padding: 15px 0px 15px 0px;
+        display: flex;
+    }
+    .navstabs .menu{   
+        display: none;
+        width: 100%;
+        margin-left: 20px;
+    }
+    .leftlogo{
+        width: 40%;
+        display: flex;
+    }
+    .rightlogo{
+        display: flex;
+    }
+  }

@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 .labout{
-    top: 150px;
-    position: relative;
-    width: 100%;
+    width: 90%;
     height: 100%;
+    background-color: white;
+    padding-bottom: 50px;
 }
 .latitle{
     margin-top: 20px;
@@ -12,6 +12,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    padding: 15px;
     width: 100%;
     height: 20%;
 
@@ -21,15 +22,20 @@
     height: 60px;
     border-radius: 50%;
 }
-.amv{
+.mvcontainer{
     display: flex;
-    justify-content: space-around;
     width: 100%;
-    height: 40%;
+    height: max-content;
+
+}
+.wrapper{
+    display: flex;
+    width: 100%;
+    height: max-content;
+    justify-content: space-around;
 }
 .amvp{
     font-family: 'Inter', sans-serif;
-    padding: 25px;
     width: 30%;
     height: 200px;
     display: flex;
@@ -41,19 +47,6 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin-bottom: 25px;
 }
-
-h1{
-    color: black;
-    font-weight: 1000;
-    font-size: 30px;
-
-}
-
-p{
-    font-size: 16px;
-
-}
-
 .aabstract{
     font-family: 'Inter', sans-serif;
     letter-spacing: 10px;
@@ -67,20 +60,22 @@ p{
     width: 100%;
     height: 40%;
 }
+.bmccofficials{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .abmccmem{
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  
+    width: 90%;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(200px, 1fr));
+    grid-gap: 10px;
+    height: 100%;
+    margin-bottom: 10px;
 }
 
-.abmccmem img{
-    display: flex;
-    border: none;
-    border-radius: 20px;
-    border: 5px solid;
-}
 /* styles.css */
 .grow-enter {
     transform: scale(0);
@@ -104,4 +99,74 @@ p{
     opacity: 0;
     transition: transform 1000ms, opacity 1000ms;
   }
-  
+  .cardprofile{
+    width: max-content;
+}
+
+.backgroundimg{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    height: 75px;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 25px;
+}
+.circular{
+    display: flex;
+    position: fixed;
+    top: 20px;
+
+    align-items: center;
+    justify-content: center;
+    width: 60%;
+    padding: 5px;
+}
+@media (max-width:728px) {
+    .labout{
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        padding-bottom: 50px;
+    }
+    .mvcontainer{
+        display: flex;
+        width: 100%;
+        padding: 15px;
+        height: max-content;
+    }
+    .wrapper{
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        height: max-content;
+        justify-content: space-around;
+        overflow: hidden;
+    }
+    .amvp{
+        font-family: 'Inter', sans-serif;
+        width: 100%;
+        height: max-content;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border-radius: 10px;
+        padding: 5px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        margin-bottom: 25px;
+    }
+    .abmccmem{
+        width: 90%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(max-content, 1fr));
+        grid-gap: 10px;
+        height: 100%;
+        margin-bottom: 10px;
+    }
+
+}

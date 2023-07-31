@@ -1,9 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 .lconthome{
-    width: 100%;
+    width: 90%;
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
 }
 
 .lapply{
@@ -18,7 +21,7 @@
     justify-content: space-between;
 
 }
-.lslogan{
+.lslogan{    
     display: flex;
     background-color: white;
     background-image: linear-gradient(rgb(225, 225, 218) 60%, transparent 100%);
@@ -42,7 +45,7 @@
     letter-spacing: 15px;
     font-style: oblique;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 35px;
 
 }
 .lslogan p{
@@ -56,13 +59,12 @@
 .lbtnapp{
     width: 100%;
     height: 20%;
+    display: flex;
     justify-content: center;
     align-items: center;
     
 }
-.llinkapp{
-    margin-left: 45%;
-}
+
 .llinkapp button{
     font-size: 20px;
     font-weight: 600;
@@ -82,20 +84,140 @@
     display: flex;
     padding: 10px;
     justify-content: center;
+    align-items: top;
+}
+.definescho{
+    width: 67%;
 }
 
 .carousel-image {
     margin: 15px;
-    height: 100%;
-    width:75%;
+    height: 300px;
+    width:300px;
     object-fit: cover;
   }
   .lfooter{
     bottom: 0;
     left: 0;
-    width: 100%;
+    width: 90%;
     height: 100px;
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
   }
+  @media (max-width:730px) {
+    .lconthome{
+        width: 100%;
+        height: max-content;
+        display: flex;
+        flex-direction: column;
+        object-fit: cover;
+        justify-content: center;
+        align-items: center;
+        margin: 0px;
+        margin-top: 30px;
+    }
+    .lslogan{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .lslogan h1{
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        color: black;
+        letter-spacing: 5px;
+        margin-left: 20px;
+        font-style: oblique;
+        font-weight: 700;
+        font-size: 30px;
+    }
+    .lslogan p{
+        margin: 0;
+        letter-spacing: 5px;
+        font-style: italic;
+        font-family: 'Inter', sans-serif;
+        font-size: 15px;
+        margin-left: 20px;
+        font-weight: 400;
+    }
+    .lcarou{
+        width: 95%;
+        height: 60%;
+        display: flex;
+        flex-direction: column-reverse;
+        padding: 10px;
+    }
+    .definescho{
+        width: 100%;
+    }
+    
+    .carousel-image {
+        margin: 15px;
+        height: 350px;
+        width: 300px;
+        object-fit: cover;
+      }
+  }
+  @media (min-width:740px) {
+    .lslogan{
+        width: 100%;
+    }
+    .lslogan h1{
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        color: black;
+        letter-spacing: 10px;
+        font-style: oblique;
+        font-weight: 700;
+        font-size: 20px;
+    
+    }
+    .lslogan p{
+        margin: 0;
+        letter-spacing: 5px;
+        font-style: italic;
+        font-family: 'Inter', sans-serif;
+        font-size: 15px;
+        font-weight: 400;
+    }
+    .lcarou{
+        width: 95%;
+        height: 60%;
+        display: flex;
+        padding: 10px;
+        justify-content: center;
+    }
+  }
+  @media (min-width:1000px) {
+    .lslogan h1{
+        margin: 0;
+        font-size: 35px;
+        font-family: 'Inter', sans-serif;
+        color: black;
+        letter-spacing: 15px;
+        font-style: oblique;
+        font-weight: 800;
+    }
+    .lslogan p{
+        margin: 0;
+        letter-spacing: 5px;
+        font-style: italic;
+        font-family: 'Inter', sans-serif;
+        font-size: 20px;
+        font-weight: 400;
+    }
+    .lcarou{
+        width: 95%;
+        height: 60%;
+        display: flex;
+        padding: 10px;
+        justify-content: center;
+        align-items: top;
+    }
+  }
+
 
 

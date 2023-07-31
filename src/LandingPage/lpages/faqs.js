@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import LHeader from '../components/header'
 import LNav from '../components/navbar'
 import '../css/faqs.css'
 import FAQSImg from '../../userhome/assets/faqs.png'
@@ -9,7 +8,6 @@ import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Announceimg from '../../userhome/assets/announce.png'
 import { motion } from "framer-motion";
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { FetchFaqs } from '../../Api/request'
@@ -75,8 +73,6 @@ const Faqs = () => {
 
   return (
     <>
-    <LHeader/>
-    <LNav/>
     <motion.div className="faqs-container"
            initial="hidden"
            animate="visible"
@@ -89,7 +85,6 @@ const Faqs = () => {
       <div className="faqs-accordion">
         <div>
           {faqs?.map((data,index) =>{
-              console.log(data,index)
             return(
               <>
               <div style={{margin:'5px'}} key={index}>

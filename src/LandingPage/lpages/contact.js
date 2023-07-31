@@ -1,7 +1,5 @@
 import React, { useState,useEffect } from 'react'
 import LHeader from '../components/navbar'
-import LNav from '../components/navbar'
-import { Colorlist,WebImg } from '../../Api/request'
 import '../css/lcontact.css'
 import { motion } from "framer-motion";
 import { Carousel } from 'react-responsive-carousel';
@@ -32,14 +30,13 @@ const imagelist = imgList?.map((image, index) => {
 
         return (
         <div key={index} className="carousel-slide">
-          <img style={{width: '100%'}} src={image.File} alt={`Carousel Image ${index}`} />
+          <img style={{width: '100%',height:'500px'}} src={image.File} alt={`Carousel Image ${index}`} />
         </div>
         )
     })
   return (
     <>
-    {!loading && <div>
-    <LHeader/>
+    {!loading && <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
     <div className="containcont">
     <div className='carocon'>
     <Carousel className='carousel'
@@ -55,12 +52,12 @@ const imagelist = imgList?.map((image, index) => {
       {imagelist}
     </Carousel>
     </div>
-    <div className="hrhead" style={{backgroundColor:colorlist[0].bgColor,color:colorlist[0].bgColor1}}>CONTACT US</div>
     <motion.div className='lcontact'
            initial="hidden"
            animate="visible"
            variants={textVariants}
            transition={{ duration: 1 }}>
+        <div className='contactdetails'>
         <div className="lcntctcon">
           <div className="cntctde">
             <Box display="flex" justifyContent="center">
@@ -72,16 +69,6 @@ const imagelist = imgList?.map((image, index) => {
             </Box>
           </div>
         </div>
-          <motion.div className='maploc'>
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3857.9130242154506!2d120.95668217497754!3d14.773928885733268!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b273fea7697b%3A0x602bd049e77e7c8a!2sMunicipality%20Of%20Marilao%20Bulacan!5e0!3m2!1sen!2sph!4v1687064264766!5m2!1sen!2sph" 
-          width="600" 
-          height="450" 
-          style={{ border: '0'}} 
-          allowfullscreen="" 
-          loading="lazy" 
-          referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
-          </motion.div>
         <div className="logcontac">
           <h1>Connect with Us</h1>
           <p>For inquiries regarding the Scholarhip Program,please send us a message to any of the following platforms</p>
@@ -92,6 +79,19 @@ const imagelist = imgList?.map((image, index) => {
             <EmailSharpIcon sx={{ color: 'white' }}/>
           </GreenButton>
         </div>
+        </div>
+
+          <motion.div className='maploc'>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3857.9130242154506!2d120.95668217497754!3d14.773928885733268!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b273fea7697b%3A0x602bd049e77e7c8a!2sMunicipality%20Of%20Marilao%20Bulacan!5e0!3m2!1sen!2sph!4v1687064264766!5m2!1sen!2sph" 
+          width="600" 
+          height="450" 
+          style={{ border: '0'}} 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+          </motion.div>
+
     </motion.div>
     </div>
     </div>}{loading && <>

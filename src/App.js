@@ -1,8 +1,5 @@
-import LandingPage from '.././src/LandingPage/lpages/lhomepage'
-import LAbout from '.././src/LandingPage/lpages/about'
-import LContact from '.././src/LandingPage/lpages/contact'
-import LScholarship from '.././src/LandingPage/lpages/scholarship'
-import LFAQs from '.././src/LandingPage/lpages/faqs'
+
+import Bmccsite from './LandingPage/lpages/Bmccsite'
 import StepContext from './LandingPage/ApplicationgFrm/StepContext';
 import SchoCategory from './LandingPage/lpages/schoCategory';
 import Lnewexspage from './LandingPage/lpages/new-exspage'
@@ -20,7 +17,6 @@ import Register from './userhome/pages/register'
 import FlippableCard from './Experiment/card/flippable-card'
 import { Route, Routes} from 'react-router-dom';
 import RequireAuth from './features/authenticate/RequireAuth';
-import { io } from "socket.io-client";
 import { Colorlist,WebImg,Logos } from './Api/request'
 import { useEffect } from 'react'
 import { createContext } from 'react';
@@ -76,11 +72,7 @@ function App() {
 
       {/* <Route path='/' element={<Layout/>}/>
        <Route index element={<Login/>}/> */}
-         <Route exact path='/' element={<LandingPage/>}/>
-         <Route path='/About' element={<LAbout/>}/>
-         <Route path='/Contact' element={<LContact/>}/>
-         <Route path='/Scholarship' element={<LScholarship/>}/>
-         <Route path='/FAQs' element={<LFAQs/>}/>
+         <Route exact path='/' element={<Bmccsite/>}/>
          <Route path='/ScholarshipProgram' element={<SchoCategory/>}/>
          <Route path='/Scho1' element={<Lnewexspage/>}/>
          <Route path='/login' element={<Login/>}/>

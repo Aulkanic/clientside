@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 
 .faqs-container{
-    top: 200px;
-    position: relative;
+    margin-top: 20px;
     width: 100%;
     height: 100%;
     display: flex;
