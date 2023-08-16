@@ -70,11 +70,10 @@ function Educational() {
 
   const HighhandleSwitchChange = () => {
     setSwitchState(!switchState);
-    console.log(switchState)
+
   };
   const CollhandleSwitchChange = () => {
     setSwitchState1(!switchState1);
-    console.log(switchState)
   };
 
   useEffect(() => {

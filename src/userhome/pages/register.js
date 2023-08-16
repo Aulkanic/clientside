@@ -26,6 +26,8 @@ import MuiAlert from '@mui/material/Alert';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import { useContext } from "react";
 import { color } from "../../App";
+import { useDispatch } from 'react-redux';
+import { setName } from '../../Redux/userSlice';
 
 const CssTextField = styled(TextField)({
   backgroundColor: 'white',
@@ -53,6 +55,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const Register = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const { colorlist,imgList } = useContext(color);
     const [fname, setfname] = useState('');
@@ -229,11 +232,13 @@ const Register = () => {
     .then(res => {
       console.log(res)
       if(res.data.message === 'Created'){
+
         setResstat('200')
         setSnackbarMessage('Account Created');
         setSnackbarOpen(true); 
         navigate('/ApplicationForm');
-        localStorage.setItem('ApplicationNumber', res.data.data.applicantNum)
+        const user = res.data.data;
+        dispatch(setName({fname,lname,mname,user}))
         setLoading(false)
       
       }else{

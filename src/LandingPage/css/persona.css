@@ -1,4 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+p{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 .Persona{
     margin-left: 10%;
     width: 80%;
@@ -16,69 +26,36 @@
     background-color: blue;
     color: white;
 }
-.ribbon-header {
-  background-color: blue;
-  border: none;
-  position: relative;
-  margin: 0px 0px 20px 0px;
-}
-
-.ribbon-header::before,
-.ribbon-header::after {
-  content: '';
-  position: absolute;
-  bottom: -15.5px;
-  width: 0;
-  height: 0;
-  border: 21px solid transparent;
-}
-
-.ribbon-header::before {
-  height: 70px;
-  left: -41px;
-  border-right-color: blue;
-
-}
-
-.ribbon-header::after {
-  height: 70px;
-  right: -41px;
-  border-left-color: blue;
-
-}
-.ribbon-header-text {
-  position: relative;
-  border: none;
+.form{
+  background-color: white;
+  height: max-content;
+  padding-bottom: 20px;
 }
 .personad{
     width: 100%;
     height: 100%;
     border: none;
 }
-.selectgend{
-  margin-top: 15px;
+.parentcontainer{
+  width: 100%;
+  height: max-content;
+  display: flex;
+  justify-content: space-between;
+  line-height: 35px;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+  padding: 10px;
 }
-.personad form{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding-bottom: 20px;
-    background:white;
-    color: black;
-    border: none;
+.parentcontainer h3{
+  font-size: 23px;
+  font-weight: 700;
+  white-space: nowrap;
+  margin-bottom: 15px;
+  color: #337ab7;
 }
-.personfrmcon{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-}
-.frmpcard{
-    display: flex;
-    flex-direction: column;
-    width: 25%;
-    height: 60%;
-  
+.parentcontainer .parenteach{
+  width: 30%;
+  height: 100%;
+  padding: 5px;
 }
 .btnfrmn{
     display: flex;
@@ -88,30 +65,12 @@
     align-items: center;
     justify-content: space-around;
 }
-[type="date"] {
-  width: 100%;  
-  background: #fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png) 97% 50% no-repeat;
-  }
-  
-  [type="date"]::-webkit-inner-spin-button {
-    display: none;
-  }
-  
-  [type="date"]::-webkit-calendar-picker-indicator {
-    opacity: 0;
-  }
-  .datein {
-    border: 1px solid #c4c4c4;
-    border-radius: 5px;
-    background-color: #fff;
-    width: 315px;
-    height: 30px;
-    font-size: 16px;
-  }
-  .frmpcard .birthpick{
-    width: 100%;
+.siblinginf{
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 15px;
+  background-color: #337ab7;
+}
 
-  }
-  .birthlabel{
-    font-family: 'Inter', sans-serif;
-  }

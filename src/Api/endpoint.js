@@ -41,6 +41,7 @@ const Endpoints = {
     CANGO:'Appointment/Cango',
     FETCH_FAQS:'Faqs/Fetch',
     FETCH_RULE:'Dynamic/Rulelist',
+    APPLICATION_FORM:'ApplicationForm/Form',
 }
 
 export default Endpoints

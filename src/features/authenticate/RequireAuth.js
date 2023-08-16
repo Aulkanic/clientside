@@ -1,19 +1,16 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import { useSelector  } from "react-redux";
-import { selectCurrentToken } from "./authSlice";
 import swal from 'sweetalert';
-
+import { useSelector } from 'react-redux'
 import React from 'react'
 
 const RequireAuth = () => {
-    const token = useSelector(selectCurrentToken)
     const location = useLocation();
-    const isloggin = localStorage.getItem('LoggedIn');
-    console.log(isloggin)
+    const { LoggedIn } = useSelector((state) => state.login);
+    const isloggin = LoggedIn;
   return (
-    isloggin === 'true'
+    isloggin === true
     ? <Outlet/>
-    :        swal('Please Login to your Account to continue..') && <Navigate to='/login' state={{ from: location}} replace />
+    : swal('Please Login to your Account to continue..') && <Navigate to='/login' state={{ from: location}} replace />
   )
 }
 

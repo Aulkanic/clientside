@@ -18,7 +18,8 @@ import MuiAlert from '@mui/material/Alert';
 import ErrorIcon from '@mui/icons-material/Error';
 import { useContext } from "react";
 import { color } from "../../App";
-import { Card } from '@mui/material'
+import { useDispatch } from 'react-redux';
+import { setLoggedIn,setUserDetails } from '../../Redux/loginSlice';
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -51,6 +52,7 @@ const CssTextField = styled(TextField)({
 });
 
 const Login = () => {
+    const dispatch = useDispatch();
     const { colorlist,imgList,logolist } = useContext(color);
     const [email, setEmail] = useState('');
     const [fpemail, setFPEmail] = useState('');
@@ -110,14 +112,14 @@ const Login = () => {
             setSnackbarMessage(res.data.message);
             setSnackbarOpen(true); 
             const user = res.data.result[0]
-            localStorage.setItem('LoggedIn',true);
-            localStorage.setItem('User', JSON.stringify(user));
             setErrors('')  
+            dispatch(setLoggedIn(true));
+            dispatch(setUserDetails(user))
             setTimeout(() => {
               navigate('/home');
             }, 2500);
           }else{
-            localStorage.setItem('LoggedIn',false);
+            dispatch(setLoggedIn(false));
             setResstat('500')
             setSnackbarMessage(res.data.message);
             setSnackbarOpen(true); 

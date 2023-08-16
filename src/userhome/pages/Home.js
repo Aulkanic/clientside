@@ -1,9 +1,6 @@
 
 import './Home.css'
 import Homepage from '../components/Homepage'
-import { useSelector } from 'react-redux'
-import { selectCurrentUser, selectCurrentToken } from '../../features/authenticate/authSlice'
-import { Link } from 'react-router-dom'
 import { useContext } from "react";
 import { color } from "../../App";
 import LoopingRhombusesSpinner from '../loadingDesign/loading'

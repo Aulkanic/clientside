@@ -1,183 +1,238 @@
-import React, { useState } from 'react'
-import TextField from '@mui/material/TextField';
+import React, { useEffect, useMemo, useState } from 'react'
 import { useContext } from 'react';
 import { multiStepContext } from './StepContext';
 import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import { FormHelperText } from '@mui/material';
+import FormLabel from '@mui/material/FormLabel';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import { ApplicationForm,ScholarCategory,ApplyForm } from '../../Api/request';
+import LoadingButton from '@mui/lab/LoadingButton';
+import swal from 'sweetalert';
 import '../css/economic.css'
 import '../css/buttonStyle.css'
+import { useNavigate } from 'react-router-dom';
 
 
 function Economic() {
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
+    const navigate = useNavigate();
+    const [loading,setLoading] = useState(false)
+    const [scholarprog, setScholarProg] = useState([]);
+    const [formq,setFormq] = useState([]);
+    const [formc,setFormc] = useState([]);
+    const [selectedValues, setSelectedValues] = useState([]);
 
+    // Handler to update selected value for a specific question
+    const handleRadioChange = (questionIndex,qscore,questions,value,cscore) => {
+      setSelectedValues((prevValues) => {
+        const updatedValues = [...prevValues];
+        updatedValues[questionIndex] = {  question: qscore,questions, value,cscore };
+        return updatedValues;
+      });
+    };
+  
+
+
+    useEffect(() => {
+      async function fetchData() {
+        const scholist = await ScholarCategory.ScholarshipProgram();
+        const schodata = scholist.data.SchoCat;
+        setScholarProg(schodata);
+  
+        const frm = await ApplicationForm.FETCH_FORM();
+        setFormq(frm.data.Questions);
+        setFormc(frm.data.Answers);
+      }
+  
+      fetchData();
+    }, []);
+
+    useEffect(() => {
+      setSelectedValues([]);
+    }, [userData.schoID]);
+
+    
     function Check(){
-      console.log(userData);
       const errors = {};
-      if (userData.wereLive === '') {
-        errors.wereLive = "This Field is required";
-      } 
-      if (userData.howLong === '') {
-        errors.howLong = "This Field is required";
+      if(userData.schoID === ''){
+        errors.scho = 'Please select Scholarship Program'
       }
-      if (userData.ownerShip === '') {
-        errors.ownerShip = "This Field is required";
+      setErrors('')
+      const isComplete = selectedValues.some((item) => typeof item === 'undefined')
+      const isLength = selectedValues.length !== Questionlist.length
+      if(isComplete || isLength){
+        errors.frm = 'Incomplete'
       }
-      if (userData.monthIncome === '') {
-        errors.monthIncome = "This Field is required";
-      }
-      if (userData.baranggay === '') {
-        errors.baranggay = "This Field is required";
-      }
-      console.log(Object.keys(errors).length)
       if (Object.keys(errors).length > 0) {
         setErrors(errors);
         console.log(errors)
         return;
       }
       setErrors('')
-      setStep(4)
+      let formattedDate = '';
+      let formattedBirthday = '';
+      if (userData.birthday) {
+        formattedDate = userData.birthday.toISOString();
+        formattedBirthday = new Date(formattedDate).toLocaleString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        });
+      }       
+      const fullName = `${userData.firstName} ${userData.middleName} ${userData.lastName}`
+      let birthdayValue = formattedBirthday;
+      const formData = new FormData();
+      formData.append('applicantNum', userData.applicantNum);
+      formData.append('address', userData.address);
+      formData.append('age', userData.age);
+      formData.append('baranggay', userData.baranggay);
+      formData.append('birthday', birthdayValue);
+      formData.append('birthPlace', userData.birthPlace);
+      formData.append('SchoolAddress', userData.SchoolAddress);
+      formData.append('citizenship', userData.citizenship);
+      formData.append('contactNum', userData.contactNum);
+      formData.append('course', userData.course);
+      formData.append('School', userData.School);
+      formData.append('yearLevel', userData.yearLevel);
+      formData.append('email', userData.email);
+      formData.append('fatherEduc', userData.fatherEduc);
+      formData.append('fatherName', userData.fatherName);
+      formData.append('fatherlName', userData.fatherlName);
+      formData.append('fathermName', userData.fathermName);
+      formData.append('fatherOccu', userData.fatherOccu);
+      formData.append('fullName', fullName);
+      formData.append('gender', userData.gender);
+      formData.append('guardianContact', userData.guardianContact);
+      formData.append('guardianAddress', userData.guardianAddress);
+      formData.append('guardianName', userData.guardianName);
+      formData.append('guardianlName', userData.guardianlName);
+      formData.append('guardianmName', userData.guardianmName);
+      formData.append('motherEduc', userData.motherEduc);
+      formData.append('motherName', userData.motherName);
+      formData.append('motherlName', userData.motherlName);
+      formData.append('mothermName', userData.mothermName);
+      formData.append('motherOccu', userData.motherOccu);
+      formData.append('relationship', userData.relationship);
+      formData.append('scholarID', userData.schoID);
+      formData.append('userfrm', selectedValues);
+      setLoading(true)
+      ApplyForm.CREATE_APPINFO(formData)
+      .then(res => {
+          console.log(res.data)
+          if(res.data.success === 1){
+           
+            setUserData('');
+            navigate('/Scho1');
+            swal({
+              title: "Success",
+              text: "Successfully Submitted!",
+              icon: "success",
+              button: "OK",
+            });
+            setLoading(false)
+          }
+          else{
+            swal({
+              title: "Success",
+              text: "Something Went Wrong!",
+              icon: "success",
+              button: "OK",
+            });
+        setLoading(false)
+        navigate('/ApplicationForm');
+      }}
+      )
+     .catch(err => console.log(err));
+     setLoading(false)
+
   };
+    const schoav = scholarprog.filter(data => data.status === 'Open');
+    const Questionlist = formq?.filter(data => data.scholarshipProg === userData.schoID)
+
+
+    const FormTemplate = Questionlist?.map((data,index) =>{
+      const choices = formc?.filter(question => question.questionsid === data.id)
+
+        return(
+          <div key={index} style={{padding:'10px'}}>
+            <FormControl>
+              <FormLabel sx={{fontWeight:'700',color:'black'}} id="demo-row-radio-buttons-group-label">
+                {index + 1}.{data.questions}
+                </FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="row-radio-buttons-group"
+                value={(selectedValues[index] && selectedValues[index].value) || ''} // Set the selected value for this question
+                onChange={(event) => handleRadioChange(index,data.scorecard,data.questions, event.target.value, parseInt(event.target.id))}
+              >
+                {choices?.map((choice,index) =>{
+                  return(
+                    <FormControlLabel key={index} value={choice.value} control={<Radio  id={choice.scorecard} />} label={choice.value} />
+                  )
+                })}
+                
+              </RadioGroup>
+            </FormControl>
+          </div>
+        )
+       })
+      console.log(selectedValues)
     return (
     <div className='Econ'>
         <div className="Econd">
             <div className="form">
-            <div className="ribbon-header">
-              <div className="ribbon-header-text"><h2>Economic Information</h2></div>
-            </div>
-            <div className='econcon'>
-            <div className="frmeconcard">
-              <div>
-            <FormControl sx={{ minWidth: 150 }} size="small">
-            <InputLabel id="demo-simple-select-required-label">Where Do you Live</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={userData['wereLive']}
-                label="Where Do you Live"
-                error={!!errors.wereLive}
-                helperText={errors.wereLive}
-                onChange={(e) =>setUserData({...userData,"wereLive" : e.target.value})}
-              >
-                <MenuItem value={'Subdivision'}>Subdivision</MenuItem>
-                <MenuItem value={'Sitio/Purok'}>Sitio/Purok</MenuItem>
-                <MenuItem value={'Depressed Area'}>Depressed Area</MenuItem>
-              </Select>
-              {errors && <FormHelperText sx={{color: 'red',m:2}}>{errors.wereLive}</FormHelperText>}
-            </FormControl>
-            </div>
-            <FormControl sx={{ minWidth: 150 }} size="small">
-            <InputLabel id="demo-simple-select-required-label">Living in Marilao</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-large"
-                value={userData['howLong']}
-                label="Living in Marilao"
-                error={!!errors.howLong}
-                helperText={errors.howLong}
-                onChange={(e) =>setUserData({...userData,"howLong" : e.target.value})}
-              >
-                <MenuItem value={'6 months'}>6 months</MenuItem>
-                <MenuItem value={'1-2 years'}>1-2 years</MenuItem>
-                <MenuItem value={'3-4 years'}>3-4 years</MenuItem>
-                <MenuItem value={'More than 5 years'}>More than 5 years</MenuItem>
-              </Select>
-              {errors && <FormHelperText sx={{color: 'red',m:2}}>{errors.howLong}</FormHelperText>}
-            </FormControl>
-    
-            <FormControl sx={{ minWidth: 150 }} size="small">
-            <InputLabel id="demo-simple-select-required-label">House Ownership</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-large"
-                value={userData['ownerShip']}
-                label="House Ownership"
-                error={!!errors.ownerShip}
-                helperText={errors.ownerShip}
-                onChange={(e) =>setUserData({...userData,"ownerShip" : e.target.value})}
-              >
-                <MenuItem value={'Staying as a guest/Boarding'}>Staying as a guest/Boarding</MenuItem>
-                <MenuItem value={'Renting a House'}>Renting a House</MenuItem>
-                <MenuItem value={'Owned'}>Owned</MenuItem>
-                <MenuItem value={'Others'}>Others</MenuItem>
-              </Select>
-              {errors && <FormHelperText sx={{color: 'red',m:2}}>{errors.ownerShip}</FormHelperText>}
-            </FormControl>
-            <FormControl sx={{ minWidth: 150 }} size="small">
-            <InputLabel id="demo-simple-select-required-label">Parent(s)/Guardian Annual Gross Income</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-large"
-                value={userData['monthIncome']}
-                label="Parent(s)/Guardian Annual Gross Income"
-                error={!!errors.monthIncome}
-                helperText={errors.monthIncome}
-                onChange={(e) =>setUserData({...userData,"monthIncome" : e.target.value})}
-              >
-                <MenuItem value={'₱1,000 - 4,000'}>₱1,000 - 4,000</MenuItem>
-                <MenuItem value={'₱5,000 - 8,000'}>₱5,000 - 8,000</MenuItem>
-                <MenuItem value={'₱9,000 - 12,000'}>₱9,000 - 12,000</MenuItem>
-                <MenuItem value={'₱13,000 - 18,000'}>₱13,000 - 18,000</MenuItem>
-                <MenuItem value={'₱19,000 above'}>₱19,000 above</MenuItem>
-              </Select>
-              {errors && <FormHelperText sx={{color: 'red',m:2}}>{errors.monthIncome}</FormHelperText>}
-            </FormControl>
-            <FormControl sx={{ minWidth: 150 }} size="small">
-            <InputLabel id="demo-simple-select-required-label">Baranggay</InputLabel>
-              <Select
-                 MenuProps={{
-                   getContentAnchorEl: null,
-                   anchorOrigin: {
-                     vertical: 'bottom',
-                     horizontal: 'left',
-                   },
-                   transformOrigin: {
-                     vertical: 'top',
-                     horizontal: 'left',
-                   },
-                   PaperProps: {
-                     style: {
-                       maxHeight: 250, // Adjust the maximum height of the menu
-                     },
-                   },
-                 }}
-                labelId="demo-select-small-label"
-                id="demo-select-large"
-                value={userData['baranggay']}
-                label="Baranggay"
-                error={!!errors.baranggay}
-                helperText={errors.baranggay}
-                onChange={(e) =>setUserData({...userData,"baranggay" : e.target.value})}
-              >
-                <MenuItem value={'Abangan Norte'}>Abangan Norte</MenuItem>
-                <MenuItem value={'Abangan Sur'}>Abangan Sur</MenuItem>
-                <MenuItem value={'Ibayo'}>Ibayo</MenuItem>
-                <MenuItem value={'Lambakin'}>Lambakin</MenuItem>
-                <MenuItem value={'Lias'}>Lias</MenuItem>
-                <MenuItem value={'Loma de Gato'}>Loma de Gato</MenuItem>
-                <MenuItem value={'Nagbalon'}>Nagbalon</MenuItem>
-                <MenuItem value={'Patubig'}>Patubig</MenuItem>
-                <MenuItem value={'Poblacion I'}>Poblacion I</MenuItem>
-                <MenuItem value={'Poblacion II'}>Poblacion II</MenuItem>
-                <MenuItem value={'Prenza I'}>Prenza I</MenuItem>
-                <MenuItem value={'Prenza II'}>Prenza II</MenuItem>
-                <MenuItem value={'Saog'}>Saog</MenuItem>
-                <MenuItem value={'Sta. Rosa I'}>Sta. Rosa I</MenuItem>
-                <MenuItem value={'Sta. Rosa II'}>Sta. Rosa II</MenuItem>
-                <MenuItem value={'Tabing-Ilog'}>Tabing-Ilog</MenuItem>
-              </Select>
-              {errors && <FormHelperText sx={{color: 'red',m:2}}>{errors.baranggay}</FormHelperText>}
-            </FormControl>
-            </div>
-            </div>
+              <div className='infocontainer'>
+                {errors.frm && (
+              <Alert severity="error">
+                <AlertTitle sx={{fontWeight:700}}>Incomplete</AlertTitle>
+                Please provide answer for all the questions below
+              </Alert>
+                )}
+                {errors.scho && (
+              <Alert severity="error">
+                <AlertTitle sx={{fontWeight:700}}>Error</AlertTitle>
+                {errors.scho}
+              </Alert>
+                )}
+
+              <Row className="mb-3">
+          <Form.Group as={Col}>
+            <Form.Label className='frmlabel'>Scholarship Program</Form.Label>
+            <Form.Select aria-label="Default select example"
+              value={userData['schoID']} 
+              onChange={(e) =>setUserData({...userData,"schoID" : e.target.value})}
+            >
+              {schoav?.map((data,index) =>{
+
+                  return(
+                    index === 0 ? (<option key={index} value=''></option>) : (<option key={index} value={data.name}>{data.name}</option>)
+                  )
+                })}
+            </Form.Select>
+            </Form.Group>
+          </Row>
+                {FormTemplate}
+              </div>
             <div className='frmbtnec'>
             <Button className='myButton' variant="contained" onClick={() => setStep(2)}>Previous</Button>
-            <Button className='myButton1' variant="contained" onClick={Check}>Next</Button>
+            <LoadingButton
+                loading={loading}
+                sx={{color:'white'}}
+                loadingPosition="start"
+                className='myButton1'
+                onClick={Check}
+              >
+                Submit
+              </LoadingButton>
             </div>
             </div>
            

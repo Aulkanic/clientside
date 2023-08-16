@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import Applicationfrm from './Applicationfrm';
-import swal from 'sweetalert';
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading';
-import { useNavigate } from 'react-router-dom';
-import { Axios } from 'axios';
+import { useSelector } from 'react-redux';
 
 export const multiStepContext = React.createContext();
 function StepContext() {
-  const navigate = useNavigate();
+    const user = useSelector((state) => state.user);
     const [currentStep, setStep] = useState(1);
     const [userData, setUserData] = useState({
       applicantNum:'',
@@ -16,60 +14,34 @@ function StepContext() {
       baranggay:'',
       birthday:'',
       birthPlace:'',
-      caddress:'',
       citizenship:'',
-      checkemail:'',
-      collegeAddress:'',
-      collegeAward:'',
-      collegeSchool:'',
-      collegeYear:'',
       contactNum:'',
       course:'',
-      currentSchool:'',
-      currentYear:'',
-      elemAddress:'',
-      elemAward:'',
-      elemSchool:'',
-      elemYear:'',
+      School:'',
+      yearLevel:'',
+      SchoolAddress:'',
       email:'',
       fatherEduc:'',
       fatherName:'',
       fatherlName:'',
       fathermName:'',
       fatherOccu:'',
-      financialSupport:'',
-      firstName:'',
+      firstName:user.fname,
       gender:'',
       guardianContact:'',
       guardianName:'',
-      gwa:'',
-      highAddress:'',
-      highAward:'',
-      highSchool:'',
-      highYear:'',
-      howLong:'',
-      lastName:'',
-      middleName:'',
-      monthIncome:'',
+      guardianlName:'',
+      guardianmName:'',
+      guardianAddress:'',
+      lastName:user.lname,
+      middleName:user.mname,
       motherEduc:'',
       motherName:'',
       motherlName:'',
       mothermName:'',
       motherOccu:'',
-      famNum:'',
-      ownerShip:'',
-      paddress:'',
       relationship:'',
-      scholarID:'',
-      typeSchool:'',
-      wereLive:'',
-      Asinfo:[],
-      Esinfo:[],
-      Es1info:[],
-      AAsinfo:[],
-      YLsinfo:[],
-      Fdeceased: false,
-      Mdeceased: false,
+      schoID:'',
     });
     const [finalData, setFinalData] = useState([]);
     const [loading, setLoading] = useState(false);

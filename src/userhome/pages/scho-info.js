@@ -13,15 +13,15 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import { useSelector } from 'react-redux'
 import swal from 'sweetalert'
 import '../Button/buttonstyle.css'
 
 
 const Schoinfo = () => {
-  const detail = JSON.parse(localStorage.getItem('User'));
+      const { userdetails } = useSelector((state) => state.login);
       const [PA, setPA] = useState([]);
-      var applicantNum = detail.applicantNum;
+      const applicantNum = userdetails.applicantNum;
       const currentDate = new Date();
       const [open, setOpen] = React.useState(false);
       const [appointuser,setAppointment] = useState([]);
@@ -77,7 +77,6 @@ const Schoinfo = () => {
     }
 
     const applicantdetails = appointuser?.map((data) =>{
-      console.log(data)
       const formatDate = () => {
         const specificDate = new Date(data.schedDate);
         return specificDate.toLocaleDateString('en-US', {
@@ -162,7 +161,7 @@ const Schoinfo = () => {
                 </div>
               </div>
           )}
-          </div>
+        </div>
     </>
   )
 }

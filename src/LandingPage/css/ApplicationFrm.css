@@ -1,35 +1,35 @@
 .stepdiv{
-    top: 10%;
-    position: absolute;
+    background-color: white;
+    width: 100%;
+    height: max-content;
+    min-height: 100vh;
+    border: none;
     background-image: url('../../userhome/assets/municipal.jpg');
     background-repeat: no-repeat;
     background-position: 50%;
     background-attachment: scroll;
     background-size: cover;
-    width: 100%;
-    height: max-content;
-    border: none;
+    padding-bottom: 30px;
 }
 .stepdiv h1{
     margin: 0;
     font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
     padding-top: 20px;
+    font-weight: 700;
     text-align: center;
-    color: white;
+    color: green;
 }
-.backgroundstep{
-    height: max-content;
-    background: rgba(58, 59, 59, 0.73);
-}
+
 .stepper{
     margin-top: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background:rgb(2, 218, 2);
     width: 80%;
     margin-left: 10%;
-    height: 100px;
+    height: max-content;
+    padding: 40px 0px 20px 0px;
+    background-color: rgb(50, 161, 161);
     border-top-right-radius: 25px;
     border-top-left-radius: 25px;
 }

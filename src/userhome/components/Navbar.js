@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import './../css/mainpage.css'
 import './../css/Navbar.css'
-import Logo from './../assets/scholar.png'
 import {Link} from 'react-router-dom'
 import { FetchingProfileUser, Logoutuser,Colorlist } from '../../Api/request'
-import LoopingRhombusesSpinner from '../loadingDesign/loading'
 import Avatar from '@mui/material/Avatar';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useContext } from "react";
 import { color } from "../../App";
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux';
+import { setLoggedIn,setUserDetails } from '../../Redux/loginSlice';
 
 const Navbar = () => {
-    const { colorlist,imgList,logolist } = useContext(color);
-    const detail = JSON.parse(localStorage.getItem('User'));
-    const data = detail.applicantNum;
+    const dispatch = useDispatch();
+    const { userdetails,LoggedIn } = useSelector((state) => state.login);
+    const { colorlist} = useContext(color);
+    const data = userdetails.applicantNum;
     const [picture, setProfile] = React.useState([]);
     const [loading,Setloading] = useState(false);
     useEffect(() => {
       Setloading(true)
       FetchingProfileUser.FETCH_PROFILEUSER(data).then((response) => {
-        console.log(response)
         setProfile(response.data.Profile);
         Setloading(false)       
       });
@@ -50,10 +50,9 @@ const Navbar = () => {
     const applicantNum = data;
     const formData = new FormData();
     formData.append('applicantNum',applicantNum)
-     const response = await Logoutuser.USER_LOGOUT(formData)
-     console.log(response)
-      localStorage.setItem('ApplicantNum', '');
-      localStorage.setItem('LoggedIn', 'false');
+      await Logoutuser.USER_LOGOUT(formData)
+      dispatch(setLoggedIn(false));
+      dispatch(setUserDetails([]))
   }
   return (
     <React.Fragment>

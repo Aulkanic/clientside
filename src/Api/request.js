@@ -125,3 +125,6 @@ export const Rulelist = {
 export const UserProflist = {
     FETCH_USER: () => axiosInstance.get(Endpoints.FETCH_ACCOUNTS)
 }
+export const ApplicationForm = {
+    FETCH_FORM: () => axiosInstance.get(Endpoints.APPLICATION_FORM)
+}

@@ -23,6 +23,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import '../Button/buttonstyle.css'
 import { styled } from '@mui/material/styles';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { useSelector } from 'react-redux'
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   fontWeight: 'bold',
@@ -38,32 +39,24 @@ const StyledTabList = styled(TabList)(({ theme }) => ({
 }));
 
 const Scholar = () => {
-
-const navigate = useNavigate();
+const { userdetails } = useSelector((state) => state.login);
 const [docs, setDocs] = useState([]);
 const [submitted, setSubmittedDocs] = useState([]);
 const [submitted1, setSubmittedDocs1] = useState([]);
 const [fileValues, setFileValues] = useState([]);
-const [fileValues1, setFileValues1] = useState([]);
 const [fileNames, setFileNames] = useState([]);
 const [loading, setLoading] = useState(false);
-const [loading1, setLoading1] = useState(false);
-const [loadingPage, setLoadingPage] = useState(false);
 const [images, setImages] = useState([]);
-const [images1, setImages1] = useState([]);
 const [disabledInputs, setDisabledInputs] = useState([]);
 const [userFiles, setUserFiles] = useState([]);
-const detail = JSON.parse(localStorage.getItem('User'))
-const applicantNum = detail.applicantNum;
+const applicantNum = userdetails.applicantNum;
 const [userInfo,setUserInfo] = useState([]);
 const [errors,setErrors] = useState([]);
 const [value, setValue] = React.useState('1');
 
-const handleChange = (event, newValue) => {
+const handleChange = (event,newValue) => {
   setValue(newValue);
 };
-
-
 const handleFileChange = (index, event) => {
   const files = [...fileValues];
   files[index] = event.target.files[0];
@@ -74,21 +67,6 @@ const handleFileChange = (index, event) => {
   const updatedFileNames = [...fileValues];
   if (files[index]) {
     updatedFileNames[index] = files[index].name;
-  } else {
-    updatedFileNames[index] = 'none';
-  }
-  setFileNames(updatedFileNames);
-};
-const handleFileChange1 = (index, event) => {
-  const files1 = [...fileValues1];
-  files1[index] = event.target.files[0];
-  setFileValues1(files1);
-  const previmg1 = files1.map((img) =>
-  img instanceof File ? URL.createObjectURL(img) : img)
-  setImages1(previmg1);
-  const updatedFileNames = [...fileValues1];
-  if (files1[index]) {
-    updatedFileNames[index] = files1[index].name;
   } else {
     updatedFileNames[index] = 'none';
   }
@@ -132,8 +110,7 @@ const handleSubmit = async (event) => {
         continue;
       }
       
-      const detail = JSON.parse(localStorage.getItem('User'));
-      const applicantNum = detail.applicantNum;
+      const applicantNum = userdetails.applicantNum;
       const formData = new FormData();
       formData.append('file', file);
       formData.append('Reqname', docu.requirementName);
@@ -162,17 +139,15 @@ const handleSubmit = async (event) => {
 
 };
 const DeleteReq = async (reqName,event) =>{
-  const detail = JSON.parse(localStorage.getItem('User'));
-  const id = detail.applicantNum;
+  const id = userdetails.applicantNum;
   const requirement_Name = reqName;
   const formData = new FormData();
   formData.append('id', id);
   formData.append('requirement_Name', requirement_Name);
-  setLoading1(true)
+  setLoading(true)
   DeleteSub.DELETE_SUB(formData)
   .then(res => {
-    console.log(res)
-    setLoading1(false)
+    setLoading(false)
     setSubmittedDocs1(res.data.result);
     const schoCat = userInfo.SchoIarshipApplied
     const Batch = userInfo.Batch
@@ -189,20 +164,21 @@ const EditReq = async (data,index) =>{
     formData.append(`file`, userFiles[index] || data.File);
     formData.append(`Reqname`, requirement_Name);
     formData.append(`applicantNum`, applicantNum);
-  setLoading1(true)
-  EditSub.EDIT_SUB(formData)
-  .then(res => {
-    setSubmittedDocs1(res.data.result);
-    setUserFiles([]); 
-    setLoading1(false)
+    setLoading(true)
+    EditSub.EDIT_SUB(formData)
+    .then(res => {
+      setSubmittedDocs1(res.data.result);
+      setUserFiles([]); 
+      setLoading(false)
+    }
+    )
+    .catch(err => console.log(err));
   }
-   )
-  .catch(err => console.log(err));
-}
 useEffect(() => {
   const fetchData = async () => {
     try {
-      setLoadingPage(true)
+      setLoading(true)
+      console.log(userdetails)
       const response = await Promise.all([
         ListofReq.FETCH_REQUIREMENTS(),
         ListofSub.FETCH_SUB(applicantNum),
@@ -214,7 +190,7 @@ useEffect(() => {
       setDocs(RequireDocs);
       setUserInfo(response[2].data.results[0])
       setSubmittedDocs1(response[1].data.Document);
-      setLoadingPage(false)
+      setLoading(false)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -222,51 +198,7 @@ useEffect(() => {
 
   fetchData();
 }, []);
- function ViewsubDocs(){
-      if(submitted.length > submitted.length){
-       
-        const documentsubmitted = submitted?.map((req, index) => {
-
-          return (
-            <>
-            {req.File !== 'None' && <div key={index}>
-              <div className="grid_container">
-
-            <div className="docusibmitted">
-              <div className="docusubprev">   
-              {req.File ? (<img src={req.File} alt="" />) : (<img src={Noimageprev} alt="" />)}
-              </div>
-              <div className='userdocsubstat'>
-            <p>{req.requirement_Name}</p>
-            <p>{req.Status}</p>
-            <p>{req.Comments}</p>
-            <div>
-            <input
-          key={index}
-          type="file"
-          value={req[index]}
-          onChange={e => {
-            // Update the corresponding file in the state
-            const updatedFiles = [...userFiles];
-            updatedFiles[index] = e.target.files[0];
-            setUserFiles(updatedFiles);
-          }}
-        />
-        <button className='myButton1' onClick={() =>EditReq(req.requirement_Name,index)}>Save Changes</button>
-        <button className='myButton2' onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button>
-              
-            </div>
-            </div>
-            </div>
-
-            {(index + 1) % 3 === 0 && <br />}
-            </div>
-            </div>}
-            </>
-          );
-        });    
-        return documentsubmitted  
-      }else{
+function ViewsubDocs(){
         const documentsubmitted1 = submitted1?.map((req, index) => {
           return (
             <>
@@ -308,8 +240,7 @@ useEffect(() => {
             </>
           );
         });  
-        return documentsubmitted1   
-      }   
+        return documentsubmitted1     
     }
 const requirements = docs?.map((docu, index) => {
       const isDisabled = disabledInputs[index] || false;
@@ -360,7 +291,7 @@ return(
   <>
     <Homepage/>
   <div>
-  <TabContext value={value}>
+      <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <StyledTabList onChange={handleChange} aria-label="lab API tabs example">
             <StyledTab label="Requirements List" value="1" />
@@ -416,9 +347,7 @@ return(
         </CSSTransition>
       </TransitionGroup>
       </TabContext>
-
-
-    </div>
+  </div>
 
   </>
 )

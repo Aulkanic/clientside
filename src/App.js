@@ -1,4 +1,4 @@
-
+import Application from './userhome/pages/Application';
 import Bmccsite from './LandingPage/lpages/Bmccsite'
 import StepContext from './LandingPage/ApplicationgFrm/StepContext';
 import SchoCategory from './LandingPage/lpages/schoCategory';
@@ -18,13 +18,15 @@ import FlippableCard from './Experiment/card/flippable-card'
 import { Route, Routes} from 'react-router-dom';
 import RequireAuth from './features/authenticate/RequireAuth';
 import { Colorlist,WebImg,Logos } from './Api/request'
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import store, { persistor} from './Redux/store';
 import { useEffect } from 'react'
 import { createContext } from 'react';
 import { useState } from 'react'
-import LoopingRhombusesSpinner
- from './userhome/loadingDesign/loading'
-export const color = createContext();
+import LoopingRhombusesSpinner from './userhome/loadingDesign/loading'
 
+export const color = createContext();
 function App() {
   const colorstore = JSON.parse(localStorage.getItem('Color'));
   const imgstore = JSON.parse(localStorage.getItem('Image'));
@@ -67,6 +69,8 @@ function App() {
 
   return (
     <>
+    <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
     <color.Provider value={{ colorlist,imgList,logolist }}>
     <Routes> 
 
@@ -80,7 +84,7 @@ function App() {
          <Route path='/ApplicationForm' element={<StepContext/>}/>
          <Route path='/Experiment' element={<FlippableCard/>}/>
 
-         
+
         {/* Protective Route*/}
 
        <Route element={<RequireAuth/>}>
@@ -97,6 +101,8 @@ function App() {
 
     </Routes>  
     </color.Provider>
+    </PersistGate>
+    </Provider>
       </>
   );
 }
