@@ -6,9 +6,10 @@ import { useSelector } from 'react-redux';
 export const multiStepContext = React.createContext();
 function StepContext() {
     const user = useSelector((state) => state.user);
-    const [currentStep, setStep] = useState(1);
+    console.log(user)
+    const [currentStep, setStep] = useState(3);
     const [userData, setUserData] = useState({
-      applicantNum:'',
+      applicantNum:user.applicantNum,
       address:'',
       age:'',
       baranggay:'',
@@ -20,7 +21,7 @@ function StepContext() {
       School:'',
       yearLevel:'',
       SchoolAddress:'',
-      email:'',
+      email:user.email,
       fatherEduc:'',
       fatherName:'',
       fatherlName:'',

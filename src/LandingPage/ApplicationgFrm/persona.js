@@ -467,8 +467,8 @@ function Persona() {
                   <Form.Label className='frmlabel'>Guardian Contact No.</Form.Label>
                   <Form.Control
                   type="text" 
-                  value={userData['guardianTele']} 
-                  onChange={(e) =>setUserData({...userData,"guardianTele" : e.target.value})} 
+                  value={userData['guardianContact']} 
+                  onChange={(e) =>setUserData({...userData,"guardianContact" : e.target.value})} 
                   />
                   {errors.guardianContact && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianContact}</p>}
                 </Form.Group>

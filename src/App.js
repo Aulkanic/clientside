@@ -21,9 +21,9 @@ import { Colorlist,WebImg,Logos } from './Api/request'
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import store, { persistor} from './Redux/store';
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 import { createContext } from 'react';
-import { useState } from 'react'
+import { useState } from 'react';
 import LoopingRhombusesSpinner from './userhome/loadingDesign/loading'
 
 export const color = createContext();
@@ -73,9 +73,6 @@ function App() {
     <PersistGate loading={null} persistor={persistor}>
     <color.Provider value={{ colorlist,imgList,logolist }}>
     <Routes> 
-
-      {/* <Route path='/' element={<Layout/>}/>
-       <Route index element={<Login/>}/> */}
          <Route exact path='/' element={<Bmccsite/>}/>
          <Route path='/ScholarshipProgram' element={<SchoCategory/>}/>
          <Route path='/Scho1' element={<Lnewexspage/>}/>

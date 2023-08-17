@@ -59,7 +59,7 @@ function Economic() {
       setSelectedValues([]);
     }, [userData.schoID]);
 
-    
+    console.log(userData)
     function Check(){
       const errors = {};
       if(userData.schoID === ''){
@@ -77,16 +77,15 @@ function Economic() {
         return;
       }
       setErrors('')
-      let formattedDate = '';
-      let formattedBirthday = '';
-      if (userData.birthday) {
-        formattedDate = userData.birthday.toISOString();
-        formattedBirthday = new Date(formattedDate).toLocaleString('en-US', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric',
-        });
-      }       
+      let formattedBirthday = '';      
+      const birthdayDate = new Date(userData.birthday);
+
+      if (birthdayDate instanceof Date) {
+        const options = { month: 'long', day: 'numeric', year: 'numeric' };
+       formattedBirthday = birthdayDate.toLocaleDateString('en-US', options);
+      } else {
+        console.error("Invalid date format");
+      }
       const fullName = `${userData.firstName} ${userData.middleName} ${userData.lastName}`
       let birthdayValue = formattedBirthday;
       const formData = new FormData();
@@ -96,11 +95,11 @@ function Economic() {
       formData.append('baranggay', userData.baranggay);
       formData.append('birthday', birthdayValue);
       formData.append('birthPlace', userData.birthPlace);
-      formData.append('SchoolAddress', userData.SchoolAddress);
+      formData.append('schoolAddress', userData.SchoolAddress);
       formData.append('citizenship', userData.citizenship);
       formData.append('contactNum', userData.contactNum);
       formData.append('course', userData.course);
-      formData.append('School', userData.School);
+      formData.append('school', userData.School);
       formData.append('yearLevel', userData.yearLevel);
       formData.append('email', userData.email);
       formData.append('fatherEduc', userData.fatherEduc);

@@ -232,13 +232,12 @@ const Register = () => {
     .then(res => {
       console.log(res)
       if(res.data.message === 'Created'){
-
+        const applicantNum = res.data.data.applicantNum
         setResstat('200')
         setSnackbarMessage('Account Created');
         setSnackbarOpen(true); 
         navigate('/ApplicationForm');
-        const user = res.data.data;
-        dispatch(setName({fname,lname,mname,user}))
+        dispatch(setName({fname,lname,mname,email,applicantNum}))
         setLoading(false)
       
       }else{

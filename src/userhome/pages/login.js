@@ -106,7 +106,6 @@ const Login = () => {
         
         loginUserAcc.USER_LOGIN({email,password})
         .then(res => {
-          console.log(res)
           if(res.data.message === 'Login Successfully'){
             setResstat('200')
             setSnackbarMessage(res.data.message);

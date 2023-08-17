@@ -148,13 +148,6 @@ function Firststep() {
     } else if (!/^09\d{9}$/.test(userData.contactNum)) {
       errors.contactNum = "Invalid phone number.";
     }
-    if (userData.email === '') {
-      errors.email = "Email is required";
-    } else if (!/^[A-Za-z0-9._%+-]+@gmail\.com$/.test(userData.email)) {
-       errors.email = "Email is invalid";
-    }else if (userData.email !== userData.checkemail) {
-      errors.email = "Use your registered email";
-   }
     if (userData.address === '') {
       errors.address = "Current Address is required";
     }else if (/[!@#$%^&*/_()?":{}|<>]/.test(userData.address)) {
@@ -163,6 +156,7 @@ function Firststep() {
     
 
     if (Object.keys(errors).length > 0) {
+      console.log(errors)
       setErrors(errors);
       return;
     }
