@@ -7,7 +7,7 @@ export const multiStepContext = React.createContext();
 function StepContext() {
     const user = useSelector((state) => state.user);
     console.log(user)
-    const [currentStep, setStep] = useState(3);
+    const [currentStep, setStep] = useState(1);
     const [userData, setUserData] = useState({
       applicantNum:user.applicantNum,
       address:'',

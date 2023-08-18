@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import {  useNavigate } from 'react-router-dom'
-import Axios from 'axios'
-import Municipal from '../assets/municipal.jpg'
-import swal from 'sweetalert';
-import BMCC from '../assets/marisko.png'
-import Lheader from '../../LandingPage/components/navbar';
 import './register.css'
 import TextField from '@mui/material/TextField';
-import { Button } from '@mui/material';
+import { Button, Link } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -18,9 +13,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import SendIcon from '@mui/icons-material/Send';
-import { CreatingRegistry, RegistryOtp,ResendOtp, ValidateOtp,Colorlist } from '../../Api/request';
+import { CreatingRegistry, RegistryOtp,ResendOtp, ValidateOtp,FindRegisteredUser } from '../../Api/request';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
-import { alpha, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
@@ -28,6 +23,7 @@ import { useContext } from "react";
 import { color } from "../../App";
 import { useDispatch } from 'react-redux';
 import { setName } from '../../Redux/userSlice';
+import Swal from 'sweetalert2';
 
 const CssTextField = styled(TextField)({
   backgroundColor: 'white',
@@ -62,12 +58,12 @@ const Register = () => {
     const [lname, setlname] = useState('');
     const [mname, setmname] = useState('');
     const [email, setEmail] = useState('');
-    const [otp, setOtp] = useState('');
+    const [otp, setOtp] = useState(new Array(6).fill(''));
+    const inputRefs = useRef([]);
     const [step, setStep] = useState(1); 
     const [password, setPassword] = useState('');
     const [loading,setLoading] = useState(false);
     const [loading1,setLoading1] = useState(false);
-    const [loading2,setLoading2] = useState(false);
     const [errors, setErrors] = useState({});
     const [remainingSeconds, setRemainingSeconds] = useState(60);
     const [disabled,setDisabled] = useState(false);
@@ -75,15 +71,31 @@ const Register = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [resstat,setResstat] = useState('');
     const [open, setOpen] = React.useState(true);
-
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
   
     const handleClose = () => {
       setOpen(false);
     };
-
+    const handleChange = (event, index) => {
+      const value = event.target.value;
+      if (value.length <= 1) {
+        const newOTP = [...otp];
+        newOTP[index] = value;
+        setOtp(newOTP);
+  
+        if (value !== '' && index < 6 - 1) {
+          inputRefs.current[index + 1].focus();
+        }
+      }
+    };
+  
+    const handleKeyPress = (event, index) => {
+      if (event.key === 'Backspace' && index > 0 && otp[index] === '') {
+        const newOTP = [...otp];
+        newOTP[index - 1] = '';
+        setOtp(newOTP);
+        inputRefs.current[index - 1].focus();
+      }
+    };
 
     const handleSnackbarClose = () => {
       setSnackbarOpen(false);
@@ -107,7 +119,6 @@ const Register = () => {
     setLoading(true)
      await RegistryOtp.REGISTRY_OTP(formData)
      .then(res => {
-      console.log(res)
       if(res.data.success === 0){
         setResstat('500')
         setSnackbarMessage(res.data.message);
@@ -143,8 +154,9 @@ const Register = () => {
     const handleVerifyClick = (e) => {
       e.preventDefault()
       const errors = {}; 
-      if(!otp){
-        errors.otp = 'This field is required'
+      const checkotp = otp.join('')
+      if(!checkotp || checkotp === ''){
+        errors.otp = 'Please input OTP'
       }
       if (Object.keys(errors).length > 0) {
         setErrors(errors);
@@ -154,7 +166,7 @@ const Register = () => {
       setLoading(true)
       const formData = new FormData();
       formData.append('email', email);
-      formData.append('otp', otp);
+      formData.append('otp', checkotp);
       ValidateOtp.VALIDATE_OTP(formData)
       .then(res => {
         console.log(res)
@@ -221,7 +233,6 @@ const Register = () => {
     } else if (!/^[a-zA-Z0-9]*$/.test(password)) {
       errors.password = "Password can only contain alphanumeric characters";
     }
-    console.log(Object.keys(errors).length)
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       console.log(errors)
@@ -230,7 +241,6 @@ const Register = () => {
     setLoading(true)
     CreatingRegistry.CREATE_REGISTRY({fname,lname,mname,email,password})
     .then(res => {
-      console.log(res)
       if(res.data.message === 'Created'){
         const applicantNum = res.data.data.applicantNum
         setResstat('200')
@@ -294,7 +304,6 @@ const Register = () => {
 const handlerFnameInput = (e) => setfname(e.target.value)
 const handlerLnameInput = (e) => setlname(e.target.value)
 const handlerMnameInput = (e) => setmname(e.target.value)
-const handlerOtpInput = (e) => setOtp(e.target.value)
 const handlerEmailInput = (e) => setEmail(e.target.value)
 const handlerPasswordInput = (e) => setPassword(e.target.value)
 const handlerBackInput = (e) => {
@@ -315,6 +324,35 @@ const handlerNextInput = (e) => {
   }
   setStep(2)
   setErrors('')
+}
+
+const findCreatedAcc = async() =>{
+  const { value: email } = await Swal.fire({
+    title: 'Input email address',
+    input: 'email',
+    inputLabel: 'Your email address',
+    inputPlaceholder: 'Enter your email address'
+  })
+  
+  if (email) {
+    const formData = new FormData()
+    formData.append('email',email)
+     await FindRegisteredUser.FETCH_USERREG(formData)
+     .then((res) =>{
+      if(res.data.success === 1){
+        const result = res.data.result;
+        const fname = result.fname;
+        const lname = result.lname;
+        const mname = result.mname;
+        const email = result.email;
+        const applicantNum = result.applicantNum;
+        dispatch(setName({fname,lname,mname,email,applicantNum}))
+        navigate('/ApplicationForm')
+      }else{
+        Swal.fire(res.data.message)
+      }
+     })
+  }
 }
 
   return (
@@ -356,307 +394,307 @@ const handlerNextInput = (e) => {
         <div className="registrationcon">
           <div className="registrationfrm">
               <div className="regfrmcontainer">
-      {step === 1 && (
-        <div className='emailotpreg'>
-          <h2 style={{color:colorlist[0].bgColor}}>Registration</h2>
-          <p>Enter your Email address to create Account</p>
-          <p>We will send you one time password(OTP)</p>
-          <TextField      
-        id="input-with-icon-textfield"
-        label="Email"
-        value={email}
-        onChange={handlerEmailInput}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <EmailRoundedIcon />
-            </InputAdornment>
-          ),
-        }}
-        variant="outlined"
-        style={{
-          margin: '10px', 
-          marginBottom: '0px',
-          cursor: 'pointer', 
-        }}
-      />
-    {errors.email && <p variant='outlined' 
-    style={{ 
-      width: '92%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'12px',
-      height:'max-Content',
-     }}>
-          {errors.email}
-        </p>}
-          <br />
-        <div className="regbtnregnex">
-          <div>
-            <LoadingButton
-            loading={loading}
-            loadingPosition="end"
-            variant="elevated"
-            fullWidth
-            style={{
-              margin: '10px', 
-              cursor: 'pointer', 
-              fontWeight: '700',
-              background: colorlist[0].btnColor,
-              color: 'white',
-              fontSize:'10px',
-              textTransform:'capitalize',
-              fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-            }}
-            onClick={handleRegisterClick}
-          >
-            Register
-          </LoadingButton>
-          </div>
-          <div>
-          <LoadingButton variant="elevated" 
+              <img className="mydo" src="https://drive.google.com/uc?id=12yKj9K3Caiaq3hP1JRKRbaLpkIuvapkZ"
+         alt=""/>
+                {step === 1 && (
+                  <div className='emailotpreg'>
+                    <h2 style={{color:colorlist[0].bgColor}}>Registration</h2>
+                    <p>Enter your Email address to create Account</p>
+                    <p>We will send you one time password(OTP)</p>
+                    <TextField      
+                  id="input-with-icon-textfield"
+                  label="Email"
+                  value={email}
+                  onChange={handlerEmailInput}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <EmailRoundedIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="outlined"
                   style={{
-                    margin: '10px', 
+                    cursor: 'pointer', 
+                    width:'80%'
+                  }}
+                />
+              {errors.email && <p variant='outlined' 
+              style={{ 
+                width: '92%', 
+                color:'red', 
+                fontSize:'12px',
+                height:'max-Content',
+              }}>
+                    {errors.email}
+                  </p>}
+
+                    <br />
+                  <div className="regbtnregnex">
+                    <div>
+                      <LoadingButton
+                      loading={loading}
+                      loadingPosition="end"
+                      variant="elevated"
+                      fullWidth
+                      className='myButton1'
+                      style={{
+                        cursor: 'pointer', 
+                        fontWeight: '700',
+                        color: 'white',
+                        fontSize:'12px',
+                        textTransform:'capitalize',
+                        fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+                      }}
+                      onClick={handleRegisterClick}
+                    >
+                      Register
+                    </LoadingButton>
+                    </div>
+                    <div>
+                    <LoadingButton variant="elevated" 
+                      className='myButton1'
+                      fullWidth
+                      style={{
+                        marginTop: '10px', 
+                        cursor: 'pointer', 
+                        fontWeight: '700',
+                        color: 'white',
+                        fontSize:'12px',
+                        textTransform:'capitalize',
+                        fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+                      }}
+                            onClick={handlerNextInput}>
+                              Next</LoadingButton>
+                    </div>
+                  </div>
+                  <Link onClick={findCreatedAcc}>
+                  Already Registered an Account?
+                  </Link>
+                  </div>
+                )}
+
+                {step === 2 && (
+                  <div className='otpfreg'>
+                    <h2 style={{color:colorlist[0].bgColor}}>OTP Verification</h2>
+                    <p>An OTP has been sent to your email. Please enter it below:</p>
+                    <div className="otp-input-container">
+                    {otp.map((digit, index) => (
+                        <input
+                          key={index}
+                          className="otp-input"
+                          type="text"
+                          maxLength="1"
+                          value={digit}
+                          onChange={(e) => handleChange(e, index)}
+                          onKeyDown={(e) => handleKeyPress(e, index)}
+                          ref={(ref) => (inputRefs.current[index] = ref)}
+                        />
+                      ))}
+                      </div>
+                        {errors.otp && <p variant='outlined' 
+                        style={{ 
+                          width: '85%', 
+                          margin: '10px', 
+                          color:'red', 
+                          fontSize:'12px',
+                          height:'max-Content'}}>
+                              {errors.otp}
+                            </p>}
+                    <br />
+                    <div className='bacreotp'>
+   
+                      <div>
+                      <LoadingButton
+                        loading={loading1}
+                        loadingPosition="end"
+                        variant="outlined"
+                        fullWidth
+                        className='myButton1'
+                        style={{
+                          cursor: 'pointer', 
+                          fontWeight: '700',
+                          color: 'white',
+                          fontSize:'12px',
+                          textTransform:'capitalize',
+                          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+                        }}
+                        onClick={handleResendClick}
+                      >
+                        Resend
+                      </LoadingButton>
+                  </div>
+                  <div>
+                <LoadingButton
+                  loading={loading}
+                  loadingPosition="end"
+                  variant="outlined"
+                  fullWidth
+                  className='myButton1'
+                  style={{
+                    margin:'10px 0px 10px 0px',
                     cursor: 'pointer', 
                     fontWeight: '700',
-                    background: colorlist[0].btnColor,
                     color: 'white',
-                    fontSize:'10px',
+                    fontSize:'12px',
                     textTransform:'capitalize',
                     fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
                   }}
-                  onClick={handlerNextInput}>
-                    Next</LoadingButton>
-          </div>
-        </div>
-        </div>
-      )}
+                  onClick={handleVerifyClick}
+                >
+                  Verify
+                </LoadingButton>
+                </div>
+                <div>
+                      <LoadingButton 
+                      fullWidth
+                      className='myButton'
+                      style={{
+                        cursor: 'pointer', 
+                        fontWeight: '700',
+                        color: 'white',
+                        fontSize:'12px',
+                        textTransform:'capitalize',
+                        fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+                      }}
+                      variant="outlined" onClick={handlerBackInput}>Back</LoadingButton>
+                      </div>  
+                </div>
 
-      {step === 2 && (
-        <div className='otpfreg'>
-          <h2 style={{color:colorlist[0].bgColor}}>OTP Verification</h2>
-          <p>An OTP has been sent to your email. Please enter it below:</p>
-            <input
-            maxLength={6}
-                  style={{
-                    width: '90%',
-                    height: '40px',
-                    fontSize: '15px',
-                    textAlign: 'center',
-                    letterSpacing: '35px',
-                    border: '1px solid #ccc',
-                    borderRadius: '5px',
-                    outline: 'none',
-                  }} type="text" value={otp} onChange={handlerOtpInput} />
-              {errors.otp && <p variant='outlined' 
+                  </div>
+                )}
+
+                {step === 3 && (
+                  <div className='createacccon'>
+                    <h2>Create Account</h2>
+                  <CssTextField      
+                  id="input-with-icon-textfield"
+                  label="First Name"
+                  value={fname}
+                  size="small"
+                  onChange={handlerFnameInput}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountCircle />
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="outlined"
+                />
+                    {errors.fname && <p variant='outlined' 
               style={{ 
-                width: '85%', 
-                margin: '10px', 
+                width: '73%', 
+                margin: '0px', 
                 color:'red', 
-                fontSize:'12px',
-                height:'max-Content'}}>
-                    {errors.otp}
+                fontSize:'10px' }}>
+                    {errors.fname}
                   </p>}
-          <br />
-          <div className='bacreotp'>
-            <div>
-            <LoadingButton 
-                          style={{
-                            cursor: 'pointer', 
-                            fontWeight: '700',
-                            background: colorlist[0].btnColor,
-                            color: colorlist[0].btnTextColor,
-                            fontSize:'10px',
-                            letterSpacing:'2px',
-                            fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-                          }}
-            variant="outlined" onClick={handlerBackInput}>Back</LoadingButton>
-            </div>     
-            <div>
-            <LoadingButton
-        loading={loading1}
-        loadingPosition="end"
-        variant="outlined"
-        fullWidth
-        style={{
-          cursor: 'pointer', 
-          fontWeight: '700',
-          background: colorlist[0].btnColor,
-          color: colorlist[0].btnTextColor,
-          fontSize:'10px',
-          letterSpacing:'2px',
-          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-        }}
-        onClick={handleResendClick}
-      >
-        Resend
-      </LoadingButton>
-         </div>
-
-      </div>
-      <div>
-      <LoadingButton
-        loading={loading}
-        loadingPosition="end"
-        variant="outlined"
-        fullWidth
-        style={{
-          cursor: 'pointer', 
-          fontWeight: '700',
-          background: colorlist[0].btnColor,
-          color: colorlist[0].btnTextColor,
-          fontSize:'10px',
-          letterSpacing:'2px',
-          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-        }}
-        onClick={handleVerifyClick}
-      >
-        VERIFY
-      </LoadingButton>
-      </div>
-        </div>
-      )}
-
-      {step === 3 && (
-        <div className='createacccon'>
-          <h2>Create Account</h2>
-        <CssTextField      
-        id="input-with-icon-textfield"
-        label="First Name"
-        value={fname}
-        size="large"
-        onChange={handlerFnameInput}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <AccountCircle />
-            </InputAdornment>
-          ),
-        }}
-        variant="outlined"
-      />
-          {errors.fname && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '73%', 
-      margin: '5px', 
-      color:'red', 
-      fontSize:'15px',
-      height:'max-Content',
-      background:'white' }} elevation={0} severity="error">
-          {errors.fname}
-        </MuiAlert>}
-        <CssTextField      
-        id="input-with-icon-textfield"
-        label="Last Name"
-        size="large"
-        value={lname}
-        onChange={handlerLnameInput}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <AccountCircle />
-            </InputAdornment>
-          ),
-        }}
-        variant="outlined"
-        style={{
-          margin:'10px',
-          cursor: 'pointer', 
-        }}
-      />
-          {errors.lname && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '73%', 
-      margin: '10px', 
-      color:'red', 
-      fontSize:'15px',
-      height:'max-Content',
-      background:'white' }} elevation={0} severity="error">
-          {errors.lname}
-        </MuiAlert>}
-        <CssTextField      
-        id="input-with-icon-textfield"
-        label="Middle Name"
-        size="large"
-        value={mname}
-        onChange={handlerMnameInput}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <AccountCircle />
-            </InputAdornment>
-          ),
-        }}
-        variant="outlined"
-        style={{
-          margin:'10px',
-          cursor: 'pointer', 
-        }}
-      />
-  {errors.mname && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '73%', 
-      margin: '5px', 
-      color:'red', 
-      fontSize:'15px',
-      height:'max-Content',
-      background:'white' }} elevation={0} severity="error">
-          {errors.mname}
-        </MuiAlert>}
-        <CssTextField      
-        id="input-with-icon-textfield"
-        label="Password"
-        size="large"
-        value={password}
-        type='password'
-        onChange={handlerPasswordInput}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <LockRoundedIcon />
-            </InputAdornment>
-          )
-        }}
-        variant="outlined"
-        style={{ 
-          margin:'10px',
-          cursor: 'pointer', 
-        }}
-      />
-   {errors.password && <MuiAlert variant='outlined' 
-    style={{ 
-      width: '73%', 
-      margin: '5px', 
-      color:'red', 
-      fontSize:'15px',
-      height:'max-Content',
-      background:'white' }} elevation={0} severity="error">
-          {errors.password}
-        </MuiAlert>} 
-        <div>  
-        <LoadingButton
-        loading={loading}
-        loadingPosition="end"
-        endIcon={loading ? (null) : (<SendIcon />)}
-        variant="elevated"
-        fullWidth
-        style={{
-          margin:'10px',      
-          cursor: 'pointer', 
-          fontWeight: '700',
-          background: colorlist[0].btnColor,
-          color: colorlist[0].btnTextColor,
-          fontSize:'10px',
-          letterSpacing:'2px',
-          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-        }}
-        onClick={handleSubmitReg}
-      >
-        Submit
-      </LoadingButton>
-      </div>  
-        </div>
-      )}
+                  <CssTextField      
+                  id="input-with-icon-textfield"
+                  label="Last Name"
+                  size="small"
+                  value={lname}
+                  onChange={handlerLnameInput}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountCircle />
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="outlined"
+                  style={{
+                    marginTop:'10px',
+                    cursor: 'pointer', 
+                  }}
+                />
+                    {errors.lname && <p variant='outlined' 
+              style={{ 
+                width: '73%', 
+                margin: '0px', 
+                color:'red', 
+                fontSize:'10px'}}>
+                    {errors.lname}
+                  </p>}
+                  <CssTextField      
+                  id="input-with-icon-textfield"
+                  label="Middle Name"
+                  size="small"
+                  value={mname}
+                  onChange={handlerMnameInput}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountCircle />
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="outlined"
+                  style={{
+                    marginTop:'10px',
+                    cursor: 'pointer', 
+                  }}
+                />
+            {errors.mname && <p variant='outlined' 
+              style={{ 
+                width: '73%', 
+                margin: '0px', 
+                color:'red', 
+                fontSize:'10px' }}>
+                    {errors.mname}
+                  </p>}
+                  <CssTextField      
+                  id="input-with-icon-textfield"
+                  label="Password"
+                  size="small"
+                  value={password}
+                  type='password'
+                  onChange={handlerPasswordInput}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LockRoundedIcon />
+                      </InputAdornment>
+                    )
+                  }}
+                  variant="outlined"
+                  style={{ 
+                    marginTop:'10px',
+                    cursor: 'pointer', 
+                  }}
+                />
+            {errors.password && <p variant='outlined' 
+              style={{ 
+                width: '73%', 
+                margin: '0px', 
+                color:'red', 
+                fontSize:'10px', }}>
+                    {errors.password}
+                  </p>} 
+                  <div>  
+                  <LoadingButton
+                  loading={loading}
+                  loadingPosition="end"
+                  endIcon={loading ? (null) : (<SendIcon />)}
+                  variant="elevated"
+                  fullWidth
+                  className='myButton1'
+                  style={{
+                    cursor: 'pointer', 
+                    fontWeight: '700',
+                    color: 'white',
+                    fontSize:'12px',
+                    textTransform:'capitalize',
+                    fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+                  }}
+                  onClick={handleSubmitReg}
+                >
+                  Submit
+                </LoadingButton>
+                </div>  
+                  </div>
+                )}
               </div>
           </div>
         </div>

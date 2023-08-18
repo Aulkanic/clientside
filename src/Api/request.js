@@ -128,3 +128,6 @@ export const UserProflist = {
 export const ApplicationForm = {
     FETCH_FORM: () => axiosInstance.get(Endpoints.APPLICATION_FORM)
 }
+export const FindRegisteredUser = {
+    FETCH_USERREG: (data) => axiosInstance.get(Endpoints.FIND_REGISTEREDACC,data)
+}

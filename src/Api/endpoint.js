@@ -9,6 +9,7 @@ const Endpoints = {
     FETCH_ADMIN:"admin/login",
     LOGIN_USER:"user/login",
     CHANGE_PROFILE:'userProf/profile',
+    FIND_REGISTEREDACC:'userProf/Acclisted',
     FETCH_ANNOUNCEMENTS:'announce/Announced',
     CREATE_APPFORM:'personalinfo/create',
     FETCH_PERSONALINFO:'personalinfo/PA/',

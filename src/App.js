@@ -14,7 +14,6 @@ import Announcement from './userhome/pages/announcement';
 import Trivia from './userhome/pages/trivia';
 import Login from './userhome/pages/login';
 import Register from './userhome/pages/register'
-import FlippableCard from './Experiment/card/flippable-card'
 import { Route, Routes} from 'react-router-dom';
 import RequireAuth from './features/authenticate/RequireAuth';
 import { Colorlist,WebImg,Logos } from './Api/request'
@@ -78,8 +77,8 @@ function App() {
          <Route path='/Scho1' element={<Lnewexspage/>}/>
          <Route path='/login' element={<Login/>}/>
          <Route path='/register' element={<Register/>}/>
+        
          <Route path='/ApplicationForm' element={<StepContext/>}/>
-         <Route path='/Experiment' element={<FlippableCard/>}/>
 
 
         {/* Protective Route*/}
