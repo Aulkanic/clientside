@@ -121,7 +121,9 @@ function Economic() {
       formData.append('motherOccu', userData.motherOccu);
       formData.append('relationship', userData.relationship);
       formData.append('scholarID', userData.schoID);
-      formData.append('userfrm', selectedValues);
+      for (let i = 0; i < selectedValues.length; i++) {
+        formData.append(`userfrm[${i}]`, JSON.stringify(selectedValues[i]));
+      }
       setLoading(true)
       ApplyForm.CREATE_APPINFO(formData)
       .then(res => {
