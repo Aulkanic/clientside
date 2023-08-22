@@ -120,9 +120,13 @@ function Economic() {
       formData.append('mothermName', userData.mothermName);
       formData.append('motherOccu', userData.motherOccu);
       formData.append('relationship', userData.relationship);
+      formData.append('gradeLevel', userData.gradeLevel);
       formData.append('scholarID', userData.schoID);
       for (let i = 0; i < selectedValues.length; i++) {
         formData.append(`userfrm[${i}]`, JSON.stringify(selectedValues[i]));
+      }
+      for (let i = 0; i < userData.siblings.length; i++) {
+        formData.append(`siblings[${i}]`, JSON.stringify(userData.siblings[i]));
       }
       setLoading(true)
       ApplyForm.CREATE_APPINFO(formData)

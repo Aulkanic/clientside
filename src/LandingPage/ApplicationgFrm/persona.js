@@ -8,7 +8,10 @@ import Form from 'react-bootstrap/Form';
 import '../css/persona.css'
 import '../css/buttonStyle.css'
 import { Rulelist,FetchingFamily, } from '../../Api/request';
-import { TextField, styled} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 function Persona() {
     const { setStep, userData, setUserData} = useContext(multiStepContext);
@@ -18,13 +21,13 @@ function Persona() {
     const [siblings, setSiblings] = useState([])
     const [onlyChild, setOnlyChild] = useState(false);
 
-    const handleInputChange = (index, event) =>{
-      const values = [...siblings];
-      values[index] = event.target.value;
-      setSiblings(values)
-    }
+    const handleInputChange = (index, field, value) => {
+      const updatedSiblings = [...siblings];
+      updatedSiblings[index][field] = value;
+      setSiblings(updatedSiblings);
+    };
     const handleAddFields = () =>{
-      setSiblings([...siblings, '']);
+      setSiblings([...siblings, { firstName: '', middleName: '', lastName: '' }]);
     }
 
     const handleRemoveFields = (index) =>{
@@ -40,11 +43,7 @@ function Persona() {
             const datafam = famdata.data.Familylist;
             const famrecord = datafam?.filter(data => 
               data.motherName !== 'None' &&
-              data.motherlName !== 'None' &&
-              data.mothermName !== 'None' &&
-              data.fatherName !== 'None' &&
-              data.fatherlName !== 'None' &&
-              data.fathermName !== 'None'     
+              data.fatherName !== 'None' 
               )
             setFamlist(famrecord)
             setRule(rul.data.result[0])
@@ -74,9 +73,6 @@ function Persona() {
        else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.motherName)) {
         errors.motherName = "First Letter must be Capital";
       }
-      else if(famlist?.some((item) => item.motherName === userData.motherName)){
-        checkfammum += 1;
-      }
       if (userData.motherlName === '') {
         errors.motherlName = "This Field is required";
       } 
@@ -94,9 +90,6 @@ function Persona() {
       }
        else if (userData.motherlName.charAt(0) !== userData.motherlName.charAt(0).toUpperCase()) {
         errors.motherlName = "First Letter must be Capital";
-      }
-      else if(famlist?.some((item) => item.motherlName === userData.motherlName)){
-        checkfammum += 1;
       }
       if (userData.mothermName === '') {
         errors.mothermName = "This Field is required";
@@ -116,9 +109,7 @@ function Persona() {
        else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.mothermName)) {
         errors.mothermName = "First Letter must be Capital";
       }
-      else if(famlist?.some((item) => item.mothermName === userData.mothermName)){
-        checkfammum += 1;
-      }
+
       if (userData.motherOccu === '') {
         errors.motherOccu = "This Field is required";
       } else if (userData.motherOccu.length === 1) {
@@ -161,9 +152,7 @@ function Persona() {
        else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.fatherName)) {
         errors.fatherName = "First Letter must be Capital";
       }
-      else if(famlist?.some((item) => item.fatherName === userData.fatherName)){
-        checkfamdad += 1;
-      }
+
       if (userData.fatherlName === '') {
         errors.fatherlName = "This Field is required";
       } 
@@ -181,9 +170,6 @@ function Persona() {
       }
        else if (userData.fatherlName.charAt(0) !== userData.fatherlName.charAt(0).toUpperCase()) {
         errors.fatherlName = "First Letter must be Capital";
-      }
-      else if(famlist?.some((item) => item.fatherlName === userData.fatherlName)){
-        checkfamdad += 1;
       }
       if (userData.fathermName === '') {
         errors.fathermName = "This Field is required";
@@ -203,9 +189,7 @@ function Persona() {
        else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.fathermName)) {
         errors.fathermName = "First Letter must be Capital";
       }
-      else if(famlist?.some((item) => item.fathermname === userData.fathermName)){
-        checkfamdad += 1;
-      }
+
       if (userData.fatherOccu === '') {
         errors.fatherOccu = "This Field is required";
       } else if (userData.fatherOccu.length === 1) {
@@ -313,17 +297,76 @@ function Persona() {
           button: "OK",
         });
       }
+      let restriction = 0;
+      const checkfam = famlist?.filter((item) => item.fatherName === userData.fathermName && item.motherName === userData.motherName)
+      if(checkfam.length === rule.famNum){
+        restriction += 1;
+      }
+
+      if(!onlyChild){
+        const hasEmptyFields = siblings.some(
+          (sibling) =>
+            sibling.firstName.trim() === '' ||
+            sibling.middleName.trim() === '' ||
+            sibling.lastName.trim() === ''
+        );
+        if(siblings.length === 0){
+          errors.sibling = `Atleast Add siblings details if not only child`
+        }else if(hasEmptyFields){
+          errors.sibling = `Please fill out all sibling information fields.`
+        }
+      }
+
 
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
           console.log(errors)
           return;
         }
+        setUserData((prevUserData) => ({
+          ...prevUserData, // Keep the previous userData properties
+          siblings: siblings, // Update the siblings property
+        }));
         setErrors('')
         setStep(3)
     };
 
-
+   const siblingfrm = siblings.map((sibling, index) => (
+    <div className='siblinginf' key={index}>
+      <Form.Group as={Col}>
+      <Form.Label className='frmlabel'>First Name</Form.Label>
+        <Form.Control
+          type="text"
+          value={sibling.firstName}
+          onChange={(e) => handleInputChange(index, 'firstName', e.target.value)}
+        />
+      </Form.Group>
+      <Form.Group as={Col} style={{margin:'0px 10px 0px 10px'}}>
+      <Form.Label className='frmlabel'>Middle Name</Form.Label>
+        <Form.Control
+          type="text"
+          value={sibling.middleName}
+          onChange={(e) => handleInputChange(index, 'middleName', e.target.value)}
+        />
+      </Form.Group>
+      <Form.Group as={Col}>
+      <Form.Label className='frmlabel'>Last Name</Form.Label>
+        <Form.Control
+          type="text"
+          value={sibling.lastName}
+          onChange={(e) => handleInputChange(index, 'lastName', e.target.value)}
+        />
+      </Form.Group>
+      <Button
+        className='myButton2'
+        variant='secondary'
+        onClick={() => handleRemoveFields(index)}
+        sx={{margin:'30px 10px -1px 10px'}}
+      >
+        <DeleteIcon sx={{color:'white'}}/>
+      </Button>
+    </div>
+     ))
     return (
     <div className='Persona'>
         <div className="personad"> 
@@ -483,33 +526,24 @@ function Persona() {
                 </Form.Group>
               </div>
             </div>
-                {/* <div>
-                  <h2>List of Siblings</h2>
-                  {siblings.map((sibling, index) => (
-                    <div className='siblinginf' key={index}>
-                      <Form.Group as={Col}>
-                      <Form.Control
-                        type="text"
-                        value={sibling}
-                        onChange={(event) => handleInputChange(index, event)}
-                      />
-                      </Form.Group>
-                      <Button sx={{ color:'white'}} className='myButton2' onClick={() => handleRemoveFields(index)}>Remove</Button>
-                    </div>
-                  ))}
-                  <Button sx={{ color:'white'}} className='myButton1' onClick={handleAddFields}>Add Sibling</Button>
-
-                  <div>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={onlyChild}
-                        onChange={() => setOnlyChild(!onlyChild)}
-                      />
-                      I am an only child
-                    </label>
-                  </div>
-                </div> */}
+            <div className='siblingcontainer'>
+              <div style={{display:"flex",justifyContent:'space-around',alignItems:'center'}}>
+              
+              <h3>List of Siblings </h3>
+              <FormControlLabel sx={{whiteSpace:'nowrap'}} control={<Switch checked={onlyChild} onChange={() => setOnlyChild(!onlyChild)} />} label="I am an only child" />
+              </div>
+              {errors.sibling && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.sibling}</p>}
+              {siblingfrm}
+              <div className='addbtnsib'>
+              <Button
+                className='myButton1'
+                variant='primary'
+                onClick={handleAddFields}
+              >
+                <AddIcon sx={{color:'white'}}/>
+              </Button>
+              </div>
+            </div>
             <div className='btnfrmn'>
             <Button className='myButton' variant="contained" onClick={() => setStep(1)}>Previous</Button>
             <Button className='myButton1' variant="contained" onClick={Check}>Next</Button>

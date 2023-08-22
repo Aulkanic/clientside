@@ -7,6 +7,7 @@ const RequireAuth = () => {
     const location = useLocation();
     const { LoggedIn } = useSelector((state) => state.login);
     const isloggin = LoggedIn;
+    console.log(isloggin)
   return (
     isloggin === true
     ? <Outlet/>

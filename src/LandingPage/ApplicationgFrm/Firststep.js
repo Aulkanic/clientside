@@ -107,6 +107,9 @@ function Firststep() {
     if (userData.School === '') {
       errors.School = "Please provide details";
     }
+    if (userData.gradeLevel === '') {
+      errors.gradeLevel = "Please provide details";
+    }
     if (userData.SchoolAddress === '') {
       errors.SchoolAddress = "Please provide details";
     }
@@ -363,8 +366,17 @@ function Firststep() {
               />
                  {errors.School && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.School}</p>}
             </Form.Group>
-
             <Form.Group as={Col}>
+              <Form.Label className='frmlabel'>School Address</Form.Label>
+              <Form.Control type="text"
+               value={userData['SchoolAddress']} 
+               onChange={(e) =>setUserData({...userData,"SchoolAddress" : e.target.value})}
+              />
+             {errors.SchoolAddress && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.SchoolAddress}</p>}
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+          <Form.Group as={Col}>
               <Form.Label className='frmlabel'>Year Level</Form.Label>
               <Form.Select
                 value={userData['yearLevel']} 
@@ -377,15 +389,14 @@ function Firststep() {
               </Form.Select>
               {errors.yearLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.yearLevel}</p>}
             </Form.Group>
-          </Row>
-          <Row className="mb-3">
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>School Address</Form.Label>
-              <Form.Control type="text"
-               value={userData['SchoolAddress']} 
-               onChange={(e) =>setUserData({...userData,"SchoolAddress" : e.target.value})}
+              <Form.Label className='frmlabel'>Grade/Year:</Form.Label>
+              <Form.Control 
+              type="text"
+              value={userData['gradeLevel']} 
+              onChange={(e) =>setUserData({...userData,"gradeLevel" : e.target.value})}
               />
-             {errors.SchoolAddress && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.SchoolAddress}</p>}
+                 {errors.gradeLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.gradeLevel}</p>}
             </Form.Group>
             <Form.Group as={Col}>
               <Form.Label className='frmlabel'>Course</Form.Label>

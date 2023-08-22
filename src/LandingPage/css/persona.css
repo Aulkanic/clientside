@@ -66,11 +66,28 @@ p{
     justify-content: space-around;
 }
 .siblinginf{
-  width: 50%;
+  width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background-color: #337ab7;
 }
-
+.siblingcontainer{
+  width: 100%;
+  padding: 10px;
+  height: max-content;
+}
+.siblingcontainer h3{
+  font-size: 23px;
+  font-weight: 700;
+  white-space: nowrap;
+  margin: 0px;
+  margin-bottom: 15px;
+  color: #337ab7;
+}
+.addbtnsib{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

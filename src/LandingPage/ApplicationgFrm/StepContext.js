@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 export const multiStepContext = React.createContext();
 function StepContext() {
     const user = useSelector((state) => state.user);
-    console.log(user)
+    
     const [currentStep, setStep] = useState(1);
     const [userData, setUserData] = useState({
       applicantNum:user.applicantNum,
@@ -29,6 +29,7 @@ function StepContext() {
       fatherOccu:'',
       firstName:user.fname,
       gender:'',
+      gradeLevel:'',
       guardianContact:'',
       guardianName:'',
       guardianlName:'',
@@ -43,6 +44,7 @@ function StepContext() {
       motherOccu:'',
       relationship:'',
       schoID:'',
+      siblings: [],
     });
     const [finalData, setFinalData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -51,6 +53,7 @@ function StepContext() {
       setUserData('');
       setStep(1);
     }
+    console.log(userData)
   return (
     <>
     {!loading && <div>
