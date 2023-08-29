@@ -16,10 +16,9 @@ const Announcement = () => {
       setAnnounced(announce.reverse());
     });
   }, []);
-  const announced = anno.map((data) => {
+  const announced = anno.map((data,index) => {
     return (
-      <>
-      <Box>
+      <Box key={index}>
         <Card>
       <div className="announcements">
       <div className='anntitle'><h3>{data.title}</h3></div>
@@ -28,7 +27,6 @@ const Announcement = () => {
       </div>
       </Card>
       </Box>
-      </>
     );
   });
   return (

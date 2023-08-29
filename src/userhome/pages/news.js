@@ -49,10 +49,9 @@ const News = () => {
       </div>
       <div className='news'>
         <h2 style={{margin:'5px'}}>Recent News</h2>
-          { newslist?.map((data) =>{
+          { newslist?.map((data,index) =>{
               return(
-                <>
-                <div className='newscon'>
+                <div key={index} className='newscon'>
                 <Card elevation={0} sx={{display:'flex',width:'97%',height:'100%',padding:'10px'}}>
                     <div style={{width:'45%',marginRight:'10px'}}>
                     <img style={{width:'100%',height:'100%'}} src={data.picture} alt="" />
@@ -69,7 +68,6 @@ const News = () => {
                     </div>
                   </Card>
                 </div>
-                </>
               )
           })
           }

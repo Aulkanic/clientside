@@ -1,19 +1,15 @@
 import React, { useState } from 'react'
-import LHeader from '../components/navbar'
 import '../css/schoCategory.css'
-import { ScholarCategory,Colorlist } from '../../Api/request.js'
-import axios from "axios";
+import { ScholarCategory } from '../../Api/request.js'
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { useContext } from "react";
 import { color } from "../../App";
 
 function SchoCategory() {
   const [post, setPost] = React.useState([]);
-  const { colorlist,imgList } = useContext(color);
-  const [loadingScreen,setLoadingScreen] = useState(false)
+  const { colorlist } = useContext(color);
   React.useEffect(() => {
 
     async function Fetch(){
@@ -26,9 +22,9 @@ function SchoCategory() {
 
   const schoCat = post?.map((contact, index) => {
     return (
-      <>
+      <div key={index}>
       {contact.status === 'Under Evaluation' ? (null) : (<div className='grid-container'>
-    <div className='schoCat' key={index}>
+    <div className='schoCat'>
       <div className="schoIcon">
       <Avatar
         alt="Remy Sharp"
@@ -39,19 +35,22 @@ function SchoCategory() {
       <div className="schoDet">
         <div className='ntitle'><h4>{contact.name}</h4></div>
         <div className='ndate'><h6>{contact.description}</h6></div>
-        {contact.status === 'open' || contact.status === 'Open' ? (<Button variant="contained"><Link className='linkingscho' to='/register' >{contact.status}</Link></Button>)
+        
+      </div>
+      <div className='btncontainerscho'>
+      {contact.status === 'open' || contact.status === 'Open' ? (<Button variant="contained"><Link className='linkingscho' to='/register' >APPLY NOW</Link></Button>)
         : (<Button variant="contained" disabled><Link className='linkingscho' >{contact.status}</Link></Button>)}
       </div>
     </div>
     {(index + 1) % 2 === 0 && <br />}
     </div>)}
-    </>
+    </div>
     );
   });
   
   return (
     <>
-    <div>
+    <div style={{width:'100%'}}>
     <h1 className='schohp' style={{backgroundColor:colorlist[0].bgColor,color:colorlist[0].bgColor1}}>Scholarship Program</h1>
     <div className='lschoCat'>
         {schoCat}

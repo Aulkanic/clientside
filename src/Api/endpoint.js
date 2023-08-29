@@ -6,6 +6,8 @@ const Endpoints = {
     FETCH_SCHOLAR_CATEGORY:"scholar/schoCat",
     CREATE_SCHOLAR:"scholar/createScho",
     FETCH_NEWS:"news/newsinfo",
+    FETCH_NOTIF:"news/Notification",
+    READ:"news/ReadNotif",
     FETCH_ADMIN:"admin/login",
     LOGIN_USER:"user/login",
     CHANGE_PROFILE:'userProf/profile',

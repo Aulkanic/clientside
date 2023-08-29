@@ -131,3 +131,9 @@ export const ApplicationForm = {
 export const FindRegisteredUser = {
     FETCH_USERREG: (data) => axiosInstance.get(Endpoints.FIND_REGISTEREDACC,data)
 }
+export const FetchNotif = {
+    FETCH_NOTIF: (data) => axiosInstance.get(Endpoints.FETCH_NOTIF,data)
+}
+export const ReadNotifi = {
+    READ_NOTIFICATION: (data) => axiosInstance.post(Endpoints.READ,data)
+}

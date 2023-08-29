@@ -25,6 +25,7 @@ import { createContext } from 'react';
 import { useState } from 'react';
 import LoopingRhombusesSpinner from './userhome/loadingDesign/loading'
 
+
 export const color = createContext();
 function App() {
   const colorstore = JSON.parse(localStorage.getItem('Color'));
@@ -77,7 +78,6 @@ function App() {
          <Route path='/Scho1' element={<Lnewexspage/>}/>
          <Route path='/login' element={<Login/>}/>
          <Route path='/register' element={<Register/>}/>
-        
          <Route path='/ApplicationForm' element={<StepContext/>}/>
 
 

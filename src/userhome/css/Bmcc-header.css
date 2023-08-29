@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 
 .Header{
+    max-width: 100vw;
+    min-width: 1200px;
     font-family: 'Inter', sans-serif;
     display: flex;
     justify-content: space-between;

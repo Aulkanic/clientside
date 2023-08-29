@@ -1,128 +1,74 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
-.acard {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px 0px 100px 0px;
-    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-  }
-.profile-card{
+.acccontainer{
+  height: 100vh;
   display: flex;
-  width: 100%;
+
+}
+.accleftbar{
+  max-width: 350px;
+  min-width: 250px;
   height: 100%;
-
+  z-index: 10px;
+  background-color: #fff;
+  box-shadow: 6px 3px 5px 0px #CFD1D5;
+-webkit-box-shadow: 6px 3px 5px 0px #CFD1D5;
+-moz-box-shadow: 6px 3px 5px 0px #CFD1D5;
 }
-.frmprof input[type="file"] {
-  border: 1px solid #ccc;
-  color: #333;
-  padding: 15px;
-  font-size: 16px;
-  width: 90%;
+.accleftbar h1{
+  margin: 10px;
+  font-size: 40px;
 }
-.prof-pic{
-  width: 30%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.editbtnacc{
+.accleftbar .settingTabs{
   width: 100%;
-  padding: 5px;
-
 }
-.editbtnacc button{
-  float: left;
-
+.accleftbar .settingTabs ul{
+  list-style: none ;
+  line-height: 60px;
 }
-.prof-img{
-  width: 100%;
-  height: 300px;
+.accleftbar .settingTabs ul li{
   display: flex;
-  flex-direction: column;
+  white-space: nowrap;
   align-items: center;
-  justify-content: center;
+  cursor: pointer;
 }
-
-.prof-img button{
-  margin-top: 10px;
-}
-
-.profile-card .prof-accs{
-  width: 80%;
-  display: flex;
-  justify-content: center;
-  align-items: center ;
-}
-
-.prof-accs button{
-  float: right;
-  margin: 5px;
-}
-
-.changeprof{
-  color: white;
-  text-decoration: none;
-}
-.Changeprofile{
-  width: 100%;
+.accrigthbar{
+  max-width: 1280px;
+  min-width: 80%;
   height: 100%;
   display: flex;
-  justify-content: center;
   flex-direction: column;
+  justify-content: top;
+  align-items: center;
+  padding-top: 20px;
+  margin: 0px 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.accAccountD{
+  background-color: #fff;
+  max-width: 1050px;
+  min-width: 650px;
+  height: max-content;
+  padding: 20px;
+  display: flex;
+  justify-content: space-around;
   align-items: center;
 }
-.chProf{
+
+.accProfile{
+  width: 400px;
+  height: 400px;
+  position: relative;
+}
+.accProfile img{
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+  border-radius: 50%;
+  border: 2px solid #252525;
 }
-.frmpass{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+.accProfile label{
+  position: absolute;
+  top: 75%;
+  right: 20px;
+  border: none;
+  border-radius: 50%;
 }
-.editinfocon{
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.infouserchng{
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: top;
-}
-.aligninfo{
-  font-size: 20px;
-}
-.fabiconedit{
-  margin: 20px 0px 0px 0px;
-  padding-right: 30px;
-}
-.chngaligninfo{
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-}
-.editinfconedc{
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-}
-.editinfconedc div{
-  width: 95%;
-
-}
-
-
-
-

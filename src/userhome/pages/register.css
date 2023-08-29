@@ -11,7 +11,6 @@
     background-size: cover;
 }
 .registrationcon{
-    width: 60%;
     height: 50%;
     border-radius: 8px;
 }
@@ -33,28 +32,35 @@
     text-align: center;
 }
 .regfrmcontainer{
-    width: 100%;
+    width: max-content;
+    min-width: max-content;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 8px;
+    background-color: white;
 }
 .mydo{
     width: 50%;
     height: 100%;
     object-fit: cover;
     background-color: aquamarine;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
 }
 
 .emailotpreg{
-    width: 100%;
+    padding: 10px;
+    width: 400px;
+    min-width: max-content;
     height: 100%;
     display: flex;
     background-color: white;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-radius: 8px;
 }
 .regbtnregnex{
     width: 50%;
@@ -67,9 +73,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: whitesmoke;
     padding: 10px;
     flex-direction: column;
+    border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
 }
 .otp-input-container {
     display: flex;
@@ -93,13 +100,15 @@
     border-color: #007bff;
   }
 .createacccon{
-    width: 70%;
-    height: 100%;
+    width: 600px;
+    min-width: max-content;
+    height: max-content;
+    padding: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: whitesmoke;
     flex-direction: column;
+    border-radius: 8px;
 }
 .otpfreg h2{
     font-size: 36px;
@@ -125,5 +134,7 @@
     display: flex;
     flex-direction: column;
     width: 90%;
-
+}
+.perrors{
+    width: 100%;
 }

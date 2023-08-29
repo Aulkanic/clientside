@@ -76,7 +76,7 @@ const Schoinfo = () => {
       .catch(err => console.log(err));
     }
 
-    const applicantdetails = appointuser?.map((data) =>{
+    const applicantdetails = appointuser?.map((data,index) =>{
       const formatDate = () => {
         const specificDate = new Date(data.schedDate);
         return specificDate.toLocaleDateString('en-US', {
@@ -89,8 +89,7 @@ const Schoinfo = () => {
       const isEnded = new Date(data.schedDate) < currentDate;
       const isCancel = data.statusApp === 'Cancel'
         return (
-            <>
-           <Box sx={{ flexGrow: 1, display:'flex',justifyContent:'center',alignItems:'center'}}>
+           <Box key={index} sx={{ flexGrow: 1, display:'flex',justifyContent:'center',alignItems:'center'}}>
           <div className='appointlistcon'>
               <Card sx={{padding:'5px'}}>
                 <div className='appointscon'>
@@ -121,8 +120,7 @@ const Schoinfo = () => {
                 </div>
               </Card>
           </div>
-    </Box>           
-            </>
+           </Box>           
         )
     })
 

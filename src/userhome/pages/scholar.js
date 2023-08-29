@@ -75,69 +75,102 @@ const handleFileChange = (index, event) => {
 const handleSubmit = async (event) => {
   event.preventDefault();
   setLoading(true);
-  if(userInfo.status === 'For Evaluation'){
+
+  if (userInfo.status === 'For Evaluation') {
     swal({
       text: 'You cannot submit your Documents until you have been evaluated by a BMCC.',
       timer: 2000,
       buttons: false,
       icon: "error",
-    })
+    });
     setLoading(false);
-    return
+    return;
   }
+
+  const errors = []; // Store validation errors
+
   try {
     for (let index = 0; index < fileValues.length; index++) {
       const file = fileValues[index];
       const docu = docs[index];
-      const Name = docu.requirementName;
-      const docsFor = docu.docsfor
-      // Skip iteration if file is undefined
+
       if (!file) {
         continue;
       }
-      if (!file.type.startsWith('image/') || (file.type !== 'image/png' && file.type !== 'image/jpeg')) {
-        // Display an error message or handle the validation error accordingly
-        errors.push({ Name, message: 'Only PNG and JPG image files are allowed.' });
+
+      const validationResult = validateFile(file, docu);
+      if (validationResult.error) {
+        errors.push({ Name: docu.requirementName, message: validationResult.error });
         continue;
       }
 
-      const fileSizeInBytes = file.size;
-      const maxSizeInBytes = 5 * 1024 * 1024; // 5MB in bytes
-      
-      if (fileSizeInBytes > maxSizeInBytes) {
-        // Display an error message or handle the validation error accordingly
-        errors.push({ Name, message: 'File size exceeds the limit of 5MB.' });
-        continue;
-      }
-      
-      const applicantNum = userdetails.applicantNum;
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('Reqname', docu.requirementName);
-      formData.append('applicantNum', applicantNum);
-      formData.append('docsFor', docsFor);
+      const formData = createFormData(file, docu);
 
-      const res = await UploadingDocs.UPLOAD_DOCS(formData);
-      const updatedDisabledInputs = [...disabledInputs];
-      updatedDisabledInputs[index] = true;
-      setDisabledInputs(updatedDisabledInputs);
-      setSubmittedDocs1(res.data.DocumentSubmitted);
+      try {
+        const res = await uploadDocument(formData);
+        handleSuccessfulUpload(index, res);
+      } catch (error) {
+        handleFailedUpload(index, error);
+      }
     }
-    setFileValues([]);
-    setImages([]);
   } catch (error) {
     console.log('An error occurred during file submission:', error);
   }
 
   setLoading(false);
+  
   if (errors.length > 0) {
     const errorMessages = errors.map((err) => `${err.Name}: ${err.message}`);
     swal(errorMessages.join("\n"));
   }
-  setErrors([])
-  
-
 };
+
+const validateFile = (file, docu) => {
+  if (!file.type.startsWith('image/') || (file.type !== 'image/png' && file.type !== 'image/jpeg')) {
+    return { error: 'Only PNG and JPG image files are allowed.' };
+  }
+
+  const fileSizeInBytes = file.size;
+  const maxSizeInBytes = 5 * 1024 * 1024; // 5MB in bytes
+
+  if (fileSizeInBytes > maxSizeInBytes) {
+    return { error: 'File size exceeds the limit of 5MB.' };
+  }
+
+  return { error: null };
+};
+
+const createFormData = (file, docu) => {
+  const applicantNum = userdetails.applicantNum;
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('Reqname', docu.requirementName);
+  formData.append('applicantNum', applicantNum);
+  formData.append('docsFor', docu.docsfor);
+  return formData;
+};
+
+const uploadDocument = async (formData) => {
+  try {
+    const res = await UploadingDocs.UPLOAD_DOCS(formData);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const handleSuccessfulUpload = (index, res) => {
+  const updatedDisabledInputs = [...disabledInputs];
+  updatedDisabledInputs[index] = true;
+  setDisabledInputs(updatedDisabledInputs);
+  setSubmittedDocs1(res.DocumentSubmitted);
+};
+
+const handleFailedUpload = (index, error) => {
+  console.error(`File upload failed for index ${index}:`, error);
+  // You can implement appropriate error handling here
+};
+
 const DeleteReq = async (reqName,event) =>{
   const id = userdetails.applicantNum;
   const requirement_Name = reqName;
@@ -203,7 +236,7 @@ function ViewsubDocs(){
           return (
             <>
             {req.File !== 'None' && <div key={index}>
-              <div className="grid_container">
+            <div className="grid_container">
             <Box>
             <Card elevation={5} sx={{height:'100%',maxWidth:'600px'}}>
             <div className="docusibmitted">
@@ -215,7 +248,7 @@ function ViewsubDocs(){
             <p>{req.Status}</p>
             <p>{req.Comments}</p>
             <div className='inputsub'>
-            <input
+            {req.Status !== "Approved" ? (<><input
                 key={index}
                 type="file"
                 value={req[index]}
@@ -225,10 +258,10 @@ function ViewsubDocs(){
                   setUserFiles(updatedFiles);
                 }}
             />
-            <div>
+           <div>
               <button style={{marginRight:'10px'}} className='myButton1' onClick={() =>EditReq(req,index)}>Save Changes</button>
               <button className='myButton2' onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button>
-            </div>
+            </div></>) : (<p>Checked</p>)}
             </div>
             </div>
             </div>

@@ -17,6 +17,7 @@ import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
 import '../css/Firststep.css'
 import '../css/buttonStyle.css'
+import { useTranslation } from 'react-i18next';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,7 +25,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 function Firststep() {
-  const user = useSelector((state) => state.user)
+  const { t } = useTranslation();
   const { setStep, userData, setUserData} = useContext(multiStepContext);
   const [errors, setErrors] = useState({}); 
   const [scholarprog, setScholarProg] = useState([]);
@@ -166,6 +167,7 @@ function Firststep() {
     setErrors('')
     setStep(2)
 };
+const translatedText = t("Personal na Impormasyon");
 
   return (
   <>
@@ -196,10 +198,10 @@ function Firststep() {
       <div className="FFd">
           <div className="form">
           <div className='containerform'>
-          <h4 className='h4head'>Personal Information</h4>
+          <h4 className='h4head'>{translatedText}</h4>
           <Row className="mb-3">
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>Last Name</Form.Label>
+              <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
               <Form.Control
                type="text" 
                value={userData['lastName']} 
@@ -208,7 +210,7 @@ function Firststep() {
             </Form.Group>
 
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>First Name</Form.Label>
+              <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
               <Form.Control 
               type="text" 
               value={userData['firstName']} 
@@ -216,7 +218,7 @@ function Firststep() {
               />
             </Form.Group>
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>Middle Name</Form.Label>
+              <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
               <Form.Control 
               type="text" 
               value={userData['middleName']} 
@@ -254,7 +256,7 @@ function Firststep() {
           </Row>
           <Row className="mb-3">
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>Address</Form.Label>
+              <Form.Label className='frmlabel'>{t("Address")}</Form.Label>
               <Form.Control 
               type="text" 
               placeholder="" 
@@ -294,7 +296,7 @@ function Firststep() {
           </Row>
           <Row className="mb-3">
           <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>Gender</Form.Label>
+            <Form.Label className='frmlabel'>{t("Gender")}</Form.Label>
             <Form.Select aria-label="Default select example"
               value={userData['gender']} 
               onChange={(e) =>setUserData({...userData,"gender" : e.target.value})}
@@ -308,7 +310,7 @@ function Firststep() {
             </Form.Group>
 
             <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>Birthday</Form.Label>
+            <Form.Label className='frmlabel'>{t("Birthday")}</Form.Label>
               <Form.Control 
               type="date" 
               value={userData['birthday']} 
@@ -318,14 +320,14 @@ function Firststep() {
             </Form.Group>
 
             <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>Age</Form.Label>
+            <Form.Label className='frmlabel'>{t("Age")}</Form.Label>
               <Form.Control value={userData['age']} type="number" disabled />
               {errors.age && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.age}</p>}
             </Form.Group>
           </Row>
           <Row className="mb-3">
           <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>Birth Place</Form.Label>
+            <Form.Label className='frmlabel'>{t("Birth Place")}</Form.Label>
             <Form.Control 
             type="text" 
             value={userData['birthPlace']} 
@@ -355,10 +357,10 @@ function Firststep() {
           </Row>
           </div>
           <div className='containerform'>
-          <h4 className='h4head'>Educational Information</h4>
+          <h4 className='h4head'>{t("Educational Information")}</h4>
           <Row className="mb-3">
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>Last School Attended</Form.Label>
+              <Form.Label className='frmlabel'>{t("Last School Attended")}</Form.Label>
               <Form.Control 
               type="text"
               value={userData['School']} 
@@ -367,7 +369,7 @@ function Firststep() {
                  {errors.School && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.School}</p>}
             </Form.Group>
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>School Address</Form.Label>
+              <Form.Label className='frmlabel'>{t("School Address")}</Form.Label>
               <Form.Control type="text"
                value={userData['SchoolAddress']} 
                onChange={(e) =>setUserData({...userData,"SchoolAddress" : e.target.value})}
@@ -377,7 +379,7 @@ function Firststep() {
           </Row>
           <Row className="mb-3">
           <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>Year Level</Form.Label>
+              <Form.Label className='frmlabel'>{t("Year Level")}</Form.Label>
               <Form.Select
                 value={userData['yearLevel']} 
                 onChange={(e) =>setUserData({...userData,"yearLevel" : e.target.value})}
@@ -399,7 +401,7 @@ function Firststep() {
                  {errors.gradeLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.gradeLevel}</p>}
             </Form.Group>
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>Course</Form.Label>
+              <Form.Label className='frmlabel'>{t("Course")}</Form.Label>
               <Form.Select 
                 value={userData['course']} 
                 onChange={(e) =>setUserData({...userData,"course" : e.target.value})}

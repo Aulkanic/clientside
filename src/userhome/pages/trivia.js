@@ -14,11 +14,10 @@ export default function Trivia() {
       setPost(trivia.reverse());
     });
   }, []);
-  const Trivia = post?.map((triv) => {
+  const Trivia = post?.map((triv,index) => {
 
     return (
-      <>
-      <Box>
+      <Box key={index}>
     <Card>
     <div className='trivcard' key={triv.id}>
         <div className="triv">
@@ -32,8 +31,7 @@ export default function Trivia() {
         </div>
     </div>
     </Card>
-    </Box>
-    </>
+      </Box>
     );
   });
 

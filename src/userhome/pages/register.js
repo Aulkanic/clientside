@@ -23,11 +23,12 @@ import { useContext } from "react";
 import { color } from "../../App";
 import { useDispatch } from 'react-redux';
 import { setName } from '../../Redux/userSlice';
+import MYDO from '../assets/mydo.png'
 import Swal from 'sweetalert2';
 
 const CssTextField = styled(TextField)({
   backgroundColor: 'white',
-  width: '400px',
+  width: '100%',
   '& label.Mui-focused': {
     color: 'black',
   },
@@ -394,8 +395,6 @@ const findCreatedAcc = async() =>{
         <div className="registrationcon">
           <div className="registrationfrm">
               <div className="regfrmcontainer">
-              <img className="mydo" src="https://drive.google.com/uc?id=12yKj9K3Caiaq3hP1JRKRbaLpkIuvapkZ"
-         alt=""/>
                 {step === 1 && (
                   <div className='emailotpreg'>
                     <h2 style={{color:colorlist[0].bgColor}}>Registration</h2>
@@ -416,7 +415,8 @@ const findCreatedAcc = async() =>{
                   variant="outlined"
                   style={{
                     cursor: 'pointer', 
-                    width:'80%'
+                    width:'80%',
+                    marginTop:'20px'
                   }}
                 />
               {errors.email && <p variant='outlined' 
@@ -461,14 +461,15 @@ const findCreatedAcc = async() =>{
                         fontWeight: '700',
                         color: 'white',
                         fontSize:'12px',
+                        marginBottom:'15px',
                         textTransform:'capitalize',
                         fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
                       }}
-                            onClick={handlerNextInput}>
-                              Next</LoadingButton>
+                      onClick={handlerNextInput}>
+                        Next</LoadingButton>
                     </div>
                   </div>
-                  <Link onClick={findCreatedAcc}>
+                  <Link sx={{cursor:'pointer'}} onClick={findCreatedAcc}>
                   Already Registered an Account?
                   </Link>
                   </div>
@@ -495,36 +496,25 @@ const findCreatedAcc = async() =>{
                         {errors.otp && <p variant='outlined' 
                         style={{ 
                           width: '85%', 
-                          margin: '10px', 
+                          margin: '10px 10px 0px 70px', 
                           color:'red', 
                           fontSize:'12px',
                           height:'max-Content'}}>
                               {errors.otp}
                             </p>}
+                  <div>
+                      <p>Didn't get the code?
+                      <Link
+                      style={{color:'#252525',cursor:'pointer'}}
+                      onClick={handleResendClick}
+                    >
+                      Resend
+                    </Link>
+                      </p>
+                  </div>
                     <br />
                     <div className='bacreotp'>
-   
-                      <div>
-                      <LoadingButton
-                        loading={loading1}
-                        loadingPosition="end"
-                        variant="outlined"
-                        fullWidth
-                        className='myButton1'
-                        style={{
-                          cursor: 'pointer', 
-                          fontWeight: '700',
-                          color: 'white',
-                          fontSize:'12px',
-                          textTransform:'capitalize',
-                          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-                        }}
-                        onClick={handleResendClick}
-                      >
-                        Resend
-                      </LoadingButton>
-                  </div>
-                  <div>
+                  <div style={{width:'90%'}}>
                 <LoadingButton
                   loading={loading}
                   loadingPosition="end"
@@ -545,7 +535,7 @@ const findCreatedAcc = async() =>{
                   Verify
                 </LoadingButton>
                 </div>
-                <div>
+                <div style={{width:'90%'}}>
                       <LoadingButton 
                       fullWidth
                       className='myButton'
@@ -583,8 +573,8 @@ const findCreatedAcc = async() =>{
                   variant="outlined"
                 />
                     {errors.fname && <p variant='outlined' 
+                    className='perrors'
               style={{ 
-                width: '73%', 
                 margin: '0px', 
                 color:'red', 
                 fontSize:'10px' }}>
@@ -610,8 +600,8 @@ const findCreatedAcc = async() =>{
                   }}
                 />
                     {errors.lname && <p variant='outlined' 
+                    className='perrors'
               style={{ 
-                width: '73%', 
                 margin: '0px', 
                 color:'red', 
                 fontSize:'10px'}}>
@@ -637,8 +627,8 @@ const findCreatedAcc = async() =>{
                   }}
                 />
             {errors.mname && <p variant='outlined' 
+              className='perrors'
               style={{ 
-                width: '73%', 
                 margin: '0px', 
                 color:'red', 
                 fontSize:'10px' }}>
@@ -664,9 +654,9 @@ const findCreatedAcc = async() =>{
                     cursor: 'pointer', 
                   }}
                 />
-            {errors.password && <p variant='outlined' 
+            {errors.password && <p variant='outlined'
+            className='perrors' 
               style={{ 
-                width: '73%', 
                 margin: '0px', 
                 color:'red', 
                 fontSize:'10px', }}>
@@ -676,7 +666,6 @@ const findCreatedAcc = async() =>{
                   <LoadingButton
                   loading={loading}
                   loadingPosition="end"
-                  endIcon={loading ? (null) : (<SendIcon />)}
                   variant="elevated"
                   fullWidth
                   className='myButton1'
@@ -685,6 +674,7 @@ const findCreatedAcc = async() =>{
                     fontWeight: '700',
                     color: 'white',
                     fontSize:'12px',
+                    marginTop:'20px',
                     textTransform:'capitalize',
                     fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
                   }}

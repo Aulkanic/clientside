@@ -12,8 +12,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import { useTranslation } from 'react-i18next';
 
 function Persona() {
+  const { t } = useTranslation();
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
     const [famlist, setFamlist] = useState([]);
@@ -34,6 +36,14 @@ function Persona() {
       const values = [...siblings]
       values.splice(index, 1);
       setSiblings(values)
+    }
+    const handleOnlyChild = () =>{
+      if(!onlyChild){
+        setOnlyChild(true);
+        setSiblings([])
+      }else{
+        setOnlyChild(false)
+      }
     }
 
     useEffect(() =>{
@@ -324,8 +334,8 @@ function Persona() {
           return;
         }
         setUserData((prevUserData) => ({
-          ...prevUserData, // Keep the previous userData properties
-          siblings: siblings, // Update the siblings property
+          ...prevUserData,
+          siblings: siblings, 
         }));
         setErrors('')
         setStep(3)
@@ -334,7 +344,7 @@ function Persona() {
    const siblingfrm = siblings.map((sibling, index) => (
     <div className='siblinginf' key={index}>
       <Form.Group as={Col}>
-      <Form.Label className='frmlabel'>First Name</Form.Label>
+      <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
         <Form.Control
           type="text"
           value={sibling.firstName}
@@ -342,7 +352,7 @@ function Persona() {
         />
       </Form.Group>
       <Form.Group as={Col} style={{margin:'0px 10px 0px 10px'}}>
-      <Form.Label className='frmlabel'>Middle Name</Form.Label>
+      <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
         <Form.Control
           type="text"
           value={sibling.middleName}
@@ -350,7 +360,7 @@ function Persona() {
         />
       </Form.Group>
       <Form.Group as={Col}>
-      <Form.Label className='frmlabel'>Last Name</Form.Label>
+      <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
         <Form.Control
           type="text"
           value={sibling.lastName}
@@ -375,7 +385,7 @@ function Persona() {
               <div className='parenteach'>
                 <h3>Father's Information</h3>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>First Name</Form.Label>
+                  <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['fatherName']} 
@@ -384,7 +394,7 @@ function Persona() {
                    {errors.fatherName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherName}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Middle Name</Form.Label>
+                  <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['fathermName']} 
@@ -393,7 +403,7 @@ function Persona() {
                    {errors.fathermName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fathermName}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Last Name</Form.Label>
+                  <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['fatherlName']} 
@@ -402,7 +412,7 @@ function Persona() {
                   {errors.fatherlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherlName}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Highest Educational Attaintment</Form.Label>
+                  <Form.Label className='frmlabel'>{t("Highest Educational Attaintment")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['fatherEduc']} 
@@ -411,7 +421,7 @@ function Persona() {
                   {errors.fatherEduc && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherEduc}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Father Occupation</Form.Label>
+                  <Form.Label className='frmlabel'>{t("Occupation")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['fatherOccu']} 
@@ -423,7 +433,7 @@ function Persona() {
               <div className='parenteach'>
               <h3>Mother's Information</h3>
                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>First Name</Form.Label>
+                  <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['motherName']} 
@@ -432,7 +442,7 @@ function Persona() {
                   {errors.motherName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherName}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Middle Name</Form.Label>
+                  <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['mothermName']} 
@@ -441,7 +451,7 @@ function Persona() {
                   {errors.mothermName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.mothermName}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Last Name</Form.Label>
+                  <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['motherlName']} 
@@ -450,7 +460,7 @@ function Persona() {
                   {errors.motherlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherlName}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Highest Educational Attaintment</Form.Label>
+                  <Form.Label className='frmlabel'>{t("Highest Educational Attaintment")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['motherEduc']} 
@@ -459,7 +469,7 @@ function Persona() {
                   {errors.motherEduc && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherEduc}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Mother Occupation</Form.Label>
+                  <Form.Label className='frmlabel'>{t("Occupation")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['motherOccu']} 
@@ -471,7 +481,7 @@ function Persona() {
               <div className='parenteach'>
               <h3>Guardian's Information</h3>
                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>First Name</Form.Label>
+                  <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['guardianName']} 
@@ -480,7 +490,7 @@ function Persona() {
                   {errors.guardianName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Middle Name</Form.Label>
+                  <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['guardianmName']} 
@@ -489,7 +499,7 @@ function Persona() {
                   {errors.guardianmName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianmName}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Last Name</Form.Label>
+                  <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
                   <Form.Control
                   type="text" 
                   value={userData['guardianlName']} 
@@ -530,7 +540,7 @@ function Persona() {
               <div style={{display:"flex",justifyContent:'space-around',alignItems:'center'}}>
               
               <h3>List of Siblings </h3>
-              <FormControlLabel sx={{whiteSpace:'nowrap'}} control={<Switch checked={onlyChild} onChange={() => setOnlyChild(!onlyChild)} />} label="I am an only child" />
+              <FormControlLabel sx={{whiteSpace:'nowrap'}} control={<Switch checked={onlyChild} onChange={handleOnlyChild} />} label="I am an only child" />
               </div>
               {errors.sibling && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.sibling}</p>}
               {siblingfrm}
@@ -539,6 +549,7 @@ function Persona() {
                 className='myButton1'
                 variant='primary'
                 onClick={handleAddFields}
+                disabled={onlyChild}
               >
                 <AddIcon sx={{color:'white'}}/>
               </Button>

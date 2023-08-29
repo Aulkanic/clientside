@@ -18,9 +18,11 @@ import swal from 'sweetalert';
 import '../css/economic.css'
 import '../css/buttonStyle.css'
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 
 function Economic() {
+    const { t } = useTranslation();
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
     const navigate = useNavigate();
@@ -59,7 +61,7 @@ function Economic() {
       setSelectedValues([]);
     }, [userData.schoID]);
 
-    console.log(userData)
+   
     function Check(){
       const errors = {};
       if(userData.schoID === ''){
@@ -170,7 +172,7 @@ function Economic() {
           <div key={index} style={{padding:'10px'}}>
             <FormControl>
               <FormLabel sx={{fontWeight:'700',color:'black'}} id="demo-row-radio-buttons-group-label">
-                {index + 1}.{data.questions}
+                {index + 1}.{t(data.questions)}
                 </FormLabel>
               <RadioGroup
                 row
@@ -181,7 +183,7 @@ function Economic() {
               >
                 {choices?.map((choice,index) =>{
                   return(
-                    <FormControlLabel key={index} value={choice.value} control={<Radio  id={choice.scorecard} />} label={choice.value} />
+                    <FormControlLabel key={index} value={choice.value} control={<Radio  id={choice.scorecard} />} label={t(choice.value)} />
                   )
                 })}
                 
@@ -190,7 +192,6 @@ function Economic() {
           </div>
         )
        })
-      console.log(selectedValues)
     return (
     <div className='Econ'>
         <div className="Econd">
@@ -229,15 +230,19 @@ function Economic() {
               </div>
             <div className='frmbtnec'>
             <Button className='myButton' variant="contained" onClick={() => setStep(2)}>Previous</Button>
+            <div>
             <LoadingButton
                 loading={loading}
-                sx={{color:'white'}}
-                loadingPosition="start"
+                sx={{color:'white',width:'maxContent'}}
+                loadingPosition="end"
                 className='myButton1'
                 onClick={Check}
+                fullWidth
               >
                 Submit
               </LoadingButton>
+            </div>
+
             </div>
             </div>
            

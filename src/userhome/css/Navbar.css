@@ -12,38 +12,44 @@
 }
 .scho-info{
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     height: 70%;
     border-top-right-radius: 25px;
     border-top-left-radius: 25px;
     font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 }
-.scho-info .profile{
+.nameprof{
+    display: flex;
+}
+.nameprof .profile{
     margin: 15px;
     margin-left: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
+
 }
-.scho-info img{
+.nameprof img{
     width: 70px;
     height: 70px;
     border-radius: 35px;
 }
-.scho-info .info{
+.nameprof .info{
     padding: 15px;
 }
-.scho-info .info .details{
+.nameprof .info .details{
     letter-spacing: 2px;
     margin: 0;
     font-size: 18px;
     text-decoration: none;
 }
-.scho-info .info .details small .stat{
+.nameprof .info .details small .stat{
     font-size: 15px;
     margin-left: 10px;
 }
-.scho-info .notific{
+.nameprof .notific{
     display: flex;
     cursor: pointer;
 }
@@ -90,3 +96,39 @@
   .dropdown:hover .dropdown-content {display: block;}
   
   .dropdown:hover .dropbtn {background-color: whitesmoke;}
+
+  .notif{
+    margin-right: 20px;
+    position: relative;
+  }
+  .nonotif{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+  }
+  .notifcontainer{
+    display: flex;
+    padding: 10px;
+    height: 120px;
+    border-bottom: 2px solid #252525;
+    overflow: hidden;
+    margin-bottom: 15px;
+    cursor: pointer;
+  }
+  .truncated-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .notifcontainer img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid grey;
+    margin-right: 15px;
+  }

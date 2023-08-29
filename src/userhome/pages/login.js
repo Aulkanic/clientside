@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './login.css'
 import { useNavigate, Link } from 'react-router-dom'
-import BMCC from '../assets/marisko.png'
+import BMCC from '../assets/mydo.png'
 import TextField from '@mui/material/TextField';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -9,9 +9,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import LoginTwoToneIcon from '@mui/icons-material/LoginTwoTone';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
-import { alpha, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
-import {loginUserAcc, GetUserAcc, GenerateOtp, ValidateUserOtp, ChangePassbyOtp,Colorlist} from '../../Api/request'
+import {loginUserAcc, GetUserAcc, GenerateOtp, ValidateUserOtp, ChangePassbyOtp} from '../../Api/request'
 import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
@@ -26,12 +26,10 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function TransitionLeft(props) {
-  return <Slide {...props} direction="left" />;
-}
+
 const CssTextField = styled(TextField)({
   backgroundColor: 'white',
-  width: '400px',
+  width: 'auto',
   '& label.Mui-focused': {
     color: 'black',
   },
@@ -53,7 +51,7 @@ const CssTextField = styled(TextField)({
 
 const Login = () => {
     const dispatch = useDispatch();
-    const { colorlist,imgList,logolist } = useContext(color);
+    const { colorlist } = useContext(color);
     const [email, setEmail] = useState('');
     const [fpemail, setFPEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -67,14 +65,35 @@ const Login = () => {
     const [loading2,setLoading2] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [otp, setOtp] = useState('');
+    const [otp, setOtp] = useState(new Array(6).fill(''));
+    const inputRefs = useRef([]);
     const [remainingSeconds, setRemainingSeconds] = useState(60);
     const [resstat,setResstat] = useState('');
-
+ 
     const handleSnackbarClose = () => {
       setSnackbarOpen(false);
     };
-
+    const handleChange = (event, index) => {
+      const value = event.target.value;
+      if (value.length <= 1) {
+        const newOTP = [...otp];
+        newOTP[index] = value;
+        setOtp(newOTP);
+  
+        if (value !== '' && index < 6 - 1) {
+          inputRefs.current[index + 1].focus();
+        }
+      }
+    };
+  
+    const handleKeyPress = (event, index) => {
+      if (event.key === 'Backspace' && index > 0 && otp[index] === '') {
+        const newOTP = [...otp];
+        newOTP[index - 1] = '';
+        setOtp(newOTP);
+        inputRefs.current[index - 1].focus();
+      }
+    };
 
     useEffect(() => {
       if (remainingSeconds > 0) {
@@ -95,7 +114,6 @@ const Login = () => {
         if (!password) {
           errors.password = "Password is required";
         }
-        console.log(Object.keys(errors).length)
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
           console.log(errors)
@@ -323,7 +341,6 @@ const Login = () => {
     const handlerNewPasswordInput = (e) => setNewPassword(e.target.value)
     const handlerRenewPasswordInput = (e) => setRenewPassword(e.target.value)
     const handlerForgotPasswordLink = (e) => setStep(1)
-    const handlerOtpInput = (e) => setOtp(e.target.value)
     const handlerBackInput = (e) => {
       setStep(0)
     }
@@ -346,18 +363,18 @@ const Login = () => {
 
     <div className="loginpage">
                 <div className="lgform">
-                    <div className="logbmcc"  style={{backgroundColor:colorlist[0].bgColor}}>
-                        <img  src={BMCC} alt="" />
-                        <p>PONDO PARA SA ISKOLAR NG BAYAN <br />NG MARILAO</p>
-                    </div>
+
                     
                     {step === 0 && (
                     <div className="lgcon">
-
+                    <div className="logbmcc">
+                        <img  src={BMCC} alt="" />
+                        <p>USER LOGIN</p>
+                    </div>
                   <form action="">
                     <div style={{marginBottom:'20px'}}>
                       <CssTextField      
-                      id="input-with-icon-textfield"
+                      id="Email"
                       label="Email"
                       value={email}
                       fullWidth
@@ -378,6 +395,7 @@ const Login = () => {
                       style={{
                         cursor: 'pointer', 
                       }}
+                      autoComplete="email"
                     />
                     {errors.email && <p
                     style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }}
@@ -387,7 +405,7 @@ const Login = () => {
                     </div>
                     <div>
                     <CssTextField      
-                      id="input-with-icon-textfield"
+                      id="Password"
                       label="Password"
                       type='password'
                       value={password}
@@ -408,6 +426,7 @@ const Login = () => {
                       style={{
                         cursor: 'pointer', 
                       }}
+                      autoComplete="current-password"
                     />
                     {errors.password && <p 
                     style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }} 
@@ -416,26 +435,28 @@ const Login = () => {
                       </p>}
                     </div>
                   </form>
+                  <div className="loglink">
+                    <Link className='lglink' onClick={handlerForgotPasswordLink}>Forgot your Password?</Link>
+                  </div>
                   <div className='signforgot'>
                         <div className="lgbtn">
                             <LoadingButton
                             loading={loading}
                             loadingPosition="end"
                             variant="elevated"
-                            endIcon={loading ? (null) : (<LoginTwoToneIcon />)}
                             fullWidth
                             sx={{
                               margin: '10px',
                               cursor: 'pointer',
                               fontWeight: '700',
-                              backgroundColor: 'green',
+                              backgroundColor: '#B0C4DE',
                               color: 'white',
                               fontSize: '15px',
                               letterSpacing: '2px',
                               textTransform:'capitalize',
                               transition: 'background 0.3s ease-in-out, clip-path 0.3s ease-in-out',
                               '&:hover': {
-                                backgroundColor: 'rgba(43, 194, 106, 0.73)',
+                                backgroundColor: 'rgba(32, 76, 234, 1) ',
                               },
                               fontFamily:
                                 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
@@ -445,15 +466,15 @@ const Login = () => {
                             Login
                           </LoadingButton>
                         </div>
-                        <div className="loglink">
-                            <Link className='lglink' onClick={handlerForgotPasswordLink}>Forgot your Password?</Link>
-                        </div>
                   </div>
 
                     </div>)}
                     {step === 1 && (
         <div className='findtocon'>
-          <h2 style={{color:colorlist[0].bgColor}}>Find your account</h2>
+                    <div className="logbmcc">
+                        <img  src={BMCC} alt="" />
+                        <p>FIND YOUR ACCOUNT</p>
+                    </div>
           <div className="otpfform">
           <p>Enter your email here to send a confirmation for a password reset.</p>
           <CssTextField      
@@ -489,15 +510,14 @@ const Login = () => {
           <LoadingButton
             loading={loading1}
             loadingPosition="end"
-            endIcon={loading ? (null) : (<SendIcon />)}
             variant="elevated"
             fullWidth
             sx={{
               '&:hover': {
-                background: colorlist[0].bgColor,
+                background: 'rgba(76, 234, 32, 1)',
                 transform: 'scale(1.1)'
               },
-              background: colorlist[0].bgColor,
+              background:'#B9E6B0',
               color: 'white',
               marginLeft:'10px',
               textTransform:'capitalize'
@@ -510,11 +530,11 @@ const Login = () => {
           <div>
           <LoadingButton variant="elevated" 
                   sx={{
-                    background: colorlist[0].bgColor,
+                    background: '#B0C4DE',
                     color: 'white',
                     textTransform:'capitalize',
                     '&:hover': {
-                      background: colorlist[0].bgColor,
+                      background: 'rgba(32, 76, 234, 1)',
                       transform: 'scale(1.1)'
                     },
                   }}
@@ -527,22 +547,27 @@ const Login = () => {
                       )}
                     {step === 2 && (
         <div className='otpverifycon'>
-          <h2 style={{color:colorlist[0].bgColor}}>OTP VERIFICATION</h2>
+                    <div className="logbmcc">
+                        <img  src={BMCC} alt="" />
+                        <p>OTP VERIFICATION</p>
+                    </div>
           <div className="formotpvalif">
           <p>An OTP has been sent to your email. Please enter it below:</p>
           <label>
-            <input
-            maxLength={6}
-                  style={{
-                    width: '100%',
-                    height: '40px',
-                    fontSize: '18px',
-                    textAlign: 'center',
-                    letterSpacing: '25px',
-                    border: '1px solid #ccc',
-                    borderRadius: '5px',
-                    outline: 'none',
-                  }} type="text" value={otp} onChange={handlerOtpInput}/>
+          <div className="otp-input-container">
+                    {otp.map((digit, index) => (
+                        <input
+                          key={index}
+                          className="otp-input"
+                          type="text"
+                          maxLength="1"
+                          value={digit}
+                          onChange={(e) => handleChange(e, index)}
+                          onKeyDown={(e) => handleKeyPress(e, index)}
+                          ref={(ref) => (inputRefs.current[index] = ref)}
+                        />
+                      ))}
+          </div>
      {errors.otp && (<p
          style={{ 
           width: '83%', 
@@ -559,29 +584,13 @@ const Login = () => {
           </div>
           <div className='bacreotp'>    
             <div>
-            <LoadingButton
-        loading={loading1}
-        loadingPosition="end"
-        variant="outlined"
-        sx={{
-          '&:hover': {
-            background: colorlist[0].bgColor,
-            transform: 'scale(1.1)'
-          },
-          background: colorlist[0].bgColor,
-          margin: '10px', 
-          cursor: 'pointer', 
-          fontWeight: '700',
-          color: 'white',
-          fontSize:'15px',
-          textTransform:'capitalize',
-          width:'90%',
-          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-        }}
-        onClick={handleResendClick}
-      >
-        Resend
-      </LoadingButton>
+            <p>Didn't get a code?<Link
+              style={{color:'#252525'}}
+              onClick={handleResendClick}
+            >
+              Resend
+            </Link></p>
+
             </div>
             <div>
             <LoadingButton
@@ -589,20 +598,16 @@ const Login = () => {
               loadingPosition="end"
               variant="outlined"
               fullWidth
-              style={{
+              sx={{
                 '&:hover': {
-                  background: colorlist[0].bgColor,
+                  background: 'rgba(76, 234, 32, 1)',
                   transform: 'scale(1.1)'
                 },
-                background: colorlist[0].bgColor,
-                margin: '10px', 
-                cursor: 'pointer', 
-                fontWeight: '700',
+                background:'#B9E6B0',
                 color: 'white',
-                fontSize:'15px',
-                textTransform:'capitalize',
-                width:'90%',
-                fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+                marginLeft:'10px',
+                marginTop:'20px',
+                textTransform:'capitalize'
               }}
               onClick={ValidateOtp}
             >
@@ -614,7 +619,10 @@ const Login = () => {
                        )}
                     {step === 3 && (
         <div className='restfrmpass'>
-          <h1 style={{color:colorlist[0].bgColor}}>Reset your Password</h1>
+                    <div className="logbmcc">
+                        <img  src={BMCC} alt="" />
+                        <p>OTP VERIFICATION</p>
+                    </div>
           <div className="updatepassresfrm">
           <div>
           <CssTextField      
@@ -690,21 +698,17 @@ const Login = () => {
         loading={loading}
         fullWidth
         loadingPosition="end"
-        endIcon={loading ? (null) : (<SendIcon />)}
         variant="elevated"
         sx={{
           '&:hover': {
-            background: colorlist[0].bgColor,
+            background: 'rgba(76, 234, 32, 1)',
             transform: 'scale(1.1)'
           },
-          margin: '10px', 
-          cursor: 'pointer', 
-          fontWeight: '700',
-          background: colorlist[0].btnColor,
+          background:'#B9E6B0',
           color: 'white',
-          fontSize:'15px',
-          textTransform:'capitalize',
-          fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+          marginBottom:'10px',
+          marginTop:'10px',
+          textTransform:'capitalize'
         }}
         onClick={UpdateUserPass}
       >

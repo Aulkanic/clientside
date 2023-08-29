@@ -1,19 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap');
 .lschoCat{
-    top: 20%;
-    position: absolute;
     background-image: url('../../userhome/assets/municipal.jpg');
     background-repeat: no-repeat;
     background-position: 50%;
     background-attachment: scroll;
     background-size: cover;
-    padding-top: 20px;
     height: 100%;
     min-height: 100vh;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit,minmax(400px, 1fr));
     grid-gap: 10px;
+    padding: 20px;
+
 }
 .schohp{
     text-align: center;
@@ -24,12 +23,9 @@
 }
 
 .schoCat{
-    margin: 20px 40px 10px 40px;
     padding: 10px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     background: white;
     border-radius: 10px;
     height: 300px;
@@ -37,7 +33,7 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .schoIcon{
-    width: 50%;
+    width: 100%;
     height: 100px;
     display: flex;
     align-items: top;
@@ -45,8 +41,9 @@
 }
 
 .schoDet{
+    height: inherit;
     font-family: 'Inter', sans-serif;
-    text-align: center;
+    text-align: left;
 }
 .schoDet .ntitle{
     color: darkgreen;
@@ -54,15 +51,13 @@
 .schoDet .ndate h6{
     font-size: 15px;
 }
-.schobtncat{
-    font-size: 15px;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    bottom: 0;
-    margin-top: 15px;
+.btncontainerscho{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .linkingscho{
     color: white;
     text-decoration: none;
+    position: relative;
 }
