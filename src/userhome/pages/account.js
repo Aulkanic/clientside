@@ -4,25 +4,13 @@ import Homepage from '../components/Homepage'
 import { FetchingProfileUser,ChangingProfile, Change_Password,FetchingApplicantsInfo,EditUserinfo } from '../../Api/request'
 import {useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
-import { Box,Card, Typography } from "@mui/material"; 
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import Avatar from '@mui/material/Avatar';
-import LoadingButton from '@mui/lab/LoadingButton';
-import MuiAlert from '@mui/material/Alert';
-import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import TextField from '@mui/material/TextField';
-import EditIcon from '@mui/icons-material/Edit';
-import Fab from '@mui/material/Fab';
-import InputAdornment from '@mui/material/InputAdornment';
-import SendIcon from '@mui/icons-material/Send';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import '../Button/buttonstyle.css'
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Typography from '@mui/material/Typography';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import PasswordRoundedIcon from '@mui/icons-material/PasswordRounded';
@@ -30,53 +18,48 @@ import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import ListRoundedIcon from '@mui/icons-material/ListRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import swal from 'sweetalert'
+import { FetchNotif,FetchUnreadNotif,ReadNotifi,UserActivity,Logoutuser } from '../../Api/request';
+import swal from 'sweetalert';
+import Form from 'react-bootstrap/Form';
+import MYDO from '../assets/mydo.png'
 import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux';
+import parse from 'date-fns/parse';
+import { setLoggedIn,setUserDetails } from '../../Redux/loginSlice';
 
-const CssTextField = styled(TextField)({
-  backgroundColor: 'white',
-  width: '400px',
-  '& label.Mui-focused': {
-    color: 'black',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: '#B2BAC2',
-  },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: '#E0E3E7',
-    },
-    '&:hover fieldset': {
-      borderColor: '#B2BAC2',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#6F7E8C',
-    },
-  },
-});
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  borderRadius:'10px'
+};
 
 const Account = () => {
-  const { userdetails } = useSelector((state) => state.login);
+  const dispatch = useDispatch();
+  const { userdetails,LoggedIn } = useSelector((state) => state.login);
   const [post, setPost] = useState([]);
   const [userpicture, setProfileuser] = React.useState([]);
   const applicantNum = userdetails.applicantNum
   const [value, setValue] = useState(0);
   const [userprofile, setProfilepic] = useState(null);
+  const [userlog,setUserlog] = useState([])
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState();
   const [currentpassword, setCurrent] = useState('');
   const [newpassword, setNew] = useState('');
   const [repass, setRepass] = useState('');
   const [errors, setErrors] = useState({});
-  const [open, setOpen] = useState(false);
-  const [age,setAge] = useState('');
-  const [contactNum,setContactNum] = useState('');
-  const [caddress, setCaddress] = useState('');
-  const [currentSchool,setCschool] = useState('');
-  const [gwa,setGwa] = useState('');
-  const [typeSchool,setTypeschool] = useState('');
-  const [currentYear,setCurrentYear] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [remarks, setRemarks] = useState('all');
+  const [notification,setNotification] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [notifInf,setNotifDet] = useState([]);
+  const handleClose = () => setOpen(false);
 
 
 useEffect(() => {
@@ -91,17 +74,6 @@ setPreview(objectUrl)
 return () => URL.revokeObjectURL(objectUrl)
 }, [userprofile])
 
-const handleFileInputChange = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    setSelectedFile(file);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreview(reader.result);
-    };
-    reader.readAsDataURL(file);
-  }
-};
 
 useEffect(() => {
   const fetchData = async () => {
@@ -111,6 +83,14 @@ useEffect(() => {
 
       const profileUserResponse = await FetchingProfileUser.FETCH_PROFILEUSER(applicantNum);
       setProfileuser(profileUserResponse.data.Profile[0]);
+
+      const Notification = await FetchNotif.FETCH_NOTIF(applicantNum)
+      setNotification(Notification.data.reverse())
+      const userData = new FormData();
+      userData.append('applicantNum',applicantNum)
+      const re = await UserActivity.USER_LOG(userData)
+      const log = re.data.result
+      setUserlog(log.reverse())
     } catch (error) {
       console.log(error);
     }
@@ -126,7 +106,6 @@ useEffect(() => {
     const details = {userprof,applicantNum};
    await ChangingProfile.CHANGE_PROFILE(details)
     .then(res => {
-      console.log(res)
       setProfileuser(res.data.Result[0])
       setLoading(false)
     }
@@ -192,96 +171,93 @@ useEffect(() => {
      )
     .catch(err => console.log(err));
   }
-  async function Editinfo(event){
-    event.preventDefault()
-      let errors = {};
-      const upage = age || post[0].age;
-      if(/[a-zA-Z]/.test(upage)){
-        errors.age = "Input must not contain letter value";
-      }else if(upage < post[0].age){
-        errors.age = 'Age must be greater than your previous age if you want to update'
-      }
-      const contact = contactNum || post[0].contactNum
-      if(!/^09\d{9}$/.test(contact)){
-        errors.contactNum = "Invalid phone number.";
-      }
-    const addressc = caddress || post[0].caddress
-    const school = currentSchool || post[0].currentSchool
-    const schoyear = currentYear || post[0].currentYear;
-    const schotype = typeSchool || post[0].typeSchool;
-    const schogwa = gwa || post[0].gwa
-    if (Object.keys(errors).length > 0) {
-      setErrors(errors);
-      console.log(errors)
-      return;
-    }
-    setLoading(true)
-    const formData = new FormData();
-    formData.append('age',upage)
-    formData.append('contactNum',contact)
-    formData.append('caddress',addressc)
-    formData.append('currentSchool',school)
-    formData.append('currentYear',schoyear)
-    formData.append('typeSchool',schotype)
-    formData.append('gwa',schogwa)
-    formData.append('applicantNum',applicantNum)
-   const response = await EditUserinfo.EDIT_USERINFO(formData);
-   if(response.data.success === 1){
-    setPost(response.data.result)
-    setLoading(false)
-    setErrors('')
-    swal({
-      text: 'Updated Successfully',
-      timer: 2000,
-      buttons: false,
-      icon: "success",
-    })
-   }
-   else{
-    setLoading(false)
-   }
 
+const allnotif = async() => {
+  setRemarks('all')
+  await FetchNotif.FETCH_NOTIF(applicantNum)
+  .then((res) =>{
+    setNotification(res.data.reverse())
+  })
+}
+const unreadnotif = async() =>{
+  setRemarks('unread')
+  await FetchUnreadNotif.FETCH_UNREADNOTIF(applicantNum)
+  .then((res) =>{
+    setNotification(res.data.reverse())
+  })
+}
+const SetReadNotif = async(val) =>{
+  setOpen(true)
+  setNotifDet(val)
+  const formData = new FormData();
+  formData.append('notifId',val.id)
+  formData.append('applicantNum',applicantNum)
+ await ReadNotifi.READ_NOTIFICATION(formData)
+ .then((response)=>{
+  const rev = response.data
+  setNotification(rev.reverse());
+  })
+}
+
+function formatTimeDifference(date) {
+  const timestamp = new Date(date);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - timestamp) / 1000);
+
+  if (diffInSeconds < 10) {
+    return "just now";
+  } else if (diffInSeconds < 60) {
+    return `${diffInSeconds} seconds ago`;
+  } else if (diffInSeconds < 3600) {
+    const minutes = Math.floor(diffInSeconds / 60);
+    return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
+  } else if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600);
+    return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
+  } else {
+    const days = Math.floor(diffInSeconds / 86400);
+    return `${days} ${days === 1 ? 'day' : 'days'} ago`;
   }
-  const stylediv = {
-    width: '100%',
-    fontSize:'20px',
-    textAlign:'center'
-  };
+}
 
-const userinfor = Array.isArray(post)
-  ? post.map((data,index) => {
-      return (
-          <Card key={index} elevation={0} sx={{width:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'top'}}>
-            <div className="aligninfo">
-              <h1 style={{color:'#666'}}>Personal Information</h1>
-            <Typography>
-              Name: {data?.Name}
-            </Typography>
-            <Typography>
-            Age: {data.age}
-            </Typography>
-            <Typography>
-            Contact Number: {data.contactNum}
-            </Typography>
-            <Typography>
-            Current Address: {data.address}
-            </Typography>
-            <Typography>
-            School Attended this Year: {data.school}
-            </Typography>
+async function signout() {
+  const formData = new FormData();
+  formData.append('applicantNum',applicantNum)
+    await Logoutuser.USER_LOGOUT(formData)
+    dispatch(setLoggedIn(false));
+    dispatch(setUserDetails([]))
+}
 
-            </div>
-          </Card>
-      );
-    })
-  : null;
 
   const handlerCPasswordInput = (e) => setCurrent(e.target.value)
   const handlerNPasswordInput = (e) => setNew(e.target.value)
   const handlerRPasswordInput = (e) => setRepass(e.target.value)
-console.log(userprofile)
   return (
     <>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={style}>
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              {notifInf.title}
+            </Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+              {notifInf.content}
+            </Typography>
+          </Box>
+        </Fade>
+      </Modal>
       <Homepage/>
       <div className="acccontainer">
        <div className='accleftbar'>
@@ -292,42 +268,36 @@ console.log(userprofile)
             sx={{
               fontSize:'30px',
               marginRight:'10px',
-              border:"2px solid black",
               borderRadius:'50%'}}
             />Account Details</li>
             <li onClick={() => setValue(1)}><CameraAltRoundedIcon 
              sx={{
               fontSize:'30px',
               marginRight:'10px',
-              border:"2px solid black",
               borderRadius:'50%'}}           
             />Change Profile</li>
             <li onClick={() => setValue(2)}><PasswordRoundedIcon 
             sx={{
               fontSize:'30px',
               marginRight:'10px',
-              border:"2px solid black",
               borderRadius:'50%'}}            
             />Change Password</li>
             <li onClick={() => setValue(3)}><NotificationsRoundedIcon 
              sx={{
               fontSize:'30px',
               marginRight:'10px',
-              border:"2px solid black",
               borderRadius:'50%'}}             
             />Notifications</li>
             <li onClick={() => setValue(4)}><ListRoundedIcon 
              sx={{
               fontSize:'30px',
               marginRight:'10px',
-              border:"2px solid black",
               borderRadius:'50%'}}            
             />Activity Log</li>
-            <li><LogoutRoundedIcon 
+            <li onClick={signout}><LogoutRoundedIcon 
              sx={{
               fontSize:'30px',
               marginRight:'10px',
-              border:"2px solid black",
               borderRadius:'50%'}}             
             />Logout</li>
           </ul>
@@ -357,6 +327,7 @@ console.log(userprofile)
           }
           {value === 1 &&
           <>
+          <h1 className='acch1'>Account Profile</h1>
           <div className='accProfile'>
           <img src={preview || post.profile} alt="" />
       <label>
@@ -379,6 +350,122 @@ console.log(userprofile)
           {preview && (<button className='myButton' onClick={ChangeProf}>Upload Image</button>)}
           </div>
          
+          </>
+          }
+          {value === 2 &&
+          <>
+          <div className='accPassword'>
+            <h1>Change Password</h1>
+            <Form>
+              <Form.Group className="mb-3" controlId="formGroupEmail">
+                <Form.Label>Old Password</Form.Label>
+                <Form.Control style={{backgroundColor:'#f1f3fa'}} type="password" 
+                value={currentpassword}
+                onChange={handlerCPasswordInput}
+                />
+                {errors.currentpassword && <p variant='outlined' 
+                  style={{ 
+                    width: '87%', 
+                    color:'red', 
+                    fontSize:'10px',
+                    height:'30px',
+                    background:'white' }} elevation={0} severity="error">
+                        {errors.currentpassword}
+                </p>} 
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formGroupPassword">
+                <Form.Label>New Password</Form.Label>
+                <Form.Control style={{backgroundColor:'#f1f3fa'}} type="password"
+                value={newpassword}
+                onChange={handlerNPasswordInput}
+                />
+                      {errors.newpassword && <p variant='outlined' 
+                      style={{ 
+                        width: '87%',
+                        color:'red', 
+                        fontSize:'10px',
+                        height:'30px',
+                        background:'white' }} elevation={0} severity="error">
+                            {errors.newpassword}
+                      </p>} 
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formGroupPassword">
+                <Form.Label>Confirm new Password</Form.Label>
+                <Form.Control style={{backgroundColor:'#f1f3fa'}} type="password" 
+                value={repass}
+                onChange={handlerRPasswordInput}
+                />
+                {errors.repass && <p variant='outlined' 
+                style={{ 
+                  width: '87%',
+                  color:'red', 
+                  fontSize:'10px',
+                  height:'30px',
+                  background:'white' }} elevation={0} severity="error">
+                      {errors.repass}
+                </p>} 
+              </Form.Group>
+            </Form>
+            <p>Make sure it's at least 15 characters OR at least 8 characters including a number and a lowercase letter.</p>
+            <button  onClick={ChangePassword} className='myButton'>Update password</button>
+          </div>
+          </>
+          }
+          {value === 3 &&
+          <>
+          <div className="accNotifify">
+            <h2 >Notifications</h2>
+            <div className='sortbtnNotify'>
+              <button onClick={allnotif} className={remarks === 'all' ? 'btnnotifactive' : 'inactive'}>All</button>
+              <button onClick={unreadnotif} className={remarks === 'unread' ? 'btnnotifactive' : 'inactive'}>Unread</button>
+            </div>
+            <div className="listofNotif">
+              {notification?.map((data,index)=>{
+                  const rawDate = data.date.replace("at", ""); // Remove "at" from the date string
+                  const formattedDate = new Date(rawDate);
+                let content;
+                if(data.content.length <= 110){
+                  content = <p className='truncated-text1'>{data.content}</p>
+                }else{
+                  const truncated = data.content.substring(0, 110) + '...';
+                  content = <p className='truncated-text1'>{truncated}</p>
+                }
+                return (
+                  <div key={index} onClick={() => SetReadNotif(data)} className='notif'>
+                    <img src={MYDO} alt="" />
+                    <div style={{display:'flex',flexDirection:'column'}}>
+                    <p style={{
+                      fontWeight:'700',
+                      margin:'0'
+                    }}>{data.title}</p>
+                    {content}
+                    <p className={data.remarks === 'unread' ? 'unreadnotif' : 'none'}>{formatTimeDifference(formattedDate)}</p>
+                    </div>
+                    {data.remarks === 'unread' && (<div className='rightnotif'>
+                        <div className='circle'></div>
+                    </div>)}
+                  </div>
+                )
+              })
+            }
+            </div>
+          </div>
+          </>
+          }
+          {value === 4 &&
+          <>
+          <div className="userlog">
+          <h1>Recent Activity</h1>
+            <ul>
+            {userlog?.map((data,index) =>{
+              return(
+                <li>
+                  <p key={index}>{data.actions} on {data.date}</p><span>{formatTimeDifference(data.date)}</span>
+                </li>
+              )
+            })}
+            </ul>
+          </div>
           </>
           }
        </div>

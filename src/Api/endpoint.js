@@ -6,7 +6,8 @@ const Endpoints = {
     FETCH_SCHOLAR_CATEGORY:"scholar/schoCat",
     CREATE_SCHOLAR:"scholar/createScho",
     FETCH_NEWS:"news/newsinfo",
-    FETCH_NOTIF:"news/Notification",
+    FETCH_NOTIF:"news/Notification/",
+    FETCH_UNREADNOTIF:"news/UnreadNotification/",
     READ:"news/ReadNotif",
     FETCH_ADMIN:"admin/login",
     LOGIN_USER:"user/login",
@@ -45,6 +46,8 @@ const Endpoints = {
     FETCH_FAQS:'Faqs/Fetch',
     FETCH_RULE:'Dynamic/Rulelist',
     APPLICATION_FORM:'ApplicationForm/Form',
+    USER_ACTIVITY: 'admin/Userlog',
+
 }
 
 export default Endpoints

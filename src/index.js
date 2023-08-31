@@ -4,8 +4,6 @@ import App from './App';
 import { BrowserRouter, Route, Routes} from 'react-router-dom'
 import { store } from './app/store';
 import { Provider } from 'react-redux';
-import { I18nextProvider } from 'react-i18next';
-import i18next from './i18n';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

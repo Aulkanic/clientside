@@ -114,7 +114,6 @@
     display: flex;
     padding: 10px;
     height: 120px;
-    border-bottom: 2px solid #252525;
     overflow: hidden;
     margin-bottom: 15px;
     cursor: pointer;

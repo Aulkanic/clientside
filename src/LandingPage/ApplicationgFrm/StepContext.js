@@ -10,7 +10,7 @@ export const multiStepContext = React.createContext();
 function StepContext() {
     const user = useSelector((state) => state.user);
     
-    const [currentStep, setStep] = useState(3);
+    const [currentStep, setStep] = useState(2);
     const [userData, setUserData] = useState({
       applicantNum:user.applicantNum,
       address:'',
@@ -62,7 +62,6 @@ function StepContext() {
       <I18nextProvider i18n={i18next}>
         <multiStepContext.Provider value={{currentStep, setStep, userData, setUserData, finalData, setFinalData, SubmitData}} >
             <Applicationfrm/>
-            <LanguageSwitcher />
         </multiStepContext.Provider>
         </I18nextProvider>
     </div>}

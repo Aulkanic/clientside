@@ -132,8 +132,14 @@ export const FindRegisteredUser = {
     FETCH_USERREG: (data) => axiosInstance.get(Endpoints.FIND_REGISTEREDACC,data)
 }
 export const FetchNotif = {
-    FETCH_NOTIF: (data) => axiosInstance.get(Endpoints.FETCH_NOTIF,data)
+    FETCH_NOTIF: (data) => axiosInstance.get(Endpoints.FETCH_NOTIF+data)
+}
+export const FetchUnreadNotif = {
+    FETCH_UNREADNOTIF: (data) => axiosInstance.get(Endpoints.FETCH_UNREADNOTIF+data)
 }
 export const ReadNotifi = {
     READ_NOTIFICATION: (data) => axiosInstance.post(Endpoints.READ,data)
+}
+export const UserActivity = {
+    USER_LOG: (data) => axiosInstance.post(Endpoints.USER_ACTIVITY,data)
 }

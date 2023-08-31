@@ -1,20 +1,15 @@
 import React, { useContext } from 'react'
 import Firststep from './Firststep'
 import Perso from './persona'
-import Fam from './family'
-import Educ from './educational'
 import Econ from './economic'
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import SettingsIcon from '@mui/icons-material/Settings';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import PropTypes from 'prop-types';
 import '../css/ApplicationFrm.css'
 import { multiStepContext } from './StepContext';
-import Lheader from '../components/navbar'
+import LanguageSwitcher from '../../LanguageSwitcher';
 import { styled } from '@mui/material/styles';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
@@ -139,7 +134,16 @@ function Applicationfrm() {
           </Step>
         ))}
         </Stepper>
+        
     </div>
+    <div className="ribbon-header">
+    <div className="ribbon-header-text">
+      {currentStep === 1 && (<h2>Personal Information</h2>)}
+      {currentStep === 2 && (<h2>Family Background</h2>)}
+      {currentStep === 3 && (<h2>Other Information</h2>)}
+      <LanguageSwitcher />    
+    </div>
+  </div>
     <form action="">
     {showStep(currentStep)}
     </form>

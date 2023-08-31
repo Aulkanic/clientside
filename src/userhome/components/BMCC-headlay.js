@@ -1,14 +1,12 @@
 import React from 'react'
-import BMCC from './../assets/logo.jpg'
 import '../css/Bmcc-header.css'
 import marilao from './../assets/marilao.jpg'
-import mayor from './../assets/hl.png'
 import Avatar from '@mui/material/Avatar';
 import { useContext } from "react";
 import { color } from "../../App";
 import LoopingRhombusesSpinner from '../loadingDesign/loading'
 const Header = () => {
-  const { colorlist,imgList,logolist } = useContext(color);
+  const { colorlist,logolist } = useContext(color);
 
   return (
     <>

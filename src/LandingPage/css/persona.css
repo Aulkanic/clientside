@@ -10,6 +10,7 @@ p{
   box-sizing: border-box;
 }
 .Persona{
+    margin-top: -20px;
     margin-left: 10%;
     width: 80%;
     height: 100vh;

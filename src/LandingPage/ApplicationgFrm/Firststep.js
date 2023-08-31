@@ -194,11 +194,12 @@ const translatedText = t("Personal na Impormasyon");
       <Button onClick={handleClose}>Ok</Button>
     </DialogActions>
   </Dialog>
+
   <div className='FirstepFrm'>
+
       <div className="FFd">
           <div className="form">
           <div className='containerform'>
-          <h4 className='h4head'>{translatedText}</h4>
           <Row className="mb-3">
             <Form.Group as={Col}>
               <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>

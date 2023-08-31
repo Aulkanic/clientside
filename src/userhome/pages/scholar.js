@@ -41,7 +41,6 @@ const StyledTabList = styled(TabList)(({ theme }) => ({
 const Scholar = () => {
 const { userdetails } = useSelector((state) => state.login);
 const [docs, setDocs] = useState([]);
-const [submitted, setSubmittedDocs] = useState([]);
 const [submitted1, setSubmittedDocs1] = useState([]);
 const [fileValues, setFileValues] = useState([]);
 const [fileNames, setFileNames] = useState([]);
@@ -211,7 +210,6 @@ useEffect(() => {
   const fetchData = async () => {
     try {
       setLoading(true)
-      console.log(userdetails)
       const response = await Promise.all([
         ListofReq.FETCH_REQUIREMENTS(),
         ListofSub.FETCH_SUB(applicantNum),
@@ -219,9 +217,9 @@ useEffect(() => {
       ]);
       const schoCat = response[2].data.results[0].SchoIarshipApplied
       const Batch = response[2].data.results[0].Batch
-      const RequireDocs = response[0].data.Requirements.results1?.filter(docs => docs.schoName === schoCat && docs.batch === Batch)
+      const RequireDocs = response[0].data.Requirements.results1?.filter(docs => docs.schoName === schoCat && docs.batch === Batch && docs.docsfor === 'Application')
       setDocs(RequireDocs);
-      setUserInfo(response[2].data.results[0])
+      setUserInfo(response[2].data.results[0]);
       setSubmittedDocs1(response[1].data.Document);
       setLoading(false)
     } catch (error) {
