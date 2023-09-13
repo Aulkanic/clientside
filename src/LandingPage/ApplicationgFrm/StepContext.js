@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Applicationfrm from './Applicationfrm';
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading';
 import { useSelector } from 'react-redux';
-import LanguageSwitcher from '../../LanguageSwitcher';
 import i18next from '../../i18n';
 import { I18nextProvider } from 'react-i18next';
 
@@ -10,8 +9,10 @@ export const multiStepContext = React.createContext();
 function StepContext() {
     const user = useSelector((state) => state.user);
     
-    const [currentStep, setStep] = useState(2);
-    const [userData, setUserData] = useState({
+    const [currentStep, setStep] = useState(1);
+    const [userData, setUserData] = useState(() => {
+      const saveData = localStorage.getItem('userData');
+      return saveData ? JSON.parse(saveData) : {
       applicantNum:user.applicantNum,
       address:'',
       age:'',
@@ -48,9 +49,23 @@ function StepContext() {
       relationship:'',
       schoID:'',
       siblings: [],
+      };
     });
+    console.log(userData)
     const [finalData, setFinalData] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() =>{
+        localStorage.setItem('userData',JSON.stringify(userData))
+    },[userData])
+
+    useEffect(() =>{
+      const saveData = localStorage.getItem('userData');
+      if(saveData){
+        setUserData(JSON.parse(saveData))
+      }
+    },[])
+
     function SubmitData(){
       setFinalData(finalData => [...finalData,userData])
       setUserData('');

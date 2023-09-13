@@ -1,5 +1,4 @@
 import React from 'react'
-import Lheader from '../components/navbar'
 import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -61,42 +60,9 @@ function Newexspage() {
            <Link className='gotolog' to='/login'>REDIRECT TO LOGIN PAGE</Link> 
         </div>
         <div className='lnewpage'>
-        <Button variant="none" onClick={handleClickOpen}><Link className='gotoreg'>MOBILE APPLICATION</Link></Button>
+        <Button variant="none" ><Link className='gotoreg'>MOBILE APPLICATION</Link></Button>
         </div>
-        <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Download the MARISKO APP</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            To login to the Mobile Application, please download the MARISKO APP and enter your email address here for us to send the link of the APK.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            value={email}
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button className='myButton' sx={{color:'white',marginRight:'10px'}} onClick={handleClose}>Cancel</Button>
-          <div>
-          <LoadingButton
-                loading={loading}
-                loadingPosition="end"
-                variant="elevated"
-                fullWidth
-                sx={{color:'white'}}
-                className='myButton1'
-                onClick={sendEmail}
-              >
-                Send
-          </LoadingButton>
-          </div>
-        </DialogActions>
-      </Dialog>
+
     </div>
     </>
   )

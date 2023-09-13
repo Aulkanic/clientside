@@ -1,29 +1,35 @@
 import React, {useEffect, useState} from 'react'
 import './scholar.css'
-import DeleteBtn from '../Button/deletebutton'
-import Button from '@mui/material/Button';
 import Homepage from '../components/Homepage'
-import Axios from 'axios'
 import { UploadingDocs, ListofReq, ListofSub, EditSub, DeleteSub,FetchingApplicantsInfo } from '../../Api/request';
 import swal from 'sweetalert';
-import LoopingRhombusesSpinner from '../loadingDesign/loading'
-import { useNavigate } from 'react-router-dom'
 import Noimageprev from '../../userhome/assets/documenticon.png'
-import DefAvatar from '../../userhome/assets/defavatar.png'
-import { motion } from "framer-motion";
-import { Box, Modal} from "@mui/material";
+import { DataGrid} from '@mui/x-data-grid';
+import { Box, Button} from "@mui/material";
+import Swal from 'sweetalert2';
 import Card from '@mui/material/Card';
-import Skeleton from '@mui/material/Skeleton';
 import LoadingButton from '@mui/lab/LoadingButton';
-import MuiAlert from '@mui/material/Alert';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
+import Chip from '@mui/material/Chip';
 import TabPanel from '@mui/lab/TabPanel';
+import { darken, lighten} from '@mui/material/styles';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import EditIcon from '@mui/icons-material/Edit';
+import HourglassBottomRoundedIcon from '@mui/icons-material/HourglassBottomRounded';
 import '../Button/buttonstyle.css'
 import { styled } from '@mui/material/styles';
+import { Backdrop, CircularProgress } from '@mui/material';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useSelector } from 'react-redux'
+
+const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 50,
+  color: '#fff',
+}));
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   fontWeight: 'bold',
@@ -38,12 +44,121 @@ const StyledTabList = styled(TabList)(({ theme }) => ({
 
 }));
 
+const getBackgroundColor = (color, mode) =>
+  mode === 'dark' ? darken(color, 0.9) : lighten(color, 0.7);
+
+const getHoverBackgroundColor = (color, mode) =>
+  mode === 'dark' ? darken(color, 0.6) : lighten(color, 0.6);
+
+const getSelectedBackgroundColor = (color, mode) =>
+  mode === 'dark' ? darken(color, 0.5) : lighten(color, 0.5);
+
+const getSelectedHoverBackgroundColor = (color, mode) =>
+  mode === 'dark' ? darken(color, 0.4) : lighten(color, 0.4);
+
+const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+  '& .super-app-theme--Open': {
+    backgroundColor: getBackgroundColor(theme.palette.info.main, theme.palette.mode),
+    '&:hover': {
+      backgroundColor: getHoverBackgroundColor(
+        theme.palette.info.main,
+        theme.palette.mode,
+      ),
+    },
+    '&.Mui-selected': {
+      backgroundColor: getSelectedBackgroundColor(
+        theme.palette.info.main,
+        theme.palette.mode,
+      ),
+      '&:hover': {
+        backgroundColor: getSelectedHoverBackgroundColor(
+          theme.palette.info.main,
+          theme.palette.mode,
+        ),
+      },
+    },
+  },
+  '& .super-app-theme--Approved': {
+    backgroundColor: getBackgroundColor(
+      theme.palette.success.main,
+      theme.palette.mode,
+    ),
+    '&:hover': {
+      backgroundColor: getHoverBackgroundColor(
+        theme.palette.success.main,
+        theme.palette.mode,
+      ),
+    },
+    '&.Mui-selected': {
+      backgroundColor: getSelectedBackgroundColor(
+        theme.palette.success.main,
+        theme.palette.mode,
+      ),
+      '&:hover': {
+        backgroundColor: getSelectedHoverBackgroundColor(
+          theme.palette.success.main,
+          theme.palette.mode,
+        ),
+      },
+    },
+  },
+  '& .super-app-theme--For_Review': {
+    backgroundColor: getBackgroundColor(
+      theme.palette.warning.main,
+      theme.palette.mode,
+    ),
+    '&:hover': {
+      backgroundColor: getHoverBackgroundColor(
+        theme.palette.warning.main,
+        theme.palette.mode,
+      ),
+    },
+    '&.Mui-selected': {
+      backgroundColor: getSelectedBackgroundColor(
+        theme.palette.warning.main,
+        theme.palette.mode,
+      ),
+      '&:hover': {
+        backgroundColor: getSelectedHoverBackgroundColor(
+          theme.palette.warning.main,
+          theme.palette.mode,
+        ),
+      },
+    },
+  },
+  '& .super-app-theme--Reject': {
+    backgroundColor: getBackgroundColor(
+      theme.palette.error.main,
+      theme.palette.mode,
+    ),
+    '&:hover': {
+      backgroundColor: getHoverBackgroundColor(
+        theme.palette.error.main,
+        theme.palette.mode,
+      ),
+    },
+    '&.Mui-selected': {
+      backgroundColor: getSelectedBackgroundColor(
+        theme.palette.error.main,
+        theme.palette.mode,
+      ),
+      '&:hover': {
+        backgroundColor: getSelectedHoverBackgroundColor(
+          theme.palette.error.main,
+          theme.palette.mode,
+        ),
+      },
+    },
+  },
+}));
+
 const Scholar = () => {
 const { userdetails } = useSelector((state) => state.login);
 const [docs, setDocs] = useState([]);
 const [submitted1, setSubmittedDocs1] = useState([]);
 const [fileValues, setFileValues] = useState([]);
 const [fileNames, setFileNames] = useState([]);
+const [showBackdrop, setShowBackdrop] = useState(false);
 const [loading, setLoading] = useState(false);
 const [images, setImages] = useState([]);
 const [disabledInputs, setDisabledInputs] = useState([]);
@@ -87,8 +202,12 @@ const handleSubmit = async (event) => {
   }
 
   const errors = []; // Store validation errors
-
+  const messages = [];
+  if(fileValues.length === 0 ){
+    swal("Error","Please upload all required Requirements.","warning");
+  }
   try {
+   
     for (let index = 0; index < fileValues.length; index++) {
       const file = fileValues[index];
       const docu = docs[index];
@@ -108,6 +227,8 @@ const handleSubmit = async (event) => {
       try {
         const res = await uploadDocument(formData);
         handleSuccessfulUpload(index, res);
+        
+        messages.push({Name: docu.requirementName, Message: res.message})
       } catch (error) {
         handleFailedUpload(index, error);
       }
@@ -117,10 +238,13 @@ const handleSubmit = async (event) => {
   }
 
   setLoading(false);
-  
+  if(messages.length > 0){
+    const successMessages = messages.map((succ) => `${succ.Name}: ${succ.Message}`);
+    swal(successMessages.join("\n"));
+  }
   if (errors.length > 0) {
     const errorMessages = errors.map((err) => `${err.Name}: ${err.message}`);
-    swal(errorMessages.join("\n"));
+    swal(errorMessages.join("\n"), { icon: "error" });
   }
 };
 
@@ -162,6 +286,7 @@ const handleSuccessfulUpload = (index, res) => {
   const updatedDisabledInputs = [...disabledInputs];
   updatedDisabledInputs[index] = true;
   setDisabledInputs(updatedDisabledInputs);
+  setFileValues([])
   setSubmittedDocs1(res.DocumentSubmitted);
 };
 
@@ -170,41 +295,91 @@ const handleFailedUpload = (index, error) => {
   // You can implement appropriate error handling here
 };
 
-const DeleteReq = async (reqName,event) =>{
-  const id = userdetails.applicantNum;
-  const requirement_Name = reqName;
+const DeleteReq = async (det) =>{
+  const id = det.applicantId;
+  const requirement_Name = det.requirement_Name;
   const formData = new FormData();
   formData.append('id', id);
   formData.append('requirement_Name', requirement_Name);
-  setLoading(true)
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Deleted!',
+        'Your file has been deleted.',
+        'success'
+      )
+      setShowBackdrop(true)
   DeleteSub.DELETE_SUB(formData)
   .then(res => {
-    setLoading(false)
+    setShowBackdrop(false)
     setSubmittedDocs1(res.data.result);
     const schoCat = userInfo.SchoIarshipApplied
     const Batch = userInfo.Batch
-    const RequireDocs = res.data.documentlist.results1?.filter(docs => docs.schoName === schoCat && docs.batch === Batch)
+    const RequireDocs = res.data.documentlist.results1?.filter(docs => docs.schoName === schoCat && docs.batch === Batch && docs.docsfor === 'Application')
     setDocs(RequireDocs);
   }
    )
   .catch(err => console.log(err));
+    }
+  })
+  
 }
-const EditReq = async (data,index) =>{
+const EditReq = async (data) =>{
+  const { value: file } = await Swal.fire({
+    title: 'Select image',
+    input: 'file',
+    inputAttributes: {
+      'accept': 'image/*',
+      'aria-label': 'Upload your profile picture'
+    }
+  })
+  if(!file){
+    return
+  }
+  
   const applicantNum = data.applicantId;
   const requirement_Name = data.requirement_Name;
   const formData = new FormData();
-    formData.append(`file`, userFiles[index] || data.File);
+    formData.append(`file`, file);
     formData.append(`Reqname`, requirement_Name);
     formData.append(`applicantNum`, applicantNum);
-    setLoading(true)
+    setShowBackdrop(true);
     EditSub.EDIT_SUB(formData)
     .then(res => {
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          Swal.fire({
+            title: 'Your uploaded picture',
+            imageUrl: e.target.result,
+            imageAlt: 'The uploaded picture'
+          })
+        }
+        reader.readAsDataURL(file)
+      }
       setSubmittedDocs1(res.data.result);
       setUserFiles([]); 
-      setLoading(false)
+      setShowBackdrop(false);
     }
     )
     .catch(err => console.log(err));
+  }
+  const viewFile = async (data) =>{
+    Swal.fire({
+      title: `${data.requirement_Name}`,
+      imageUrl: `${data.File}`,
+      imageWidth: 600,
+      imageHeight: 400,
+      imageAlt: 'Custom image',
+    })
   }
 useEffect(() => {
   const fetchData = async () => {
@@ -229,50 +404,7 @@ useEffect(() => {
 
   fetchData();
 }, []);
-function ViewsubDocs(){
-        const documentsubmitted1 = submitted1?.map((req, index) => {
-          return (
-            <>
-            {req.File !== 'None' && <div key={index}>
-            <div className="grid_container">
-            <Box>
-            <Card elevation={5} sx={{height:'100%',maxWidth:'600px'}}>
-            <div className="docusibmitted">
-              <div className="docusubprev">   
-              {req.File ? (<img src={req.File} alt="" />) : (<img src={Noimageprev} alt="" />)}
-              </div>
-              <div className='userdocsubstat'>
-            <p style={{fontSize:'18px',fontWeight:'700'}}>{req.requirement_Name}</p>
-            <p>{req.Status}</p>
-            <p>{req.Comments}</p>
-            <div className='inputsub'>
-            {req.Status !== "Approved" ? (<><input
-                key={index}
-                type="file"
-                value={req[index]}
-                onChange={e => {
-                  const updatedFiles = [...userFiles];
-                  updatedFiles[index] = e.target.files[0];
-                  setUserFiles(updatedFiles);
-                }}
-            />
-           <div>
-              <button style={{marginRight:'10px'}} className='myButton1' onClick={() =>EditReq(req,index)}>Save Changes</button>
-              <button className='myButton2' onClick={() =>DeleteReq(req.requirement_Name)}>Delete</button>
-            </div></>) : (<p>Checked</p>)}
-            </div>
-            </div>
-            </div>
-            </Card>
-            </Box>
 
-            </div>
-            </div>}
-            </>
-          );
-        });  
-        return documentsubmitted1     
-    }
 const requirements = docs?.map((docu, index) => {
       const isDisabled = disabledInputs[index] || false;
       const valueToCheck = docu.requirementName;
@@ -318,8 +450,100 @@ const requirements = docs?.map((docu, index) => {
         </React.Fragment>
       );
     });
+
+    const columns = [
+      { 
+        field: 'requirement_Name', 
+        headerName: 'Requirement Name',
+        width: 200
+       },
+       {
+        field: 'File',
+        headerName: 'File',
+        width: 200, 
+        renderCell: (params) => {     
+          return (
+                <img
+                  alt="No Image"
+                  src={params.value}
+                  style={{ minwidth: '75px', height: 35,objectFit:'cover' }}
+                />
+          );},
+        },
+       {
+         field: 'Date', 
+          headerName: 'Date Submitted',
+        width: 250
+        },
+      {
+        field: 'Comments',
+        headerName: 'Comments',
+        width: 150,
+        editable: false,
+      },
+      {
+        field: 'Status',
+        headerName: 'Remarks',
+        width: 200,
+        editable: false,
+        renderCell: (params) =>{
+          let details = {};
+          if(params.row.Status === 'Approved'){
+             details = {
+              color: 'success',
+              icon: <CheckRoundedIcon/>,
+              label: 'Checked'
+            }
+          }
+          if(params.row.Status === 'Reject'){
+             details = {
+              color: 'error',
+              icon: <ClearRoundedIcon/>,
+              label: 'Rejected'
+            }
+          }
+          if(params.row.Status === 'For_Review'){
+            details = {
+              color: 'warning',
+              icon: <HourglassBottomRoundedIcon/>,
+              label: 'For Review'
+            }
+          }
+
+          return(
+            <Chip label={details.label} color={details.color} variant={'filled'} icon={details.icon}/>
+          )
+        }
+      },
+      {
+        field: 'actions',
+        headerName: 'Actions',
+        width: 220,
+        editable: false,
+        renderCell:(params) =>{
+
+          return(
+            <>
+            {params.row.Status !== 'Approved' ? 
+            (<div>
+              <Button onClick={() =>EditReq(params.row)} sx={{color:'white',textTransform:'none',marginRight:'10px'}} className='myButton1'><EditIcon sx={{fontSize:'15px'}}/></Button>
+              <Button onClick={() =>DeleteReq(params.row)} sx={{color:'white',textTransform:'none'}} className='myButton2'><ClearRoundedIcon sx={{fontSize:'15px'}}/></Button>
+            </div>) :
+            (
+              <Button onClick={() => viewFile(params.row)} sx={{color:'white',display:'flex',alignItems:'center',textTransform:'none'}} className='myButton'><RemoveRedEyeIcon sx={{marginTop:'-2px',marginRight:'2px'}}/>View</Button>
+            )
+            }
+            </>
+          )
+        }
+      }
+  
+    ];
 return(
   <>
+  <StyledBackdrop open={showBackdrop}>
+    <CircularProgress color="inherit" />
+  </StyledBackdrop>
     <Homepage/>
   <div>
       <TabContext value={value}>
@@ -362,10 +586,31 @@ return(
           <div className="userdocusub">
             <div className="userschocont">
             <div>
-              <h1>Documents Submitted</h1>
+              <h1>Requirements Submitted</h1>
             </div>
             <div className='usersbumtdoc'>
-            {submitted1.length > 0 ? (ViewsubDocs()) : 
+            {submitted1.length > 0 ? 
+            (
+              <Box sx={{backgroundColor:'white',color:'black',borderRadius:'5px',overflow:'auto'}}>
+              <StyledDataGrid
+              rows={submitted1}
+              columns={columns}
+              getRowId={(row) => row.id}
+              scrollbarSize={10}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              sx={{color:'black',padding:'10px'}}
+              getRowClassName={(params) => `super-app-theme--${params.row.Status}`}
+              pageSizeOptions={[25]}
+              disableRowSelectionOnClick
+            />
+            </Box>
+            ) : 
             (<div className="docusibmitted">
               <div className='Nodocupost'> 
               <p>No Document Submitted</p>

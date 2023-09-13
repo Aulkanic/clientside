@@ -1,20 +1,18 @@
-import Application from './userhome/pages/Application';
 import Bmccsite from './LandingPage/lpages/Bmccsite'
 import StepContext from './LandingPage/ApplicationgFrm/StepContext';
 import SchoCategory from './LandingPage/lpages/schoCategory';
-import Lnewexspage from './LandingPage/lpages/new-exspage'
 import Home from './userhome/pages/Home'
 import Account from './userhome/pages/account';
-import ChangeProfile from './userhome/actions/changeProfile';
-import ChangePassword from './userhome/actions/changePassword';
 import SCHOLAR from './userhome/pages/scholar';
 import Schoinfo from './userhome/pages/scho-info';
+import PageNotFound from './userhome/pages/PagenotFound';
+import NoInternet from './userhome/pages/NoInternet';
 import News from './userhome/pages/news';
 import Announcement from './userhome/pages/announcement';
 import Trivia from './userhome/pages/trivia';
 import Login from './userhome/pages/login';
 import Register from './userhome/pages/register'
-import { Route, Routes} from 'react-router-dom';
+import { Route, Routes, useNavigate} from 'react-router-dom';
 import RequireAuth from './features/authenticate/RequireAuth';
 import { Colorlist,WebImg,Logos } from './Api/request'
 import { Provider } from 'react-redux';
@@ -28,6 +26,8 @@ import LoopingRhombusesSpinner from './userhome/loadingDesign/loading'
 
 export const color = createContext();
 function App() {
+  const navigate = useNavigate();
+  const isOnline = navigator.onLine;
   const colorstore = JSON.parse(localStorage.getItem('Color'));
   const imgstore = JSON.parse(localStorage.getItem('Image'));
   const logostore = JSON.parse(localStorage.getItem('Logo'));
@@ -35,6 +35,12 @@ function App() {
   const [imgList,setImglist] = useState(imgstore || null);
   const [logolist,setLogolist] = useState(logostore || null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isOnline) {
+      navigate('/no-internet');
+    }
+  }, [isOnline, navigate]);
 
   useEffect(() =>{
     async function Fetch(){
@@ -75,19 +81,18 @@ function App() {
     <Routes> 
          <Route exact path='/' element={<Bmccsite/>}/>
          <Route path='/ScholarshipProgram' element={<SchoCategory/>}/>
-         <Route path='/Scho1' element={<Lnewexspage/>}/>
          <Route path='/login' element={<Login/>}/>
          <Route path='/register' element={<Register/>}/>
          <Route path='/ApplicationForm' element={<StepContext/>}/>
-
+         <Route path='/no-internet' element={<NoInternet/>}/>
+         <Route path="/404" element={<PageNotFound />} />
+         <Route path="*" element={<PageNotFound />} />
 
         {/* Protective Route*/}
 
        <Route element={<RequireAuth/>}>
             <Route path='/home' element={<Home/>}/>
             <Route path='/account' element={<Account/>}/>
-            <Route path='/ChangeProfile' element={<ChangeProfile/>}/>
-            <Route path='/ChangePassword' element={<ChangePassword/>}/>
             <Route path='/scholar' element={<SCHOLAR/>}/>
             <Route path='/scholar/info' element={<Schoinfo/>}/>
             <Route path='/news' element={<News/>}/>

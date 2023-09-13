@@ -23,6 +23,9 @@ const Header = () => {
     
       <div className='LINK'>
         <div className='marilao'>
+        <Avatar alt="" src="https://drive.google.com/uc?id=1HsYAs1azfEEjkJDjPKQaWjhorcW1W0T6" sx={{width: 60, height: 60}} />
+        </div>
+        <div className='marilao'>
         <Avatar alt="" src={marilao} sx={{width: 60, height: 60}} />
         </div>
     <div className='mayor'>

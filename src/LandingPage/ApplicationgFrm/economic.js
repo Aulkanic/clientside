@@ -137,7 +137,7 @@ function Economic() {
           if(res.data.success === 1){
            
             setUserData('');
-            navigate('/Scho1');
+            setStep(4)
             swal({
               title: "Success",
               text: "Successfully Submitted!",
@@ -233,11 +233,12 @@ function Economic() {
             <div>
             <LoadingButton
                 loading={loading}
-                sx={{color:'white',width:'maxContent'}}
+                sx={{color:'white',textTransform:'none'}}
                 loadingPosition="end"
                 className='myButton1'
                 onClick={Check}
                 fullWidth
+
               >
                 Submit
               </LoadingButton>

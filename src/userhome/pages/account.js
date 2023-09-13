@@ -6,7 +6,6 @@ import {useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import '../Button/buttonstyle.css'
-import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
@@ -24,8 +23,14 @@ import Form from 'react-bootstrap/Form';
 import MYDO from '../assets/mydo.png'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
-import parse from 'date-fns/parse';
+import { Backdrop, CircularProgress } from '@mui/material';
+import DefaultImg from '../assets/defaultimg.png'
 import { setLoggedIn,setUserDetails } from '../../Redux/loginSlice';
+
+const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 50,
+  color: '#fff',
+}));
 
 const style = {
   position: 'absolute',
@@ -50,12 +55,13 @@ const Account = () => {
   const [userprofile, setProfilepic] = useState(null);
   const [userlog,setUserlog] = useState([])
   const [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState();
+  const [preview, setPreview] = useState(null);
   const [currentpassword, setCurrent] = useState('');
   const [newpassword, setNew] = useState('');
   const [repass, setRepass] = useState('');
   const [errors, setErrors] = useState({});
   const [remarks, setRemarks] = useState('all');
+  const [showBackdrop, setShowBackdrop] = useState(false);
   const [notification,setNotification] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [notifInf,setNotifDet] = useState([]);
@@ -101,13 +107,19 @@ useEffect(() => {
 
  async function ChangeProf(event){
     event.preventDefault();
-    setLoading(true)
+    setShowBackdrop(true)
     const userprof = userprofile;
     const details = {userprof,applicantNum};
    await ChangingProfile.CHANGE_PROFILE(details)
     .then(res => {
       setProfileuser(res.data.Result[0])
-      setLoading(false)
+      setShowBackdrop(false)
+      swal({
+        text: 'Profile has been Changed',
+        timer: 2000,
+        buttons: false,
+        icon: "success",
+      })
     }
      )
     .catch(err => console.log(err));
@@ -135,7 +147,6 @@ useEffect(() => {
     if(repass !== newpassword){
       errors.newpassword = 'New Password did not Match'
     }
-    console.log(Object.keys(errors).length)
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       console.log(errors)
@@ -146,11 +157,12 @@ useEffect(() => {
     formData.append('newpassword',newpassword);
     formData.append('Currentpassword',currentpassword);
     formData.append('email',email)
-    setLoading(true)
+    setShowBackdrop(true)
   await Change_Password.CHANGE_PASSWORD(formData)
     .then(res => {
         if(res.data.success === 0){
-          setLoading(false)
+          setShowBackdrop(false)
+          setErrors('')
           swal({
             text: res.data.message,
             timer: 2000,
@@ -159,7 +171,8 @@ useEffect(() => {
           })
         }
         else{
-          setLoading(false)
+          setShowBackdrop(false)
+          setErrors('')
           swal({
             text: res.data.message,
             timer: 2000,
@@ -234,6 +247,9 @@ async function signout() {
   const handlerRPasswordInput = (e) => setRepass(e.target.value)
   return (
     <>
+      <StyledBackdrop open={showBackdrop}>
+        <CircularProgress color="inherit" />
+      </StyledBackdrop>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -329,7 +345,7 @@ async function signout() {
           <>
           <h1 className='acch1'>Account Profile</h1>
           <div className='accProfile'>
-          <img src={preview || post.profile} alt="" />
+          <img src={preview || post.profile || DefaultImg} alt="" />
       <label>
         <PhotoCameraIcon
           sx={{

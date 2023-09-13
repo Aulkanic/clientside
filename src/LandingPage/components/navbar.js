@@ -61,6 +61,13 @@ function Navbar() {
             </div>
           
             <div className='rightlogo'>
+            <div style={{margin:'2px'}}>
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="https://drive.google.com/uc?id=1HsYAs1azfEEjkJDjPKQaWjhorcW1W0T6"
+                        sx={{ width: 56, height: 56 }}
+                      />
+                </div>
                 <div style={{margin:'2px'}}>
                       <Avatar
                         alt="Remy Sharp"
@@ -75,6 +82,7 @@ function Navbar() {
                         sx={{ width: 56, height: 56 }}
                       />
                 </div>
+
             </div>
         </div>
         <div className='navstabs' style={{backgroundColor: colorlist[0].bgColor}}>

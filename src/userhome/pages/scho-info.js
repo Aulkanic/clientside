@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './scho-info.css'
 import  Homepage from '../components/Homepage'
 import { Cango, FetchingApplicantsInfo, FetchingUserappoint,UserCango } from '../../Api/request'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
-import { styled } from '@mui/material/styles';
 import { Tabs, Tab, Box, Modal, Card } from "@mui/material"; 
-import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -106,15 +102,15 @@ const Schoinfo = () => {
                   {data.statusApp === 'Ongoing' && data.isInterview === 'No' ? 
                   (<div>
                   <button style={{marginRight:'10px'}} className='myButton1' onClick={() =>willgo(data,'Yes')}>
-                    Will Go
+                    Accept
                   </button>
                   <button className='myButton2' onClick={() =>handleClickOpen(data)}>
-                    Cannot Go
+                    Decline
                   </button>
                   </div>) : data.isInterview === 'Reappoint' ? (<>
                   <p>You've been Re-Appointed</p>
                   </>) : data.isPassed !== 'Pending' ? (<p>
-                    <p>{data.isPassed}</p>
+                    <p>Done</p>
                   </p>) : null}
                 </div>
                 </div>

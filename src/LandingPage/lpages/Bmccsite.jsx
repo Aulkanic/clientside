@@ -12,6 +12,7 @@ import { useContext } from "react";
 import { color } from "../../App";
 import { useRef } from "react";
 import { useInView } from "framer-motion";
+import ScrollToTopButton from '../../userhome/components/scrollButton.jsx'
 import '../css/page.css'
 
 const Bmccsite = () => {
@@ -99,6 +100,7 @@ const Bmccsite = () => {
         </div>
         </div>
         </div>
+        <ScrollToTopButton />
     </div>
   )
 }

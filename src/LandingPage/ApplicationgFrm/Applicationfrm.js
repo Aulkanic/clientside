@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import Firststep from './Firststep'
 import Perso from './persona'
 import Econ from './economic'
+import Done from './done'
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
@@ -118,6 +119,8 @@ function Applicationfrm() {
                 return <Perso/>
             case 3 :
                 return <Econ/>
+            case 4 : 
+                return <Done/>
         }
     }
   return (
