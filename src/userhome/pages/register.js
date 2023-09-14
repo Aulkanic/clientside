@@ -120,6 +120,7 @@ const Register = () => {
     setLoading(true)
      await RegistryOtp.REGISTRY_OTP(formData)
      .then(res => {
+      console.log(res)
       if(res.data.success === 0){
         setResstat('500')
         setSnackbarMessage(res.data.message);
