@@ -59,6 +59,7 @@
 .hascho h1{
     font-size: 20px;
     margin-bottom: 15px;
+    color: green;
 }
 .ascholi{
     width: 100%;
@@ -85,6 +86,16 @@
 .alinkapp{
     color: black;
     text-decoration: none;
+    border: 2px solid green;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: ease;
+}
+.alinkapp:hover{
+    background-color:#4CAF50 ;
+    color: white;
+    padding: 7px;
 }
 @media (max-width:630px) {
     .ascholarship{

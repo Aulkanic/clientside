@@ -71,7 +71,7 @@ const imagelist = imgList?.map((image, index) => {
         </div>
         <div className="logcontac">
           <h1>Connect with Us</h1>
-          <p>For inquiries regarding the Scholarhip Program,please send us a message to any of the following platforms</p>
+          <p style={{marginBottom:'20px'}}>For inquiries regarding the Scholarhip Program,please send us a message to any of the following platforms</p>
           <GreenButton variant="contained" href="https://web.facebook.com/BatangMarilenyo">
             <FacebookSharpIcon/>
           </GreenButton>

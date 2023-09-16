@@ -107,7 +107,7 @@ const Register = () => {
 
       if (!email) {
         errors.email = "Email is required";
-      } else if (!/^[A-Za-z0-9._%+-]+@gmail\.com$/.test(email)) {
+      } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email)) {
          errors.email = "Email is invalid";
       }
       if (Object.keys(errors).length > 0) {
@@ -120,7 +120,6 @@ const Register = () => {
     setLoading(true)
      await RegistryOtp.REGISTRY_OTP(formData)
      .then(res => {
-      console.log(res)
       if(res.data.success === 0){
         setResstat('500')
         setSnackbarMessage(res.data.message);
@@ -244,12 +243,13 @@ const Register = () => {
     CreatingRegistry.CREATE_REGISTRY({fname,lname,mname,email,password})
     .then(res => {
       if(res.data.message === 'Created'){
-        const applicantNum = res.data.data.applicantNum
+        const applicantNum = res.data.data.applicantNum;
+        const isWarning = res.data.warning;
         setResstat('200')
         setSnackbarMessage('Account Created');
         setSnackbarOpen(true); 
         navigate('/ApplicationForm');
-        dispatch(setName({fname,lname,mname,email,applicantNum}))
+        dispatch(setName({fname,lname,mname,email,applicantNum,isWarning}))
         setLoading(false)
       
       }else{
@@ -266,6 +266,10 @@ const Register = () => {
     const handleResendClick = (event) =>{
       event.preventDefault();
       const errors = {};
+      if(remainingSeconds === 1){
+        setDisabled(true)
+        errors.otp = `${remainingSeconds} second before requesting another OTP.`
+      }
       if(remainingSeconds > 0){
         setDisabled(true)
         errors.otp = `${remainingSeconds} seconds before requesting another OTP.`
@@ -337,12 +341,10 @@ const findCreatedAcc = async() =>{
   })
   
   if (email) {
-    const formData = new FormData()
-    formData.append('email',email)
-     await FindRegisteredUser.FETCH_USERREG(formData)
+     await FindRegisteredUser.FETCH_USERREG(email)
      .then((res) =>{
       if(res.data.success === 1){
-        const result = res.data.result;
+        const result = res.data.result[0];
         const fname = result.fname;
         const lname = result.lname;
         const mname = result.mname;
@@ -557,21 +559,16 @@ const findCreatedAcc = async() =>{
 
                 {step === 3 && (
                   <div className='createacccon'>
+
+                    <div className='Fieldlog'>
                     <h2>Create Account</h2>
-                  <CssTextField      
+                    <label htmlFor="First Name">First Name</label>
+                    <input      
                   id="input-with-icon-textfield"
                   label="First Name"
+                  className='inputss'
                   value={fname}
-                  size="small"
                   onChange={handlerFnameInput}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountCircle />
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant="outlined"
                 />
                     {errors.fname && <p variant='outlined' 
                     className='perrors'
@@ -581,24 +578,13 @@ const findCreatedAcc = async() =>{
                 fontSize:'10px' }}>
                     {errors.fname}
                   </p>}
-                  <CssTextField      
+                  <label htmlFor="First Name">Last Name</label>
+                  <input      
                   id="input-with-icon-textfield"
                   label="Last Name"
-                  size="small"
+                  className='inputss'
                   value={lname}
                   onChange={handlerLnameInput}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountCircle />
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant="outlined"
-                  style={{
-                    marginTop:'10px',
-                    cursor: 'pointer', 
-                  }}
                 />
                     {errors.lname && <p variant='outlined' 
                     className='perrors'
@@ -608,24 +594,13 @@ const findCreatedAcc = async() =>{
                 fontSize:'10px'}}>
                     {errors.lname}
                   </p>}
-                  <CssTextField      
+                  <label htmlFor="First Name">Middle Name</label>
+                  <input      
                   id="input-with-icon-textfield"
                   label="Middle Name"
-                  size="small"
+                  className='inputss'
                   value={mname}
                   onChange={handlerMnameInput}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountCircle />
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant="outlined"
-                  style={{
-                    marginTop:'10px',
-                    cursor: 'pointer', 
-                  }}
                 />
             {errors.mname && <p variant='outlined' 
               className='perrors'
@@ -635,25 +610,14 @@ const findCreatedAcc = async() =>{
                 fontSize:'10px' }}>
                     {errors.mname}
                   </p>}
-                  <CssTextField      
+                  <label htmlFor="First Name">Password</label>
+                  <input      
                   id="input-with-icon-textfield"
                   label="Password"
-                  size="small"
+                  className='inputss'
                   value={password}
                   type='password'
                   onChange={handlerPasswordInput}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockRoundedIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                  variant="outlined"
-                  style={{ 
-                    marginTop:'10px',
-                    cursor: 'pointer', 
-                  }}
                 />
             {errors.password && <p variant='outlined'
             className='perrors' 
@@ -683,7 +647,9 @@ const findCreatedAcc = async() =>{
                 >
                   Submit
                 </LoadingButton>
-                </div>  
+                  </div> 
+                    </div>
+ 
                   </div>
                 )}
               </div>

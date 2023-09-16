@@ -6,8 +6,7 @@ import TextField from '@mui/material/TextField';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import LoadingButton from '@mui/lab/LoadingButton';
-import SendIcon from '@mui/icons-material/Send';
-import LoginTwoToneIcon from '@mui/icons-material/LoginTwoTone';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import { styled } from '@mui/material/styles';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
@@ -20,6 +19,8 @@ import { useContext } from "react";
 import { color } from "../../App";
 import { useDispatch } from 'react-redux';
 import { setLoggedIn,setUserDetails } from '../../Redux/loginSlice';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { IconButton } from '@mui/material';
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -51,12 +52,12 @@ const CssTextField = styled(TextField)({
 
 const Login = () => {
     const dispatch = useDispatch();
-    const { colorlist } = useContext(color);
     const [email, setEmail] = useState('');
     const [fpemail, setFPEmail] = useState('');
     const [password, setPassword] = useState('');
     const [newpassword, setNewPassword] = useState('');
     const [renewpassword, setRenewPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const [step, setStep] = useState(0); 
     const [errors, setErrors] = useState({});
@@ -93,6 +94,9 @@ const Login = () => {
         setOtp(newOTP);
         inputRefs.current[index - 1].focus();
       }
+    };
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
     };
 
     useEffect(() => {
@@ -372,30 +376,14 @@ const Login = () => {
                         <p>USER LOGIN</p>
                     </div>
                   <form action="">
-                    <div style={{marginBottom:'20px'}}>
-                      <CssTextField      
+                    <div className="email-input-container">
+                    <label className='labellogin' htmlFor="Email">Email</label>
+                      <input      
                       id="Email"
                       label="Email"
                       value={email}
-                      fullWidth
+                      className='inputemail'
                       onChange={handlerEmailInput}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <EmailRoundedIcon />
-                          </InputAdornment>
-                        ),
-                        endAdornment:(
-                          <InputAdornment position="end">
-                          {errors.email && <ErrorIcon sx={{color:'red'}}/>}
-                          </InputAdornment>   
-                        )
-                      }}
-                      variant="outlined"
-                      style={{
-                        cursor: 'pointer', 
-                      }}
-                      autoComplete="email"
                     />
                     {errors.email && <p
                     style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }}
@@ -403,31 +391,14 @@ const Login = () => {
                         {errors.email}
                       </p>}
                     </div>
-                    <div>
-                    <CssTextField      
-                      id="Password"
-                      label="Password"
-                      type='password'
-                      value={password}
-                      onChange={handlerPasswordInput}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <LockRoundedIcon />
-                          </InputAdornment>
-                        ),
-                        endAdornment:(
-                          <InputAdornment position="end">
-                          {errors.password && <ErrorIcon sx={{color:'red'}}/>}
-                          </InputAdornment>   
-                        )
-                      }}
-                      variant="outlined"
-                      style={{
-                        cursor: 'pointer', 
-                      }}
-                      autoComplete="current-password"
-                    />
+                    <div className="password-input-container">
+                      <label className='labellogin' htmlFor="password">Password</label>
+                   <input type="password" 
+                    id='password'
+                   className='inputpass'
+                   value={password}
+                   onChange={handlerPasswordInput}
+                   />
                     {errors.password && <p 
                     style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }} 
                     >
@@ -621,7 +592,7 @@ const Login = () => {
         <div className='restfrmpass'>
                     <div className="logbmcc">
                         <img  src={BMCC} alt="" />
-                        <p>OTP VERIFICATION</p>
+                        <p>CHANGE PASSWORD</p>
                     </div>
           <div className="updatepassresfrm">
           <div>

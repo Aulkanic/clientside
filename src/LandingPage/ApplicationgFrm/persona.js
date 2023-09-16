@@ -11,17 +11,49 @@ import { Rulelist,FetchingFamily, } from '../../Api/request';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import Switch from '@mui/material/Switch';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 function Persona() {
   const { t } = useTranslation();
+  const user = useSelector((state) => state.user);
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
     const [famlist, setFamlist] = useState([]);
     const [rule,setRule] = useState([]);
     const [siblings, setSiblings] = useState([])
     const [onlyChild, setOnlyChild] = useState(false);
+    const [value, setValue] = useState('Other');
+    const [isGuardiancheck,setisGuardiancheck] = useState(false)
+
+    const handleChangeRadio = (event) => {
+      setValue(event.target.value);
+      const isGuardian = event.target.value;
+      if(isGuardian === 'Father'){
+        userData.guardianName = userData.fatherName;
+        userData.guardianlName = userData.fatherlName;
+        userData.guardianmName = userData.fathermName;
+        userData.relationship = 'Father'
+        setisGuardiancheck(true);
+      }
+      if(isGuardian === 'Mother'){
+        userData.guardianName = userData.motherName;
+        userData.guardianlName= userData.motherlName ;
+        userData.guardianmName  = userData.mothermName;
+        userData.relationship = 'Mother';
+        setisGuardiancheck(true)
+      }
+      if(isGuardian === 'Other'){
+        userData.guardianName = '';
+        userData.guardianlName= '' ;
+        userData.guardianmName  = '';
+        userData.relationship ='';
+        setisGuardiancheck(false)
+      }
+    };
 
     const handleInputChange = (index, field, value) => {
       const updatedSiblings = [...siblings];
@@ -307,10 +339,21 @@ function Persona() {
           button: "OK",
         });
       }
-      let restriction = 0;
-      const checkfam = famlist?.filter((item) => item.fatherName === userData.fathermName && item.motherName === userData.motherName)
+      const fatherNamecheck = `${userData.fatherName} ${userData.fathermName} ${userData.fatherlName}`
+      const motherNamecheck = `${userData.motherName} ${userData.mothermName} ${userData.motherlName}`
+      const checkfam = famlist?.filter((item) => item.fatherName === fatherNamecheck && item.motherName === motherNamecheck)
       if(checkfam.length === rule.famNum){
-        restriction += 1;
+        user.isWarning += 1;
+        if(user.isWarning === 2){
+          swal({
+            title: "Warning",
+            text: 'One Family Per head',
+            icon: "warning",
+            button: "OK",
+          });
+         setStep(2)
+         return
+        }
       }
 
       if(!onlyChild){
@@ -413,11 +456,22 @@ function Persona() {
                 </Form.Group>
                 <Form.Group as={Col}>
                   <Form.Label className='frmlabel'>{t("Highest Educational Attaintment")}</Form.Label>
-                  <Form.Control
+                  <Form.Select
                   type="text" 
                   value={userData['fatherEduc']} 
                   onChange={(e) =>setUserData({...userData,"fatherEduc" : e.target.value})} 
-                  />
+                  >
+                <option value={'No Grade Completed'}>No Grade Completed</option>
+                <option value={'Elementary Undergraduate'}>Elementary Undergraduate</option>
+                <option value={'Elementary Graduate'}>Elementary Graduate</option>
+                <option value={'High School Undergraduate'}>High School Undergraduate</option>
+                <option value={'High School Graduate'}>High School Graduate</option>
+                <option value={'Post Secondary Undergraduate'}>Post Secondary Undergraduate</option>
+                <option value={'Post Secondary Graduate'}>Post Secondary Graduate</option>
+                <option value={'College Undergraduate'}>College Undergraduate</option>
+                <option value={'College Graduate'}>College Graduate</option>
+                <option value={'Post Baccalaureate'}>Post Baccalaureate</option>
+                  </Form.Select>
                   {errors.fatherEduc && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherEduc}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
@@ -461,11 +515,22 @@ function Persona() {
                 </Form.Group>
                 <Form.Group as={Col}>
                   <Form.Label className='frmlabel'>{t("Highest Educational Attaintment")}</Form.Label>
-                  <Form.Control
+                  <Form.Select
                   type="text" 
                   value={userData['motherEduc']} 
                   onChange={(e) =>setUserData({...userData,"motherEduc" : e.target.value})} 
-                  />
+                  >
+                <option value={'No Grade Completed'}>No Grade Completed</option>
+                <option value={'Elementary Undergraduate'}>Elementary Undergraduate</option>
+                <option value={'Elementary Graduate'}>Elementary Graduate</option>
+                <option value={'High School Undergraduate'}>High School Undergraduate</option>
+                <option value={'High School Graduate'}>High School Graduate</option>
+                <option value={'Post Secondary Undergraduate'}>Post Secondary Undergraduate</option>
+                <option value={'Post Secondary Graduate'}>Post Secondary Graduate</option>
+                <option value={'College Undergraduate'}>College Undergraduate</option>
+                <option value={'College Graduate'}>College Graduate</option>
+                <option value={'Post Baccalaureate'}>Post Baccalaureate</option>
+                  </Form.Select>
                   {errors.motherEduc && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherEduc}</p>}
                 </Form.Group>
                 <Form.Group as={Col}>
@@ -480,10 +545,25 @@ function Persona() {
               </div>
               <div className='parenteach'>
               <h3>Guardian's Information</h3>
+                <Form.Group as={Col}>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="female"
+                  name="radio-buttons-group"
+                  value={value}
+                  onChange={handleChangeRadio}
+                >
+                  <FormControlLabel value="Mother" control={<Radio />} label="Mother" />
+                  <FormControlLabel value="Father" control={<Radio />} label="Father" />
+                  <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                </RadioGroup>
+                </Form.Group>
                <Form.Group as={Col}>
                   <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
                   <Form.Control
                   type="text" 
+                  disabled={isGuardiancheck}
                   value={userData['guardianName']} 
                   onChange={(e) =>setUserData({...userData,"guardianName" : e.target.value})} 
                   />
@@ -493,6 +573,7 @@ function Persona() {
                   <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
                   <Form.Control
                   type="text" 
+                  disabled={isGuardiancheck}
                   value={userData['guardianmName']} 
                   onChange={(e) =>setUserData({...userData,"guardianmName" : e.target.value})} 
                   />
@@ -502,6 +583,7 @@ function Persona() {
                   <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
                   <Form.Control
                   type="text" 
+                  disabled={isGuardiancheck}
                   value={userData['guardianlName']} 
                   onChange={(e) =>setUserData({...userData,"guardianlName" : e.target.value})} 
                   />
@@ -511,6 +593,7 @@ function Persona() {
                   <Form.Label className='frmlabel'>Relationship to Guardian</Form.Label>
                   <Form.Control
                   type="text" 
+                  disabled={isGuardiancheck}
                   value={userData['relationship']} 
                   onChange={(e) =>setUserData({...userData,"relationship" : e.target.value})} 
                   />

@@ -5,7 +5,8 @@ const initialState = {
     mname:'',
     lname:'',
     email:'',
-    applicantNum:''
+    applicantNum:'',
+    isWarning: 0,
 }
 
 const userSlice = createSlice({
@@ -13,12 +14,13 @@ const userSlice = createSlice({
     initialState,
     reducers:{
         setName:(state,action) =>{
-            const { fname,lname,mname,email,applicantNum} = action.payload;
+            const { fname,lname,mname,email,applicantNum,isWarning} = action.payload;
             state.fname = fname;
             state.lname = lname;
             state.mname = mname;
             state.email = email;
             state.applicantNum = applicantNum;
+            state.isWarning = isWarning;
         }
     }
 })

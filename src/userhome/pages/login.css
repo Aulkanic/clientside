@@ -51,7 +51,26 @@
     justify-content: center;
     padding: 10px 0px 10px 0px;
 }
-
+.password-input-container,.email-input-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.labellogin{
+    font-weight: 500;
+}
+.inputpass,.inputemail,.inputss{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 5px;
+    margin-bottom: 5px;
+    outline: none;
+    transition: border-color 0.3s; 
+}
+.inputpass:focus,.inputemail:focus,.inputss:focus {
+    border-color: #007bff; 
+  }
 .lgcon{
     width: 100%;
     height: 100%;

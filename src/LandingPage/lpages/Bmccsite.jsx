@@ -85,7 +85,7 @@ const Bmccsite = () => {
             <Faqs/>
         </section>
         </Section>
-        <div className="lfooter" style={{backgroundColor:colorlist[0].bgColor1}}>
+        <div className="lfooter" style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
             <div className='copyr'>
                 <p>Terms of Service</p>
             </div>

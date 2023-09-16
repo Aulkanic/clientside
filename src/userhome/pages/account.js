@@ -4,7 +4,6 @@ import Homepage from '../components/Homepage'
 import { FetchingProfileUser,ChangingProfile, Change_Password,FetchingApplicantsInfo,EditUserinfo } from '../../Api/request'
 import {useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
 import '../Button/buttonstyle.css'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -322,7 +321,8 @@ async function signout() {
        <div className="accrigthbar">
           {value === 0 && 
           <>
-            <h1>General Information</h1>
+          <div className="accountDetgen">
+          <h1>General Information</h1>
            <div className='accAccountD'>
             <div className="headerdetails">
               <p>Name</p>
@@ -338,7 +338,8 @@ async function signout() {
               <p>{post.applicantCode}</p>
               <p>{post.date}</p>              
             </div>
-          </div>         
+          </div>  
+          </div>
           </>
           }
           {value === 1 &&

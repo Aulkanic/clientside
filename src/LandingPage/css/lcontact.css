@@ -40,7 +40,9 @@
 }
 .cntcthder h1,.logcontac h1{
     font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    font-weight: 900;
+    font-weight: 700;
+    font-size:1.5rem ;   
+    margin: 20px 0px 10px 0px;
 }
 .cntcthder p,.logcontac p{
     font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
@@ -49,6 +51,7 @@
 .logcontac{
     width: 100%;
 }
+
 .cntctinf{
     width: 100%;
     display: flex;

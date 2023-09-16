@@ -83,14 +83,24 @@ function Firststep() {
 
   function Check(){
     const errors = {};
+
+    if(userData.firstName === '' || userData.middleName === '' || userData.lastName === '' || userData.email === ''){
+      Swal.fire({
+        title: "Warning",
+        text: `The system did not recognized or find registered user information.Please Register first your account to continue filling up the form`,
+        icon: "warning",
+        button: "OK",
+      });
+      setStep(1);
+    }
     if (!userData.gender) {
       errors.gender = "Please Select your Gender";
     }
     if (userData.citizenship === '') {
       errors.citizenship = "Citizenship is required";
-    }else if (userData.citizenship.length === 1) {
+    }else if (userData.citizenship?.length === 1) {
       errors.citizenship = "Input must not contain a single letter.";
-    }else if (userData.citizenship.length > 50) {
+    }else if (userData.citizenship?.length > 50) {
       errors.citizenship = "Input should contain less than 50 characters.";
     } else if (/[0-9]/.test(userData.citizenship)) {
       errors.citizenship = "Input must not contain numeric value";

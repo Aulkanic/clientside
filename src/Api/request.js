@@ -129,7 +129,7 @@ export const ApplicationForm = {
     FETCH_FORM: () => axiosInstance.get(Endpoints.APPLICATION_FORM)
 }
 export const FindRegisteredUser = {
-    FETCH_USERREG: (data) => axiosInstance.get(Endpoints.FIND_REGISTEREDACC,data)
+    FETCH_USERREG: (data) => axiosInstance.get(Endpoints.FIND_REGISTEREDACC+data)
 }
 export const FetchNotif = {
     FETCH_NOTIF: (data) => axiosInstance.get(Endpoints.FETCH_NOTIF+data)

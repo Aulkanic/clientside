@@ -19,10 +19,17 @@ import '../css/economic.css'
 import '../css/buttonStyle.css'
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Backdrop, CircularProgress } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
+const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 50,
+  color: '#fff',
+}));
 
 function Economic() {
     const { t } = useTranslation();
+    const [showBackdrop, setShowBackdrop] = useState(false);
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
     const navigate = useNavigate();
@@ -130,13 +137,15 @@ function Economic() {
       for (let i = 0; i < userData.siblings.length; i++) {
         formData.append(`siblings[${i}]`, JSON.stringify(userData.siblings[i]));
       }
-      setLoading(true)
+      setShowBackdrop(true)
       ApplyForm.CREATE_APPINFO(formData)
       .then(res => {
           console.log(res.data)
           if(res.data.success === 1){
            
             setUserData('');
+            localStorage.removeItem("userData");
+            setShowBackdrop(false)
             setStep(4)
             swal({
               title: "Success",
@@ -144,16 +153,17 @@ function Economic() {
               icon: "success",
               button: "OK",
             });
-            setLoading(false)
+           
           }
           else{
+            setShowBackdrop(false)
             swal({
               title: "Success",
               text: "Something Went Wrong!",
               icon: "success",
               button: "OK",
             });
-        setLoading(false)
+      
         navigate('/ApplicationForm');
       }}
       )
@@ -193,6 +203,10 @@ function Economic() {
         )
        })
     return (
+      <>
+       <StyledBackdrop open={showBackdrop}>
+        <CircularProgress color="inherit" />
+      </StyledBackdrop>    
     <div className='Econ'>
         <div className="Econd">
             <div className="form">
@@ -249,6 +263,7 @@ function Economic() {
            
         </div>
     </div>
+    </>
   )
 }
 

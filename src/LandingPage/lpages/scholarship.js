@@ -178,7 +178,7 @@ function Scholarship() {
         </div>
         <div className="aruqua">
           <h1>Are you Qualified to be a Scholar of Marilao?</h1>
-          <Link to='/ScholarshipProgram' className='alinkapp'>Click APPLY NOW</Link>
+          <Link to='/ScholarshipProgram' className='alinkapp'>APPLY NOW</Link>
         </div>
     </motion.div>
     </div>

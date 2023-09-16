@@ -100,15 +100,19 @@
     border-color: #007bff;
   }
 .createacccon{
-    width: 600px;
-    min-width: max-content;
-    height: max-content;
-    padding: 30px;
+    width: 500px;
+    height:auto;
+    padding: 15px;
     display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
     border-radius: 8px;
+    background-color: white;
+}
+.Fieldlog{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 .otpfreg h2{
     font-size: 36px;
