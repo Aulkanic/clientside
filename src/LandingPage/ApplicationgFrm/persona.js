@@ -341,20 +341,22 @@ function Persona() {
       }
       const fatherNamecheck = `${userData.fatherName} ${userData.fathermName} ${userData.fatherlName}`
       const motherNamecheck = `${userData.motherName} ${userData.mothermName} ${userData.motherlName}`
-      const checkfam = famlist?.filter((item) => item.fatherName === fatherNamecheck && item.motherName === motherNamecheck)
-      if(checkfam.length === rule.famNum){
-        user.isWarning += 1;
-        if(user.isWarning === 2){
-          swal({
-            title: "Warning",
-            text: 'One Family Per head',
-            icon: "warning",
-            button: "OK",
-          });
-         setStep(2)
-         return
+      const checkfam = famlist?.filter(data => 
+        data.fatherName === fatherNamecheck &&
+        data.motherName === motherNamecheck
+        )
+      if(checkfam.length > 0){
+        if(user.isWarning === 1){
+            swal({
+              title: "Warning",
+              text: 'One Family Per head',
+              icon: "warning",
+              button: "OK",
+            });
+           setStep(2)
+           return
         }
-      }
+        }
 
       if(!onlyChild){
         const hasEmptyFields = siblings.some(
