@@ -97,6 +97,7 @@ const Schoinfo = () => {
                 <div className='appointdetails'>
                   <p>Status: {isEnded ? "Ended" : isCancel ? 'Cancelled' : 'Ongoing'}</p>
                   <p>Agenda: {data.Reason}</p>
+                  <p>Response: {data.canGo}</p>
                   <p>Location: {data.Location}</p>
                   <p>Time: {data.timeStart} - {data.timeEnd}</p>
                   {data.statusApp === 'Ongoing' && data.isInterview === 'No' ? 

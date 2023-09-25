@@ -95,6 +95,9 @@ export const ChangePassbyOtp = {
 export const FetchingBmccSchoinfo = {
     FETCH_SCHOLARSINFO: (data) => axiosInstance.get(Endpoints.FETCH_BMCCSCHOLARINFO+data)
 }
+export const FetchingBmccSchocODE = {
+    FETCH_SCHOLARSCODE: (data) => axiosInstance.get(Endpoints.FETCH_BMCCSCHOLARCODE+data)
+}
 export const FetchingUserappoint = {
     FETCH_USERAPPOINTMENT: (data) => axiosInstance.get(Endpoints.FETCH_USERAPPOINTMENT+data)
 }
@@ -142,4 +145,13 @@ export const ReadNotifi = {
 }
 export const UserActivity = {
     USER_LOG: (data) => axiosInstance.post(Endpoints.USER_ACTIVITY,data)
+}
+export const FillRenewal = {
+    SET_RENEW: (data) => axiosInstance.post(Endpoints.SET_RENEW,data)
+}
+export const FillRenewal1 = {
+    SET_RENEW1: (data) => axiosInstance.post(Endpoints.SET_RENEW1,data)
+}
+export const FetchRenewal = {
+    FETCH_RENEW: () => axiosInstance.get(Endpoints.FETCH_RENEW)
 }

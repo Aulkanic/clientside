@@ -236,3 +236,31 @@
     align-items: center;
     border-radius: 10px;
 }
+.red {
+    color: black; 
+    transition: color 0.5s; 
+  }
+  
+  .animate-red {
+    color: red; 
+  }
+  
+
+  @keyframes removeRed {
+    0%, 100% {
+        color: red;
+        transform: translateX(0); 
+      }
+      10%, 30%, 50%, 70%, 90% {
+        color: red;
+        transform: translateX(-15px); 
+      }
+      20%, 40%, 60%, 80% {
+        color: red;
+        transform: translateX(15px); 
+      }
+  }
+  body.animate-red p.red {
+    color: red;
+    animation: removeRed 2s;
+  }

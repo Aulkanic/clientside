@@ -51,7 +51,6 @@ function StepContext() {
       siblings: [],
       };
     });
-    console.log(userData)
     const [finalData, setFinalData] = useState([]);
     const [loading, setLoading] = useState(false);
 

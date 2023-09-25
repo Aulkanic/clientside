@@ -171,7 +171,8 @@ const SetReadNotif = async(val) =>{
                            : (
                         <>
                         <strong>Scholar Number:</strong><small> {scholar.scholarCode}</small><br />
-                        <strong>Scholarship Status:</strong><small><span className='stat'> {scholar.remarks}</span></small>
+                        <strong>Scholarship Status:</strong><small><span className='stat'> 
+                        {scholar.remarks}</span></small>
                         </>)
                            }
                     </div>

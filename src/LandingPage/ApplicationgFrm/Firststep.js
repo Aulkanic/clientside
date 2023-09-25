@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useContext } from 'react';
 import { multiStepContext } from './StepContext';
+import {  useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -11,10 +12,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import { ScholarCategory} from '../../Api/request.js'
+import { ScholarCategory,FindRegisteredUser} from '../../Api/request.js'
 import { Rulelist} from '../../Api/request.js';
 import Swal from 'sweetalert2';
-import { useSelector } from 'react-redux';
+import TextField from '@mui/material/TextField';
+import { useDispatch } from 'react-redux';
+import { setName } from '../../Redux/userSlice';
 import '../css/Firststep.css'
 import '../css/buttonStyle.css'
 import { useTranslation } from 'react-i18next';
@@ -26,15 +29,22 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function Firststep() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const { setStep, userData, setUserData} = useContext(multiStepContext);
   const [errors, setErrors] = useState({}); 
   const [scholarprog, setScholarProg] = useState([]);
   const [rule,setRule] = useState([])
-  const [open, setOpen] = React.useState(true);
+  const [open1, setOpen1] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
   };
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
+
 
   const calculateAge = (birthday) => {
     const today = new Date();
@@ -83,7 +93,11 @@ function Firststep() {
 
   function Check(){
     const errors = {};
-
+    if(!userData.firstName || !userData.middleName || !userData.lastName || !userData.email){
+      setOpen1(true)
+      setStep(1);
+      return
+    }
     if(userData.firstName === '' || userData.middleName === '' || userData.lastName === '' || userData.email === ''){
       Swal.fire({
         title: "Warning",
@@ -92,6 +106,7 @@ function Firststep() {
         button: "OK",
       });
       setStep(1);
+      return
     }
     if (!userData.gender) {
       errors.gender = "Please Select your Gender";
@@ -177,10 +192,64 @@ function Firststep() {
     setErrors('')
     setStep(2)
 };
-const translatedText = t("Personal na Impormasyon");
+const findCreatedAcc = async() =>{
+  setOpen1(false)
+  const { value: email } = await Swal.fire({
+    title: 'Input email address',
+    input: 'email',
+    inputPlaceholder: 'Enter your email address',
+    confirmButtonText: "Submit",
+    cancelButtonText: "Already Registered",
+  })
+  
+  if (email) {
+     await FindRegisteredUser.FETCH_USERREG(email)
+     .then((res) =>{
+      if(res.data.success === 1){
+        const result = res.data.result[0];
+        const fname = result.fname;
+        const lname = result.lname;
+        const mname = result.mname;
+        const email = result.email;
+        const applicantNum = result.applicantNum;
+        dispatch(setName({fname,lname,mname,email,applicantNum}))
+        userData.firstName = fname;
+        userData.lastName = lname;
+        userData.middleName = mname;
+        userData.email = email;
+        userData.applicantNum = applicantNum;
+        navigate('/ApplicationForm')
+        Swal.fire('Successfully Find your Registered Email')
+      }else{
+        Swal.fire(res.data.message)
+      }
+     })
+  }
+}
+const handleRegister = () => {
+  // Redirect to the registration route
+  navigate('/register');
+};
+
 
   return (
   <>
+  <Dialog open={open1} onClose={handleClose1}>
+        <DialogTitle>Warning</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            The system did not recognize or find registered user information. Please Register first your email account to continue filling up the form or if you think you already registered, click the buttons below:
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button className='myButton' sx={{color:'white',textTransform:'none'}} onClick={handleRegister} color="primary">
+           Go to Register
+          </Button>
+          <Button className='myButton' sx={{color:'white',textTransform:'none'}} onClick={findCreatedAcc} color="primary">
+            Already Registered?Find your Email now!
+          </Button>
+        </DialogActions>
+  </Dialog>
   <Dialog
     open={open}
     TransitionComponent={Transition}

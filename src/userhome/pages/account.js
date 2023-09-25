@@ -53,7 +53,6 @@ const Account = () => {
   const [value, setValue] = useState(0);
   const [userprofile, setProfilepic] = useState(null);
   const [userlog,setUserlog] = useState([])
-  const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [currentpassword, setCurrent] = useState('');
   const [newpassword, setNew] = useState('');
@@ -106,6 +105,21 @@ useEffect(() => {
 
  async function ChangeProf(event){
     event.preventDefault();
+    if(userprofile === null){
+      swal("Error","Image Required",'warning')
+      return
+    }
+    const fileExtension = userprofile?.name.split('.').pop().toLowerCase();
+    if (fileExtension !== 'png' && fileExtension !== 'jpg' && fileExtension !== 'jpeg')  {
+      swal({
+        text: 'Please upload a PNG or JPG image only.',
+        timer: 2000,
+        buttons: false,
+        icon: "error",
+      });
+    
+      return false;
+    }
     setShowBackdrop(true)
     const userprof = userprofile;
     const details = {userprof,applicantNum};

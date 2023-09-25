@@ -21,6 +21,7 @@ import store, { persistor} from './Redux/store';
 import { useEffect } from 'react';
 import { createContext } from 'react';
 import { useState } from 'react';
+import Renewal from './LandingPage/Renewal/renewal';
 import LoopingRhombusesSpinner from './userhome/loadingDesign/loading'
 
 
@@ -86,6 +87,7 @@ function App() {
          <Route path='/ApplicationForm' element={<StepContext/>}/>
          <Route path='/no-internet' element={<NoInternet/>}/>
          <Route path="/404" element={<PageNotFound />} />
+         <Route path="/Renewal" element={<Renewal />} />
          <Route path="*" element={<PageNotFound />} />
 
         {/* Protective Route*/}

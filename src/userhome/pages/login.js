@@ -6,8 +6,6 @@ import TextField from '@mui/material/TextField';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import LoadingButton from '@mui/lab/LoadingButton';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import { styled } from '@mui/material/styles';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import {loginUserAcc, GetUserAcc, GenerateOtp, ValidateUserOtp, ChangePassbyOtp} from '../../Api/request'
@@ -15,12 +13,10 @@ import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
 import ErrorIcon from '@mui/icons-material/Error';
-import { useContext } from "react";
-import { color } from "../../App";
+import { Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { setLoggedIn,setUserDetails } from '../../Redux/loginSlice';
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { IconButton } from '@mui/material';
+
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -95,10 +91,18 @@ const Login = () => {
         inputRefs.current[index - 1].focus();
       }
     };
-    const togglePasswordVisibility = () => {
-      setShowPassword(!showPassword);
-    };
 
+    useEffect(() => {
+      if (errors.otp) {
+        document.body.classList.add('animate-red');
+  
+        const timeoutId = setTimeout(() => {
+          document.body.classList.remove('animate-red');
+        }, 5000);
+
+        return () => clearTimeout(timeoutId);
+      }
+    }, [errors.otp]);
     useEffect(() => {
       if (remainingSeconds > 0) {
         const timer = setInterval(() => {
@@ -219,10 +223,11 @@ const Login = () => {
           console.log(errors)
           return;
         }
+        const checkotp = otp.join('')
         setLoading2(true)
         const formData = new FormData();
         formData.append('fpemail', fpemail);
-        formData.append('otp', otp);
+        formData.append('otp', checkotp);
         ValidateUserOtp.VALIDATE_USEROTP(formData)
         .then(res => {
           console.log(res)
@@ -357,7 +362,7 @@ const Login = () => {
       TransitionComponent={Slide}
       TransitionProps={{ direction: 'right' }}
     >
-        {snackbarMessage === 'Login Successfully' || snackbarMessage === 'OTP is sent into your Email Account' || snackbarMessage === 'Verification Success'
+        {snackbarMessage === 'Login Successfully' || snackbarMessage === 'OTP is sent into your Email Account' || snackbarMessage === 'OTP Verified Successfully.'
         || snackbarMessage === 'Password Changed Successfully' ? (<Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
         {snackbarMessage}!
         </Alert>) :(<Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
@@ -420,7 +425,7 @@ const Login = () => {
                               margin: '10px',
                               cursor: 'pointer',
                               fontWeight: '700',
-                              backgroundColor: '#B0C4DE',
+                              backgroundColor: 'blue',
                               color: 'white',
                               fontSize: '15px',
                               letterSpacing: '2px',
@@ -523,7 +528,7 @@ const Login = () => {
                         <p>OTP VERIFICATION</p>
                     </div>
           <div className="formotpvalif">
-          <p>An OTP has been sent to your email. Please enter it below:</p>
+          <p style={{color:'black'}}>An OTP has been sent to your email. Please enter it below:</p>
           <label>
           <div className="otp-input-container">
                     {otp.map((digit, index) => (
@@ -539,23 +544,15 @@ const Login = () => {
                         />
                       ))}
           </div>
-     {errors.otp && (<p
-         style={{ 
-          width: '83%', 
-          margin: '10px', 
-          color:'red', 
-          fontSize:'10px',
-          height:'max-Content',
-          background:'white',
-          boxShadow:'none' }}
-          >
-        {errors.otp}
-      </p>)}
+          <div style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>
+          {remainingSeconds > 0 ? (<p className={errors.otp ? 'red' : ''}>{remainingSeconds} seconds before requesting another OTP</p>) : (null)}
+          </div>
+          
           </label>
           </div>
           <div className='bacreotp'>    
             <div>
-            <p>Didn't get a code?<Link
+            <p style={{color:'black'}}>Didn't get a code?<Link
               style={{color:'#252525'}}
               onClick={handleResendClick}
             >

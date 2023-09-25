@@ -37,6 +37,7 @@ const Endpoints = {
     APKEmail: 'OTP/EmailAPK',
     CHANGE_PASSWORDBYOTP: 'OTP/ChangePassword',
     FETCH_BMCCSCHOLARINFO: 'BMCCScholar/SchoInfo/',
+    FETCH_BMCCSCHOLARCODE: 'BMCCScholar/Renew/',
     FETCH_USERAPPOINTMENT: 'Appointment/appointmentSched/',
     USER_LOGOUT:'user/Logout',
     FFETCH_COLOR:'Dynamic/Colorslist',
@@ -47,6 +48,9 @@ const Endpoints = {
     FETCH_RULE:'Dynamic/Rulelist',
     APPLICATION_FORM:'ApplicationForm/Form',
     USER_ACTIVITY: 'admin/Userlog',
+    SET_RENEW:'RenewalForm/FillRenewal',
+    SET_RENEW1:'RenewalForm/FillRenewal1',
+    FETCH_RENEW:'RenewalForm/YearlyRenew',
 
 }
 

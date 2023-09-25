@@ -188,11 +188,10 @@ const handleFileChange = (index, event) => {
 };
 const handleSubmit = async (event) => {
   event.preventDefault();
-  setLoading(true);
 
-  if (userInfo.status === 'For Evaluation') {
+  if (userInfo.status === 'For Evaluation' || userInfo.status === 'Failed' || userInfo.status === 'Revoke') {
     swal({
-      text: 'You cannot submit your Documents until you have been evaluated by a BMCC.',
+      text: `You cannot submit your Documents because your Application Status is ${userInfo.status}`,
       timer: 2000,
       buttons: false,
       icon: "error",
@@ -201,7 +200,7 @@ const handleSubmit = async (event) => {
     return;
   }
 
-  const errors = []; // Store validation errors
+  const errors = []; 
   const messages = [];
   if(fileValues.length === 0 ){
     swal("Error","Please upload all required Requirements.","warning");
@@ -223,7 +222,7 @@ const handleSubmit = async (event) => {
       }
 
       const formData = createFormData(file, docu);
-
+      setShowBackdrop(true)
       try {
         const res = await uploadDocument(formData);
         handleSuccessfulUpload(index, res);
@@ -237,7 +236,7 @@ const handleSubmit = async (event) => {
     console.log('An error occurred during file submission:', error);
   }
 
-  setLoading(false);
+  setShowBackdrop(false)
   if(messages.length > 0){
     const successMessages = messages.map((succ) => `${succ.Name}: ${succ.Message}`);
     swal(successMessages.join("\n"));
@@ -344,7 +343,28 @@ const EditReq = async (data) =>{
   if(!file){
     return
   }
+  const fileExtension = file?.name.split('.').pop().toLowerCase();
+  if (fileExtension !== 'png' && fileExtension !== 'jpg' && fileExtension !== 'jpeg')  {
+    swal({
+      text: 'Please upload a PNG or JPG image only.',
+      timer: 2000,
+      buttons: false,
+      icon: "error",
+    });
   
+    return
+  }
+  const fileSizeInBytes = file.size;
+  const maxSizeInBytes = 5 * 1024 * 1024; // 5MB in bytes
+  if (fileSizeInBytes > maxSizeInBytes) {
+    swal({
+      text: 'File size exceeds the limit of 5MB.',
+      timer: 2000,
+      buttons: false,
+      icon: "error",
+    });
+    return
+  }
   const applicantNum = data.applicantId;
   const requirement_Name = data.requirement_Name;
   const formData = new FormData();
@@ -384,7 +404,7 @@ const EditReq = async (data) =>{
 useEffect(() => {
   const fetchData = async () => {
     try {
-      setLoading(true)
+      setShowBackdrop(true)
       const response = await Promise.all([
         ListofReq.FETCH_REQUIREMENTS(),
         ListofSub.FETCH_SUB(applicantNum),
@@ -396,7 +416,7 @@ useEffect(() => {
       setDocs(RequireDocs);
       setUserInfo(response[2].data.results[0]);
       setSubmittedDocs1(response[1].data.Document);
-      setLoading(false)
+      setShowBackdrop(false)
     } catch (error) {
       console.error('Error fetching data:', error);
     }

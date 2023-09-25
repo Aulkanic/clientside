@@ -3,7 +3,6 @@ import {  useNavigate } from 'react-router-dom'
 import './register.css'
 import TextField from '@mui/material/TextField';
 import { Button, Link } from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Dialog from '@mui/material/Dialog';
@@ -12,18 +11,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import SendIcon from '@mui/icons-material/Send';
 import { CreatingRegistry, RegistryOtp,ResendOtp, ValidateOtp,FindRegisteredUser } from '../../Api/request';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import { styled } from '@mui/material/styles';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import { useContext } from "react";
 import { color } from "../../App";
 import { useDispatch } from 'react-redux';
 import { setName } from '../../Redux/userSlice';
-import MYDO from '../assets/mydo.png'
 import Swal from 'sweetalert2';
 
 const CssTextField = styled(TextField)({
@@ -142,7 +138,17 @@ const Register = () => {
     .catch(err => console.log(err));
 
     };
+    useEffect(() => {
+      if (errors.otp) {
+        document.body.classList.add('animate-red');
+  
+        const timeoutId = setTimeout(() => {
+          document.body.classList.remove('animate-red');
+        }, 5000);
 
+        return () => clearTimeout(timeoutId);
+      }
+    }, [errors.otp]);
     useEffect(() => {
       if (remainingSeconds > 0) {
         const timer = setInterval(() => {
@@ -315,22 +321,7 @@ const handlerPasswordInput = (e) => setPassword(e.target.value)
 const handlerBackInput = (e) => {
   setStep(1)
 }
-const handlerNextInput = (e) => {
-  e.preventDefault();
-  const errors ={};
-  if (!email) {
-    errors.email = "Email is required";
-  } else if (!/^[A-Za-z0-9._%+-]+@gmail\.com$/.test(email)) {
-     errors.email = "Email is invalid";
-  }
-  if (Object.keys(errors).length > 0) {
-    setErrors(errors);
-    console.log(errors)
-    return;
-  }
-  setStep(2)
-  setErrors('')
-}
+
 
 const findCreatedAcc = async() =>{
   const { value: email } = await Swal.fire({
@@ -448,28 +439,12 @@ const findCreatedAcc = async() =>{
                         fontSize:'12px',
                         textTransform:'capitalize',
                         fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
+                        marginBottom:'15px'
                       }}
                       onClick={handleRegisterClick}
                     >
                       Register
                     </LoadingButton>
-                    </div>
-                    <div>
-                    <LoadingButton variant="elevated" 
-                      className='myButton1'
-                      fullWidth
-                      style={{
-                        marginTop: '10px', 
-                        cursor: 'pointer', 
-                        fontWeight: '700',
-                        color: 'white',
-                        fontSize:'12px',
-                        marginBottom:'15px',
-                        textTransform:'capitalize',
-                        fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-                      }}
-                      onClick={handlerNextInput}>
-                        Next</LoadingButton>
                     </div>
                   </div>
                   <Link sx={{cursor:'pointer'}} onClick={findCreatedAcc}>
@@ -481,7 +456,7 @@ const findCreatedAcc = async() =>{
                 {step === 2 && (
                   <div className='otpfreg'>
                     <h2 style={{color:colorlist[0].bgColor}}>OTP Verification</h2>
-                    <p>An OTP has been sent to your email. Please enter it below:</p>
+                    <p style={{color:'black'}}>An OTP has been sent to your email. Please enter it below:</p>
                     <div className="otp-input-container">
                     {otp.map((digit, index) => (
                         <input
@@ -496,17 +471,11 @@ const findCreatedAcc = async() =>{
                         />
                       ))}
                       </div>
-                        {errors.otp && <p variant='outlined' 
-                        style={{ 
-                          width: '85%', 
-                          margin: '10px 10px 0px 70px', 
-                          color:'red', 
-                          fontSize:'12px',
-                          height:'max-Content'}}>
-                              {errors.otp}
-                            </p>}
+                      <div style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>
+          {remainingSeconds > 0 ? (<p className={errors.otp ? 'red' : ''}>{remainingSeconds} seconds before requesting another OTP</p>) : (null)}
+          </div>
                   <div>
-                      <p>Didn't get the code?
+                      <p style={{color:'black'}}>Didn't get the code?
                       <Link
                       style={{color:'#252525',cursor:'pointer'}}
                       onClick={handleResendClick}
@@ -561,8 +530,8 @@ const findCreatedAcc = async() =>{
                   <div className='createacccon'>
 
                     <div className='Fieldlog'>
-                    <h2>Create Account</h2>
-                    <label htmlFor="First Name">First Name</label>
+                    <h2 style={{color:'black'}}>Create Account</h2>
+                    <label style={{color:'black'}} htmlFor="First Name">First Name</label>
                     <input      
                   id="input-with-icon-textfield"
                   label="First Name"
@@ -578,7 +547,7 @@ const findCreatedAcc = async() =>{
                 fontSize:'10px' }}>
                     {errors.fname}
                   </p>}
-                  <label htmlFor="First Name">Last Name</label>
+                  <label style={{color:'black'}} htmlFor="First Name">Last Name</label>
                   <input      
                   id="input-with-icon-textfield"
                   label="Last Name"
@@ -594,7 +563,7 @@ const findCreatedAcc = async() =>{
                 fontSize:'10px'}}>
                     {errors.lname}
                   </p>}
-                  <label htmlFor="First Name">Middle Name</label>
+                  <label style={{color:'black'}} htmlFor="First Name">Middle Name</label>
                   <input      
                   id="input-with-icon-textfield"
                   label="Middle Name"
@@ -610,7 +579,7 @@ const findCreatedAcc = async() =>{
                 fontSize:'10px' }}>
                     {errors.mname}
                   </p>}
-                  <label htmlFor="First Name">Password</label>
+                  <label style={{color:'black'}} htmlFor="First Name">Password</label>
                   <input      
                   id="input-with-icon-textfield"
                   label="Password"
