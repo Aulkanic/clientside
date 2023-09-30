@@ -155,3 +155,6 @@ export const FillRenewal1 = {
 export const FetchRenewal = {
     FETCH_RENEW: () => axiosInstance.get(Endpoints.FETCH_RENEW)
 }
+export const CheckFamily = {
+    CHECK_FAM: (data) => axiosInstance.post(Endpoints.CHECK_FAM,data)
+}

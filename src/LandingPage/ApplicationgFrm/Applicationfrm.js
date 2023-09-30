@@ -23,14 +23,12 @@ import InfoIcon from '@mui/icons-material/Info';
     },
     [`&.${stepConnectorClasses.active}`]: {
       [`& .${stepConnectorClasses.line}`]: {
-        backgroundImage:
-          'linear-gradient( 95deg,rgba(54,225,70,1) 0%, rgba(185,207,188,1) 57%, rgba(160,196,161,1) 100%);',
+        backgroundColor:'blue'
       },
     },
     [`&.${stepConnectorClasses.completed}`]: {
       [`& .${stepConnectorClasses.line}`]: {
-        backgroundImage:
-          'linear-gradient( 95deg,rgba(102,213,112,1) 0%, rgba(8,193,36,1) 57%, rgba(5,92,9,1) 100%);',
+        backgroundColor:'blue'
       },
     },
     [`& .${stepConnectorClasses.line}`]: {
@@ -43,25 +41,22 @@ import InfoIcon from '@mui/icons-material/Info';
   }));
   
   const ColorlibStepIconRoot = styled('div')(({ theme, ownerState }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[700] : '#ccc',
+    backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[1000] : '#ccc',
     zIndex: 1,
     color: '#fff',
     width: 50,
     height: 50,
     display: 'flex',
-    borderRadius:'10px',
+    borderRadius:'5px',
     justifyContent: 'center',
     alignItems: 'center',
     transition: 'transform 0.2s ease',
     ...(ownerState.active && {
-      backgroundImage:
-        'linear-gradient( 136deg, rgba(109,102,213,1) 0%, rgba(8,83,193,1) 57%, rgba(5,34,92,1) 100%)',
-      boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+      backgroundColor:'rgba(0, 32, 203, 1)',
       transform:'scale(1.5)'
     }),
     ...(ownerState.completed && {
-      backgroundImage:
-        'linear-gradient( 136deg,rgba(102,213,112,1) 0%, rgba(8,193,36,1) 57%, rgba(5,92,9,1) 100%);',
+      backgroundColor:'rgb(11, 73, 128)',
     }),
   }));
   
@@ -102,9 +97,10 @@ import InfoIcon from '@mui/icons-material/Info';
   const steps = ['Personal Information', 'Family Background', 'Other Information'];
   const CustomStepLabel = styled(StepLabel)(({ theme, active }) => ({
     '& .MuiStepLabel-label': {
-      color: active ? 'black' : 'black', // Change the color when active
+      color: active ? 'whitesmoke' : 'white', 
       fontWeight: active ? '900' : '200',
-      fontSize: active ? '18px' : '15px'
+      fontSize: active ? '18px' : '15px',
+      marginTop:'20px'
     },
   }));
 
@@ -127,13 +123,13 @@ function Applicationfrm() {
     <div style={{display:'flex',flexDirection:'column'}}>
     <div className='stepdiv'>
     <div className="backgroundstep">
-        <h1>BMCC APPLICATION FORM</h1>
+        <h1>SCHOLARSHIP APPLICATION FORM</h1>
     <div className='stepper'>
-        <Stepper alternativeLabel style={{width:'100%',paddingTop:'20px',height:'max-Content'}} activeStep={currentStep - 1} orientation='horizontal' connector={<ColorlibConnector />}>
+        <Stepper alternativeLabel style={{width:'100%',paddingTop:'20px',height:'max-Content',color:'white'}} activeStep={currentStep - 1} orientation='horizontal' connector={<ColorlibConnector />}>
 
         {steps.map((label,index) => (
           <Step key={label}>
-            <CustomStepLabel active={currentStep === (index + 1)} StepIconComponent={ColorlibStepIcon}>{label}</CustomStepLabel>
+            <CustomStepLabel  sx={{color:"white"}} active={currentStep === (index + 1)} StepIconComponent={ColorlibStepIcon}>{label}</CustomStepLabel>
           </Step>
         ))}
         </Stepper>
@@ -141,15 +137,20 @@ function Applicationfrm() {
     </div>
     <div className="ribbon-header">
     <div className="ribbon-header-text">
-      {currentStep === 1 && (<h2>Personal Information</h2>)}
-      {currentStep === 2 && (<h2>Family Background</h2>)}
-      {currentStep === 3 && (<h2>Other Information</h2>)}
+      {currentStep === 1 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>Personal Information</h2>)}
+      {currentStep === 2 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>Parent's Information</h2>)}
+      {currentStep === 3 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>Other Information</h2>)}
       <LanguageSwitcher />    
     </div>
+    <div style={{paddingLeft:'15px'}}>
+     {currentStep !== 3 && currentStep !== 4 && <p style={{paddingLeft:'5px',fontStyle:'italic'}}>Please use<strong> UPPERCASE FORMAT</strong> to fill up this application form.</p>}
+     {currentStep === 3 && <p style={{paddingLeft:'5px',fontStyle:'italic'}}>Please complete the form by selecting your answers from the available choices.</p>}
+     {currentStep === 4 && null}
+    </div>
   </div>
-    <form action="">
+   
     {showStep(currentStep)}
-    </form>
+    
     </div>
     </div>
     </div>

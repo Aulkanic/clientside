@@ -4,16 +4,18 @@
     margin-left: 10%;
     height: max-content;
     background-color: white;
+    color: #0b4980;
 }
 .ribbon-header {
     width: 80%;
-    background-color: blue;
+    background-color: white;
+    color: #0b4980;
     border: none;
     position: relative;
     margin: 0px 0px 20px 0px;
     margin-left: 10%;
   }
-  .ribbon-header::before,
+  /* .ribbon-header::before,
   .ribbon-header::after {
     content: '';
     position: absolute;
@@ -21,9 +23,9 @@
     width: 0;
     height: 0;
     border: 21px solid transparent;
-  }
+  } */
   
-  .ribbon-header::before {
+  /* .ribbon-header::before {
     height: 79px;
     left: -41px;
     border-right-color: blue;
@@ -35,7 +37,7 @@
     right: -41px;
     border-left-color: blue;
   
-  }
+  } */
   .ribbon-header-text {
     position: relative;
     border: none;
@@ -51,51 +53,16 @@
     padding-bottom: 20px;
 }
 .h4head{
-    font-weight: 700;
-    color: #337ab7;
+    font-size: 30px;
+    color: #0b4980;
 }
 .containerform{
     margin-top: -20px;
     padding: 15px;
     margin-bottom: 20px;
     line-height: 25px;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
 }
 .frmlabel{
     font-weight: 700;
+}
 
-}
-@media only screen and (max-width: 660px)  {
-    .ribbon-header-text {
-        position: relative;
-        border: none;
-        padding: 6px 6px 6px 20px;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-      .ribbon-header::before,
-      .ribbon-header::after {
-        content: '';
-        position: absolute;
-        bottom: -20.5px;
-        width: 0;
-        height: 0;
-        border: 21px solid transparent;
-      }
-      .ribbon-header::before {
-        height: 105px;
-        left: -41px;
-        border-right-color: blue;
-      
-      }
-      
-      .ribbon-header::after {
-        height: 105px;
-        right: -41px;
-        border-left-color: blue;
-      
-      }
-}

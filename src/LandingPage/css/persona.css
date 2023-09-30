@@ -43,7 +43,15 @@ p{
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
   line-height: 35px;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+  padding: 10px;
+}
+.parentcontainer1{
+  width: 100%;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  line-height: 35px;
   padding: 10px;
 }
 .parentcontainer h3{
@@ -51,12 +59,47 @@ p{
   font-weight: 700;
   white-space: nowrap;
   margin-bottom: 15px;
-  color: #337ab7;
+  color: rgb(11, 73, 128);
 }
-.parentcontainer .parenteach{
+ .parenteach{
+  width: 100%;
+  height: max-content;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.parenteach div{
+  margin:'5px';
+  padding: 3px;
+  color: rgb(11, 73, 128) ;
+}
+.parenteach1{
   width: 100%;
   height: 100%;
   padding: 5px;
+  display: flex;
+  color:rgb(11, 73, 128)  ;
+  justify-content: space-between;
+}
+.parenteach1 div{
+  width: 100%;
+}
+.parenteach2{
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+.parenteach2 h3{
+  font-size: 23px;
+  font-weight: 700;
+  white-space: nowrap;
+  margin: 0px;
+  margin-bottom: 15px;
+  color: rgb(11, 73, 128);
+  padding-left: 10px;
 }
 .btnfrmn{
     display: flex;
@@ -73,10 +116,15 @@ p{
   align-items: center;
   padding: 15px;
 }
+.siblinginf div{
+  width: 90%;
+}
 .siblingcontainer{
   width: 100%;
   padding: 10px;
   height: max-content;
+  padding-left: 18px;
+  color: rgb(11, 73, 128) ;
 }
 .siblingcontainer h3{
   font-size: 23px;
@@ -84,7 +132,8 @@ p{
   white-space: nowrap;
   margin: 0px;
   margin-bottom: 15px;
-  color: #337ab7;
+  color: rgb(11, 73, 128);
+  padding-left: 10px;
 }
 .addbtnsib{
   width: 100%;

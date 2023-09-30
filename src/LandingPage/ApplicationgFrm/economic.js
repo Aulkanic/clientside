@@ -10,6 +10,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import ScrollToTopButton from '../../userhome/components/scrollButton.jsx'
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { ApplicationForm,ScholarCategory,ApplyForm } from '../../Api/request';
@@ -95,8 +96,9 @@ function Economic() {
       } else {
         console.error("Invalid date format");
       }
-      const fullName = `${userData.firstName} ${userData.middleName} ${userData.lastName}`
+      const fullName = `${userData.firstName} ${userData.lastName}`
       let birthdayValue = formattedBirthday;
+
       const formData = new FormData();
       formData.append('applicantNum', userData.applicantNum);
       formData.append('address', userData.address);
@@ -114,7 +116,6 @@ function Economic() {
       formData.append('fatherEduc', userData.fatherEduc);
       formData.append('fatherName', userData.fatherName);
       formData.append('fatherlName', userData.fatherlName);
-      formData.append('fathermName', userData.fathermName);
       formData.append('fatherOccu', userData.fatherOccu);
       formData.append('fullName', fullName);
       formData.append('gender', userData.gender);
@@ -122,15 +123,14 @@ function Economic() {
       formData.append('guardianAddress', userData.guardianAddress);
       formData.append('guardianName', userData.guardianName);
       formData.append('guardianlName', userData.guardianlName);
-      formData.append('guardianmName', userData.guardianmName);
       formData.append('motherEduc', userData.motherEduc);
       formData.append('motherName', userData.motherName);
       formData.append('motherlName', userData.motherlName);
-      formData.append('mothermName', userData.mothermName);
       formData.append('motherOccu', userData.motherOccu);
       formData.append('relationship', userData.relationship);
       formData.append('gradeLevel', userData.gradeLevel);
       formData.append('scholarID', userData.schoID);
+      formData.append('familyCode', userData.familyCode);
       for (let i = 0; i < selectedValues.length; i++) {
         formData.append(`userfrm[${i}]`, JSON.stringify(selectedValues[i]));
       }
@@ -179,8 +179,8 @@ function Economic() {
       const choices = formc?.filter(question => question.questionsid === data.id)
 
         return(
-          <div key={index} style={{padding:'10px'}}>
-            <FormControl>
+          <div key={index} style={{padding:'10px 50px 10px 50px'}}>
+            <FormControl sx={{width:'100%'}}>
               <FormLabel sx={{fontWeight:'700',color:'black'}} id="demo-row-radio-buttons-group-label">
                 {index + 1}.{t(data.questions)}
                 </FormLabel>
@@ -191,12 +191,18 @@ function Economic() {
                 value={(selectedValues[index] && selectedValues[index].value) || ''} // Set the selected value for this question
                 onChange={(event) => handleRadioChange(index,data.scorecard,data.questions, event.target.value, parseInt(event.target.id))}
               >
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(50%, 1fr))',
+                  gap: '5px', 
+                 
+                }}>
                 {choices?.map((choice,index) =>{
                   return(
                     <FormControlLabel key={index} value={choice.value} control={<Radio  id={choice.scorecard} />} label={t(choice.value)} />
                   )
                 })}
-                
+               </div>
               </RadioGroup>
             </FormControl>
           </div>
@@ -234,7 +240,7 @@ function Economic() {
               {schoav?.map((data,index) =>{
 
                   return(
-                    index === 0 ? (<option key={index} value=''></option>) : (<option key={index} value={data.name}>{data.name}</option>)
+                    index === 0 ? (<option key={index} value=''>Select Scholarship Program</option>) : (<option key={index} value={data.name}>{data.name}</option>)
                   )
                 })}
             </Form.Select>
@@ -263,6 +269,7 @@ function Economic() {
            
         </div>
     </div>
+    <ScrollToTopButton/>
     </>
   )
 }

@@ -27,6 +27,7 @@ const Endpoints = {
     DELETE_SUBMITTED: 'requirements/Delete',
     FETCH_FAMLIST: 'personalinfo/',
     UPDATE_USERINFO: 'personalinfo/update',
+    CHECK_FAM: 'personalinfo/FamilyCode',
     FETCH_APPLICANTSINFO: 'personalinfo/ApplicantFdetails/',
     REGSITRY_OTP: 'OTP/RegistryOtp',
     RESEND_OTP: 'OTP/ResendOtp',

@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import '../css/persona.css'
 import '../css/buttonStyle.css'
-import { Rulelist,FetchingFamily, } from '../../Api/request';
+import { Rulelist,FetchingFamily,CheckFamily } from '../../Api/request';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -15,41 +15,46 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Switch from '@mui/material/Switch';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { Backdrop, CircularProgress } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 50,
+  color: '#fff',
+}));
 
 function Persona() {
   const { t } = useTranslation();
-  const user = useSelector((state) => state.user);
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
+    const [showBackdrop, setShowBackdrop] = useState(false);
     const [famlist, setFamlist] = useState([]);
     const [rule,setRule] = useState([]);
     const [siblings, setSiblings] = useState([])
     const [onlyChild, setOnlyChild] = useState(false);
+    const [noFather, setNoFather] = useState(false);
     const [value, setValue] = useState('Other');
     const [isGuardiancheck,setisGuardiancheck] = useState(false)
-
+    const [isFather,setisFather] = useState(false)
+ 
     const handleChangeRadio = (event) => {
       setValue(event.target.value);
       const isGuardian = event.target.value;
       if(isGuardian === 'Father'){
         userData.guardianName = userData.fatherName;
         userData.guardianlName = userData.fatherlName;
-        userData.guardianmName = userData.fathermName;
-        userData.relationship = 'Father'
+        userData.relationship = 'FATHER'
         setisGuardiancheck(true);
       }
       if(isGuardian === 'Mother'){
         userData.guardianName = userData.motherName;
         userData.guardianlName= userData.motherlName ;
-        userData.guardianmName  = userData.mothermName;
-        userData.relationship = 'Mother';
+        userData.relationship = 'MOTHER';
         setisGuardiancheck(true)
       }
       if(isGuardian === 'Other'){
         userData.guardianName = '';
         userData.guardianlName= '' ;
-        userData.guardianmName  = '';
         userData.relationship ='';
         setisGuardiancheck(false)
       }
@@ -61,7 +66,7 @@ function Persona() {
       setSiblings(updatedSiblings);
     };
     const handleAddFields = () =>{
-      setSiblings([...siblings, { firstName: '', middleName: '', lastName: '' }]);
+      setSiblings([...siblings, { firstName: '', lastName: '' }]);
     }
 
     const handleRemoveFields = (index) =>{
@@ -75,6 +80,27 @@ function Persona() {
         setSiblings([])
       }else{
         setOnlyChild(false)
+      }
+    }
+    const handleNoFather = () =>{
+      if(!noFather){
+        setNoFather(true);
+        setUserData({
+          fatherName: 'NONE',
+          fatherlName: 'NONE',
+          fatherOccu: 'NONE',
+          fatherEduc: 'NONE',
+        });
+        setisFather(true);
+      }else{
+        setNoFather(false)
+        setUserData({
+          fatherName: '',
+          fatherlName: '',
+          fatherOccu: '',
+          fatherEduc: '',
+        });
+        setisFather(false);
       }
     }
 
@@ -93,11 +119,9 @@ function Persona() {
           Fetch()
     },[])
 
-    function Check(){
+   async function Check(){
       const errors = {};
-      let checkfammum = 0;
-      let checkfamdad = 0;
-      if (userData.motherName === '') {
+      if (!userData.motherName || userData.motherName === '') {
         errors.motherName = "This Field is required";
       } 
       else if (userData.motherName.length === 1) {
@@ -115,7 +139,7 @@ function Persona() {
        else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.motherName)) {
         errors.motherName = "First Letter must be Capital";
       }
-      if (userData.motherlName === '') {
+      if (!userData.motherlName || userData.motherlName === '') {
         errors.motherlName = "This Field is required";
       } 
       else if (userData.motherlName.length === 1) {
@@ -133,26 +157,7 @@ function Persona() {
        else if (userData.motherlName.charAt(0) !== userData.motherlName.charAt(0).toUpperCase()) {
         errors.motherlName = "First Letter must be Capital";
       }
-      if (userData.mothermName === '') {
-        errors.mothermName = "This Field is required";
-      } 
-      else if (userData.mothermName.length === 1) {
-        errors.mothermName = "Input must not contain a single letter.";
-      }
-      else if (userData.mothermName.length > 50) {
-        errors.mothermName = "Input should contain less than 50 characters.";
-      }
-      else if (/[0-9]/.test(userData.mothermName)) {
-        errors.mothermName = "Input must not contain numeric value.";
-      }
-      else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.mothermName)) {
-        errors.mothermName = "Special characters are not allowed.";
-      }
-       else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.mothermName)) {
-        errors.mothermName = "First Letter must be Capital";
-      }
-
-      if (userData.motherOccu === '') {
+      if (!userData.motherOccu || userData.motherOccu === '') {
         errors.motherOccu = "This Field is required";
       } else if (userData.motherOccu.length === 1) {
         errors.motherOccu = "Input must not contain a single letter.";
@@ -165,7 +170,7 @@ function Persona() {
       } else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.motherOccu)) {
         errors.motherOccu = "First Letter must be Capital";
       }
-      if (userData.motherEduc === '') {
+      if (!userData.motherEduc || userData.motherEduc === '') {
         errors.motherEduc = "This Field is required";
       } else if (userData.motherEduc.length === 1) {
         errors.motherEduc = "Input must not contain a single letter.";
@@ -176,7 +181,7 @@ function Persona() {
       } else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.motherEduc)) {
         errors.motherEduc = "First Letter must be Capital";
       }
-      if (userData.fatherName === '') {
+      if (!userData.fatherName || userData.fatherName === '') {
         errors.fatherName = "This Field is required";
       } 
       else if (userData.fatherName.length === 1) {
@@ -195,7 +200,7 @@ function Persona() {
         errors.fatherName = "First Letter must be Capital";
       }
 
-      if (userData.fatherlName === '') {
+      if (!userData.fatherlName || userData.fatherlName === '') {
         errors.fatherlName = "This Field is required";
       } 
       else if (userData.fatherlName.length === 1) {
@@ -213,26 +218,9 @@ function Persona() {
        else if (userData.fatherlName.charAt(0) !== userData.fatherlName.charAt(0).toUpperCase()) {
         errors.fatherlName = "First Letter must be Capital";
       }
-      if (userData.fathermName === '') {
-        errors.fathermName = "This Field is required";
-      } 
-      else if (userData.fathermName.length === 1) {
-        errors.fathermName = "Input must not contain a single letter.";
-      }
-      else if (userData.fathermName.length > 50) {
-        errors.fathermName = "Input should contain less than 50 characters.";
-      } 
-      else if (/[0-9]/.test(userData.fathermName)) {
-        errors.fathermName = "Input must not contain numeric value.";
-      }
-      else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.fathermName)) {
-        errors.fathermName = "Special characters are not allowed.";
-      }
-       else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.fathermName)) {
-        errors.fathermName = "First Letter must be Capital";
-      }
 
-      if (userData.fatherOccu === '') {
+
+      if (!userData.fatherOccu || userData.fatherOccu === '') {
         errors.fatherOccu = "This Field is required";
       } else if (userData.fatherOccu.length === 1) {
         errors.fatherOccu = "Input must not contain a single letter.";
@@ -245,7 +233,7 @@ function Persona() {
       } else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.fatherOccu)) {
         errors.fatherOccu = "First Letter must be Capital";
       }
-      if (userData.fatherEduc === '') {
+      if (!userData.fatherEduc || userData.fatherEduc === '') {
         errors.fatherEduc = "This Field is required";
       } else if (userData.fatherEduc.length === 1) {
         errors.fatherEduc = "Input must not contain a single letter.";
@@ -259,7 +247,7 @@ function Persona() {
       if (userData.guardianAddress === '') {
         errors.guardianAddress = "This Field is required";
       } 
-      if (userData.guardianName === '') {
+      if (!userData.guardianName || userData.guardianName === '') {
         errors.guardianName = "This Field is required";
       } 
       else if (userData.guardianName.length === 1) {
@@ -274,22 +262,7 @@ function Persona() {
        else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.guardianName)) {
         errors.guardianName = "First Letter must be Capital";
       }
-      if (userData.guardianmName === '') {
-        errors.guardianmName = "This Field is required";
-      } 
-      else if (userData.guardianmName.length === 1) {
-        errors.guardianmName = "Input must not contain a single letter.";
-      }
-      else if (/[0-9]/.test(userData.guardianmName)) {
-        errors.guardianmName = "Input must not contain numeric value.";
-      }
-      else if (/[!@#$%^&*/_()?":{}|<>]/.test(userData.guardianmName)) {
-        errors.guardianmName = "Special characters are not allowed.";
-      }
-       else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.guardianmName)) {
-        errors.guardianmName = "First Letter must be Capital";
-      }
-      if (userData.guardianlName === '') {
+      if (!userData.guardianlName || userData.guardianlName === '') {
         errors.guardianlName = "This Field is required";
       } 
       else if (userData.guardianlName.length === 1) {
@@ -304,7 +277,7 @@ function Persona() {
        else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.guardianlName)) {
         errors.guardianlName = "First Letter must be Capital";
       }
-      if (userData.relationship === '') {
+      if (!userData.relationship || userData.relationship === '') {
         errors.relationship = "This Field is required";
       } 
       else if (userData.relationship.length === 1) {
@@ -319,50 +292,19 @@ function Persona() {
        else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.relationship)) {
         errors.relationship = "First Letter must be Capital";
       }
-      if (userData.guardianContact === '') {
+      if (!userData.guardianContact || userData.guardianContact === '') {
         errors.guardianContact = "Phone Number is required";
       } else if (!/^09\d{9}$/.test(userData.guardianContact)) {
         errors.guardianContact = "Invalid phone number.";
       }
-      if (userData.famNum === '') {
-        errors.famNum = "This Field is required";
-      }else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.famNum)) {
-        errors.famNum = "Special characters are not allowed.";
+      if (!userData.guardianAddress || userData.guardianAddress === '') {
+        errors.guardianAddress = "This field is required";
       }
-      const famrule = 3 * rule.famNum
-      if(checkfammum === famrule && checkfamdad === famrule){
-        errors.valid = 'Invalid'
-        swal({
-          title: "Warning",
-          text: 'One Family Per head',
-          icon: "warning",
-          button: "OK",
-        });
-      }
-      const fatherNamecheck = `${userData.fatherName} ${userData.fathermName} ${userData.fatherlName}`
-      const motherNamecheck = `${userData.motherName} ${userData.mothermName} ${userData.motherlName}`
-      const checkfam = famlist?.filter(data => 
-        data.fatherName === fatherNamecheck &&
-        data.motherName === motherNamecheck
-        )
-      if(checkfam.length > 0){
-        if(user.isWarning === 1){
-            swal({
-              title: "Warning",
-              text: 'One Family Per head',
-              icon: "warning",
-              button: "OK",
-            });
-           setStep(2)
-           return
-        }
-        }
 
       if(!onlyChild){
         const hasEmptyFields = siblings.some(
           (sibling) =>
             sibling.firstName.trim() === '' ||
-            sibling.middleName.trim() === '' ||
             sibling.lastName.trim() === ''
         );
         if(siblings.length === 0){
@@ -382,36 +324,111 @@ function Persona() {
           ...prevUserData,
           siblings: siblings, 
         }));
-        setErrors('')
-        setStep(3)
+        const userName = `${userData.firstName} ${userData.lastName}`
+        const groupedNames = {
+          motherName: `${userData.motherName} ${userData.motherlName}`,
+          fatherName: `${userData.fatherName} ${userData.fatherlName}`,
+          siblingNames: siblings ? [...siblings.map(sibling => `${sibling.firstName} ${sibling.lastName}`), userName].sort() : [],
+
+        };
+
+        const formData = new FormData();
+        formData.append('familyNames', JSON.stringify(groupedNames));
+        setShowBackdrop(true)
+        await CheckFamily.CHECK_FAM(formData)
+        .then((res) =>{
+          console.log(res)
+          if(res.data.results.length === rule.famNum){
+            setShowBackdrop(false)
+            swal({
+              title: "Warning",
+              text: 'One Family Per head',
+              icon: "warning",
+              button: "OK",
+            });
+            userData.familyCode = res.data.familyCode
+            setErrors('')
+            
+            setStep(2)
+            return
+          }else{
+            setErrors('')
+            setShowBackdrop(false)
+            setStep(3)
+          }
+        })
+
     };
+
+    useEffect(() => {
+      const errors = {};
+    
+      const fieldsToCheck = [
+        'fatherName',
+        'fatherlName',
+        'fatherOccu',
+        'motherName',
+        'motherlName',
+        'motherOccu',
+        'guardianName',
+        'guardianlName',
+        'guardianAddress',
+      ];
+    
+      fieldsToCheck.forEach((field) => {
+        if (userData[field] !== '' && /[a-z]/.test(userData[field])) {
+          errors[field] = 'Use uppercase format only';
+        } else {
+          delete errors[field];
+        }
+      });
+      const siblingErrors = [];
+
+      siblings.forEach((sibling, index) => {
+        console.log(index)
+        if (!/^[A-Z]+$/.test(sibling.firstName)) {
+          siblingErrors.push(`Sibling ${index + 1} - First Name should be in uppercase.`);
+        }
+        if (!/^[A-Z]+$/.test(sibling.lastName)) {
+          siblingErrors.push(`Sibling ${index + 1} - Last Name should be in uppercase.`);
+        }
+      });
+      
+      if (siblingErrors.length > 0) {
+        errors.siblingErrors = 'Please Capitalize all letters for all your Siblings information'; 
+      } else {
+        delete errors.siblingErrors;
+      }
+      setErrors(errors);
+    }, [userData,siblings]);
 
    const siblingfrm = siblings.map((sibling, index) => (
     <div className='siblinginf' key={index}>
+     
+      <div>
       <Form.Group as={Col}>
-      <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
+      <Form.Label className='frmlabel'>Sibling {index + 1}({t("First Name")})</Form.Label>
         <Form.Control
           type="text"
           value={sibling.firstName}
+          placeholder="Enter sibling's first name"
           onChange={(e) => handleInputChange(index, 'firstName', e.target.value)}
         />
       </Form.Group>
-      <Form.Group as={Col} style={{margin:'0px 10px 0px 10px'}}>
-      <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
-        <Form.Control
-          type="text"
-          value={sibling.middleName}
-          onChange={(e) => handleInputChange(index, 'middleName', e.target.value)}
-        />
-      </Form.Group>
+      </div>
+      <div>
       <Form.Group as={Col}>
-      <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
+      <Form.Label className='frmlabel'>Sibling {index + 1}({t("Last Name")})</Form.Label>
         <Form.Control
           type="text"
+          placeholder="Enter sibling's last name"
           value={sibling.lastName}
           onChange={(e) => handleInputChange(index, 'lastName', e.target.value)}
         />
+
       </Form.Group>
+      </div>
+      
       <Button
         className='myButton2'
         variant='secondary'
@@ -423,211 +440,259 @@ function Persona() {
     </div>
      ))
     return (
+    <>   
+      <StyledBackdrop open={showBackdrop}>
+        <CircularProgress color="inherit" />
+      </StyledBackdrop>
     <div className='Persona'>
         <div className="personad"> 
+           
            <div className='form'>
+
             <div className='parentcontainer'>
-              <div className='parenteach'>
-              <h3>Father's Information</h3>
+              <div className='parenteach'> 
+                <div>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
+                <Form.Label className='frmlabel'>Father's first name</Form.Label>
                   <Form.Control
+                  placeholder="Your answer"
                   type="text" 
+                  disabled={isFather}
                   value={userData['fatherName']} 
                   onChange={(e) =>setUserData({...userData,"fatherName" : e.target.value})} 
                   />
                    {errors.fatherName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherName}</p>}
                 </Form.Group>
+                </div>          
+                <div>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
+                <Form.Label className='frmlabel'>Father's last name</Form.Label>
                   <Form.Control
+                  placeholder="Your answer"
                   type="text" 
-                  value={userData['fathermName']} 
-                  onChange={(e) =>setUserData({...userData,"fathermName" : e.target.value})} 
-                  />
-                   {errors.fathermName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fathermName}</p>}
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
-                  <Form.Control
-                  type="text" 
+                  disabled={isFather}
                   value={userData['fatherlName']} 
                   onChange={(e) =>setUserData({...userData,"fatherlName" : e.target.value})} 
                   />
                   {errors.fatherlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherlName}</p>}
                 </Form.Group>
+                </div>
+                <div>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Highest Educational Attaintment")}</Form.Label>
+                <Form.Label className='frmlabel'>Highest Educational Attaintment</Form.Label>
                   <Form.Select
                   type="text" 
+                  disabled={isFather}
                   value={userData['fatherEduc']} 
                   onChange={(e) =>setUserData({...userData,"fatherEduc" : e.target.value})} 
                   >
-                <option value={'No Grade Completed'}>No Grade Completed</option>
-                <option value={'Elementary Undergraduate'}>Elementary Undergraduate</option>
-                <option value={'Elementary Graduate'}>Elementary Graduate</option>
-                <option value={'High School Undergraduate'}>High School Undergraduate</option>
-                <option value={'High School Graduate'}>High School Graduate</option>
-                <option value={'Post Secondary Undergraduate'}>Post Secondary Undergraduate</option>
-                <option value={'Post Secondary Graduate'}>Post Secondary Graduate</option>
-                <option value={'College Undergraduate'}>College Undergraduate</option>
-                <option value={'College Graduate'}>College Graduate</option>
-                <option value={'Post Baccalaureate'}>Post Baccalaureate</option>
+                {noFather && <option value={userData['fatherEduc']}>{userData['fatherEduc']}</option>}
+                <option value={''}>Please select</option>
+                <option value="NO GRADE COMPLETED">NO GRADE COMPLETED</option>
+                <option value="ELEMENTARY UNDERGRADUATE">ELEMENTARY UNDERGRADUATE</option>
+                <option value="ELEMENTARY GRADUATE">ELEMENTARY GRADUATE</option>
+                <option value="HIGH SCHOOL UNDERGRADUATE">HIGH SCHOOL UNDERGRADUATE</option>
+                <option value="HIGH SCHOOL GRADUATE">HIGH SCHOOL GRADUATE</option>
+                <option value="POST SECONDARY UNDERGRADUATE">POST SECONDARY UNDERGRADUATE</option>
+                <option value="POST SECONDARY GRADUATE">POST SECONDARY GRADUATE</option>
+                <option value="COLLEGE UNDERGRADUATE">COLLEGE UNDERGRADUATE</option>
+                <option value="COLLEGE GRADUATE">COLLEGE GRADUATE</option>
+                <option value="POST BACCALAUREATE">POST BACCALAUREATE</option>
                   </Form.Select>
                   {errors.fatherEduc && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherEduc}</p>}
                 </Form.Group>
+                </div>
+                <div>
                 <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Occupation")}</Form.Label>
+                <Form.Label className='frmlabel'>Father's Occupation</Form.Label>
                   <Form.Control
                   type="text" 
+                  disabled={isFather}
+                  placeholder="Your answer"
                   value={userData['fatherOccu']} 
                   onChange={(e) =>setUserData({...userData,"fatherOccu" : e.target.value})} 
                   />
                   {errors.fatherOccu && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherOccu}</p>}
                 </Form.Group>
+                </div>
+                <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={noFather} onChange={handleNoFather} />} label="No father" />
               </div>
               <div className='parenteach'>
-              <h3>Mother's Information</h3>
-               <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
+                  <div>
+                  <Form.Group as={Col}>
+                  <Form.Label className='frmlabel'>Mother's first name</Form.Label>
                   <Form.Control
                   type="text" 
+                  placeholder="Your answer"
                   value={userData['motherName']} 
                   onChange={(e) =>setUserData({...userData,"motherName" : e.target.value})} 
                   />
                   {errors.motherName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherName}</p>}
                 </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  value={userData['mothermName']} 
-                  onChange={(e) =>setUserData({...userData,"mothermName" : e.target.value})} 
-                  />
-                  {errors.mothermName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.mothermName}</p>}
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  value={userData['motherlName']} 
-                  onChange={(e) =>setUserData({...userData,"motherlName" : e.target.value})} 
-                  />
-                  {errors.motherlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherlName}</p>}
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Highest Educational Attaintment")}</Form.Label>
-                  <Form.Select
-                  type="text" 
-                  value={userData['motherEduc']} 
-                  onChange={(e) =>setUserData({...userData,"motherEduc" : e.target.value})} 
-                  >
-                <option value={'No Grade Completed'}>No Grade Completed</option>
-                <option value={'Elementary Undergraduate'}>Elementary Undergraduate</option>
-                <option value={'Elementary Graduate'}>Elementary Graduate</option>
-                <option value={'High School Undergraduate'}>High School Undergraduate</option>
-                <option value={'High School Graduate'}>High School Graduate</option>
-                <option value={'Post Secondary Undergraduate'}>Post Secondary Undergraduate</option>
-                <option value={'Post Secondary Graduate'}>Post Secondary Graduate</option>
-                <option value={'College Undergraduate'}>College Undergraduate</option>
-                <option value={'College Graduate'}>College Graduate</option>
-                <option value={'Post Baccalaureate'}>Post Baccalaureate</option>
-                  </Form.Select>
-                  {errors.motherEduc && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherEduc}</p>}
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Occupation")}</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  value={userData['motherOccu']} 
-                  onChange={(e) =>setUserData({...userData,"motherOccu" : e.target.value})} 
-                  />
-                  {errors.motherOccu && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherOccu}</p>}
-                </Form.Group>
-              </div>
-              <div className='parenteach'>
-              <h3>Guardian's Information</h3>
-                <Form.Group as={Col}>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="female"
-                  name="radio-buttons-group"
-                  value={value}
-                  onChange={handleChangeRadio}
-                >
-                  <FormControlLabel value="Mother" control={<Radio />} label="Mother" />
-                  <FormControlLabel value="Father" control={<Radio />} label="Father" />
-                  <FormControlLabel value="Other" control={<Radio />} label="Other" />
-                </RadioGroup>
-                </Form.Group>
-               <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  disabled={isGuardiancheck}
-                  value={userData['guardianName']} 
-                  onChange={(e) =>setUserData({...userData,"guardianName" : e.target.value})} 
-                  />
-                  {errors.guardianName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  disabled={isGuardiancheck}
-                  value={userData['guardianmName']} 
-                  onChange={(e) =>setUserData({...userData,"guardianmName" : e.target.value})} 
-                  />
-                  {errors.guardianmName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianmName}</p>}
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  disabled={isGuardiancheck}
-                  value={userData['guardianlName']} 
-                  onChange={(e) =>setUserData({...userData,"guardianlName" : e.target.value})} 
-                  />
-                  {errors.guardianlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianlName}</p>}
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Relationship to Guardian</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  disabled={isGuardiancheck}
-                  value={userData['relationship']} 
-                  onChange={(e) =>setUserData({...userData,"relationship" : e.target.value})} 
-                  />
-                  {errors.relationship && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.relationship}</p>}
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Guardian Contact No.</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  value={userData['guardianContact']} 
-                  onChange={(e) =>setUserData({...userData,"guardianContact" : e.target.value})} 
-                  />
-                  {errors.guardianContact && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianContact}</p>}
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>Guardian Address</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  value={userData['guardianAddress']} 
-                  onChange={(e) =>setUserData({...userData,"guardianAddress" : e.target.value})} 
-                  />
-                  {errors.guardianAddress && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianAddress}</p>}
-                </Form.Group>
+                  </div>
+                  <div>
+                  <Form.Group as={Col}>
+                  <Form.Label className='frmlabel'>Mother's last Name</Form.Label>
+                    <Form.Control
+                    type="text" 
+                    placeholder="Your answer"
+                    value={userData['motherlName']} 
+                    onChange={(e) =>setUserData({...userData,"motherlName" : e.target.value})} 
+                    />
+                    {errors.motherlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherlName}</p>}
+                  </Form.Group>
+                  </div>
+                  <div>
+                  <Form.Group as={Col}>
+                  <Form.Label className='frmlabel'>Highest Educational Attaintment</Form.Label>
+                    <Form.Select
+                    type="text" 
+                    value={userData['motherEduc']} 
+                    onChange={(e) =>setUserData({...userData,"motherEduc" : e.target.value})} 
+                    >
+                  <option value={''}>Please select</option>
+                  <option value="NO GRADE COMPLETED">NO GRADE COMPLETED</option>
+                  <option value="ELEMENTARY UNDERGRADUATE">ELEMENTARY UNDERGRADUATE</option>
+                  <option value="ELEMENTARY GRADUATE">ELEMENTARY GRADUATE</option>
+                  <option value="HIGH SCHOOL UNDERGRADUATE">HIGH SCHOOL UNDERGRADUATE</option>
+                  <option value="HIGH SCHOOL GRADUATE">HIGH SCHOOL GRADUATE</option>
+                  <option value="POST SECONDARY UNDERGRADUATE">POST SECONDARY UNDERGRADUATE</option>
+                  <option value="POST SECONDARY GRADUATE">POST SECONDARY GRADUATE</option>
+                  <option value="COLLEGE UNDERGRADUATE">COLLEGE UNDERGRADUATE</option>
+                  <option value="COLLEGE GRADUATE">COLLEGE GRADUATE</option>
+                  <option value="POST BACCALAUREATE">POST BACCALAUREATE</option>
+                    </Form.Select>
+                    {errors.motherEduc && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherEduc}</p>}
+                  </Form.Group>
+                  </div>
+                  <div>
+                  <Form.Group as={Col}>
+                  <Form.Label className='frmlabel'>Mother's Occupation</Form.Label>
+                    <Form.Control
+                    type="text" 
+                    placeholder="Your answer"
+                    value={userData['motherOccu']} 
+                    onChange={(e) =>setUserData({...userData,"motherOccu" : e.target.value})} 
+                    />
+                    {errors.motherOccu && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherOccu}</p>}
+                  </Form.Group>
+                  </div>
               </div>
             </div>
-            <div className='siblingcontainer'>
-              <div style={{display:"flex",justifyContent:'space-around',alignItems:'center'}}>
+            <div className='parentcontainer1'>
+              <div className='parenteach2'>
+                <h3>Guardian's Information</h3>
+              </div>
               
+            <div className='parenteach1'>
+                    <div>
+                      <h3 style={{fontSize:'18px',fontWeight:'bold',color:'rgb(11, 73, 128)'}}>Guardian</h3>
+                      <Form.Group as={Col}>
+                            <RadioGroup
+                              row
+                              aria-labelledby="demo-radio-buttons-group-label"
+                              name="radio-buttons-group"
+                              value={value}
+                              onChange={handleChangeRadio}
+                            >
+                              <FormControlLabel value="Mother" control={<Radio />} label="Mother" />
+                              <FormControlLabel disabled={isFather} value="Father" control={<Radio />} label="Father" />
+                              <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                            </RadioGroup>
+                      </Form.Group>
+                    </div>
+                    <div style={{marginRight:'5px',color:'rgb(11, 73, 128)'}}>
+                      <Form.Group as={Col}>
+                      <Form.Label className='frmlabel'>Guardian's first name</Form.Label>
+                            <Form.Control
+                            type="text" 
+                            placeholder="Your answer"
+                            disabled={isGuardiancheck}
+                            value={userData['guardianName']} 
+                            onChange={(e) =>setUserData({...userData,"guardianName" : e.target.value})} 
+                            />
+                            {errors.guardianName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
+                      </Form.Group>
+                    </div>
+                    <div>
+                      <Form.Group as={Col}>
+                      <Form.Label className='frmlabel'>Guardian's last name</Form.Label>
+                                <Form.Control
+                                type="text" 
+                                disabled={isGuardiancheck}
+                                placeholder="Your answer"
+                                value={userData['guardianlName']} 
+                                onChange={(e) =>setUserData({...userData,"guardianlName" : e.target.value})} 
+                                />
+                                {errors.guardianlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianlName}</p>}
+                      </Form.Group>
+                    </div>
+            </div>
+            <div className='parenteach1'>
+                {!isGuardiancheck && <div>
+                <Form.Group as={Col}>
+                <Form.Label className='frmlabel'>Relationship to guardian</Form.Label>
+                        <Form.Select
+                        type="text" 
+                        disabled={isGuardiancheck}
+                        value={userData['relationship']} 
+                        onChange={(e) =>setUserData({...userData,"relationship" : e.target.value})} 
+                        >
+                  {isGuardiancheck && <option value={userData['relationship']}>{userData['relationship']}</option>}
+                  <option value={''}>Please select</option>
+                  <option value={'LEGAL GUARDIAN'}>LEGAL GUARDIAN</option>
+                  <option value={'STEPMOTHER'}>STEPMOTHER</option>
+                  <option value={'STEPFATHER'}>STEPFATHER</option>
+                  <option value={'FOSTER PARENT'}>FOSTER PARENT</option>
+                  <option value={'GRANDPARENT'}>GRANDPARENT</option>
+                  <option value={'AUNT OR UNCLE'}>AUNT OR UNCLE</option>
+                  <option value={'OTHER RELATIVE'}>OTHER RELATIVE</option>
+                  <option value={'CUSTODIAN'}>CUSTODIAN</option>
+                  <option value={'NANNY OR CARETAKER'}>NANNY OR CARETAKER</option>
+                  <option value={'LEGAL GUARDIAN APPOINTED BY WILL'}>LEGAL GUARDIAN APPOINTED BY WILL</option>
+                  <option value={'GUARDIAN AD LITEM'}>GUARDIAN AD LITEM</option>
+                  <option value={'FAMILY FRIEND'}>FAMILY FRIEND</option>
+                        </Form.Select>
+                        {errors.relationship && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.relationship}</p>}
+                </Form.Group>
+                </div>}
+                <div style={{margin:'0px 10px 0px 10px'}}>
+                <Form.Group as={Col}>
+                <Form.Label className='frmlabel'>Guardian's Contact No.</Form.Label>
+                        <Form.Control
+                        type="text" 
+                        placeholder="09xxxxxxxxx"
+                        value={userData['guardianContact']} 
+                        onChange={(e) =>setUserData({...userData,"guardianContact" : e.target.value})} 
+                        />
+                        {errors.guardianContact && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianContact}</p>}
+                </Form.Group>
+                </div>
+                <div>
+                <Form.Group as={Col}>
+                <Form.Label className='frmlabel'>Guardian's Address</Form.Label>
+                        <Form.Control
+                        type="text" 
+                        placeholder="House No., Street, Barangay, Municipality"
+                        value={userData['guardianAddress']} 
+                        onChange={(e) =>setUserData({...userData,"guardianAddress" : e.target.value})} 
+                        />
+                        {errors.guardianAddress && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianAddress}</p>}
+                </Form.Group>
+                </div>
+
+
+            </div>
+            </div>
+
+            <div className='siblingcontainer'>
+              <div style={{display:"flex",justifyContent:'space-between',alignItems:'center'}}>
               <h3>List of Siblings </h3>
+              
               <FormControlLabel sx={{whiteSpace:'nowrap'}} control={<Switch checked={onlyChild} onChange={handleOnlyChild} />} label="I am an only child" />
               </div>
               {errors.sibling && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.sibling}</p>}
+              {errors.siblingErrors && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.siblingErrors}</p>}
               {siblingfrm}
               <div className='addbtnsib'>
               <Button
@@ -647,6 +712,7 @@ function Persona() {
             </div>
         </div>
     </div>
+    </>
   )
 }
 

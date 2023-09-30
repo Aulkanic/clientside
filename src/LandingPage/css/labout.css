@@ -101,8 +101,17 @@
   }
   .cardprofile{
     width: max-content;
+    box-shadow: 0px 1px 5px 7px rgba(122, 122, 122, 0.25) inset;
+    -webkit-box-shadow: 0px 1px 5px 7px rgba(122, 122, 122, 0.25) inset;
+    -moz-box-shadow: 0px 1px 5px 7px rgba(122, 122, 122, 0.25) inset;
+    padding: 5px;
+    border-radius: 2px;
+    transition: all 0.3s ease;
 }
-
+.cardprofile:hover,.circular:hover {
+    box-shadow: 0px 1px 10px 7px rgba(45, 2, 235, 0.801) inset;
+    transform: scale(2.05);
+  }
 .backgroundimg{
     width: 100%;
     display: flex;
@@ -110,20 +119,31 @@
     align-items: center;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
-    height: 75px;
+    height: 80px;
     background-size: cover;
     background-position: center;
     margin-bottom: 25px;
+    border-bottom: 2px solid black;
 }
 .circular{
     display: flex;
     position: fixed;
     top: 20px;
-
     align-items: center;
     justify-content: center;
     width: 60%;
     padding: 5px;
+    border: 2px solid transparent; 
+    border-radius: 50%; 
+    transition: all 0.3s ease; 
+}
+.circular:hover {
+    border-color: #007bff; 
+  }
+.mydoofficials{
+    text-decoration: underline;
+    font-size: 35px;
+    font-weight: bold;
 }
 @media (max-width:728px) {
     .labout{

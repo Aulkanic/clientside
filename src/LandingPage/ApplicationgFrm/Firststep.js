@@ -37,6 +37,7 @@ function Firststep() {
   const [scholarprog, setScholarProg] = useState([]);
   const [rule,setRule] = useState([])
   const [open1, setOpen1] = useState(false);
+  const [housenum,setHousenum] = useState('')
 
   const handleClose = () => {
     setOpen(false);
@@ -70,6 +71,16 @@ function Firststep() {
   useEffect(() => {
     const { birthday } = userData;
     const age = calculateAge(birthday);
+    if (age > rule.ageNum) {
+      errors.age = "Not Qualified";
+      Swal.fire({
+        title: "Warning",
+        text: `You are not Qualify to Apply Scholarship.Only ${rule.ageNum} below must considered.`,
+        icon: "warning",
+        button: "OK",
+      });
+      setStep(1);
+    }
     setUserData((prevData) => ({ ...prevData, age: age.toString() }));
   }, [userData.birthday]);
   
@@ -93,12 +104,12 @@ function Firststep() {
 
   function Check(){
     const errors = {};
-    if(!userData.firstName || !userData.middleName || !userData.lastName || !userData.email){
+    if(!userData.firstName || !userData.lastName || !userData.email){
       setOpen1(true)
       setStep(1);
       return
     }
-    if(userData.firstName === '' || userData.middleName === '' || userData.lastName === '' || userData.email === ''){
+    if(userData.firstName === '' || userData.lastName === '' || userData.email === ''){
       Swal.fire({
         title: "Warning",
         text: `The system did not recognized or find registered user information.Please Register first your account to continue filling up the form`,
@@ -111,38 +122,28 @@ function Firststep() {
     if (!userData.gender) {
       errors.gender = "Please Select your Gender";
     }
-    if (userData.citizenship === '') {
-      errors.citizenship = "Citizenship is required";
-    }else if (userData.citizenship?.length === 1) {
-      errors.citizenship = "Input must not contain a single letter.";
-    }else if (userData.citizenship?.length > 50) {
-      errors.citizenship = "Input should contain less than 50 characters.";
-    } else if (/[0-9]/.test(userData.citizenship)) {
-      errors.citizenship = "Input must not contain numeric value";
-    } else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.citizenship)) {
-      errors.citizenship = "Special characters are not allowed.";
-    } else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.citizenship)) {
-      errors.citizenship = "First Letter must be Capital";
-    }
-    if (userData.birthday === '') {
+    if (!userData.birthday || userData.birthday === '') {
       errors.birthday = "Birthday is required";
     }
-    if (userData.baranggay === '') {
+    if (!housenum || housenum === '') {
+      errors.housenum = "This field is required";
+    }
+    if (!userData.baranggay || userData.baranggay === '') {
       errors.baranggay = "Select your Baranggay";
     }
-    if (userData.School === '') {
-      errors.School = "Please provide details";
+    if (!userData.School || userData.School === '') {
+      errors.School = "This field is required";
     }
-    if (userData.gradeLevel === '') {
-      errors.gradeLevel = "Please provide details";
+    if (!userData.gradeLevel || userData.gradeLevel === '') {
+      errors.gradeLevel = "This field is required";
     }
-    if (userData.SchoolAddress === '') {
-      errors.SchoolAddress = "Please provide details";
+    if (!userData.SchoolAddress || userData.SchoolAddress === '') {
+      errors.SchoolAddress = "This field is required";
     }
-    if (userData.yearLevel === '') {
+    if (!userData.yearLevel || userData.yearLevel === '') {
       errors.yearLevel = "Select your Year Level";
     }
-    if (userData.course === '') {
+    if (!userData.course || userData.course === '') {
       errors.course = "Select your Course";
     }
     if (userData.age === '') {
@@ -153,15 +154,6 @@ function Firststep() {
       errors.age = "Input must not contain letter value";
     }else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.age)) {
       errors.age = "Special characters are not allowed.";
-    }else if (userData.age > rule.ageNum) {
-      errors.age = "Not Qualified";
-      Swal.fire({
-        title: "Warning",
-        text: `You are not Qualify to Apply Scholarship.Only ${rule.ageNum} below must considered.`,
-        icon: "warning",
-        button: "OK",
-      });
-      setStep(1);
     }else if(userData.age <=5){
       errors.age = 'Minimum age for application is five years old';
     }
@@ -177,11 +169,7 @@ function Firststep() {
     } else if (!/^09\d{9}$/.test(userData.contactNum)) {
       errors.contactNum = "Invalid phone number.";
     }
-    if (userData.address === '') {
-      errors.address = "Current Address is required";
-    }else if (/[!@#$%^&*/_()?":{}|<>]/.test(userData.address)) {
-      errors.address = "Special characters are not allowed.";
-    }   
+
     
 
     if (Object.keys(errors).length > 0) {
@@ -209,13 +197,11 @@ const findCreatedAcc = async() =>{
         const result = res.data.result[0];
         const fname = result.fname;
         const lname = result.lname;
-        const mname = result.mname;
         const email = result.email;
         const applicantNum = result.applicantNum;
-        dispatch(setName({fname,lname,mname,email,applicantNum}))
+        dispatch(setName({fname,lname,email,applicantNum}))
         userData.firstName = fname;
         userData.lastName = lname;
-        userData.middleName = mname;
         userData.email = email;
         userData.applicantNum = applicantNum;
         navigate('/ApplicationForm')
@@ -231,7 +217,21 @@ const handleRegister = () => {
   navigate('/register');
 };
 
+useEffect(() => {
+  const fieldsToCheck = ['housenum', 'birthPlace', 'School', 'SchoolAddress'];
+  const errors = {};
 
+  fieldsToCheck.forEach((field) => {
+    if (/[a-z]/.test(field === 'housenum' ? housenum : userData[field])) {
+      errors[field] = 'Use uppercase format only';
+    } else {
+      delete errors[field];
+    }
+  });
+
+  setErrors(errors);
+}, [housenum, userData.birthPlace, userData.School, userData.SchoolAddress]);
+  console.log(userData)
   return (
   <>
   <Dialog open={open1} onClose={handleClose1}>
@@ -280,16 +280,7 @@ const handleRegister = () => {
           <div className="form">
           <div className='containerform'>
           <Row className="mb-3">
-            <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
-              <Form.Control
-               type="text" 
-               value={userData['lastName']} 
-               disabled
-               />
-            </Form.Group>
-
-            <Form.Group as={Col}>
+          <Form.Group as={Col}>
               <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
               <Form.Control 
               type="text" 
@@ -298,12 +289,12 @@ const handleRegister = () => {
               />
             </Form.Group>
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
-              <Form.Control 
-              type="text" 
-              value={userData['middleName']} 
-              disabled
-              />
+              <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
+              <Form.Control
+               type="text" 
+               value={userData['lastName']} 
+               disabled
+               />
             </Form.Group>
             <Form.Group className='col-md-3'>
               <Form.Label className='frmlabel'>Suffix</Form.Label>
@@ -335,25 +326,25 @@ const handleRegister = () => {
             </div>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Address")}</Form.Label>
-              <Form.Control 
-              type="text" 
-              placeholder="" 
-              value={userData['address']} 
-              onChange={(e) =>setUserData({...userData,"address" : e.target.value})}
-              />
-          {errors.address && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.address}</p>}
-            </Form.Group>
-            <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>Baranggay</Form.Label>
-              <Form.Select 
-              type="text" 
-              placeholder="" 
-              value={userData['baranggay']} 
+             <Form.Group as={Col}>
+            <Form.Label className='frmlabel'>House No/Street</Form.Label>
+            <Form.Control
+              type="text"
+              name="houseNoStreet"
+              value={housenum}
+              placeholder="e.g., 123 Main Street"
+              onChange={(e) =>setHousenum(e.target.value)}
+            />
+            {errors.housenum && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.housenum}</p>}
+              </Form.Group>
+          <Form.Group as={Col}>
+            <Form.Label className='frmlabel'>Barangay</Form.Label>
+            <Form.Select
+              as="select"
+              name="barangay"
               onChange={(e) =>setUserData({...userData,"baranggay" : e.target.value})}
-              >
-                <option value={''}>Select Baranggay</option>
+            >
+                <option value={''}>Please select baranggay</option>
                 <option value={'Abangan Norte'}>Abangan Norte</option>
                 <option value={'Abangan Sur'}>Abangan Sur</option>
                 <option value={'Ibayo'}>Ibayo</option>
@@ -370,8 +361,31 @@ const handleRegister = () => {
                 <option value={'Sta. Rosa I'}>Sta. Rosa I</option>
                 <option value={'Sta. Rosa II'}>Sta. Rosa II</option>
                 <option value={'Tabing-Ilog'}>Tabing-Ilog</option>
-              </Form.Select>
-              {errors.baranggay && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.baranggay}</p>}
+            </Form.Select>
+            {errors.baranggay && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.baranggay}</p>}
+          </Form.Group>
+          </Row>
+          <Row className='mb-3'>
+            <Form.Group as={Col}>
+              <Form.Label className='frmlabel'>City</Form.Label>
+              <Form.Control
+                type="text"
+                value={'Marilao'}
+                name="city"
+                readOnly
+                disabled
+              />
+            </Form.Group>
+
+            <Form.Group as={Col}>
+              <Form.Label className='frmlabel'>Province</Form.Label>
+              <Form.Control
+                type="text"
+                value={'Bulacan'}
+                name="province"
+                readOnly
+                disabled
+              />
             </Form.Group>
           </Row>
           <Row className="mb-3">
@@ -390,7 +404,7 @@ const handleRegister = () => {
             </Form.Group>
 
             <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("Birthday")}</Form.Label>
+            <Form.Label className='frmlabel'>{t("Birth Date")}</Form.Label>
               <Form.Control 
               type="date" 
               value={userData['birthday']} 
@@ -409,21 +423,12 @@ const handleRegister = () => {
           <Form.Group as={Col}>
             <Form.Label className='frmlabel'>{t("Birth Place")}</Form.Label>
             <Form.Control 
-            type="text" 
+            type="text"
+            placeholder='House No., Street, Barangay, Municipality' 
             value={userData['birthPlace']} 
             onChange={(e) =>setUserData({...userData,"birthPlace" : e.target.value})}
             />
            {errors.birthPlace && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.birthPlace}</p>}
-            </Form.Group>
-
-            <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>Citizenship</Form.Label>
-            <Form.Control 
-            type="text" 
-            value={userData['citizenship']} 
-            onChange={(e) =>setUserData({...userData,"citizenship" : e.target.value})}
-            />
-               {errors.citizenship && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.citizenship}</p>}
             </Form.Group>
 
             <Form.Group as={Col}>
@@ -437,21 +442,23 @@ const handleRegister = () => {
           </Row>
           </div>
           <div className='containerform'>
-          <h4 className='h4head'>{t("Educational Information")}</h4>
+          <h4 style={{color:"#0b4980",marginTop:'10px'}} className='h4head'>{t("Educational Information")}</h4>
           <Row className="mb-3">
             <Form.Group as={Col}>
               <Form.Label className='frmlabel'>{t("Last School Attended")}</Form.Label>
               <Form.Control 
               type="text"
               value={userData['School']} 
+              placeholder='e.g., ABC Elementary School'
               onChange={(e) =>setUserData({...userData,"School" : e.target.value})}
               />
-                 {errors.School && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.School}</p>}
+            {errors.School && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.School}</p>}
             </Form.Group>
             <Form.Group as={Col}>
               <Form.Label className='frmlabel'>{t("School Address")}</Form.Label>
               <Form.Control type="text"
                value={userData['SchoolAddress']} 
+               placeholder='Please enter the address of your last school ...'
                onChange={(e) =>setUserData({...userData,"SchoolAddress" : e.target.value})}
               />
              {errors.SchoolAddress && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.SchoolAddress}</p>}
@@ -464,30 +471,66 @@ const handleRegister = () => {
                 value={userData['yearLevel']} 
                 onChange={(e) =>setUserData({...userData,"yearLevel" : e.target.value})}
               >
-                <option value={''}></option>
+                <option value={''}>Select your year level</option>
                 <option value={'Elementary'}>Elementary</option>
-                <option value={'Highschool'}>Highschool</option>
+                <option value={'Junior Highschool'}>Junior Highschool</option>
+                <option value={'Senior Highschool'}>Senior Highschool</option>
                 <option value={'College'}>College</option>
               </Form.Select>
               {errors.yearLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.yearLevel}</p>}
             </Form.Group>
-            <Form.Group as={Col}>
+            {userData['yearLevel'] !== '' && (<Form.Group as={Col}>
               <Form.Label className='frmlabel'>Grade/Year:</Form.Label>
-              <Form.Control 
-              type="text"
+              <Form.Select
               value={userData['gradeLevel']} 
               onChange={(e) =>setUserData({...userData,"gradeLevel" : e.target.value})}
-              />
+              >
+                {userData.yearLevel === 'Elementary' && (<>
+                  <option value={''}>Select your grade level</option>
+                <option value={'Grade 1'}>Grade 1</option>
+                <option value={'Grade 2'}>Grade 2</option>
+                <option value={'Grade 3'}>Grade 3</option>
+                <option value={'Grade 4'}>Grade 4</option>
+                <option value={'Grade 5'}>Grade 5</option>
+                <option value={'Grade 6'}>Grade 6</option>
+                </>)}
+                {userData.yearLevel === 'Junior Highschool' && (<>
+                  <option value={''}>Select your grade level</option>
+                <option value={'Grade 7'}>Grade 7</option>
+                <option value={'Grade 8'}>Grade 8</option>
+                <option value={'Grade 9'}>Grade 9</option>
+                <option value={'Grade 10'}>Grade 10</option>
+                </>)}
+                {userData.yearLevel === 'Senior Highschool' && (<>
+                  <option>Select your grade level</option>
+                <option value={'Grade 11'}>Grade 11</option>
+                <option value={'Grade 12'}>Grade 12</option>
+                </>)}
+                {userData.yearLevel === 'College' && (<>
+                  <option value={''}>Select your grade level</option>
+                <option value={'1st Year'}>1st Year</option>
+                <option value={'2nd Year'}>2nd Year</option>
+                <option value={'3rd Year'}>3rd Year</option>
+                <option value={'4th Year'}>4th Year</option>
+                </>)}
+              </Form.Select>
                  {errors.gradeLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.gradeLevel}</p>}
-            </Form.Group>
-            <Form.Group as={Col}>
+            </Form.Group>)}
+            {userData.yearLevel !== 'College' && userData.yearLevel !== 'Senior Highschool' ? (null) : (<Form.Group as={Col}>
               <Form.Label className='frmlabel'>{t("Course")}</Form.Label>
               <Form.Select 
-                value={userData['course']} 
-                onChange={(e) =>setUserData({...userData,"course" : e.target.value})}
+                value={userData.yearLevel !== 'College' && userData.yearLevel !== 'Senior Highschool' ? 'None' : userData.course}
+                defaultValue={userData.yearLevel !== 'College' || userData.yearLevel !=='Senior Highschool' && ('None') }
+                onChange={(e) => {
+                  const selectedValue = e.target.value;
+                  const newCourse = userData.yearLevel !== 'College' || userData.yearLevel !== 'Senior Highschool' ? 'None' : selectedValue;
+                  setUserData({ ...userData, course: newCourse });
+                }}
+              
               >
-                <option value={''}></option>
-                <option value={'Not Applicable'}>Not Applicable</option>
+                {userData.yearLevel === 'College' && (
+                  <>
+                <option>Select your course</option>
                 <option value={'Bachelor fo Science in Respiratory Therapy'}>Bachelor fo Science in Respiratory Therapy</option>
                 <option value={'Bachelor in Landscape Architecture'}>Bachelor in Landscape Architecture</option>
                 <option value={'Bachelor in Secondary Education Major in Mathematics'}>Bachelor in Secondary Education Major in Mathematics</option>
@@ -585,9 +628,23 @@ const handleRegister = () => {
                 <option value={'Bachelor of Sports and Exercise Science'}>Bachelor of Sports and Exercise Science</option>
                 <option value={'Doctor of Dental Medicine'}>Doctor of Dental Medicine</option>
                 <option value={'Doctor of Optometry'}>Doctor of Optometry</option>
+                </>
+                )}
+                {userData.yearLevel === 'Senior Highschool' && (<>
+                  <option>Select your course</option>
+                  <option value={'Science Technology Engineering and Mathematics (STEM)'}>Science Technology Engineering and Mathematics (STEM)</option>
+                  <option value={'Humanities and Social Sciences (HUMSS)'}>Humanities and Social Sciences (HUMSS)</option>
+                  <option value={'Accountancy Business and Management (ABM)'}>Accountancy Business and Management (ABM)</option>
+                  <option value={' General Academic Strand (GAS)'}> General Academic Strand (GAS)</option>
+                  <option value={'Home Economics'}>Home Economics</option>
+                  <option value={'Agri-fishery Arts'}>Agri-fishery Arts</option>
+                  <option value={'Industrial Arts'}>Industrial Arts</option>
+                  <option value={'Information and Communications Technology'}>Information and Communications Technology</option>
+                </>)}
+
               </Form.Select>
               {errors.course && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.course}</p>}
-            </Form.Group>
+            </Form.Group>)}
           </Row>
           </div>
           <div className='frmbtnec'>

@@ -9,7 +9,8 @@ export const multiStepContext = React.createContext();
 function StepContext() {
     const user = useSelector((state) => state.user);
     
-    const [currentStep, setStep] = useState(1);
+    const [currentStep, setStep] = useState(3);
+  
     const [userData, setUserData] = useState(() => {
       const saveData = localStorage.getItem('userData');
       return saveData ? JSON.parse(saveData) : {
@@ -31,6 +32,7 @@ function StepContext() {
       fatherlName:'',
       fathermName:'',
       fatherOccu:'',
+      familyCode:'',
       firstName:user.fname,
       gender:'',
       gradeLevel:'',
@@ -40,7 +42,6 @@ function StepContext() {
       guardianmName:'',
       guardianAddress:'',
       lastName:user.lname,
-      middleName:user.mname,
       motherEduc:'',
       motherName:'',
       motherlName:'',
@@ -70,6 +71,7 @@ function StepContext() {
       setUserData('');
       setStep(1);
     }
+  
   return (
     <>
     {!loading && <div>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import LNav from '../components/navbar'
 import BMCClogo from '../../userhome/assets/logo.jpg'
-import Member1 from '../Assets/Screenshot 2023-07-28 084013.png'
-import Member2 from '../Assets/Screenshot 2023-07-28 084022.png'
-import Member3 from '../Assets/Screenshot 2023-07-28 084038.png'
-import Member4 from '../Assets/Screenshot 2023-07-28 084048.png'
-import Member5 from '../Assets/Screenshot 2023-07-28 084054.png'
+import Member1 from '../../userhome/assets/mydo3.jpg'
+import Member2 from '../../userhome/assets/mydo5.jpg'
+import Member3 from '../../userhome/assets/mydo4.jpg'
+import Member4 from '../../userhome/assets/mydo1.jpg'
+import Member5 from '../../userhome/assets/mydo2.jpg'
 import { motion } from "framer-motion";
 import '../css/labout.css'
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
@@ -151,7 +151,7 @@ const About = () => {
       </div>
     <div ref={ref1} className='bmccofficials'>
       <div>
-        <h1>BMCC OFFICIALS</h1>
+        <h1 className='mydoofficials'>MYDO OFFICIALS</h1>
       </div>
       <motion.div 
       className="abmccmem"
@@ -164,10 +164,15 @@ const About = () => {
               <motion.div key={index} className='cardprofile'
               variants={item}
               >
-              <Card elevation={2} sx={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',padding:'0px 0px 10px 0px',height:'max-Content',width:'170px',minHeight:'150px',border:'none'}}>
+              <Card className='profileoffic' elevation={3} 
+              sx={{
+                display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',padding:'0px 0px 10px 0px',height:'max-Content',width:'190px',minHeight:'150px',border:'none',
+                
+                
+                }}>
               <div className='backgroundimg' style={{backgroundImage:`url(${logolist[0].logo})`}}>
                 <div className='circular' style={{padding:'5px',borderRadius:'50%',position:'relative'}}>
-                <Avatar sx={{width:70,height:70}} alt="Remy Sharp" src={data.profile} size="lg" />
+                <Avatar sx={{width:100,height:90}} alt="Remy Sharp" src={data.profile} size="lg" />
                 </div>
               </div>
                 <div style={{margin:'5px',textAlign:'center',height:'30px'}}>
