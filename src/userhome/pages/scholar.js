@@ -579,6 +579,11 @@ return(
             <div className='schousercont'>
           <div className='reqheadtitle'>
             <h1 style={{margin:'0px'}}>Requirements</h1>
+            <p>Please upload the documents required below</p>
+            <ul>
+              <li>File format in JPEG(.jpg) and PNG are the only acceptable file for upload.</li>
+              <li>A maximum of 5mb file size is allowed per attached file.</li>
+            </ul>
           </div>
           <div className="userequirements">
               {requirements}
@@ -593,7 +598,7 @@ return(
                 className='myButton1'
                 onClick={handleSubmit}
               >
-                Submit
+                Upload
               </LoadingButton>
           </div>
             </div>

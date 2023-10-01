@@ -57,7 +57,7 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState(new Array(6).fill(''));
     const inputRefs = useRef([]);
-    const [step, setStep] = useState(1); 
+    const [step, setStep] = useState(3); 
     const [password, setPassword] = useState('');
     const [loading,setLoading] = useState(false);
     const [loading1,setLoading1] = useState(false);
@@ -163,53 +163,52 @@ const Register = () => {
     }, [remainingSeconds]);
 
     useEffect(() => {
-      const validationCriteria = [
-        {
-          description: '8 - 45 characters',
-          isValid: password.length >= 8 && password.length <= 45,
-        },
-        {
-          description: 'At least one uppercase letter (A to Z)',
-          isValid: /[A-Z]/.test(password),
-        },
-        {
-          description: 'At least one lowercase letter (a to z)',
-          isValid: /[a-z]/.test(password),
-        },
-        {
-          description: 'At least one number (0 to 9)',
-          isValid: /[0-9]/.test(password),
-        },
-        {
-          description: "Don't use : ; , * \" / \\",
-          isValid: !/[:;,*"\/\\]/.test(password),
-        },
-        {
-          description: 'No spaces',
-          isValid: !/\s/.test(password),
-        },
-      ];
-      const validateName = (name,lname) => {
-        return [
+        const validationCriteria = [
           {
-            description: 'Capitalize all letter of name',
-            isValid: /^[A-Z]+$/.test(name) && /^[A-Z]+$/.test(lname),
+            description: '8 - 45 characters',
+            isValid: !password || password.length >= 8 && password.length <= 45,
           },
           {
-            description: 'minimum of 2 and maximum of 45 characters only.',
-            isValid: name.length >= 2 && name.length <= 45 && lname.length >= 2 && lname.length <= 45,
+            description: 'At least one uppercase letter (A to Z)',
+            isValid: !password || /[A-Z]/.test(password),
           },
           {
-            description: 'No numbers',
-            isValid: !/\d/.test(name) && !/\d/.test(lname), // Ensures there are no numbers
+            description: 'At least one lowercase letter (a to z)',
+            isValid: !password || /[a-z]/.test(password),
+          },
+          {
+            description: 'At least one number (0 to 9)',
+            isValid: !password || /[0-9]/.test(password),
+          },
+          {
+            description: "Don't use : ; , * \" / \\",
+            isValid: !password || !/[:;,*"\/\\]/.test(password),
+          },
+          {
+            description: 'No spaces',
+            isValid: !password || !/\s/.test(password),
           },
         ];
-      };
+        const validateName = (name,lname) => {
+          return [
+            {
+              description: 'Capitalize all letter of firstname and lastname.',
+              isValid: !name || !lname || /^[A-Z]+$/.test(name) && /^[A-Z]+$/.test(lname),
+            },
+            {
+              description: 'At least 3 to 45 characters only.',
+              isValid: !name || !lname || name.length >= 2 && name.length <= 45 && lname.length >= 2 && lname.length <= 45,
+            },
+            {
+              description: 'No numbers.',
+              isValid: !/\d/.test(name) && !/\d/.test(lname) || !name || !lname, // Ensures there are no numbers
+            },
+          ];
+        };
+        const validationforName = validateName(fname,lname);
+        setValidationResults1(validationforName)
+        setValidationResults(validationCriteria);
 
-      
-      const validationforName = validateName(fname,lname);
-      setValidationResults1(validationforName)
-      setValidationResults(validationCriteria);
     }, [password,fname,lname]);
 
     useEffect(() => {
@@ -503,7 +502,7 @@ const findCreatedAcc = async() =>{
                           }}
                           onClick={handleRegisterClick}
                         >
-                          REGISTER
+                          CONTINUE
                         </LoadingButton>
                         </div>
                       </div>
@@ -617,6 +616,14 @@ const findCreatedAcc = async() =>{
                           value={fname}
                           onChange={handlerFnameInput}
                         />
+                          {errors.fname && <p variant='outlined' 
+                            className='perrors'
+                            style={{ 
+                              margin: '0px', 
+                              color:'red', 
+                              fontSize:'10px'}}>
+                                  {errors.fname}
+                                </p>}
                           </div>
                           <div style={{width:'100%'}}>
                           <label className='labelsinp' htmlFor="">Last Name</label>
@@ -639,7 +646,7 @@ const findCreatedAcc = async() =>{
                                 </p>}
                           </div>
                          <div>
-                          <p>Notes</p>
+                          <p>Instructions</p>
                          {validationResults1.map((result, index) => (
                           <p key={index} style={{ color: result.isValid ? 'green' : 'red',fontSize:'12px' }}>
                            {result.isValid ? (<CheckIcon sx={{fontSize:'12px'}}/>) : (<CloseIcon sx={{fontSize:'12px'}}/>)} {result.description}
@@ -670,7 +677,7 @@ const findCreatedAcc = async() =>{
                           </p>} 
                         </div>
                         <div>
-                        <p>Notes</p>
+                        <p>Instructions</p>
                         {validationResults.map((result, index) => (
                           <p key={index} style={{ color: result.isValid ? 'green' : 'red',fontSize:'12px' }}>
                           {result.isValid ? (<CheckIcon sx={{fontSize:'12px'}}/>) : (<CloseIcon sx={{fontSize:'12px'}}/>)}  {result.description}

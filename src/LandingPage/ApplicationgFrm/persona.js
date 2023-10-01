@@ -377,7 +377,7 @@ function Persona() {
     
       fieldsToCheck.forEach((field) => {
         if (userData[field] !== '' && /[a-z]/.test(userData[field])) {
-          errors[field] = 'Use uppercase format only';
+          errors[field] = 'Use uppercase format only.';
         } else {
           delete errors[field];
         }
@@ -395,7 +395,7 @@ function Persona() {
       });
       
       if (siblingErrors.length > 0) {
-        errors.siblingErrors = 'Please Capitalize all letters for all your Siblings information'; 
+        errors.siblingErrors = 'Please Capitalize all letters for all your Siblings information.'; 
       } else {
         delete errors.siblingErrors;
       }
@@ -407,7 +407,8 @@ function Persona() {
      
       <div>
       <Form.Group as={Col}>
-      <Form.Label className='frmlabel'>Sibling {index + 1}({t("First Name")})</Form.Label>
+      <Form.Label style={{margin:'0px'}} className='frmlabel'>Sibling {index + 1}</Form.Label><br/>
+      <Form.Label style={{fontSize:'15px',margin:'0px'}} className='frmlabel'>{t("First Name")}</Form.Label>
         <Form.Control
           type="text"
           value={sibling.firstName}
@@ -418,7 +419,8 @@ function Persona() {
       </div>
       <div>
       <Form.Group as={Col}>
-      <Form.Label className='frmlabel'>Sibling {index + 1}({t("Last Name")})</Form.Label>
+      <Form.Label style={{margin:'0px'}} className='frmlabel'></Form.Label><br/>
+      <Form.Label style={{fontSize:'15px',margin:'0px'}} className='frmlabel'>{t("Last Name")}</Form.Label>
         <Form.Control
           type="text"
           placeholder="Enter sibling's last name"
@@ -586,7 +588,7 @@ function Persona() {
               
             <div className='parenteach1'>
                     <div>
-                      <h3 style={{fontSize:'18px',fontWeight:'bold',color:'rgb(11, 73, 128)'}}>Guardian</h3>
+                      <h3 style={{fontSize:'18px',fontWeight:'bold',color:'rgb(11, 73, 128)',marginLeft:'5px'}}>Guardian</h3>
                       <Form.Group as={Col}>
                             <RadioGroup
                               row
@@ -689,7 +691,7 @@ function Persona() {
               <div style={{display:"flex",justifyContent:'space-between',alignItems:'center'}}>
               <h3>List of Siblings </h3>
               
-              <FormControlLabel sx={{whiteSpace:'nowrap'}} control={<Switch checked={onlyChild} onChange={handleOnlyChild} />} label="I am an only child" />
+              <FormControlLabel sx={{whiteSpace:'nowrap'}} control={<Switch checked={onlyChild} onChange={handleOnlyChild} />} label="I am only child" />
               </div>
               {errors.sibling && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.sibling}</p>}
               {errors.siblingErrors && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.siblingErrors}</p>}
@@ -700,8 +702,9 @@ function Persona() {
                 variant='primary'
                 onClick={handleAddFields}
                 disabled={onlyChild}
+                sx={{color:'white',textTransform:'none',fontWeight:'bold'}}
               >
-                <AddIcon sx={{color:'white'}}/>
+                <AddIcon sx={{color:'white'}}/>Add more siblings
               </Button>
               </div>
             </div>
