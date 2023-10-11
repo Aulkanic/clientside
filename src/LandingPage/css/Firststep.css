@@ -64,5 +64,9 @@
 }
 .frmlabel{
     font-weight: 700;
+    color: black;
+}
+option{
+  text-transform: uppercase;
 }
 

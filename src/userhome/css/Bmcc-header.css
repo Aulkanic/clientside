@@ -31,11 +31,9 @@
 .LINK {
     margin: 0;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-right: 20px;
 }
 
-.LINK .mayor{
-    margin: 0 5px 2px 20px ;
-}

@@ -376,7 +376,8 @@ function Persona() {
       ];
     
       fieldsToCheck.forEach((field) => {
-        if (userData[field] !== '' && /[a-z]/.test(userData[field])) {
+        const fieldValue = userData[field];
+        if (fieldValue && fieldValue.trim() !== '' && /[a-z]/.test(fieldValue)) {
           errors[field] = 'Use uppercase format only.';
         } else {
           delete errors[field];
@@ -385,11 +386,12 @@ function Persona() {
       const siblingErrors = [];
 
       siblings.forEach((sibling, index) => {
-        console.log(index)
-        if (!/^[A-Z]+$/.test(sibling.firstName)) {
+        const siblingFirstName = sibling.firstName;
+        const siblingLastName = sibling.lastName;
+        if (siblingFirstName && siblingFirstName.trim() !== '' && !/^[A-Z]+$/.test(siblingFirstName)) {
           siblingErrors.push(`Sibling ${index + 1} - First Name should be in uppercase.`);
         }
-        if (!/^[A-Z]+$/.test(sibling.lastName)) {
+        if (siblingLastName && siblingLastName.trim() !== '' && !/^[A-Z]+$/.test(siblingLastName)) {
           siblingErrors.push(`Sibling ${index + 1} - Last Name should be in uppercase.`);
         }
       });
@@ -401,6 +403,27 @@ function Persona() {
       }
       setErrors(errors);
     }, [userData,siblings]);
+
+    useEffect(() =>{
+      if(value === 'Father'){
+        userData.guardianName = userData.fatherName;
+        userData.guardianlName = userData.fatherlName;
+        userData.relationship = 'FATHER'
+        setisGuardiancheck(true);
+      }
+      if(value === 'Mother'){
+        userData.guardianName = userData.motherName;
+        userData.guardianlName= userData.motherlName ;
+        userData.relationship = 'MOTHER';
+        setisGuardiancheck(true)
+      }
+      if(value === 'Other'){
+        userData.guardianName = '';
+        userData.guardianlName= '' ;
+        userData.relationship ='';
+        setisGuardiancheck(false)
+      }
+    },[value])
 
    const siblingfrm = siblings.map((sibling, index) => (
     <div className='siblinginf' key={index}>

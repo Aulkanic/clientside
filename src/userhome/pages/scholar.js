@@ -154,6 +154,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 
 const Scholar = () => {
 const { userdetails } = useSelector((state) => state.login);
+console.log(userdetails)
 const [docs, setDocs] = useState([]);
 const [submitted1, setSubmittedDocs1] = useState([]);
 const [fileValues, setFileValues] = useState([]);
@@ -189,9 +190,9 @@ const handleFileChange = (index, event) => {
 const handleSubmit = async (event) => {
   event.preventDefault();
 
-  if (userInfo.status === 'For Evaluation' || userInfo.status === 'Failed' || userInfo.status === 'Revoke') {
+  if (userInfo.remarks === 'For Evaluation' || userInfo.remarks === 'Failed' || userInfo.remarks === 'Revoke') {
     swal({
-      text: `You cannot submit your Documents because your Application Status is ${userInfo.status}`,
+      text: `You cannot submit your Documents because your Application Status is ${userInfo.remarks}`,
       timer: 2000,
       buttons: false,
       icon: "error",
@@ -269,6 +270,7 @@ const createFormData = (file, docu) => {
   formData.append('Reqname', docu.requirementName);
   formData.append('applicantNum', applicantNum);
   formData.append('docsFor', docu.docsfor);
+  formData.append('Name', userdetails.Name);
   return formData;
 };
 

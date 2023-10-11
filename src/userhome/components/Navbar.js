@@ -165,7 +165,7 @@ const SetReadNotif = async(val) =>{
                         {data.status !== "Approved" ? (
                         <>
                         <strong>Application Number:</strong><small> {data.applicantCode}</small><br />
-                        <strong>Application Status:</strong><small><span className='stat'> {data.status}</span></small>
+                        <strong>Application Status:</strong><small><span className='stat'> {data.remarks}</span></small>
                         </>
                         )
                            : (

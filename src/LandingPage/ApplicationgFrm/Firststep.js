@@ -169,10 +169,13 @@ function Firststep() {
     } else if (!/^09\d{9}$/.test(userData.contactNum)) {
       errors.contactNum = "Invalid phone number.";
     }
-
+    const fulladress = `${housenum} ${userData.baranggay} MARILAO BULACAN`
+    setUserData((prevData) => ({ ...prevData, address: fulladress }));
     
-
-    if (Object.keys(errors).length > 0) {
+    if(userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL'){
+      setUserData((prevData) => ({ ...prevData, course: 'NONE', }));
+    }
+    if (!errors || Object.keys(errors).length > 0) {
       console.log(errors)
       setErrors(errors);
       return;
@@ -222,7 +225,8 @@ useEffect(() => {
   const errors = {};
 
   fieldsToCheck.forEach((field) => {
-    if (/[a-z]/.test(field === 'housenum' ? housenum : userData[field])) {
+    const fieldValue = field === 'housenum' ? housenum : userData[field];
+    if (fieldValue && fieldValue.trim() !== '' && !/^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(fieldValue)) {
       errors[field] = 'Use uppercase format only';
     } else {
       delete errors[field];
@@ -231,7 +235,8 @@ useEffect(() => {
 
   setErrors(errors);
 }, [housenum, userData.birthPlace, userData.School, userData.SchoolAddress]);
-  console.log(userData)
+
+console.log(userData)
   return (
   <>
   <Dialog open={open1} onClose={handleClose1}>
@@ -344,23 +349,23 @@ useEffect(() => {
               name="barangay"
               onChange={(e) =>setUserData({...userData,"baranggay" : e.target.value})}
             >
-                <option value={''}>Please select baranggay</option>
-                <option value={'Abangan Norte'}>Abangan Norte</option>
-                <option value={'Abangan Sur'}>Abangan Sur</option>
-                <option value={'Ibayo'}>Ibayo</option>
-                <option value={'Lambakin'}>Lambakin</option>
-                <option value={'Lias'}>Lias</option>
-                <option value={'Loma de Gato'}>Loma de Gato</option>
-                <option value={'Nagbalon'}>Nagbalon</option>
-                <option value={'Patubig'}>Patubig</option>
-                <option value={'Poblacion I'}>Poblacion I</option>
-                <option value={'Poblacion II'}>Poblacion II</option>
-                <option value={'Prenza I'}>Prenza I</option>
-                <option value={'Prenza II'}>Prenza II</option>
-                <option value={'Saog'}>Saog</option>
-                <option value={'Sta. Rosa I'}>Sta. Rosa I</option>
-                <option value={'Sta. Rosa II'}>Sta. Rosa II</option>
-                <option value={'Tabing-Ilog'}>Tabing-Ilog</option>
+              <option value={''}>PLEASE SELECT BARANGGAY</option>
+              <option value={'ABANGAN NORTE'}>ABANGAN NORTE</option>
+              <option value={'ABANGAN SUR'}>ABANGAN SUR</option>
+              <option value={'IBAYO'}>IBAYO</option>
+              <option value={'LAMBAKIN'}>LAMBAKIN</option>
+              <option value={'LIAS'}>LIAS</option>
+              <option value={'LOMA DE GATO'}>LOMA DE GATO</option>
+              <option value={'NAGBALON'}>NAGBALON</option>
+              <option value={'PATUBIG'}>PATUBIG</option>
+              <option value={'POBLACION I'}>POBLACION I</option>
+              <option value={'POBLACION II'}>POBLACION II</option>
+              <option value={'PRENZA I'}>PRENZA I</option>
+              <option value={'PRENZA II'}>PRENZA II</option>
+              <option value={'SAOG'}>SAOG</option>
+              <option value={'STA. ROSA I'}>STA. ROSA I</option>
+              <option value={'STA. ROSA II'}>STA. ROSA II</option>
+              <option value={'TABING-ILOG'}>TABING-ILOG</option>
             </Form.Select>
             {errors.baranggay && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.baranggay}</p>}
           </Form.Group>
@@ -396,9 +401,9 @@ useEffect(() => {
               onChange={(e) =>setUserData({...userData,"gender" : e.target.value})}
             >
               <option>Select your gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Others">Others</option>
+              <option value="MALE">MALE</option>
+              <option value="FEMALE">FEMALE</option>
+              <option value="OTHERS">OTHERS</option>
             </Form.Select>
             {errors.gender && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.gender}</p>}
             </Form.Group>
@@ -471,11 +476,11 @@ useEffect(() => {
                 value={userData['yearLevel']} 
                 onChange={(e) =>setUserData({...userData,"yearLevel" : e.target.value})}
               >
-                <option value={''}>Select your year level</option>
-                <option value={'Elementary'}>Elementary</option>
-                <option value={'Junior Highschool'}>Junior Highschool</option>
-                <option value={'Senior Highschool'}>Senior Highschool</option>
-                <option value={'College'}>College</option>
+              <option value={''}>SELECT YOUR YEAR LEVEL</option>
+              <option value={'ELEMENTARY'}>ELEMENTARY</option>
+              <option value={'JUNIOR HIGHSCHOOL'}>JUNIOR HIGHSCHOOL</option>
+              <option value={'SENIOR HIGHSCHOOL'}>SENIOR HIGHSCHOOL</option>
+              <option value={'COLLEGE'}>COLLEGE</option>
               </Form.Select>
               {errors.yearLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.yearLevel}</p>}
             </Form.Group>
@@ -485,161 +490,171 @@ useEffect(() => {
               value={userData['gradeLevel']} 
               onChange={(e) =>setUserData({...userData,"gradeLevel" : e.target.value})}
               >
-                {userData.yearLevel === 'Elementary' && (<>
-                  <option value={''}>Select your grade level</option>
-                <option value={'Grade 1'}>Grade 1</option>
-                <option value={'Grade 2'}>Grade 2</option>
-                <option value={'Grade 3'}>Grade 3</option>
-                <option value={'Grade 4'}>Grade 4</option>
-                <option value={'Grade 5'}>Grade 5</option>
-                <option value={'Grade 6'}>Grade 6</option>
+                {userData.yearLevel === 'ELEMENTARY' && (<>
+                <option value={''}>SELECT YOUR GRADE LEVEL</option>
+                <option value={'GRADE 1'}>GRADE 1</option>
+                <option value={'GRADE 2'}>GRADE 2</option>
+                <option value={'GRADE 3'}>GRADE 3</option>
+                <option value={'GRADE 4'}>GRADE 4</option>
+                <option value={'GRADE 5'}>GRADE 5</option>
+                <option value={'GRADE 6'}>GRADE 6</option>
+
                 </>)}
-                {userData.yearLevel === 'Junior Highschool' && (<>
-                  <option value={''}>Select your grade level</option>
-                <option value={'Grade 7'}>Grade 7</option>
-                <option value={'Grade 8'}>Grade 8</option>
-                <option value={'Grade 9'}>Grade 9</option>
-                <option value={'Grade 10'}>Grade 10</option>
+                {userData.yearLevel === 'JUNIOR HIGHSCHOOL' && (<>
+                  <option value={''}>SELECT YOUR GRADE LEVEL</option>
+                <option value={'GRADE 7'}>GRADE 7</option>
+                <option value={'GRADE 8'}>GRADE 8</option>
+                <option value={'GRADE 9'}>GRADE 9</option>
+                <option value={'GRADE 10'}>GRADE 10</option>
+
                 </>)}
-                {userData.yearLevel === 'Senior Highschool' && (<>
-                  <option>Select your grade level</option>
-                <option value={'Grade 11'}>Grade 11</option>
-                <option value={'Grade 12'}>Grade 12</option>
+                {userData.yearLevel === 'SENIOR HIGHSCHOOL' && (<>
+                  <option value={''}>SELECT YOUR GRADE LEVEL</option>
+                  <option value={'GRADE 11'}>GRADE 11</option>
+                  <option value={'GRADE 12'}>GRADE 12</option>
+
                 </>)}
-                {userData.yearLevel === 'College' && (<>
-                  <option value={''}>Select your grade level</option>
-                <option value={'1st Year'}>1st Year</option>
-                <option value={'2nd Year'}>2nd Year</option>
-                <option value={'3rd Year'}>3rd Year</option>
-                <option value={'4th Year'}>4th Year</option>
+                {userData.yearLevel === 'COLLEGE' && (<>
+                  <option value={''}>SELECT YOUR GRADE LEVEL</option>
+                  <option value={'1ST YEAR'}>1ST YEAR</option>
+                  <option value={'2ND YEAR'}>2ND YEAR</option>
+                  <option value={'3RD YEAR'}>3RD YEAR</option>
+                  <option value={'4TH YEAR'}>4TH YEAR</option>
+
                 </>)}
               </Form.Select>
                  {errors.gradeLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.gradeLevel}</p>}
             </Form.Group>)}
-            {userData.yearLevel !== 'College' && userData.yearLevel !== 'Senior Highschool' ? (null) : (<Form.Group as={Col}>
+            {userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL' ? (null) : (<Form.Group as={Col}>
               <Form.Label className='frmlabel'>{t("Course")}</Form.Label>
               <Form.Select 
-                value={userData.yearLevel !== 'College' && userData.yearLevel !== 'Senior Highschool' ? 'None' : userData.course}
-                defaultValue={userData.yearLevel !== 'College' || userData.yearLevel !=='Senior Highschool' && ('None') }
+                value={userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL' ? 'None' : userData.course}
                 onChange={(e) => {
                   const selectedValue = e.target.value;
-                  const newCourse = userData.yearLevel !== 'College' || userData.yearLevel !== 'Senior Highschool' ? 'None' : selectedValue;
-                  setUserData({ ...userData, course: newCourse });
+                  console.log(selectedValue)
+                  const newCourse = 
+                  userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL' 
+                  ? 'None' : 
+                  selectedValue;
+                  console.log(newCourse)
+                  setUserData((prevData) => ({ ...prevData, course: newCourse, }));
                 }}
               
               >
-                {userData.yearLevel === 'College' && (
+                {userData.yearLevel === 'COLLEGE' && (
                   <>
-                <option>Select your course</option>
-                <option value={'Bachelor fo Science in Respiratory Therapy'}>Bachelor fo Science in Respiratory Therapy</option>
-                <option value={'Bachelor in Landscape Architecture'}>Bachelor in Landscape Architecture</option>
-                <option value={'Bachelor in Secondary Education Major in Mathematics'}>Bachelor in Secondary Education Major in Mathematics</option>
-                <option value={'Bachelor in Secondary Education Major in Science'}>Bachelor in Secondary Education Major in Science</option>
-                <option value={'Bachelor of Culture and the Arts Education'}>Bachelor of Culture and the Arts Education</option>
-                <option value={'Bachelor of Data Science and Analytics'}>Bachelor of Data Science and Analytics</option>
-                <option value={'Bachelor of Early Childhood Education'}>Bachelor of Early Childhood Education</option>
-                <option value={'Bachelor of Fine Arts'}>Bachelor of Fine Arts</option>
-                <option value={'Bachelor of Library and Information Science'}>Bachelor of Library and Information Science</option>
-                <option value={'Bachelor of Medical Laboratory Science'}>Bachelor of Medical Laboratory Science</option>
-                <option value={'Bachelor of Science in Accountancy'}>Bachelor of Science in Accountancy</option>
-                <option value={'Bachelor of Science in Agribusiness'}>Bachelor of Science in Agribusiness</option>
-                <option value={'Bachelor of Science in Agricultural and Biosystems Engineering'}>Bachelor of Science in Agricultural and Biosystems Engineering</option>
-                <option value={'Bachelor of Science in Agroforestry'}>Bachelor of Science in Agroforestry</option>
-                <option value={'Bachelor of Science in Aircraft Maintenance Technology'}>Bachelor of Science in Aircraft Maintenance Technology</option>
-                <option value={'Bachelor of Science in Applied Mathematics'}>Bachelor of Science in Applied Mathematics</option>
-                <option value={'Bachelor of Science in Applied Physics'}>Bachelor of Science in Applied Physics</option>
-                <option value={'Bachelor of Science in Applied Statistics'}>Bachelor of Science in Applied Statistics</option>
-                <option value={'Bachelor of Science in Architecture'}>Bachelor of Science in Architecture</option>
-                <option value={'Bachelor of Science in Aviation'}>Bachelor of Science in Aviation</option>
-                <option value={'Bachelor of Science in Aviation Technology'}>Bachelor of Science in Aviation Technology</option>
-                <option value={'Bachelor of Science in Biochemistry'}>Bachelor of Science in Biochemistry</option>
-                <option value={'Bachelor of Science in Biology'}>Bachelor of Science in Biology</option>
-                <option value={'Bachelor of Science in Botany'}>Bachelor of Science in Botany</option>
-                <option value={'Bachelor of Science in Business Administration Major in Business Analytics'}>Bachelor of Science in Business Administration Major in Business Analytics</option>
-                <option value={'Bachelor of Science in Business Analytics'}>Bachelor of Science in Business Analytics</option>
-                <option value={'Bachelor of Science in Ceramic Engineering'}>Bachelor of Science in Ceramic Engineering</option>
-                <option value={'Bachelor of Science in Chemical Engineering'}>Bachelor of Science in Chemical Engineering</option>
-                <option value={'Bachelor of Science in Chemistry'}>Bachelor of Science in Chemistry</option>
-                <option value={'Bachelor of Science in Civil Engineering'}>Bachelor of Science in Civil Engineering</option>
-                <option value={'Bachelor of Science in Climate Change'}>Bachelor of Science in Climate Change</option>
-                <option value={'Bachelor of Science in Community Development'}>Bachelor of Science in Community Development</option>
-                <option value={'Bachelor of Science in Computer Engineering'}>Bachelor of Science in Computer Engineering</option>
-                <option value={'Bachelor of Science in Computer Science'}>Bachelor of Science in Computer Science</option>
-                <option value={'Bachelor of Science in Cyber Security'}>Bachelor of Science in Cyber Security</option>
-                <option value={'Bachelor of Science in Disaster Risk Management'}>Bachelor of Science in Disaster Risk Management</option>
-                <option value={'Bachelor of Science in Electrical Engineering'}>Bachelor of Science in Electrical Engineering</option>
-                <option value={'Bachelor of Science in Electronics and Communications Engineering'}>Bachelor of Science in Electronics and Communications Engineering</option>
-                <option value={'Bachelor of Science in Electronics Engineering'}>Bachelor of Science in Electronics Engineering</option>
-                <option value={'Bachelor of Science in Engineering Technology'}>Bachelor of Science in Engineering Technology</option>
-                <option value={'Bachelor of Science in Entertainment and Multimedia Computing'}>Bachelor of Science in Entertainment and Multimedia Computing</option>
-                <option value={'Bachelor of Science in Environmental Planning'}>Bachelor of Science in Environmental Planning</option>
-                <option value={'Bachelor of Science in Environmental Science'}>Bachelor of Science in Environmental Science</option>
-                <option value={'Bachelor of Science in Food Engineering'}>Bachelor of Science in Food Engineering</option>
-                <option value={'Bachelor of Science in Game Development and Animation'}>Bachelor of Science in Game Development and Animation</option>
-                <option value={'Bachelor of Science in Geodetic Engineering'}>Bachelor of Science in Geodetic Engineering</option>
-                <option value={'Bachelor of Science in Geology'}>Bachelor of Science in Geology</option>
-                <option value={'Bachelor of Science in Hospitality Management'}>Bachelor of Science in Hospitality Management</option>
-                <option value={'Bachelor of Science in Human Biology'}>Bachelor of Science in Human Biology</option>
-                <option value={'Bachelor of Science in Human Services'}>Bachelor of Science in Human Services</option>
-                <option value={'Bachelor of Science in Indigenous Peoples Education'}>Bachelor of Science in Indigenous Peoples Education</option>
-                <option value={'Bachelor of Science in Indigenous Peoples Studies'}>Bachelor of Science in Indigenous Peoples Studies</option>
-                <option value={'Bachelor of Science in Industrial Engineering'}>Bachelor of Science in Industrial Engineering</option>
-                <option value={'Bachelor of Science in Industrial Technology'}>Bachelor of Science in Industrial Technology</option>
-                <option value={'Bachelor of Science in Information Systems'}>Bachelor of Science in Information Systems</option>
-                <option value={'Bachelor of Science in Information Technology'}>Bachelor of Science in Information Technology</option>
-                <option value={'Bachelor of Science in Interior Design'}>Bachelor of Science in Interior Design</option>
-                <option value={'Bachelor of Science in Manufacturing Engineering'}>Bachelor of Science in Manufacturing Engineering</option>
-                <option value={'Bachelor of Science in Marine Biology'}>Bachelor of Science in Marine Biology</option>
-                <option value={'Bachelor of Science in Marine Engineering'}>Bachelor of Science in Marine Engineering</option>
-                <option value={'Bachelor of Science in Marine Transportation'}>Bachelor of Science in Marine Transportation</option>
-                <option value={'Bachelor of Science in Materials Engineering'}>Bachelor of Science in Materials Engineering</option>
-                <option value={'Bachelor of Science in Mathematics'}>Bachelor of Science in Mathematics</option>
-                <option value={'Bachelor of Science in Mechanical Engineering'}>Bachelor of Science in Mechanical Engineering</option>
-                <option value={'Bachelor of Science in Mechatronics Engineering'}>Bachelor of Science in Mechatronics Engineering</option>
-                <option value={'Bachelor of Science in Mechatronics Engineering Technology'}>Bachelor of Science in Mechatronics Engineering Technology</option>
-                <option value={'Bachelor of Science in Medical Technology'}>Bachelor of Science in Medical Technology</option>
-                <option value={'Bachelor of Science in Metallurgical Engineering'}>Bachelor of Science in Metallurgical Engineering</option>
-                <option value={'Bachelor of Science in Meteorology'}>Bachelor of Science in Meteorology</option>
-                <option value={'Bachelor of Science in Midwifery'}>Bachelor of Science in Midwifery</option>
-                <option value={'Bachelor of Science in Mining Engineering'}>Bachelor of Science in Mining Engineering</option>
-                <option value={'Bachelor of Science in Molecular Biology and Biotechnology'}>Bachelor of Science in Molecular Biology and Biotechnology</option>
-                <option value={'Bachelor of Science in Nursing'}>Bachelor of Science in Nursing</option>
-                <option value={'Bachelor of Science in Nutrition and Dietetics'}>Bachelor of Science in Nutrition and Dietetics</option>
-                <option value={'Bachelor of Science in Occupational Therapy'}>Bachelor of Science in Occupational Therapy</option>
-                <option value={'Bachelor of Science in Peace Education'}>Bachelor of Science in Peace Education</option>
-                <option value={'Bachelor of Science in Peace Studies'}>Bachelor of Science in Peace Studies</option>
-                <option value={'Bachelor of Science in Petroleum Engineering'}>Bachelor of Science in Petroleum Engineering</option>
-                <option value={'Bachelor of Science in Physical Therapy'}>Bachelor of Science in Physical Therapy</option>
-                <option value={'Bachelor of Science in Physics'}>Bachelor of Science in Physics</option>
-                <option value={'Bachelor of Science in Production Engineering'}>Bachelor of Science in Production Engineering</option>
-                <option value={'Bachelor of Science in Radiologic Technology'}>Bachelor of Science in Radiologic Technology</option>
-                <option value={'Bachelor of Science in Renewable Energy'}>Bachelor of Science in Renewable Energy</option>
-                <option value={'Bachelor of Science in Robotics Engineering'}>Bachelor of Science in Robotics Engineering</option>
-                <option value={'Bachelor of Science in Sanitary Engineering'}>Bachelor of Science in Sanitary Engineering</option>
-                <option value={'Bachelor of Science in Social Work'}>Bachelor of Science in Social Work</option>
-                <option value={'Bachelor of Science in Speech-Language Pathology'}>Bachelor of Science in Speech-Language Pathology</option>
-                <option value={'Bachelor of Science in Statistics'}>Bachelor of Science in Statistics</option>
-                <option value={'Bachelor of Science in Structural Engineering'}>Bachelor of Science in Structural Engineering</option>
-                <option value={'Bachelor of Science in Sustainable Energy'}>Bachelor of Science in Sustainable Energy</option>
-                <option value={'Bachelor of Science in Tourism'}>Bachelor of Science in Tourism</option>
-                <option value={'Bachelor of Science in Tourism Management'}>Bachelor of Science in Tourism Management</option>
-                <option value={'Bachelor of Science/Bachelor of Arts in Psychology'}>Bachelor of Science/Bachelor of Arts in Psychology</option>
-                <option value={'Bachelor of Special Needs Education'}>Bachelor of Special Needs Education</option>
-                <option value={'Bachelor of Sports and Exercise Science'}>Bachelor of Sports and Exercise Science</option>
-                <option value={'Doctor of Dental Medicine'}>Doctor of Dental Medicine</option>
-                <option value={'Doctor of Optometry'}>Doctor of Optometry</option>
+                  <option>SELECT YOUR COURSE</option>
+                  <option value={'BACHELOR OF SCIENCE IN RESPIRATORY THERAPY'}>BACHELOR OF SCIENCE IN RESPIRATORY THERAPY</option>
+                  <option value={'BACHELOR IN LANDSCAPE ARCHITECTURE'}>BACHELOR IN LANDSCAPE ARCHITECTURE</option>
+                  <option value={'BACHELOR IN SECONDARY EDUCATION MAJOR IN MATHEMATICS'}>BACHELOR IN SECONDARY EDUCATION MAJOR IN MATHEMATICS</option>
+                  <option value={'BACHELOR IN SECONDARY EDUCATION MAJOR IN SCIENCE'}>BACHELOR IN SECONDARY EDUCATION MAJOR IN SCIENCE</option>
+                  <option value={'BACHELOR OF CULTURE AND THE ARTS EDUCATION'}>BACHELOR OF CULTURE AND THE ARTS EDUCATION</option>
+                  <option value={'BACHELOR OF DATA SCIENCE AND ANALYTICS'}>BACHELOR OF DATA SCIENCE AND ANALYTICS</option>
+                  <option value={'BACHELOR OF EARLY CHILDHOOD EDUCATION'}>BACHELOR OF EARLY CHILDHOOD EDUCATION</option>
+                  <option value={'BACHELOR OF FINE ARTS'}>BACHELOR OF FINE ARTS</option>
+                  <option value={'BACHELOR OF LIBRARY AND INFORMATION SCIENCE'}>BACHELOR OF LIBRARY AND INFORMATION SCIENCE</option>
+                  <option value={'BACHELOR OF MEDICAL LABORATORY SCIENCE'}>BACHELOR OF MEDICAL LABORATORY SCIENCE</option>
+                  <option value={'BACHELOR OF SCIENCE IN ACCOUNTANCY'}>BACHELOR OF SCIENCE IN ACCOUNTANCY</option>
+                  <option value={'BACHELOR OF SCIENCE IN AGRIBUSINESS'}>BACHELOR OF SCIENCE IN AGRIBUSINESS</option>
+                  <option value={'BACHELOR OF SCIENCE IN AGRICULTURAL AND BIOSYSTEMS ENGINEERING'}>BACHELOR OF SCIENCE IN AGRICULTURAL AND BIOSYSTEMS ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN AGROFORESTRY'}>BACHELOR OF SCIENCE IN AGROFORESTRY</option>
+                  <option value={'BACHELOR OF SCIENCE IN AIRCRAFT MAINTENANCE TECHNOLOGY'}>BACHELOR OF SCIENCE IN AIRCRAFT MAINTENANCE TECHNOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN APPLIED MATHEMATICS'}>BACHELOR OF SCIENCE IN APPLIED MATHEMATICS</option>
+                  <option value={'BACHELOR OF SCIENCE IN APPLIED PHYSICS'}>BACHELOR OF SCIENCE IN APPLIED PHYSICS</option>
+                  <option value={'BACHELOR OF SCIENCE IN APPLIED STATISTICS'}>BACHELOR OF SCIENCE IN APPLIED STATISTICS</option>
+                  <option value={'BACHELOR OF SCIENCE IN ARCHITECTURE'}>BACHELOR OF SCIENCE IN ARCHITECTURE</option>
+                  <option value={'BACHELOR OF SCIENCE IN AVIATION'}>BACHELOR OF SCIENCE IN AVIATION</option>
+                  <option value={'BACHELOR OF SCIENCE IN AVIATION TECHNOLOGY'}>BACHELOR OF SCIENCE IN AVIATION TECHNOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN BIOCHEMISTRY'}>BACHELOR OF SCIENCE IN BIOCHEMISTRY</option>
+                  <option value={'BACHELOR OF SCIENCE IN BIOLOGY'}>BACHELOR OF SCIENCE IN BIOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN BOTANY'}>BACHELOR OF SCIENCE IN BOTANY</option>
+                  <option value={'BACHELOR OF SCIENCE IN BUSINESS ADMINISTRATION MAJOR IN BUSINESS ANALYTICS'}>BACHELOR OF SCIENCE IN BUSINESS ADMINISTRATION MAJOR IN BUSINESS ANALYTICS</option>
+                  <option value={'BACHELOR OF SCIENCE IN BUSINESS ANALYTICS'}>BACHELOR OF SCIENCE IN BUSINESS ANALYTICS</option>
+                  <option value={'BACHELOR OF SCIENCE IN CERAMIC ENGINEERING'}>BACHELOR OF SCIENCE IN CERAMIC ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN CHEMICAL ENGINEERING'}>BACHELOR OF SCIENCE IN CHEMICAL ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN CHEMISTRY'}>BACHELOR OF SCIENCE IN CHEMISTRY</option>
+                  <option value={'BACHELOR OF SCIENCE IN CIVIL ENGINEERING'}>BACHELOR OF SCIENCE IN CIVIL ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN CLIMATE CHANGE'}>BACHELOR OF SCIENCE IN CLIMATE CHANGE</option>
+                  <option value={'BACHELOR OF SCIENCE IN COMMUNITY DEVELOPMENT'}>BACHELOR OF SCIENCE IN COMMUNITY DEVELOPMENT</option>
+                  <option value={'BACHELOR OF SCIENCE IN COMPUTER ENGINEERING'}>BACHELOR OF SCIENCE IN COMPUTER ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN COMPUTER SCIENCE'}>BACHELOR OF SCIENCE IN COMPUTER SCIENCE</option>
+                  <option value={'BACHELOR OF SCIENCE IN CYBER SECURITY'}>BACHELOR OF SCIENCE IN CYBER SECURITY</option>
+                  <option value={'BACHELOR OF SCIENCE IN DISASTER RISK MANAGEMENT'}>BACHELOR OF SCIENCE IN DISASTER RISK MANAGEMENT</option>
+                  <option value={'BACHELOR OF SCIENCE IN ELECTRICAL ENGINEERING'}>BACHELOR OF SCIENCE IN ELECTRICAL ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN ELECTRONICS AND COMMUNICATIONS ENGINEERING'}>BACHELOR OF SCIENCE IN ELECTRONICS AND COMMUNICATIONS ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN ELECTRONICS ENGINEERING'}>BACHELOR OF SCIENCE IN ELECTRONICS ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN ENGINEERING TECHNOLOGY'}>BACHELOR OF SCIENCE IN ENGINEERING TECHNOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN ENTERTAINMENT AND MULTIMEDIA COMPUTING'}>BACHELOR OF SCIENCE IN ENTERTAINMENT AND MULTIMEDIA COMPUTING</option>
+                  <option value={'BACHELOR OF SCIENCE IN ENVIRONMENTAL PLANNING'}>BACHELOR OF SCIENCE IN ENVIRONMENTAL PLANNING</option>
+                  <option value={'BACHELOR OF SCIENCE IN ENVIRONMENTAL SCIENCE'}>BACHELOR OF SCIENCE IN ENVIRONMENTAL SCIENCE</option>
+                  <option value={'BACHELOR OF SCIENCE IN FOOD ENGINEERING'}>BACHELOR OF SCIENCE IN FOOD ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN GAME DEVELOPMENT AND ANIMATION'}>BACHELOR OF SCIENCE IN GAME DEVELOPMENT AND ANIMATION</option>
+                  <option value={'BACHELOR OF SCIENCE IN GEODETIC ENGINEERING'}>BACHELOR OF SCIENCE IN GEODETIC ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN GEOLOGY'}>BACHELOR OF SCIENCE IN GEOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN HOSPITALITY MANAGEMENT'}>BACHELOR OF SCIENCE IN HOSPITALITY MANAGEMENT</option>
+                  <option value={'BACHELOR OF SCIENCE IN HUMAN BIOLOGY'}>BACHELOR OF SCIENCE IN HUMAN BIOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN HUMAN SERVICES'}>BACHELOR OF SCIENCE IN HUMAN SERVICES</option>
+                  <option value={'BACHELOR OF SCIENCE IN INDIGENOUS PEOPLES EDUCATION'}>BACHELOR OF SCIENCE IN INDIGENOUS PEOPLES EDUCATION</option>
+                  <option value={'BACHELOR OF SCIENCE IN INDIGENOUS PEOPLES STUDIES'}>BACHELOR OF SCIENCE IN INDIGENOUS PEOPLES STUDIES</option>
+                  <option value={'BACHELOR OF SCIENCE IN INDUSTRIAL ENGINEERING'}>BACHELOR OF SCIENCE IN INDUSTRIAL ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN INDUSTRIAL TECHNOLOGY'}>BACHELOR OF SCIENCE IN INDUSTRIAL TECHNOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN INFORMATION SYSTEMS'}>BACHELOR OF SCIENCE IN INFORMATION SYSTEMS</option>
+                  <option value={'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY'}>BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN INTERIOR DESIGN'}>BACHELOR OF SCIENCE IN INTERIOR DESIGN</option>
+                  <option value={'BACHELOR OF SCIENCE IN MANUFACTURING ENGINEERING'}>BACHELOR OF SCIENCE IN MANUFACTURING ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN MARINE BIOLOGY'}>BACHELOR OF SCIENCE IN MARINE BIOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN MARINE ENGINEERING'}>BACHELOR OF SCIENCE IN MARINE ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN MARINE TRANSPORTATION'}>BACHELOR OF SCIENCE IN MARINE TRANSPORTATION</option>
+                  <option value={'BACHELOR OF SCIENCE IN MATERIALS ENGINEERING'}>BACHELOR OF SCIENCE IN MATERIALS ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN MATHEMATICS'}>BACHELOR OF SCIENCE IN MATHEMATICS</option>
+                  <option value={'BACHELOR OF SCIENCE IN MECHANICAL ENGINEERING'}>BACHELOR OF SCIENCE IN MECHANICAL ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN MECHATRONICS ENGINEERING'}>BACHELOR OF SCIENCE IN MECHATRONICS ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN MECHATRONICS ENGINEERING TECHNOLOGY'}>BACHELOR OF SCIENCE IN MECHATRONICS ENGINEERING TECHNOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN MEDICAL TECHNOLOGY'}>BACHELOR OF SCIENCE IN MEDICAL TECHNOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN METALLURGICAL ENGINEERING'}>BACHELOR OF SCIENCE IN METALLURGICAL ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN METEOROLOGY'}>BACHELOR OF SCIENCE IN METEOROLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN MIDWIFERY'}>BACHELOR OF SCIENCE IN MIDWIFERY</option>
+                  <option value={'BACHELOR OF SCIENCE IN MINING ENGINEERING'}>BACHELOR OF SCIENCE IN MINING ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN MOLECULAR BIOLOGY AND BIOTECHNOLOGY'}>BACHELOR OF SCIENCE IN MOLECULAR BIOLOGY AND BIOTECHNOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN NURSING'}>BACHELOR OF SCIENCE IN NURSING</option>
+                  <option value={'BACHELOR OF SCIENCE IN NUTRITION AND DIETETICS'}>BACHELOR OF SCIENCE IN NUTRITION AND DIETETICS</option>
+                  <option value={'BACHELOR OF SCIENCE IN OCCUPATIONAL THERAPY'}>BACHELOR OF SCIENCE IN OCCUPATIONAL THERAPY</option>
+                  <option value={'BACHELOR OF SCIENCE IN PEACE EDUCATION'}>BACHELOR OF SCIENCE IN PEACE EDUCATION</option>
+                  <option value={'BACHELOR OF SCIENCE IN PEACE STUDIES'}>BACHELOR OF SCIENCE IN PEACE STUDIES</option>
+                  <option value={'BACHELOR OF SCIENCE IN PETROLEUM ENGINEERING'}>BACHELOR OF SCIENCE IN PETROLEUM ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN PHYSICAL THERAPY'}>BACHELOR OF SCIENCE IN PHYSICAL THERAPY</option>
+                  <option value={'BACHELOR OF SCIENCE IN PHYSICS'}>BACHELOR OF SCIENCE IN PHYSICS</option>
+                  <option value={'BACHELOR OF SCIENCE IN PRODUCTION ENGINEERING'}>BACHELOR OF SCIENCE IN PRODUCTION ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN RADIOLOGIC TECHNOLOGY'}>BACHELOR OF SCIENCE IN RADIOLOGIC TECHNOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN RENEWABLE ENERGY'}>BACHELOR OF SCIENCE IN RENEWABLE ENERGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN ROBOTICS ENGINEERING'}>BACHELOR OF SCIENCE IN ROBOTICS ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN SANITARY ENGINEERING'}>BACHELOR OF SCIENCE IN SANITARY ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN SOCIAL WORK'}>BACHELOR OF SCIENCE IN SOCIAL WORK</option>
+                  <option value={'BACHELOR OF SCIENCE IN SPEECH-LANGUAGE PATHOLOGY'}>BACHELOR OF SCIENCE IN SPEECH-LANGUAGE PATHOLOGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN STATISTICS'}>BACHELOR OF SCIENCE IN STATISTICS</option>
+                  <option value={'BACHELOR OF SCIENCE IN STRUCTURAL ENGINEERING'}>BACHELOR OF SCIENCE IN STRUCTURAL ENGINEERING</option>
+                  <option value={'BACHELOR OF SCIENCE IN SUSTAINABLE ENERGY'}>BACHELOR OF SCIENCE IN SUSTAINABLE ENERGY</option>
+                  <option value={'BACHELOR OF SCIENCE IN TOURISM'}>BACHELOR OF SCIENCE IN TOURISM</option>
+                  <option value={'BACHELOR OF SCIENCE IN TOURISM MANAGEMENT'}>BACHELOR OF SCIENCE IN TOURISM MANAGEMENT</option>
+                  <option value={'BACHELOR OF SCIENCE/BACHELOR OF ARTS IN PSYCHOLOGY'}>BACHELOR OF SCIENCE/BACHELOR OF ARTS IN PSYCHOLOGY</option>
+                  <option value={'BACHELOR OF SPECIAL NEEDS EDUCATION'}>BACHELOR OF SPECIAL NEEDS EDUCATION</option>
+                  <option value={'BACHELOR OF SPORTS AND EXERCISE SCIENCE'}>BACHELOR OF SPORTS AND EXERCISE SCIENCE</option>
+                  <option value={'DOCTOR OF DENTAL MEDICINE'}>DOCTOR OF DENTAL MEDICINE</option>
+                  <option value={'DOCTOR OF OPTOMETRY'}>DOCTOR OF OPTOMETRY</option>
+
                 </>
                 )}
-                {userData.yearLevel === 'Senior Highschool' && (<>
-                  <option>Select your course</option>
-                  <option value={'Science Technology Engineering and Mathematics (STEM)'}>Science Technology Engineering and Mathematics (STEM)</option>
-                  <option value={'Humanities and Social Sciences (HUMSS)'}>Humanities and Social Sciences (HUMSS)</option>
-                  <option value={'Accountancy Business and Management (ABM)'}>Accountancy Business and Management (ABM)</option>
-                  <option value={' General Academic Strand (GAS)'}> General Academic Strand (GAS)</option>
-                  <option value={'Home Economics'}>Home Economics</option>
-                  <option value={'Agri-fishery Arts'}>Agri-fishery Arts</option>
-                  <option value={'Industrial Arts'}>Industrial Arts</option>
-                  <option value={'Information and Communications Technology'}>Information and Communications Technology</option>
+                {userData.yearLevel === 'SENIOR HIGHSCHOOL' && (<>
+                  <option>SELECT YOUR COURSE</option>
+                  <option value={'SCIENCE TECHNOLOGY ENGINEERING AND MATHEMATICS (STEM)'}>SCIENCE TECHNOLOGY ENGINEERING AND MATHEMATICS (STEM)</option>
+                  <option value={'HUMANITIES AND SOCIAL SCIENCES (HUMSS)'}>HUMANITIES AND SOCIAL SCIENCES (HUMSS)</option>
+                  <option value={'ACCOUNTANCY BUSINESS AND MANAGEMENT (ABM)'}>ACCOUNTANCY BUSINESS AND MANAGEMENT (ABM)</option>
+                  <option value={'GENERAL ACADEMIC STRAND (GAS)'}>GENERAL ACADEMIC STRAND (GAS)</option>
+                  <option value={'HOME ECONOMICS'}>HOME ECONOMICS</option>
+                  <option value={'AGRI-FISHERY ARTS'}>AGRI-FISHERY ARTS</option>
+                  <option value={'INDUSTRIAL ARTS'}>INDUSTRIAL ARTS</option>
+                  <option value={'INFORMATION AND COMMUNICATIONS TECHNOLOGY'}>INFORMATION AND COMMUNICATIONS TECHNOLOGY</option>
+
                 </>)}
 
               </Form.Select>

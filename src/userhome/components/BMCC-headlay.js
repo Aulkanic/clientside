@@ -1,6 +1,7 @@
 import React from 'react'
 import '../css/Bmcc-header.css'
 import marilao from './../assets/marilao.jpg'
+import Bmcc from './../assets/logo.jpg'
 import Avatar from '@mui/material/Avatar';
 import { useContext } from "react";
 import { color } from "../../App";
@@ -23,14 +24,14 @@ const Header = () => {
     
       <div className='LINK'>
         <div className='marilao'>
-        <Avatar alt="" src="https://drive.google.com/uc?id=1HsYAs1azfEEjkJDjPKQaWjhorcW1W0T6" sx={{width: 60, height: 60}} />
+        <Avatar alt="" src={Bmcc} sx={{width: 60, height: 60}} />
         </div>
         <div className='marilao'>
-        <Avatar alt="" src={marilao} sx={{width: 60, height: 60}} />
+        <Avatar alt="" src={marilao} sx={{width: 60, height: 60,margin:'0px 5px 0px 5px'}} />
         </div>
-    <div className='mayor'>
-         <Avatar alt="" src={logolist[1].logo} sx={{width: 60, height: 60}} />
-    </div>
+        <div className='mayor'>
+            <Avatar alt="" src={logolist[1].logo} sx={{width: 60, height: 60}} />
+        </div>
     
   
       </div>

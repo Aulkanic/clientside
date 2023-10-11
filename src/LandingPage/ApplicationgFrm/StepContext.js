@@ -22,7 +22,7 @@ function StepContext() {
       birthPlace:'',
       citizenship:'',
       contactNum:'',
-      course:'',
+      course:'NONE',
       School:'',
       yearLevel:'',
       SchoolAddress:'',

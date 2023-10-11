@@ -172,6 +172,7 @@ function Economic() {
 
   };
     const schoav = scholarprog.filter(data => data.status === 'Open');
+    console.log(schoav)
     const Questionlist = formq?.filter(data => data.scholarshipProg === userData.schoID)
 
 
@@ -236,11 +237,15 @@ function Economic() {
             <Form.Select aria-label="Default select example"
               value={userData['schoID']} 
               onChange={(e) =>setUserData({...userData,"schoID" : e.target.value})}
+              style={{height:'maxContent'}}
             >
               {schoav?.map((data,index) =>{
-
+                  console.log(data)
                   return(
-                    index === 0 ? (<option key={index} value=''>Select Scholarship Program</option>) : (<option key={index} value={data.name}>{data.name}</option>)
+                    <>
+                    {index === 0 && <option key={index} value=''>Select Scholarship Program</option>}
+                    {index >= 0 && <option key={data.name} value={data.name}>{data.name}</option>}
+                    </>
                   )
                 })}
             </Form.Select>
