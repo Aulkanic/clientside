@@ -100,8 +100,8 @@ const Register = () => {
     const handleSnackbarClose = () => {
       setSnackbarOpen(false);
     };
-    const handleRegisterClick = async (event) => {
-      event.preventDefault();
+    const handleRegisterClick = async () => {
+  
       const errors = {};
 
       if (!email) {
@@ -114,6 +114,7 @@ const Register = () => {
         console.log(errors)
         return;
       }
+      console.log(email)
     const formData = new FormData();
     formData.append('email', email);
     setLoading(true)
