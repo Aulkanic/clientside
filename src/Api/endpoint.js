@@ -1,9 +1,9 @@
 const Endpoints = {
-    FETCH_SCHOCATEGORY:"scholar/schoCat",
+    FETCH_SCHOCATEGORY:"scholar/schoCat1",
     CHANGE_PASSWORD:"userProf/ChangePassword",
     FETCH_USER_BY_ID:"userProf/UserAccounts",
     FETCH_ACCOUNTS:"userProf/UserAccounts",
-    FETCH_SCHOLAR_CATEGORY:"scholar/schoCat",
+    FETCH_SCHOLAR_CATEGORY:"scholar/schoCat1",
     CREATE_SCHOLAR:"scholar/createScho",
     FETCH_NEWS:"news/newsinfo",
     FETCH_NOTIF:"news/Notification/",
