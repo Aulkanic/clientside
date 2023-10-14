@@ -68,7 +68,8 @@
         
         height: 60px;
         display: flex;
-        border: 2px solid grey;
+        border-radius: 50%;
+        
     }
     .timelink{
         content: '';

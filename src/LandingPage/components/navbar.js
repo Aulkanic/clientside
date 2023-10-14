@@ -52,6 +52,7 @@ function Navbar() {
             <img
             className='bmccava'
             alt="BMCC"
+            style={{border:"2px solid",borderColor:colorlist[0].bgColor}}
             src={logolist[0].logo}
                 />
             </div>
