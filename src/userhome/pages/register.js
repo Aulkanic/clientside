@@ -57,7 +57,7 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState(new Array(6).fill(''));
     const inputRefs = useRef([]);
-    const [step, setStep] = useState(3); 
+    const [step, setStep] = useState(1); 
     const [password, setPassword] = useState('');
     const [loading,setLoading] = useState(false);
     const [loading1,setLoading1] = useState(false);

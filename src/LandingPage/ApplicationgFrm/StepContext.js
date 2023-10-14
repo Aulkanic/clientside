@@ -9,7 +9,7 @@ export const multiStepContext = React.createContext();
 function StepContext() {
     const user = useSelector((state) => state.user);
     
-    const [currentStep, setStep] = useState(4);
+    const [currentStep, setStep] = useState(1);
   
     const [userData, setUserData] = useState(() => {
       const saveData = localStorage.getItem('userData');
