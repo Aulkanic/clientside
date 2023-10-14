@@ -57,7 +57,7 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState(new Array(6).fill(''));
     const inputRefs = useRef([]);
-    const [step, setStep] = useState(1); 
+    const [step, setStep] = useState(3); 
     const [password, setPassword] = useState('');
     const [loading,setLoading] = useState(false);
     const [loading1,setLoading1] = useState(false);
@@ -194,7 +194,7 @@ const Register = () => {
           return [
             {
               description: 'Capitalize all letter of firstname and lastname.',
-              isValid: !name || !lname || /^[A-Z]+$/.test(name) && /^[A-Z]+$/.test(lname),
+              isValid: !name || !lname || /^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(name) && /^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(lname),
             },
             {
               description: 'At least 3 to 45 characters only.',
@@ -210,7 +210,7 @@ const Register = () => {
         setValidationResults1(validationforName)
         setValidationResults(validationCriteria);
 
-    }, [password,fname,lname]);
+    }, [password,fname,lname,validationResults, validationResults1]);
 
     useEffect(() => {
       // Check if any of the validation results are invalid
@@ -270,8 +270,6 @@ const Register = () => {
       errors.fname = "Input must not contain numeric value";
     } else if (/[!@#$%^&*(),.?":{}|<>]/.test(fname)) {
       errors.fname = "Special characters are not allowed.";
-    } else if (!/^[A-Z][A-Za-z,\s]*$/.test(fname)) {
-      errors.fname = "First Name must be in title case format";
     }
     if (!lname) {
       errors.lname = "Last Name is required";
@@ -281,8 +279,6 @@ const Register = () => {
       errors.lname = "Input must not contain numeric value";
     } else if (/[!@#$%^&*(),.?":{}|<>]/.test(lname)) {
       errors.lname = "Special characters are not allowed.";
-    } else if (!/^[A-Z][A-Za-z,\s]*$/.test(lname)) {
-      errors.lname = "Last Name must be in title case format";
     }
     if (!password) {
       errors.password = "Password is required";
