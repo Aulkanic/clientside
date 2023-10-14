@@ -145,6 +145,7 @@ function Economic() {
            
             setUserData('');
             localStorage.removeItem("userData");
+            sessionStorage.removeItem('persist:root')
             setShowBackdrop(false)
             setStep(4)
             swal({
@@ -153,6 +154,7 @@ function Economic() {
               icon: "success",
               button: "OK",
             });
+            
            
           }
           else{

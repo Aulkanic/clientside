@@ -328,10 +328,10 @@ function Persona() {
         const groupedNames = {
           motherName: `${userData.motherName} ${userData.motherlName}`,
           fatherName: `${userData.fatherName} ${userData.fatherlName}`,
-          siblingNames: siblings ? [...siblings.map(sibling => `${sibling.firstName} ${sibling.lastName}`), userName].sort() : [],
+          siblingNames: siblings.length > 0 ? [...siblings.map(sibling => `${sibling.firstName} ${sibling.lastName}`), userName].sort() : [],
 
         };
-
+        
         const formData = new FormData();
         formData.append('familyNames', JSON.stringify(groupedNames));
         setShowBackdrop(true)
@@ -346,13 +346,12 @@ function Persona() {
               icon: "warning",
               button: "OK",
             });
-            userData.familyCode = res.data.familyCode
             setErrors('')
-            
             setStep(2)
             return
           }else{
             setErrors('')
+            setUserData((prevData) => ({ ...prevData, familyCode: res.data.familyCode, }));
             setShowBackdrop(false)
             setStep(3)
           }

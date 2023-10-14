@@ -202,7 +202,7 @@ const Register = () => {
             },
             {
               description: 'No numbers.',
-              isValid: !/\d/.test(name) && !/\d/.test(lname) || !name || !lname, // Ensures there are no numbers
+              isValid: !/\d/.test(name) && !/\d/.test(lname) || !name || !lname, 
             },
           ];
         };
