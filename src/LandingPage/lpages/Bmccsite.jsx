@@ -47,7 +47,7 @@ const Bmccsite = () => {
         </Section>
         <div 
         className="hrhead" 
-        style={{backgroundColor:colorlist[0].bgColor,color:colorlist[0].bgColor1}}>
+        style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
             ABOUT US
         </div>
         <Section>
@@ -57,7 +57,7 @@ const Bmccsite = () => {
         </Section>
         <div 
         className="hrhead" 
-        style={{backgroundColor:colorlist[0].bgColor,color:colorlist[0].bgColor1}}>
+        style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
             CONTACT US
         </div>
         <Section>
@@ -67,7 +67,7 @@ const Bmccsite = () => {
         </Section>
         <div 
         className="hrhead" 
-        style={{backgroundColor:colorlist[0].bgColor,color:colorlist[0].bgColor1}}>
+        style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
             SCHOLARSHIP PROGRAM
         </div>
         <Section>
@@ -77,7 +77,7 @@ const Bmccsite = () => {
         </Section>
         <div 
         className="hrhead" 
-        style={{backgroundColor:colorlist[0].bgColor,color:colorlist[0].bgColor1}}>
+        style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
             FREQUENTLY ASK QUESTIONS
         </div>
         <Section>

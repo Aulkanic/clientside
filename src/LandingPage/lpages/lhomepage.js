@@ -34,7 +34,7 @@ function Lhomepage() {
         <div className="lbtnapp">
           <Link to='/ScholarshipProgram' 
                 className='llinkapp'>
-          <motion.button style={{backgroundColor:colorlist[0].bgColor,color:colorlist[0].bgColor1}} whileHover={{
+          <motion.button style={{backgroundColor:colorlist[0].bgColor,color:'white'}} whileHover={{
               scale: 1.2,
               transition: { duration: 0.5 },
             }}
