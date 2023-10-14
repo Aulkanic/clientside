@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { color } from "../../App";
 import Avatar from '@mui/material/Avatar';
 import marilao from '../../userhome/assets/marilao.jpg'
+import Bmcc from '../../userhome/assets/logo.jpg'
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -65,7 +66,7 @@ function Navbar() {
             <div style={{margin:'2px'}}>
                       <Avatar
                         alt="Remy Sharp"
-                        src="https://drive.google.com/uc?id=1HsYAs1azfEEjkJDjPKQaWjhorcW1W0T6"
+                        src={Bmcc}
                         sx={{ width: 56, height: 56 }}
                       />
                 </div>
