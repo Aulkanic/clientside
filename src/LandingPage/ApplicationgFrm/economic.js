@@ -49,7 +49,7 @@ function Economic() {
       });
     };
   
-
+    console.log(userData)
 
     useEffect(() => {
       async function fetchData() {
@@ -154,15 +154,14 @@ function Economic() {
               icon: "success",
               button: "OK",
             });
-            
-           
+          
           }
           else{
             setShowBackdrop(false)
             swal({
-              title: "Success",
+              title: "Error",
               text: "Something Went Wrong!",
-              icon: "success",
+              icon: "error",
               button: "OK",
             });
       
