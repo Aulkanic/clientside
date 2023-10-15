@@ -18,10 +18,10 @@ function ChangeProf(event){
     event.preventDefault();
     setLoading(true)
     const data = {userprof,applicantNum};
-    console.log(data)
+  
     ChangingProfile.CHANGE_PROFILE(data)
     .then(res => {
-      console.log(res)
+   
       swal({
         title: "Success",
         text: "Profile has been changed!",

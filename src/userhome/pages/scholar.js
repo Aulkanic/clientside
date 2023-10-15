@@ -154,7 +154,6 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 
 const Scholar = () => {
 const { userdetails } = useSelector((state) => state.login);
-console.log(userdetails)
 const [docs, setDocs] = useState([]);
 const [submitted1, setSubmittedDocs1] = useState([]);
 const [fileValues, setFileValues] = useState([]);

@@ -162,7 +162,7 @@ useEffect(() => {
     }
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
-      console.log(errors)
+    
       return;
     }
     const email = userpicture.email

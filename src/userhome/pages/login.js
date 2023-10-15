@@ -165,7 +165,7 @@ const Login = () => {
         }
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
-          console.log(errors)
+        
           return;
         }
         setErrors('')
@@ -174,7 +174,7 @@ const Login = () => {
         setLoading1(true)
        await GetUserAcc.FETCH_USERACCS(formData)
         .then(res => {
-          console.log(res)
+     
           if(res.data.success === 0){
             setResstat('500')
             setSnackbarMessage(res.data.message);
@@ -187,7 +187,7 @@ const Login = () => {
             formData.append('fpemail', fpemail);
             GenerateOtp.GENERATE_OTP(formData)
             .then(response => {
-              console.log(response)
+         
               if(response.data.success === 0){
                 setResstat('500')
                 setSnackbarMessage(res.data.message);
@@ -220,7 +220,7 @@ const Login = () => {
         }
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
-          console.log(errors)
+        
           return;
         }
         const checkotp = otp.join('')
@@ -267,7 +267,7 @@ const Login = () => {
         formData.append('fpemail', fpemail);
         GenerateOtp.GENERATE_OTP(formData)
         .then(res => {
-          console.log(res)
+       
           if(res.data.success === 0){
             setResstat('500')
             setSnackbarMessage(res.data.message);
@@ -312,7 +312,7 @@ const Login = () => {
         }
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
-          console.log(errors)
+        
           return;
         }
         setLoading(true);
@@ -321,7 +321,7 @@ const Login = () => {
         formData.append('updtpassword',renewpassword);
         ChangePassbyOtp.CHANGEPASSWORD_BYOTP(formData)
         .then(res => {
-          console.log(res)
+       
           if(res.data.success === 0){
             setResstat('500')
             setSnackbarMessage(res.data.message);

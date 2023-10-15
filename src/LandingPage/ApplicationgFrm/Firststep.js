@@ -176,7 +176,7 @@ function Firststep() {
       setUserData((prevData) => ({ ...prevData, course: 'NONE', }));
     }
     if (!errors || Object.keys(errors).length > 0) {
-      console.log(errors)
+    
       setErrors(errors);
       return;
     }
@@ -236,7 +236,6 @@ useEffect(() => {
   setErrors(errors);
 }, [housenum, userData.birthPlace, userData.School, userData.SchoolAddress]);
 
-console.log(userData)
   return (
   <>
   <Dialog open={open1} onClose={handleClose1}>
@@ -531,12 +530,12 @@ console.log(userData)
                 value={userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL' ? 'None' : userData.course}
                 onChange={(e) => {
                   const selectedValue = e.target.value;
-                  console.log(selectedValue)
+        
                   const newCourse = 
                   userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL' 
                   ? 'None' : 
                   selectedValue;
-                  console.log(newCourse)
+               
                   setUserData((prevData) => ({ ...prevData, course: newCourse, }));
                 }}
               

@@ -21,7 +21,7 @@ function ChangeProf(event){
     
     Change_Password.CHANGE_PASSWORD()
     .then(res => {
-        console.log(res.data)
+      
         if(res.data.success === 0){
             swal(res.data.message);
             navigate('/ChangePassword')

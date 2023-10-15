@@ -111,10 +111,10 @@ const Register = () => {
       }
       if (Object.keys(errors).length > 0) {
         setErrors(errors);
-        console.log(errors)
+      
         return;
       }
-      console.log(email)
+    
     const formData = new FormData();
     formData.append('email', email);
     setLoading(true)
@@ -229,7 +229,7 @@ const Register = () => {
       }
       if (Object.keys(errors).length > 0) {
         setErrors(errors);
-        console.log(errors)
+    
         return;
       }
       setLoading(true)
@@ -238,7 +238,7 @@ const Register = () => {
       formData.append('otp', checkotp);
       ValidateOtp.VALIDATE_OTP(formData)
       .then(res => {
-        console.log(res)
+  
         if(res.data.success === 0){
           setResstat('500')
           setSnackbarMessage(res.data.message);
@@ -289,7 +289,7 @@ const Register = () => {
     }
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
-      console.log(errors)
+     
       return;
     }
     setLoading(true)
@@ -328,7 +328,7 @@ const Register = () => {
       }
       if (Object.keys(errors).length > 0) {
         setErrors(errors);
-        console.log(errors)
+       
         return;
       }
       if(!email){

@@ -48,8 +48,7 @@ function Economic() {
         return updatedValues;
       });
     };
-  
-    console.log(userData)
+
 
     useEffect(() => {
       async function fetchData() {
@@ -83,7 +82,7 @@ function Economic() {
       }
       if (Object.keys(errors).length > 0) {
         setErrors(errors);
-        console.log(errors)
+
         return;
       }
       setErrors('')
@@ -140,7 +139,7 @@ function Economic() {
       setShowBackdrop(true)
       ApplyForm.CREATE_APPINFO(formData)
       .then(res => {
-          console.log(res.data)
+   
           if(res.data.success === 1){
            
             setUserData('');
@@ -173,7 +172,6 @@ function Economic() {
 
   };
     const schoav = scholarprog.filter(data => data.status === 'Open');
-    console.log(schoav)
     const Questionlist = formq?.filter(data => data.scholarshipProg === userData.schoID)
 
 
@@ -241,7 +239,7 @@ function Economic() {
               style={{height:'maxContent'}}
             >
               {schoav?.map((data,index) =>{
-                  console.log(data)
+           
                   return(
                     <>
                     {index === 0 && <option key={index} value=''>Select Scholarship Program</option>}

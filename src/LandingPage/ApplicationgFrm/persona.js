@@ -317,7 +317,7 @@ function Persona() {
 
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
-          console.log(errors)
+   
           return;
         }
         setUserData((prevUserData) => ({
@@ -337,7 +337,7 @@ function Persona() {
         setShowBackdrop(true)
         await CheckFamily.CHECK_FAM(formData)
         .then((res) =>{
-          console.log(res)
+        
           if(res.data.results.length === rule.famNum){
             setShowBackdrop(false)
             swal({
@@ -463,7 +463,7 @@ function Persona() {
       </Button>
     </div>
      ))
-     console.log(userData)
+
     return (
     <>   
       <StyledBackdrop open={showBackdrop}>

@@ -34,7 +34,7 @@ function Scholarship() {
 
   const animation = useAnimation();
   useEffect(() =>{
-    console.log(inView)
+   
       if(inView){
         animation.start({
           opacity: 1, 

@@ -69,7 +69,7 @@ const Renewal = () => {
       }, []);
     
     const Findscho = async() =>{
-      console.log(schoid)
+  
       if (!schoid || schoid === '') {
         swal({
           text: 'Please input your Scholar Code first',
@@ -93,7 +93,7 @@ const Renewal = () => {
                 const Batch = res.data.inf[0].Batch;
                 const Scholartype = res.data.inf[0].scholarshipApplied;
                 const req = await ListofReq.FETCH_REQUIREMENTS()
-                console.log(req)
+              
                 const renewalList = req.data.Requirements.results1?.filter((data) => 
                 data.docsfor === 'Renewal' &&
                 data.batch === Batch &&
@@ -110,7 +110,7 @@ const Renewal = () => {
         const files = [...file];
         const req = event.target.files[0]
         files[index] = {file:req,reqName:data.requirementName};
-        console.log(files[index])
+    
         setFile(files);
         
       };
@@ -127,10 +127,10 @@ const Renewal = () => {
               return false;
             }
             const hasEmptyOrUndefined = file.some((list) => {
-              console.log(list)
+           
               return !list.file || !list.reqName || !list;
             });
-            console.log(hasEmptyOrUndefined)
+            
             if (hasEmptyOrUndefined) {
               swal({
                 text: 'Please provide both a file and a request name for each entry.',
@@ -141,7 +141,7 @@ const Renewal = () => {
               return;
             }
             const isValid = file.every((list) => {
-              console.log(list)
+             
               if(!list){
                 swal({
                   text: 'Please upload all Pictures.',
@@ -218,7 +218,7 @@ const Renewal = () => {
                 try {
                     const errors = [];
                     let counter = 0;
-                    console.log(file.length)
+              
                     for (let index = 0; index < file.length; index++) {
                         const filereq = file[index].file;
                         const det = file[index].reqName;
