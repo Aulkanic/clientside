@@ -85,21 +85,17 @@ function Persona() {
     const handleNoFather = () =>{
       if(!noFather){
         setNoFather(true);
-        setUserData({
-          fatherName: 'NONE',
-          fatherlName: 'NONE',
-          fatherOccu: 'NONE',
-          fatherEduc: 'NONE',
-        });
+        userData.fatherName = 'NONE';
+        userData.fatherlName = 'NONE';
+        userData.fatherEduc = 'NONE'
+        userData.fatherOccu = 'NONE'
         setisFather(true);
       }else{
         setNoFather(false)
-        setUserData({
-          fatherName: '',
-          fatherlName: '',
-          fatherOccu: '',
-          fatherEduc: '',
-        });
+        userData.fatherName = '';
+        userData.fatherlName = '';
+        userData.fatherEduc = ''
+        userData.fatherOccu = ''
         setisFather(false);
       }
     }
