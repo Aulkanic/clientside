@@ -240,27 +240,27 @@ const SetReadNotif = async(val) =>{
           </Box>
         </Fade>
       </Modal>
-          <div className='scho-info' style={{backgroundColor:colorlist[0].bgColor,border:'2px solid black'}}>
+          <div className='scho-info' style={{backgroundColor:colorlist[0].bgColor}}>
           {profile}
           </div>
           <div className='navbarh'>
-                  <div className='navsec' style={{backgroundColor:colorlist[0].bgColor1,margin:'0px'}}>
+                  <div className='navsec' style={{backgroundColor:colorlist[0].bgColor1,margin:'0px',padding:'0px 10px 0px 10px'}}>
                       <ul>
-                          <Link to='/home' className='link' style={{color:colorlist[0].bgColor,textDecoration:'none'}}>HOME</Link>
-                          <Link to='/account' className='link' style={{color:colorlist[0].bgColor,textDecoration:'none'}}>ACCOUNTS</Link>
-                          <Link to='/scholar' className='link' style={{color:colorlist[0].bgColor,textDecoration:'none'}}>
+                          <Link to='/home' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>HOME</Link>
+                          <Link to='/account' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>ACCOUNTS</Link>
+                          <Link to='/scholar' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>
                           <div className="dropdown">
-                          <Link to='/scholar' className='droptbn' style={{color: colorlist[0].bgColor, textDecoration: 'none'}}>SCHOLAR</Link>
-                          <div className="dropdown-content" style={{backgroundColor:colorlist[0].bgColor1}}>
-                          <Link to='/scholar' className='link' style={{color:colorlist[0].bgColor,textDecoration:'none'}}>Document</Link>
-                          <Link to='/scholar/info' className='link' style={{color:colorlist[0].bgColor,textDecoration:'none'}}>Appointment</Link>
+                          <Link to='/scholar' className='droptbn' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>SCHOLAR</Link>
+                          <div className="dropdown-content" style={{color:'black',textDecoration:'none',fontWeight:'700',backgroundColor:colorlist[0].bgColor1}}>
+                          <Link to='/scholar' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>Document</Link>
+                          <Link to='/scholar/info' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>Appointment</Link>
                           </div>
                           </div>
                             </Link>
-                          <Link to='/news' style={{color:colorlist[0].bgColor,textDecoration:'none'}}>NEWS</Link>
-                          <Link to='/announcement' style={{color:colorlist[0].bgColor,textDecoration:'none'}}>ANNOUNCEMENT</Link>
-                          <Link to='/trivia' style={{color:colorlist[0].bgColor,textDecoration:'none'}}>TRIVIA</Link>
-                          <Link to='/' onClick={signout} style={{color:colorlist[0].bgColor,textDecoration:'none'}}>LOGOUT</Link>
+                          <Link to='/news' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>NEWS</Link>
+                          <Link to='/announcement' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>ANNOUNCEMENT</Link>
+                          <Link to='/trivia' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>TRIVIA</Link>
+                          <Link to='/' onClick={signout} style={{color:'black',textDecoration:'none',fontWeight:'700'}}>LOGOUT</Link>
                       </ul>
                   </div>
           </div>
