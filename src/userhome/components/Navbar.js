@@ -56,23 +56,33 @@ const Navbar = () => {
     };
 
     useEffect(() => {
-      Setloading(true)
-      FetchingProfileUser.FETCH_PROFILEUSER(applicantNum).then((response) => {
-        setProfile(response.data.Profile);
-        if(response.data.Profile[0].status === 'Approved'){
-          FetchingBmccSchoinfo.FETCH_SCHOLARSINFO(applicantNum)
-          .then((res) =>{
-            setScholar(res.data.ScholarInf.results2[0])
-          })
+      async function fetchData() {
+        try {
+          const profileUserResponse = await FetchingProfileUser.FETCH_PROFILEUSER(applicantNum);
+          setProfile(profileUserResponse.data.Profile);
+    
+          if (profileUserResponse.data.Profile[0].status === 'Approved') {
+            const scholarInfoResponse = await FetchingBmccSchoinfo.FETCH_SCHOLARSINFO(applicantNum);
+            setScholar(scholarInfoResponse.data.ScholarInf.results2[0]);
+          }
+    
+          const notifResponse = await FetchNotif.FETCH_NOTIF(applicantNum);
+          setNotification(notifResponse.data.reverse());
+        } catch (error) {
+          console.error('Error fetching data:', error);
         }
-
-      });
-      FetchNotif.FETCH_NOTIF(applicantNum).then((response) => {
-        const rev = response.data
-        setNotification(rev.reverse());
-      });
-      Setloading(false)
-    },[]);
+      }
+    
+      fetchData(); // Fetch data initially
+    
+      const intervalId = setInterval(fetchData, 5000);
+    
+      // Cleanup interval on component unmount
+      return () => {
+        clearInterval(intervalId);
+      };
+    }, []);
+    
     function formatTimeDifference(date) {
       const timestamp = new Date(date)
       const now = new Date();
