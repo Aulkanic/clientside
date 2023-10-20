@@ -22,6 +22,14 @@ import { setName } from '../../Redux/userSlice';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import Swal from 'sweetalert2';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Backdrop, CircularProgress } from '@mui/material';
+
+const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 50,
+  color: '#fff',
+}));
+
 
 const CssTextField = styled(TextField)({
   backgroundColor: 'white',
@@ -64,6 +72,7 @@ const Register = () => {
     const [errors, setErrors] = useState({});
     const [remainingSeconds, setRemainingSeconds] = useState(60);
     const [disabled,setDisabled] = useState(false);
+    const [showBackdrop, setShowBackdrop] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [resstat,setResstat] = useState('');
@@ -71,6 +80,7 @@ const Register = () => {
     const [validationResults, setValidationResults] = useState([]);
     const [validationResults1, setValidationResults1] = useState([]);
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+    const [showPassword,setShowPassword] = useState(false)
   
     const handleClose = () => {
       setOpen(false);
@@ -117,7 +127,7 @@ const Register = () => {
     
     const formData = new FormData();
     formData.append('email', email);
-    setLoading(true)
+    setShowBackdrop(true)
      await RegistryOtp.REGISTRY_OTP(formData)
      .then(res => {
       if(res.data.success === 0){
@@ -125,7 +135,7 @@ const Register = () => {
         setSnackbarMessage(res.data.message);
         setSnackbarOpen(true); 
         setStep(1);
-        setLoading(false)
+        setShowBackdrop(false)
       
       }else{
         setResstat('200')
@@ -134,7 +144,7 @@ const Register = () => {
         setRemainingSeconds(60);
         setStep(2);
         setErrors('')
-        setLoading(false)
+        setShowBackdrop(false)
       }
   
     }
@@ -405,6 +415,9 @@ const findCreatedAcc = async() =>{
 
   return (
     <>
+              <StyledBackdrop open={showBackdrop}>
+                <CircularProgress color="inherit" />
+              </StyledBackdrop>
       <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -445,45 +458,41 @@ const findCreatedAcc = async() =>{
                         <h2 style={{color:'rgba(0, 32, 203, 1)'}}>Registration</h2>
                       <div className='emailotpreg'>
                         <p>Please enter your email address for creating account for Scholarship.</p>
+                        
                         <CssTextField      
-                      id="input-with-icon-textfield"
-                      label="Email"
-                      value={email}
-                      placeholder='Your email address ...'
+                          id="input-with-icon-textfield"
+                          label="Email"
+                          value={email}
+                          placeholder='Your email address ...'
 
-                      onChange={handlerEmailInput}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <EmailRoundedIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      style={{
-                        cursor: 'pointer', 
-                        width:'80%',
-                        marginTop:'20px',
-                        fontStyle:'italic'
-                      }}
-                    />
-                  {errors.email && <p variant='outlined' 
-                  style={{ 
-                    width: '92%', 
-                    color:'red', 
-                    fontSize:'12px',
-                    height:'max-Content',
-                  }}>
-                        {errors.email}
-                      </p>}
-
-                        <br />
+                          onChange={handlerEmailInput}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <EmailRoundedIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                          variant="outlined"
+                          style={{
+                            cursor: 'pointer', 
+                            width:'80%',
+                            marginTop:'20px',
+                            fontStyle:'italic'
+                          }}
+                        />
+                        {errors.email && <p variant='outlined' 
+                        style={{ 
+                          width: '92%', 
+                          color:'red', 
+                          fontSize:'12px',
+                          height:'max-Content',
+                        }}>
+                              {errors.email}
+                        </p>}
                       <div className="regbtnregnex">
                         <div>
-                          <LoadingButton
-                          loading={loading}
-                          loadingPosition="end"
-                          variant="elevated"
+                          <Button
                           fullWidth
                           className='myButton'
                           style={{
@@ -500,7 +509,7 @@ const findCreatedAcc = async() =>{
                           onClick={handleRegisterClick}
                         >
                           CONTINUE
-                        </LoadingButton>
+                        </Button>
                         </div>
                       </div>
                       <Link sx={{cursor:'pointer',fontSize:'12px',fontStyle:'italic'}} onClick={findCreatedAcc}>
@@ -652,19 +661,22 @@ const findCreatedAcc = async() =>{
                           </div>
                         </div>
                         <div className='inputeval'>
-                        <div>
+                        <div style={{position:'relative'}}>
                         <label className='labelsinp' htmlFor="">Password</label>
                           <input      
-                        id="input-with-icon-textfield"
-                        label="Password"
-                        className='inputss'
-                        value={password}
-                        type='password'
-                        style={{fontStyle:'italic',fontSize:'14px',paddingLeft:'15px'}}
-                        placeholder='Enter your password...'
-                        onChange={handlerPasswordInput}
-                      />
-                    {errors.password && <p variant='outlined'
+                              id="input-with-icon-textfield"
+                              label="Password"
+                              className='inputss'
+                              value={password}
+                              type={!showPassword ? 'password' : 'text'}
+                              style={{fontStyle:'italic',fontSize:'14px',paddingLeft:'15px'}}
+                              placeholder='Enter your password...'
+                              onChange={handlerPasswordInput}
+                            />
+                            <button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'27px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
+                          {!showPassword ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
+                          </button>
+                         {errors.password && <p variant='outlined'
                     className='perrors' 
                       style={{ 
                         margin: '0px', 

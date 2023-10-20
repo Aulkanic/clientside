@@ -53,6 +53,7 @@
 }
 .password-input-container,.email-input-container{
     display: flex;
+    position: relative;
     flex-direction: column;
     width: 100%;
 }

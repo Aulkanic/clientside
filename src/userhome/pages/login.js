@@ -13,7 +13,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
 import ErrorIcon from '@mui/icons-material/Error';
-import { Typography } from '@mui/material';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { setLoggedIn,setUserDetails } from '../../Redux/loginSlice';
 
@@ -54,6 +54,7 @@ const Login = () => {
     const [newpassword, setNewPassword] = useState('');
     const [renewpassword, setRenewPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [showPassword1, setShowPassword1] = useState(false);
     const navigate = useNavigate();
     const [step, setStep] = useState(0); 
     const [errors, setErrors] = useState({});
@@ -230,7 +231,6 @@ const Login = () => {
         formData.append('otp', checkotp);
         ValidateUserOtp.VALIDATE_USEROTP(formData)
         .then(res => {
-          console.log(res)
           if(res.data.success === 0){
             setResstat('500')
             setSnackbarMessage(res.data.message);
@@ -372,8 +372,6 @@ const Login = () => {
 
     <div className="loginpage">
                 <div className="lgform">
-
-                    
                     {step === 0 && (
                     <div className="lgcon">
                     <div className="logbmcc">
@@ -397,19 +395,23 @@ const Login = () => {
                       </p>}
                     </div>
                     <div className="password-input-container">
-                      <label className='labellogin' htmlFor="password">Password</label>
-                   <input type="password" 
+                    <label className='labellogin' htmlFor="password">Password</label>
+                   <input type={!showPassword ? "password" : "text"} 
                     id='password'
                    className='inputpass'
                    value={password}
                    onChange={handlerPasswordInput}
                    />
+                   <button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'27px',width:'max-content',padding:'0px',margin:'0px'}}>
+                   {!showPassword ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
+                   </button>
                     {errors.password && <p 
                     style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }} 
                     >
                         {errors.password}
                       </p>}
                     </div>
+
                   </form>
                   <div className="loglink">
                     <Link className='lglink' onClick={handlerForgotPasswordLink}>Forgot your Password?</Link>
@@ -444,7 +446,8 @@ const Login = () => {
                         </div>
                   </div>
 
-                    </div>)}
+                    </div>
+                      )}
                     {step === 1 && (
         <div className='findtocon'>
                     <div className="logbmcc">
@@ -592,11 +595,12 @@ const Login = () => {
                         <p>CHANGE PASSWORD</p>
                     </div>
           <div className="updatepassresfrm">
-          <div>
+          <div style={{position:'relative'}}>
           <CssTextField      
                       id="input-with-icon-textfield"
                       label="New Password"
-                      type='password'
+                      type={showPassword ? 'text' : 'password'}
+                      fullWidth
                       value={newpassword}
                       onChange={handlerNewPasswordInput}
                       InputProps={{
@@ -613,6 +617,9 @@ const Login = () => {
                         cursor: 'pointer', 
                       }}
                     />
+                   <button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'25px',backgroundColor:'transparent',color:'black',top:'23px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
+                   {!showPassword ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
+                   </button>
           </div>
           {errors.newpassword && (<p
          style={{ 
@@ -626,11 +633,11 @@ const Login = () => {
            variant="outlined" severity="error">
         {errors.newpassword}
       </p>)}
-          <div style={{marginTop:'10px'}}>
+          <div style={{marginTop:'10px',position:'relative'}}>
           <CssTextField      
                       id="input-with-icon-textfield"
                       label="Re-Type New Password"
-                      type='password'
+                      type={showPassword1 ? 'text' : 'password'}
                       value={renewpassword}
                       onChange={handlerRenewPasswordInput}
                       InputProps={{
@@ -647,6 +654,9 @@ const Login = () => {
                         cursor: 'pointer', 
                       }}
                     />
+                     <button type='button' onClick={() => setShowPassword1(!showPassword1)} style={{position:'absolute',right:'25px',backgroundColor:'transparent',color:'black',top:'23px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
+                   {!showPassword1 ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
+                   </button>
           </div>
           {errors.renewpassword && (<p
          style={{ 
@@ -684,7 +694,7 @@ const Login = () => {
       </LoadingButton>
       </div>
         </div>
-      )}
+                       )}
                 </div>
     </div>
     </>

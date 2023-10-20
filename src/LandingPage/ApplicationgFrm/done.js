@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import '../css/done.css'
-import { useNavigate } from 'react-router-dom';
 import '../css/buttonStyle.css'
 import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button';
@@ -12,14 +11,20 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import '../css/newexpage.css'
-import LoadingButton from '@mui/lab/LoadingButton';
 import swal from 'sweetalert';
+import { styled } from '@mui/material';
+import { Backdrop, CircularProgress } from '@mui/material';
 
+const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 50,
+  color: '#fff',
+}));
 
 function Educational() {
   const [open, setOpen] = React.useState(false);
   const [email,setEmail] = useState('')
   const [loading,setLoading] = useState(false)
+  const [showBackdrop, setShowBackdrop] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -27,8 +32,7 @@ function Educational() {
   const handleClose = () => {
     setOpen(false);
   };
-  const sendEmail = (event) =>{
-    event.preventDefault();
+  const sendEmail = () =>{
     if(!email){
       swal({
         text: 'Please enter email address',
@@ -40,10 +44,10 @@ function Educational() {
     }
       const formData = new FormData();
       formData.append("email",email);
-      setLoading(true)
+      setShowBackdrop(true)
       APK.APKSEND(formData)
       .then(res => {
-        setLoading(false)
+        setShowBackdrop(false)
         handleClose()
         swal({
           text: res.data.Message,
@@ -59,6 +63,9 @@ function Educational() {
 
   return (
     <>
+              <StyledBackdrop open={showBackdrop}>
+                <CircularProgress color="inherit" />
+              </StyledBackdrop>
       <div className="donepage">
         <h2>Your Application Form is Submitted</h2><br/>
         
@@ -66,7 +73,7 @@ function Educational() {
         <div className='btnlogchoice'>
         <Button sx={{marginRight:'10px',textTransform:'none'}} className='myButton'>
           <Link style={{color:'white',textDecoration:'none'}} to='/login'>Redirect to Login Page in Website</Link>
-          </Button>
+        </Button>
         <Button sx={{color:'white',textTransform:'none'}} onClick={handleClickOpen} className='myButton'>Download Mobile Application and Login</Button>
         </div>
 
@@ -90,17 +97,12 @@ function Educational() {
         <DialogActions>
           <Button className='myButton' sx={{color:'white',marginRight:'10px'}} onClick={handleClose}>Cancel</Button>
           <div>
-          <LoadingButton
-                loading={loading}
-                loadingPosition="end"
-                variant="elevated"
-                fullWidth
-                sx={{color:'white'}}
+          <button
                 className='myButton1'
                 onClick={sendEmail}
               >
                 Send
-          </LoadingButton>
+          </button>
           </div>
         </DialogActions>
       </Dialog>

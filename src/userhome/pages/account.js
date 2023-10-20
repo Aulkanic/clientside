@@ -24,6 +24,7 @@ import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
 import { Backdrop, CircularProgress } from '@mui/material';
 import DefaultImg from '../assets/defaultimg.png'
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { setLoggedIn,setUserDetails } from '../../Redux/loginSlice';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
@@ -63,6 +64,9 @@ const Account = () => {
   const [notification,setNotification] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [notifInf,setNotifDet] = useState([]);
+  const [showPassword,setShowPassword] = useState(false)
+  const [showPassword1,setShowPassword1] = useState(false)
+  const [showPassword2,setShowPassword2] = useState(false)
   const handleClose = () => setOpen(false);
 
 
@@ -388,12 +392,15 @@ async function signout() {
           <div className='accPassword'>
             <h1>Change Password</h1>
             <Form>
-              <Form.Group className="mb-3" controlId="formGroupEmail">
+              <Form.Group style={{position:'relative'}} className="mb-3" controlId="formGroupEmail">
                 <Form.Label>Old Password</Form.Label>
-                <Form.Control style={{backgroundColor:'#f1f3fa'}} type="password" 
+                <Form.Control style={{backgroundColor:'#f1f3fa'}} type={!showPassword ? "password" : 'text'} 
                 value={currentpassword}
                 onChange={handlerCPasswordInput}
                 />
+                <button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'29px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
+                   {!showPassword ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
+                </button>
                 {errors.currentpassword && <p variant='outlined' 
                   style={{ 
                     width: '87%', 
@@ -404,12 +411,15 @@ async function signout() {
                         {errors.currentpassword}
                 </p>} 
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formGroupPassword">
+              <Form.Group style={{position:'relative'}} className="mb-3" controlId="formGroupPassword">
                 <Form.Label>New Password</Form.Label>
-                <Form.Control style={{backgroundColor:'#f1f3fa'}} type="password"
+                <Form.Control style={{backgroundColor:'#f1f3fa'}} type={!showPassword1 ? "password" : 'text'}
                 value={newpassword}
                 onChange={handlerNPasswordInput}
                 />
+                <button type='button' onClick={() => setShowPassword1(!showPassword1)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'29px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
+                   {!showPassword1 ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
+                </button>
                       {errors.newpassword && <p variant='outlined' 
                       style={{ 
                         width: '87%',
@@ -420,12 +430,15 @@ async function signout() {
                             {errors.newpassword}
                       </p>} 
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formGroupPassword">
+              <Form.Group style={{position:'relative'}} className="mb-3" controlId="formGroupPassword">
                 <Form.Label>Confirm new Password</Form.Label>
-                <Form.Control style={{backgroundColor:'#f1f3fa'}} type="password" 
+                <Form.Control style={{backgroundColor:'#f1f3fa'}} type={!showPassword2 ? "password" : 'text'}
                 value={repass}
                 onChange={handlerRPasswordInput}
                 />
+                <button type='button' onClick={() => setShowPassword2(!showPassword2)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'29px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
+                   {!showPassword2 ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
+                </button>
                 {errors.repass && <p variant='outlined' 
                 style={{ 
                   width: '87%',
@@ -452,7 +465,7 @@ async function signout() {
             </div>
             <div className="listofNotif">
               {notification?.map((data,index)=>{
-                  const rawDate = data.date.replace("at", ""); // Remove "at" from the date string
+                  const rawDate = data.date.replace("at", ""); 
                   const formattedDate = new Date(rawDate);
                 let content;
                 if(data.content.length <= 110){

@@ -22,6 +22,7 @@ import { useEffect } from 'react';
 import { createContext } from 'react';
 import { useState } from 'react';
 import Renewal from './LandingPage/Renewal/renewal';
+import './App.css'
 import LoopingRhombusesSpinner from './userhome/loadingDesign/loading'
 
 

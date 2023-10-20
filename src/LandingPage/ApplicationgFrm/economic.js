@@ -255,17 +255,14 @@ function Economic() {
             <div className='frmbtnec'>
             <Button className='myButton' variant="contained" onClick={() => setStep(2)}>Previous</Button>
             <div>
-            <LoadingButton
-                loading={loading}
+            <Button
                 sx={{color:'white',textTransform:'none'}}
-                loadingPosition="end"
                 className='myButton1'
                 onClick={Check}
                 fullWidth
-
               >
                 Submit
-              </LoadingButton>
+              </Button>
             </div>
 
             </div>
