@@ -35,7 +35,8 @@ function Persona() {
     const [noFather, setNoFather] = useState(false);
     const [value, setValue] = useState('Other');
     const [isGuardiancheck,setisGuardiancheck] = useState(false)
-    const [isFather,setisFather] = useState(false)
+    const [isFather,setisFather] = useState(false);
+    const [isSameAddress,setSameAddress] = useState(false)
  
     const handleChangeRadio = (event) => {
       setValue(event.target.value);
@@ -97,6 +98,15 @@ function Persona() {
         userData.fatherEduc = ''
         userData.fatherOccu = ''
         setisFather(false);
+      }
+    }
+    const handleSameAddress = () =>{
+      if(!isSameAddress){
+        setSameAddress(true);
+        userData.guardianAddress = userData.address;
+      }else{
+        setSameAddress(false)
+        userData.guardianAddress = '';
       }
     }
 
@@ -320,11 +330,17 @@ function Persona() {
           ...prevUserData,
           siblings: siblings, 
         }));
-        const userName = `${userData.firstName} ${userData.lastName}`
+        const str1 = userData.motherName.charAt(0).toUpperCase() + userData.motherName.slice(1).toLowerCase();
+        const str2 = userData.motherlName.charAt(0).toUpperCase() + userData.motherlName.slice(1).toLowerCase();
+        const str3 = userData.fatherName.charAt(0).toUpperCase() + userData.fatherName.slice(1).toLowerCase();
+        const str4 = userData.fatherlName.charAt(0).toUpperCase() + userData.fatherlName.slice(1).toLowerCase();
+        const str5 = userData.firstName.charAt(0).toUpperCase() + userData.firstName.slice(1).toLowerCase();
+        const str6 = userData.lastName.charAt(0).toUpperCase() + userData.lastName.slice(1).toLowerCase();
+        const userName = `${str5} ${str6}`
         const groupedNames = {
-          motherName: `${userData.motherName} ${userData.motherlName}`,
-          fatherName: `${userData.fatherName} ${userData.fatherlName}`,
-          siblingNames: siblings.length > 0 ? [...siblings.map(sibling => `${sibling.firstName} ${sibling.lastName}`), userName].sort() : [],
+          motherName: `${str1} ${str2}`,
+          fatherName: `${str3} ${str4}`,
+          siblingNames: siblings.length > 0 ? [...siblings.map(sibling => `${sibling.firstName.charAt(0).toUpperCase() + sibling.firstName.slice(1).toLowerCase()} ${sibling.lastName.charAt(0).toUpperCase() + sibling.lastName.slice(1).toLowerCase()}`), userName].sort() : [],
 
         };
         
@@ -692,6 +708,7 @@ function Persona() {
                 <div>
                 <Form.Group as={Col}>
                 <Form.Label className='frmlabel'>Guardian's Address</Form.Label>
+                <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={isSameAddress} onChange={handleSameAddress} />} label="Same address" />
                         <Form.Control
                         type="text" 
                         placeholder="House No., Street, Barangay, Municipality"

@@ -95,7 +95,9 @@ function Economic() {
       } else {
         console.error("Invalid date format");
       }
-      const fullName = `${userData.firstName} ${userData.lastName}`
+      const fname = userData.firstName.charAt(0).toUpperCase() + userData.firstName.slice(1);
+      const lname = userData.lastName.charAt(0).toUpperCase() + userData.lastName.slice(1);
+      const fullName = `${fname} ${lname}`
       let birthdayValue = formattedBirthday;
 
       const formData = new FormData();

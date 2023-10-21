@@ -8,7 +8,6 @@ import { I18nextProvider } from 'react-i18next';
 export const multiStepContext = React.createContext();
 function StepContext() {
     const user = useSelector((state) => state.user);
-    
     const [currentStep, setStep] = useState(1);
   
     const [userData, setUserData] = useState(() => {
@@ -56,6 +55,13 @@ function StepContext() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() =>{
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        applicantNum: user.applicantNum, 
+        firstName:user.fname,
+        lastName:user.lname,
+        email:user.email,
+      }));
         localStorage.setItem('userData',JSON.stringify(userData))
     },[userData])
 

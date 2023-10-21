@@ -307,6 +307,8 @@ const Register = () => {
     .then(res => {
       if(res.data.message === 'Created'){
         const applicantNum = res.data.data.applicantNum;
+        const fname = res.data.data.fname;
+        const lname = res.data.data.lname;
         setResstat('200')
         setSnackbarMessage('Account Created');
         setSnackbarOpen(true); 
