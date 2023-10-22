@@ -424,6 +424,10 @@ useEffect(() => {
   };
 
   fetchData();
+  const intervalId = setInterval(fetchData, 5000);
+  return () => {
+    clearInterval(intervalId);
+  };
 }, []);
 
 const requirements = docs?.map((docu, index) => {

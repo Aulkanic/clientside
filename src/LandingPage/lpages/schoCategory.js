@@ -6,9 +6,11 @@ import { Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { useContext } from "react";
 import { color } from "../../App";
+import { useNavigate } from 'react-router-dom';
 
 function SchoCategory() {
   const [post, setPost] = React.useState([]);
+  const navigate = useNavigate()
   const { colorlist } = useContext(color);
   React.useEffect(() => {
 
@@ -19,6 +21,11 @@ function SchoCategory() {
     Fetch()
 
   }, [post]);
+
+  const setSchoforForm = (schoname) =>{
+    localStorage.setItem('schoId',schoname)
+    navigate('/register')
+  }
 
   const schoCat = post?.map((contact, index) => {
     return (
@@ -38,7 +45,7 @@ function SchoCategory() {
         
       </div>
       <div className='btncontainerscho'>
-      {contact.status === 'open' || contact.status === 'Open' ? (<Button variant="contained"><Link className='linkingscho' to='/register' >APPLY NOW</Link></Button>)
+      {contact.status === 'open' || contact.status === 'Open' ? (<Button onClick={() =>setSchoforForm(contact.name)} variant="contained"><Link className='linkingscho'  >APPLY NOW</Link></Button>)
         : (<Button variant="contained" disabled><Link className='linkingscho' >{contact.status}</Link></Button>)}
       </div>
     </div>

@@ -417,9 +417,9 @@ async function signout() {
                 value={newpassword}
                 onChange={handlerNPasswordInput}
                 />
-                <button type='button' onClick={() => setShowPassword1(!showPassword1)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'29px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
+                {!newpassword ? null : (<button type='button' onClick={() => setShowPassword1(!showPassword1)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'29px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
                    {!showPassword1 ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                </button>
+                </button>)}
                       {errors.newpassword && <p variant='outlined' 
                       style={{ 
                         width: '87%',
@@ -436,9 +436,9 @@ async function signout() {
                 value={repass}
                 onChange={handlerRPasswordInput}
                 />
-                <button type='button' onClick={() => setShowPassword2(!showPassword2)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'29px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
+                {!repass ? null : (<button type='button' onClick={() => setShowPassword2(!showPassword2)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'29px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
                    {!showPassword2 ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                </button>
+                </button>)}
                 {errors.repass && <p variant='outlined' 
                 style={{ 
                   width: '87%',

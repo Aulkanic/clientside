@@ -402,9 +402,9 @@ const Login = () => {
                    value={password}
                    onChange={handlerPasswordInput}
                    />
-                   <button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'27px',width:'max-content',padding:'0px',margin:'0px'}}>
+                   {!password ? null : (<button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'27px',width:'max-content',padding:'0px',margin:'0px'}}>
                    {!showPassword ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                   </button>
+                   </button>)}
                     {errors.password && <p 
                     style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }} 
                     >
@@ -617,9 +617,9 @@ const Login = () => {
                         cursor: 'pointer', 
                       }}
                     />
-                   <button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'25px',backgroundColor:'transparent',color:'black',top:'23px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
+                   {!newpassword ? null : (<button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'25px',backgroundColor:'transparent',color:'black',top:'23px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
                    {!showPassword ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                   </button>
+                   </button>)}
           </div>
           {errors.newpassword && (<p
          style={{ 
@@ -654,9 +654,9 @@ const Login = () => {
                         cursor: 'pointer', 
                       }}
                     />
-                     <button type='button' onClick={() => setShowPassword1(!showPassword1)} style={{position:'absolute',right:'25px',backgroundColor:'transparent',color:'black',top:'23px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
+                     {!renewpassword ? null : (<button type='button' onClick={() => setShowPassword1(!showPassword1)} style={{position:'absolute',right:'25px',backgroundColor:'transparent',color:'black',top:'23px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
                    {!showPassword1 ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                   </button>
+                   </button>)}
           </div>
           {errors.renewpassword && (<p
          style={{ 

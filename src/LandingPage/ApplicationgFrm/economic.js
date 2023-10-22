@@ -34,11 +34,13 @@ function Economic() {
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
     const navigate = useNavigate();
+    const schoid = localStorage.getItem('schoId');
     const [loading,setLoading] = useState(false)
     const [scholarprog, setScholarProg] = useState([]);
     const [formq,setFormq] = useState([]);
     const [formc,setFormc] = useState([]);
     const [selectedValues, setSelectedValues] = useState([]);
+
 
     // Handler to update selected value for a specific question
     const handleRadioChange = (questionIndex,qscore,questions,value,cscore) => {
@@ -236,7 +238,7 @@ function Economic() {
           <Form.Group as={Col}>
             <Form.Label className='frmlabel'>Scholarship Program</Form.Label>
             <Form.Select aria-label="Default select example"
-              value={userData['schoID']} 
+              value={userData['schoID'] || schoid} 
               onChange={(e) =>setUserData({...userData,"schoID" : e.target.value})}
               style={{height:'maxContent'}}
             >

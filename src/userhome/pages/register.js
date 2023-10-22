@@ -675,9 +675,9 @@ const findCreatedAcc = async() =>{
                               placeholder='Enter your password...'
                               onChange={handlerPasswordInput}
                             />
-                            <button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'27px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
+                            {!password ? null : (<button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'27px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
                           {!showPassword ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                          </button>
+                          </button>)}
                          {errors.password && <p variant='outlined'
                     className='perrors' 
                       style={{ 

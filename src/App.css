@@ -1,17 +1,14 @@
-/* More specific CSS selector */
-input[type="password"] {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-  }
-  
-  /* Apply the "custom-password" class to your password input field */
-  input[type="password"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none; /* Remove the input field outline when focused */
-    width: 100%;
-    box-sizing: border-box;
-  }
+input[type="password"]::-webkit-password-reveal-button {
+  display: none;
+}
+
+/* For Internet Explorer */
+input[type="password"]::-ms-reveal {
+  display: none;
+}
+
+/* For some Edge versions */
+input[type="password"]::-ms-clear {
+  display: none;
+}
   

@@ -76,8 +76,6 @@ const Navbar = () => {
       fetchData(); // Fetch data initially
     
       const intervalId = setInterval(fetchData, 5000);
-    
-      // Cleanup interval on component unmount
       return () => {
         clearInterval(intervalId);
       };
