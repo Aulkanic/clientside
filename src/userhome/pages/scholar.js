@@ -405,7 +405,6 @@ const EditReq = async (data) =>{
 useEffect(() => {
   const fetchData = async () => {
     try {
-      setShowBackdrop(true)
       const response = await Promise.all([
         ListofReq.FETCH_REQUIREMENTS(),
         ListofSub.FETCH_SUB(applicantNum),
@@ -417,7 +416,6 @@ useEffect(() => {
       setDocs(RequireDocs);
       setUserInfo(response[2].data.results[0]);
       setSubmittedDocs1(response[1].data.Document);
-      setShowBackdrop(false)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
