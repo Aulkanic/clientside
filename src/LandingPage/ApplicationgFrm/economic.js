@@ -35,6 +35,7 @@ function Economic() {
     const [errors, setErrors] = useState({}); 
     const navigate = useNavigate();
     const schoid = localStorage.getItem('schoId');
+    userData.schoID = schoid
     const [loading,setLoading] = useState(false)
     const [scholarprog, setScholarProg] = useState([]);
     const [formq,setFormq] = useState([]);
@@ -67,6 +68,7 @@ function Economic() {
     }, []);
 
     useEffect(() => {
+      
       setSelectedValues([]);
     }, [userData.schoID]);
 
@@ -176,7 +178,8 @@ function Economic() {
 
   };
     const schoav = scholarprog.filter(data => data.status === 'Open');
-    const Questionlist = formq?.filter(data => data.scholarshipProg === userData.schoID)
+    const sch = userData.schoID ? userData.schoID :  schoid;
+    const Questionlist = formq?.filter(data => data.scholarshipProg === sch)
 
 
     const FormTemplate = Questionlist?.map((data,index) =>{
