@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './../css/mainpage.css'
 import './../css/Navbar.css'
 import {Link} from 'react-router-dom'
-import { FetchingProfileUser, Logoutuser,FetchNotif,ReadNotifi,FetchingBmccSchoinfo } from '../../Api/request'
+import { FetchingProfileUser, Logoutuser,FetchNotif,ReadNotifi,FetchingBmccSchoinfo, ListofReq, ListofSub } from '../../Api/request'
 import Avatar from '@mui/material/Avatar';
 import { useContext } from "react";
 import { color } from "../../App";
@@ -18,7 +18,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import emptyNotif from '../assets/emptynot.png'
-import MYDO from '../assets/mydo.png'
+import MYDO from '../assets/mydo.png';
 
 const style = {
   position: 'absolute',
@@ -41,10 +41,10 @@ const Navbar = () => {
     const [picture, setProfile] = React.useState([]);
     const [scholar,setScholar] = useState([])
     const [notification, setNotification] = React.useState([]);
-    const [loading,Setloading] = useState(false);
     const [state, setState] = React.useState(false);
     const [open, setOpen] = React.useState(false);
     const [notifInf,setNotifDet] = useState([]);
+    const [notSub,setNotSub] = useState(0);
     const handleClose = () => setOpen(false);
 
     const toggleDrawer = ( open) => (event) => {
@@ -68,6 +68,16 @@ const Navbar = () => {
     
           const notifResponse = await FetchNotif.FETCH_NOTIF(applicantNum);
           setNotification(notifResponse.data.reverse());
+          const response = await Promise.all([
+            ListofReq.FETCH_REQUIREMENTS(),
+            ListofSub.FETCH_SUB(applicantNum),
+          ]);
+          const schoCat = profileUserResponse.data.Profile[0].ScholarshipApplied
+          const Batch = profileUserResponse.data.Profile[0].batch
+          const listSub = response[1].data.Document
+          const RequireDocs = response[0].data.Requirements.results1?.filter(docs => docs.schoName === schoCat && docs.batch === Batch && docs.docsfor === 'Application')
+          const Subnot = RequireDocs.length - listSub.length;
+          setNotSub(Subnot)
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -124,7 +134,7 @@ const SetReadNotif = async(val) =>{
       >
       {notification.length > 0 ? (<div>
       {notification?.map((data,index) =>{
-        const rawDate = data.date.replace("at", ""); // Remove "at" from the date string
+        const rawDate = data.date.replace("at", ""); 
         const formattedDate = new Date(rawDate);        
         let content;
         if(data.content.length <= 30){
@@ -214,6 +224,7 @@ const SetReadNotif = async(val) =>{
       dispatch(setLoggedIn(false));
       dispatch(setUserDetails([]))
   }
+  console.log(notSub)
   return (
     <React.Fragment>
               <Drawer
@@ -243,8 +254,13 @@ const SetReadNotif = async(val) =>{
               {notifInf.title}
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              {notifInf.content}
+              {notifInf.content}{notifInf.title === 'Renewal Application' ? (
+              <>
+              <Link to='/renewal'>Go now</Link>
+              </>
+            ) : null}
             </Typography>
+            
           </Box>
         </Fade>
       </Modal>
@@ -258,7 +274,15 @@ const SetReadNotif = async(val) =>{
                           <Link to='/account' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>ACCOUNTS</Link>
                           <Link to='/scholar' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>
                           <div className="dropdown">
-                          <Link to='/scholar' className='droptbn' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>SCHOLAR</Link>
+                          <Badge 
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }} 
+                          sx={{
+                            paddingRight:'10px'
+                          }}                         
+                          badgeContent={notSub} color='primary' showZero><Link to='/scholar' className='droptbn' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>SCHOLAR</Link></Badge>
                           <div className="dropdown-content" style={{color:'black',textDecoration:'none',fontWeight:'700',backgroundColor:colorlist[0].bgColor1}}>
                           <Link to='/scholar' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>Document</Link>
                           <Link to='/scholar/info' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>Appointment</Link>
