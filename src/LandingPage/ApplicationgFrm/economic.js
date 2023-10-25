@@ -35,7 +35,7 @@ function Economic() {
     const [errors, setErrors] = useState({}); 
     const navigate = useNavigate();
     const schoid = localStorage.getItem('schoId');
-    userData.schoID = schoid
+    userData.schoID = schoid ? schoid : userData.schoID;
     const [loading,setLoading] = useState(false)
     const [scholarprog, setScholarProg] = useState([]);
     const [formq,setFormq] = useState([]);
@@ -244,6 +244,7 @@ function Economic() {
               value={userData['schoID'] || schoid} 
               onChange={(e) =>setUserData({...userData,"schoID" : e.target.value})}
               style={{height:'maxContent'}}
+              disabled
             >
               {schoav?.map((data,index) =>{
            
@@ -260,18 +261,14 @@ function Economic() {
                 {FormTemplate}
               </div>
             <div className='frmbtnec'>
-            <Button className='myButton' variant="contained" onClick={() => setStep(2)}>Previous</Button>
-            <div>
+            <Button sx={{color:'white',textTransform:'none',marginRight:'15px'}} className='myButton' variant="contained" onClick={() => setStep(2)}>Previous</Button>
             <Button
                 sx={{color:'white',textTransform:'none'}}
                 className='myButton1'
                 onClick={Check}
-                fullWidth
               >
                 Submit
               </Button>
-            </div>
-
             </div>
             </div>
            

@@ -21,6 +21,7 @@ import { setName } from '../../Redux/userSlice';
 import '../css/Firststep.css'
 import '../css/buttonStyle.css'
 import { useTranslation } from 'react-i18next';
+import { ta } from 'date-fns/locale';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -37,7 +38,8 @@ function Firststep() {
   const [scholarprog, setScholarProg] = useState([]);
   const [rule,setRule] = useState([])
   const [open1, setOpen1] = useState(false);
-  const [housenum,setHousenum] = useState('')
+  const savehnum = localStorage.getItem('housenum')
+  const [housenum,setHousenum] = useState('' || savehnum)
 
   const handleClose = () => {
     setOpen(false);
@@ -166,7 +168,7 @@ function Firststep() {
     }
     if (userData.contactNum === '') {
       errors.contactNum = "Phone Number is required";
-    } else if (!/^09\d{9}$/.test(userData.contactNum)) {
+    } else if (!/^9\d{9}$/.test(userData.contactNum)) {
       errors.contactNum = "Invalid phone number.";
     }
     const fulladress = `${housenum} ${userData.baranggay} MARILAO BULACAN`
@@ -180,6 +182,7 @@ function Firststep() {
       setErrors(errors);
       return;
     }
+    localStorage.setItem('userData',JSON.stringify(userData))
     setErrors('')
     setStep(2)
 };
@@ -215,8 +218,11 @@ const findCreatedAcc = async() =>{
      })
   }
 }
+
+useEffect(() =>{
+    localStorage.setItem('housenum',housenum)
+},[housenum])
 const handleRegister = () => {
-  // Redirect to the registration route
   navigate('/register');
 };
 
@@ -331,21 +337,22 @@ useEffect(() => {
           </Row>
           <Row className="mb-3">
              <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>House No/Street</Form.Label>
+            <Form.Label className='frmlabel'>{t("House No/Street")}</Form.Label>
             <Form.Control
               type="text"
               name="houseNoStreet"
               value={housenum}
               placeholder="e.g., 123 Main Street"
-              onChange={(e) =>setHousenum(e.target.value)}
+              onChange={(e) =>setHousenum(e.target.value.toUpperCase())}
             />
             {errors.housenum && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.housenum}</p>}
               </Form.Group>
           <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>Barangay</Form.Label>
+            <Form.Label className='frmlabel'>{t("Barangay")}</Form.Label>
             <Form.Select
               as="select"
               name="barangay"
+              value={userData.baranggay}
               onChange={(e) =>setUserData({...userData,"baranggay" : e.target.value})}
             >
               <option value={''}>PLEASE SELECT BARANGGAY</option>
@@ -371,7 +378,7 @@ useEffect(() => {
           </Row>
           <Row className='mb-3'>
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>City</Form.Label>
+              <Form.Label className='frmlabel'>{t("City")}</Form.Label>
               <Form.Control
                 type="text"
                 value={'Marilao'}
@@ -382,7 +389,7 @@ useEffect(() => {
             </Form.Group>
 
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>Province</Form.Label>
+              <Form.Label className='frmlabel'>{t("Province")}</Form.Label>
               <Form.Control
                 type="text"
                 value={'Bulacan'}
@@ -430,17 +437,21 @@ useEffect(() => {
             type="text"
             placeholder='House No., Street, Barangay, Municipality' 
             value={userData['birthPlace']} 
-            onChange={(e) =>setUserData({...userData,"birthPlace" : e.target.value})}
+            onChange={(e) =>setUserData({...userData,"birthPlace" : e.target.value.toUpperCase()})}
             />
            {errors.birthPlace && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.birthPlace}</p>}
             </Form.Group>
 
-            <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>Mobile Number</Form.Label>
-            <Form.Control type="text" placeholder='09xxxxxxxxx'
+            <Form.Group style={{margin:'0px 10px 0px 10px'}} as={Col}>
+              <div style={{position:'relative'}}>
+            <Form.Label className='frmlabel'>{t("Mobile Number")}</Form.Label>
+            <span style={{position:'absolute',bottom:'5.5px',left:'17px',fontSize:'15px',color:'black',fontWeight:'bold',display:'flex'}}><p style={{margin:'0px',marginTop:'-2px'}}>+</p>63-</span>
+            <Form.Control type="text" placeholder="XXX XXX XXXX"
               value={userData['contactNum']} 
+              style={{paddingLeft:'50px'}}
               onChange={(e) =>setUserData({...userData,"contactNum" : e.target.value})}
             />
+            </div>
                {errors.contactNum && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.contactNum}</p>}
             </Form.Group>
           </Row>
@@ -454,7 +465,7 @@ useEffect(() => {
               type="text"
               value={userData['School']} 
               placeholder='e.g., ABC Elementary School'
-              onChange={(e) =>setUserData({...userData,"School" : e.target.value})}
+              onChange={(e) =>setUserData({...userData,"School" : e.target.value.toUpperCase()})}
               />
             {errors.School && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.School}</p>}
             </Form.Group>
@@ -463,7 +474,7 @@ useEffect(() => {
               <Form.Control type="text"
                value={userData['SchoolAddress']} 
                placeholder='Please enter the address of your last school ...'
-               onChange={(e) =>setUserData({...userData,"SchoolAddress" : e.target.value})}
+               onChange={(e) =>setUserData({...userData,"SchoolAddress" : e.target.value.toUpperCase()})}
               />
              {errors.SchoolAddress && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.SchoolAddress}</p>}
             </Form.Group>
@@ -484,7 +495,7 @@ useEffect(() => {
               {errors.yearLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.yearLevel}</p>}
             </Form.Group>
             {userData['yearLevel'] !== '' && (<Form.Group as={Col}>
-              <Form.Label className='frmlabel'>Grade/Year:</Form.Label>
+              <Form.Label className='frmlabel'>{t("Grade/Year")}:</Form.Label>
               <Form.Select
               value={userData['gradeLevel']} 
               onChange={(e) =>setUserData({...userData,"gradeLevel" : e.target.value})}

@@ -15,6 +15,7 @@ import { styled } from '@mui/material/styles';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import InfoIcon from '@mui/icons-material/Info';
+import { useTranslation } from 'react-i18next';
 
 
   const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
@@ -107,6 +108,7 @@ import InfoIcon from '@mui/icons-material/Info';
 
 function Applicationfrm() {
     const { currentStep, finalData} = useContext(multiStepContext);
+    const { t } = useTranslation();
     function showStep(step){
         switch(step){  
             case 1 :
@@ -137,13 +139,13 @@ function Applicationfrm() {
     </div>
     <div className="ribbon-header">
     <div className="ribbon-header-text">
-      {currentStep === 1 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>Personal Information</h2>)}
-      {currentStep === 2 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>Parent's Information</h2>)}
-      {currentStep === 3 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>Other Information</h2>)}
+      {currentStep === 1 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>{t("Personal Information")}</h2>)}
+      {currentStep === 2 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>{t("Parent's Information")}</h2>)}
+      {currentStep === 3 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>{t("Other Information")}</h2>)}
       <LanguageSwitcher />    
     </div>
     <div style={{paddingLeft:'15px'}}>
-     {currentStep !== 3 && currentStep !== 4 && <p style={{paddingLeft:'5px',fontStyle:'italic'}}>Please use<strong> UPPERCASE FORMAT</strong> to fill up this application form.</p>}
+     {currentStep !== 3 && currentStep !== 4 && <p style={{paddingLeft:'5px',fontStyle:'italic'}}>{t("Please use UPPERCASE FORMAT to fill up this application form")}.</p>}
      {currentStep === 3 && <p style={{paddingLeft:'5px',fontStyle:'italic'}}>Please complete the form by selecting your answers from the available choices.</p>}
      {currentStep === 4 && null}
     </div>
