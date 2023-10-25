@@ -1,15 +1,8 @@
 import React from 'react'
 import '../css/lhomepage.css'
-import LHeader from '../components/header'
-import LNav from '../components/navbar'
 import {Link} from 'react-router-dom'
-import limgda from '../../userhome/assets/da.jpg'
 import { motion } from "framer-motion";
-import { WebImg } from '../../Api/request'
-import { useState } from 'react'
-import { useEffect } from 'react'
 import { Card,Typography } from '@mui/material'
-import LoadingCircle from '../LoadingScreen/skcircle'
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { useContext } from "react";
 import { color } from "../../App";

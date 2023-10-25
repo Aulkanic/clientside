@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import LNav from '../components/navbar'
 import BMCClogo from '../../userhome/assets/logo.jpg'
 import Member1 from '../../userhome/assets/mydo3.jpg'
 import Member2 from '../../userhome/assets/mydo5.jpg'
 import Member3 from '../../userhome/assets/mydo4.jpg'
 import Member4 from '../../userhome/assets/mydo1.jpg'
 import Member5 from '../../userhome/assets/mydo2.jpg'
+import MYDO from '../../userhome/assets/mydo.png'
 import { motion } from "framer-motion";
 import '../css/labout.css'
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
@@ -108,12 +108,12 @@ const About = () => {
        transition={{ duration: 1 }}>
 
       <div className="latitle">
-        <img src={BMCClogo} alt="" />
-        <h1 style={{fontWeight:'700'}}>BATANG MARILENYO COORDINATING CENTER</h1>
+        <img src={MYDO} style={{widt:'100px',height:'70px',objectFit:'contain'}} alt="" />
+        <h1 style={{fontWeight:'700'}}>Marilao Youth Development Office</h1>
       </div>
       <Card elevation={0} sx={{width:'100%',padding:'15px',display:'flex',justifyContent:'center',alignItems:'center'}}>
       <Typography sx={{fontSize:'20px'}}>
-        Batang Marilenyo Coordinating Center will be the responsible agency in implementing the process of Application and in Coordination
+      Marilao Youth Development Office will be the responsible agency in implementing the process of Application and in Coordination
         with the Municipal Treasurer Office on releasing of the Financial Assistance to the Scholars.
       </Typography>
       </Card>

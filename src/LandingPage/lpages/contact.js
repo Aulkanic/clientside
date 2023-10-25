@@ -62,7 +62,7 @@ const imagelist = imgList?.map((image, index) => {
           <div className="cntctde">
             <Box display="flex" justifyContent="center">
             <div className="cntcthder">
-            <h1>Batang Marilenyo Coordinating Center</h1>
+            <h1>Marilao Youth Development Office</h1>
             <p>Office Address: 3/F Annex Bldg., Marilao Municipal Bldg, Patubig Marilao, Bulacan</p>
             <Link href="https://web.facebook.com/BatangMarilenyo"><p>Facebook Page: https://web.facebook.com/BatangMarilenyo</p></Link>
             </div>

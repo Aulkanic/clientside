@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import './loading.css'
 import Avatar from '@mui/material/Avatar';
-import BMCC from './../assets/logo.jpg'
+import BMCC from './../assets/mydo.png'
 
 const LoadingRhombus = styled.div`
   width: ${(props) => props.size * 4}px;
@@ -64,22 +64,22 @@ function generateSpinners(num) {
 
 const LoopingRhombusesSpinner = ({
   size = 27,
-  color = '#29d50f',
+  color = '#043F97',
   animationDuration = 2500,
   className = '',
   style,
   ...props
 }) => {
-  const num = 3;
+  const num = 6;
 
   return (
     <>
     <div className='loadings'>
         <div className="loadingcontainer">
         <div className='loadingcontent'>
-        <div style={{display:'flex',justifyContent:'center',alignItems:'center',margin:'10px',flexDirection:'row-reverse'}}>
-          <h1 style={{margin:'0px',marginLeft:'5px'}}>BMCC</h1>
+        <div style={{display:'flex',justifyContent:'center',alignItems:'center',margin:'10px',flexDirection:'column'}}>
         <Avatar alt="" src={BMCC} sx={{width: 80, height: 80}} />
+          <h1 style={{margin:'0px',marginLeft:'5px',color:'#043F97'}}>Marilao Youth Development Office</h1>
         </div>
         <LoadingRhombus
           size={size}
