@@ -63,7 +63,7 @@ useEffect(() => {
             </div>
             <div className="frmprof">
              <form action="" onSubmit={ChangeProf}>
-                <input type="file" onChange={e=> setProfile(e.target.files[0])} /><br></br>
+                <input type="file" accept=".jpg, .jpeg, .png" onChange={e=> setProfile(e.target.files[0])} /><br></br>
                 <div className="btnprof">
                 <Link to='/account'><button className='cbtn'>Cancel</button></Link>
                 <input className='sbtn' type="submit" />

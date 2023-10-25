@@ -376,6 +376,7 @@ async function signout() {
         />
         <input
           type="file"
+          accept=".jpg, .jpeg, .png"
           onChange={e=> setProfilepic(e.target.files[0])}
           style={{ display: 'none' }} 
         />

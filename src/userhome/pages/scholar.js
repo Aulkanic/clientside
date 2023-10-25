@@ -456,6 +456,7 @@ const requirements = docs?.map((docu, index) => {
                       !isDisabled && !hassubmit ? (
                         <input
                           type="file"
+                          accept=".jpg, .jpeg, .png"
                           name={`${docu.requirementName}`}
                           disabled={isDisabled}
                           onChange={(event) => handleFileChange(index, event)}

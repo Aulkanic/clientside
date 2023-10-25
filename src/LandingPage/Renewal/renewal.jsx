@@ -448,7 +448,7 @@ const Renewal = () => {
                                 return(
                                     <Form.Group controlId="formFile" className="mb-3">
                                     <Form.Label>{data.requirementName}</Form.Label>
-                                    <Form.Control type="file" 
+                                    <Form.Control type="file" accept=".jpg, .jpeg, .png"
                                     onChange={(event) => handleFileChange(index,data, event)}
                                     />
                                     </Form.Group>
