@@ -151,6 +151,9 @@ function Economic() {
             setUserData('');
             localStorage.removeItem("userData");
             sessionStorage.removeItem('persist:root')
+            localStorage.removeItem('nofather');
+            localStorage.removeItem('sameaddress');
+            localStorage.removeItem('onlychild');
             setShowBackdrop(false)
             setStep(4)
             swal({
