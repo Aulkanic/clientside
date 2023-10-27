@@ -9,6 +9,7 @@ import swal from 'sweetalert';
 import { Button } from '@mui/material'
 import { Backdrop, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { use } from 'i18next'
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
     zIndex: theme.zIndex.drawer + 50,
@@ -50,6 +51,7 @@ const Renewal = () => {
     const [guardian,setGuardian] = useState('')
     const [disablebtn,setDisablebtn] = useState(false)
     const [disablebtn1,setDisablebtn1] = useState(true)
+    const [errors,setErrors] = useState({})
 
     useEffect(() => {
         async function fetchData() {
@@ -117,6 +119,14 @@ const Renewal = () => {
       const handleSubmit = async (event) => {
         try {
             event.preventDefault();
+            const errors = {};
+            if (!/^9\d{9}$/.test(phoneNum)) {
+              errors.contactNum = "Invalid phone number.";
+            }
+            if (!errors || Object.keys(errors).length > 0) {
+              setErrors(errors);
+              return;
+            }
             if (!file || reqlist.length !== file.length) {
               swal({
                 text: 'Please upload all Pictures.',
@@ -183,6 +193,7 @@ const Renewal = () => {
             if(!isValid){
               return
             }
+
             const user = schoinf[0];
             const date = new Date();
             const formData = new FormData();
@@ -304,6 +315,7 @@ const Renewal = () => {
         return details
       };
     const isOpen = isRenewalForm();
+      console.log(yearLevel)
   return (
     <>
     <StyledBackdrop open={showBackdrop}>
@@ -316,7 +328,7 @@ const Renewal = () => {
                 <div style={{display:'flex',flexDirection:'column'}}>
                 <label htmlFor="">Scholarship Code:</label>
                 <div style={{display:'flex'}}>
-                <div className='schlabel'>SCH-</div>
+                <div className='schlabel'>SC-</div>
                 <input className='schid' type="text" 
                 placeholder='Input your Scholarship Code'
                 value={schoid}
@@ -384,23 +396,46 @@ const Renewal = () => {
                             </Form.Group>
                             <Form.Group as={Col}>
                             <Form.Label className='frmlabel'>Phone Number</Form.Label>
+                            <div style={{position:'relative'}}>
+                            <span style={{position:'absolute',bottom:'6.5px',left:'8px',fontSize:'15px',color:'black',fontWeight:'bold',display:'flex'}}><p style={{margin:'0px',marginTop:'-2px'}}>+</p>63-</span>
                             <Form.Control 
                             type="text" 
                             name='Phone Number'
                             value={phoneNum} 
+                            style={{paddingLeft:'42px'}}
                             placeholder={data.phoneNum}
                             onChange={(e) =>setPhoneNum(e.target.value)}
                             />
+                            </div>
+                            {errors.contactNum && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.contactNum}</p>}
                             </Form.Group>
                             <Form.Group as={Col}>
                             <Form.Label className='frmlabel'>Baranggay</Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            name='Baranggay'
-                            value={baranggay}
-                            placeholder={data.Baranggay} 
-                            onChange={(e) => setBaranggay(e.target.value)}
-                            />
+                            <Form.Select
+                                as="select"
+                                name="barangay"
+                                value={baranggay || data.Baranggay}
+                                placeholder={data.Baranggay} 
+                                onChange={(e) => setBaranggay(e.target.value)}
+                              >
+                                <option value={''}>PLEASE SELECT BARANGGAY</option>
+                                <option value={'ABANGAN NORTE'}>ABANGAN NORTE</option>
+                                <option value={'ABANGAN SUR'}>ABANGAN SUR</option>
+                                <option value={'IBAYO'}>IBAYO</option>
+                                <option value={'LAMBAKIN'}>LAMBAKIN</option>
+                                <option value={'LIAS'}>LIAS</option>
+                                <option value={'LOMA DE GATO'}>LOMA DE GATO</option>
+                                <option value={'NAGBALON'}>NAGBALON</option>
+                                <option value={'PATUBIG'}>PATUBIG</option>
+                                <option value={'POBLACION I'}>POBLACION I</option>
+                                <option value={'POBLACION II'}>POBLACION II</option>
+                                <option value={'PRENZA I'}>PRENZA I</option>
+                                <option value={'PRENZA II'}>PRENZA II</option>
+                                <option value={'SAOG'}>SAOG</option>
+                                <option value={'STA. ROSA I'}>STA. ROSA I</option>
+                                <option value={'STA. ROSA II'}>STA. ROSA II</option>
+                                <option value={'TABING-ILOG'}>TABING-ILOG</option>
+                              </Form.Select>
                             </Form.Group>
                             <Form.Group as={Col}>
                             <Form.Label className='frmlabel'>Current School</Form.Label>
@@ -409,28 +444,63 @@ const Renewal = () => {
                             name='school'
                             value={school}
                             placeholder={data.school} 
-                            onChange={(e) => setSchool(e.target.value)}
+                            onChange={(e) => setSchool(e.target.value.toUpperCase())}
                             />
                             </Form.Group>
                             <Form.Group as={Col}>
                             <Form.Label className='frmlabel'>Year Level</Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            name='yearLevel'
-                            value={yearLevel}
+                            <Form.Select
+                            value={yearLevel || data.yearLevel}
                             placeholder={data.yearLevel} 
                             onChange={(e) =>setYearlevel(e.target.value)}
-                            />
+                            >
+                            <option value={''}>SELECT YOUR YEAR LEVEL</option>
+                            <option disabled={data.yearLevel === 'JUNIOR HIGHSCHOOL' || data.yearLevel === 'SENIOR HIGHSCHOOL' || data.yearLevel === 'COLLEGE'} value={'ELEMENTARY'}>ELEMENTARY</option>
+                            <option disabled={data.yearLevel === 'COLLEGE' || data.yearLevel === 'SENIOR HIGHSCHOOL'} value={'JUNIOR HIGHSCHOOL'}>JUNIOR HIGHSCHOOL</option>
+                            <option disabled={data.yearLevel === 'COLLEGE' || data.yearLevel === 'ELEMENTARY'} value={'SENIOR HIGHSCHOOL'}>SENIOR HIGHSCHOOL</option>
+                            <option disabled={data.yearLevel === 'ELEMENTARY'} value={'COLLEGE'}>COLLEGE</option>
+                            </Form.Select>
                             </Form.Group>
                             <Form.Group as={Col}>
                             <Form.Label className='frmlabel'>Grade/Year</Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            name='gradeLevel'
-                            value={gradeLevel} 
+                            <Form.Select
+                            value={gradeLevel || data.gradeLevel} 
                             placeholder={data.gradeLevel}
                             onChange={(e) =>setGradelevel(e.target.value)}
-                            />
+                            >
+                              {(yearLevel ? yearLevel === 'ELEMENTARY' : data.yearLevel === 'ELEMENTARY') && (<>
+                              <option value={''}>SELECT YOUR GRADE LEVEL</option>
+                              <option value={'GRADE 1'}>GRADE 1</option>
+                              <option value={'GRADE 2'}>GRADE 2</option>
+                              <option value={'GRADE 3'}>GRADE 3</option>
+                              <option value={'GRADE 4'}>GRADE 4</option>
+                              <option value={'GRADE 5'}>GRADE 5</option>
+                              <option value={'GRADE 6'}>GRADE 6</option>
+
+                              </>)}
+                              {(yearLevel ? yearLevel === 'JUNIOR HIGHSCHOOL' : data.yearLevel === 'JUNIOR HIGHSCHOOL') && (<>
+                              <option value={''}>SELECT YOUR GRADE LEVEL</option>
+                              <option value={'GRADE 7'}>GRADE 7</option>
+                              <option value={'GRADE 8'}>GRADE 8</option>
+                              <option value={'GRADE 9'}>GRADE 9</option>
+                              <option value={'GRADE 10'}>GRADE 10</option>
+
+                              </>)}
+                              {(yearLevel ? yearLevel === 'SENIOR HIGHSCHOOL' : data.yearLevel === 'SENIOR HIGHSCHOOL') && (<>
+                                <option value={''}>SELECT YOUR GRADE LEVEL</option>
+                                <option value={'GRADE 11'}>GRADE 11</option>
+                                <option value={'GRADE 12'}>GRADE 12</option>
+
+                              </>)}
+                              {(yearLevel ? yearLevel === 'COLLEGE' : data.yearLevel === 'COLLEGE') && (<>
+                                <option value={''}>SELECT YOUR GRADE LEVEL</option>
+                                <option value={'1ST YEAR'}>1ST YEAR</option>
+                                <option value={'2ND YEAR'}>2ND YEAR</option>
+                                <option value={'3RD YEAR'}>3RD YEAR</option>
+                                <option value={'4TH YEAR'}>4TH YEAR</option>
+
+                              </>)}
+                            </Form.Select>
                             </Form.Group>
                             <Form.Group as={Col}>
                             <Form.Label className='frmlabel'>Guardian</Form.Label>
