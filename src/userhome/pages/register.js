@@ -380,8 +380,8 @@ const Register = () => {
        )
       .catch(err => console.log(err));
     }
-const handlerFnameInput = (e) => setfname(e.target.value)
-const handlerLnameInput = (e) => setlname(e.target.value)
+const handlerFnameInput = (e) => setfname(e.target.value.toUpperCase())
+const handlerLnameInput = (e) => setlname(e.target.value.toUpperCase())
 const handlerEmailInput = (e) => setEmail(e.target.value)
 const handlerPasswordInput = (e) => setPassword(e.target.value)
 const handlerBackInput = (e) => {

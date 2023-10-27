@@ -448,7 +448,7 @@ function Persona() {
       
   },[noFather,isSameAddress,onlyChild])
 
-   const siblingfrm = siblings.map((sibling, index) => (
+   const siblingfrm = siblings?.map((sibling, index) => (
     <div className='siblinginf' key={index}>
      
       <div>
