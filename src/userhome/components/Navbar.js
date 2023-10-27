@@ -92,9 +92,19 @@ const Navbar = () => {
     }, []);
     
     function formatTimeDifference(date) {
-      const timestamp = new Date(date)
-      const now = new Date();
-      const diffInSeconds = Math.floor((now - timestamp) / 1000);
+      const timeZone = "Asia/Manila";
+
+      // Get the current time in the specified time zone
+      const now = new Date().toLocaleString("en-US", { timeZone });
+    
+      // Convert the input date to the specified time zone
+      const timestamp = new Date(date).toLocaleString("en-US", { timeZone });
+    
+      // Convert both dates to timestamps
+      const nowTimestamp = new Date(now).getTime();
+      const timestampTimestamp = new Date(timestamp).getTime();
+    
+      const diffInSeconds = Math.floor((nowTimestamp - timestampTimestamp) / 1000);
     
       if (diffInSeconds < 10) {
         return "just now";
@@ -152,7 +162,13 @@ const SetReadNotif = async(val) =>{
               margin:'0'
             }}>{data.title}</p>
             {content}
-            {formatTimeDifference(formattedDate)}
+            <div style={{display:'flex',position:'relative'}}>
+            <p className={data.remarks === 'unread' ? 'unreadnotif' : 'none'}>{formatTimeDifference(formattedDate)}</p>
+            {data.remarks === 'unread' && (<div className='rightnotif'>
+                        <div className='circle'></div>
+              </div>)}
+            </div>
+
             </div>
           </div>
         )
@@ -224,7 +240,6 @@ const SetReadNotif = async(val) =>{
       dispatch(setLoggedIn(false));
       dispatch(setUserDetails([]))
   }
-  console.log(notSub)
   return (
     <React.Fragment>
               <Drawer
@@ -260,7 +275,7 @@ const SetReadNotif = async(val) =>{
               </>
             ) : null}
             </Typography>
-            
+
           </Box>
         </Fade>
       </Modal>
