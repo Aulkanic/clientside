@@ -230,7 +230,7 @@ useEffect(() => {
   const fieldsToCheck = ['housenum', 'birthPlace', 'School', 'SchoolAddress'];
   const errors = {};
 
-  fieldsToCheck.forEach((field) => {
+  fieldsToCheck?.forEach((field) => {
     const fieldValue = field === 'housenum' ? housenum : userData[field];
     if (fieldValue && fieldValue.trim() !== '' && !/^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(fieldValue)) {
       errors[field] = 'Use uppercase format only';

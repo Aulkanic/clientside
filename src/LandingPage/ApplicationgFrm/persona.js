@@ -392,7 +392,7 @@ function Persona() {
         'guardianAddress',
       ];
     
-      fieldsToCheck.forEach((field) => {
+      fieldsToCheck?.forEach((field) => {
         const fieldValue = userData[field];
         if (fieldValue && fieldValue.trim() !== '' && /[a-z]/.test(fieldValue)) {
           errors[field] = 'Use uppercase format only.';
@@ -402,7 +402,7 @@ function Persona() {
       });
       const siblingErrors = [];
 
-      siblings.forEach((sibling, index) => {
+      siblings?.forEach((sibling, index) => {
         const siblingFirstName = sibling.firstName;
         const siblingLastName = sibling.lastName;
         if (siblingFirstName && siblingFirstName.trim() !== '' && !/^[A-Z]+$/.test(siblingFirstName)) {
