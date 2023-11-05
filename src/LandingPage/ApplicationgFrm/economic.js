@@ -191,7 +191,7 @@ function Economic() {
         return(
           <div key={index} style={{padding:'10px 50px 10px 50px'}}>
             <FormControl sx={{width:'100%'}}>
-              <FormLabel sx={{fontWeight:'700',color:'black'}} id="demo-row-radio-buttons-group-label">
+              <FormLabel sx={{fontWeight:'700',color:'black',backgroundColor:'#ced4da',padding:'15px',borderRadius:'5px'}} id="demo-row-radio-buttons-group-label">
                 {index + 1}.{t(data.questions)}
                 </FormLabel>
               <RadioGroup
@@ -205,6 +205,7 @@ function Economic() {
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fill, minmax(50%, 1fr))',
                   gap: '5px', 
+                  marginLeft:'30px'
                  
                 }}>
                 {choices?.map((choice,index) =>{
@@ -242,12 +243,13 @@ function Economic() {
 
               <Row className="mb-3">
           <Form.Group as={Col}>
+            
+            {!schoid ? (<>
             <Form.Label className='frmlabel'>Scholarship Program</Form.Label>
             <Form.Select aria-label="Default select example"
               value={userData['schoID'] || schoid} 
               onChange={(e) =>setUserData({...userData,"schoID" : e.target.value})}
               style={{height:'maxContent'}}
-              disabled
             >
               {schoav?.map((data,index) =>{
            
@@ -258,7 +260,12 @@ function Economic() {
                     </>
                   )
                 })}
-            </Form.Select>
+            </Form.Select></>) : (
+            <div>
+            <h1 style={{fontSize:'20px'}}>
+              {schoid}
+            </h1>
+            </div>)}
             </Form.Group>
           </Row>
                 {FormTemplate}

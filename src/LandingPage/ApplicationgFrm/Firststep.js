@@ -289,7 +289,8 @@ useEffect(() => {
       <div className="FFd">
           <div className="form">
           <div className='containerform'>
-          <Row className="mb-3">
+            <div style={{padding:'20px'}}>
+            <Row className="mb-3">
           <Form.Group as={Col}>
               <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
               <Form.Control 
@@ -337,7 +338,7 @@ useEffect(() => {
           </Row>
           <Row className="mb-3">
              <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("House No/Street")}</Form.Label>
+            <Form.Label className='frmlabel'>{t("House No/Street")} *</Form.Label>
             <Form.Control
               type="text"
               name="houseNoStreet"
@@ -347,8 +348,8 @@ useEffect(() => {
             />
             {errors.housenum && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.housenum}</p>}
               </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("Barangay")}</Form.Label>
+           <Form.Group as={Col}>
+            <Form.Label className='frmlabel'>{t("Barangay")} *</Form.Label>
             <Form.Select
               as="select"
               name="barangay"
@@ -401,7 +402,7 @@ useEffect(() => {
           </Row>
           <Row className="mb-3">
           <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("Gender")}</Form.Label>
+            <Form.Label className='frmlabel'>{t("Gender")} *</Form.Label>
             <Form.Select aria-label="Default select example"
               value={userData['gender']} 
               onChange={(e) =>setUserData({...userData,"gender" : e.target.value})}
@@ -415,7 +416,7 @@ useEffect(() => {
             </Form.Group>
 
             <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("Birth Date")}</Form.Label>
+            <Form.Label className='frmlabel'>{t("Birth Date")} *</Form.Label>
               <Form.Control 
               type="date" 
               value={userData['birthday']} 
@@ -432,10 +433,10 @@ useEffect(() => {
           </Row>
           <Row className="mb-3">
           <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("Birth Place")}</Form.Label>
+            <Form.Label className='frmlabel'>{t("Birth Place")} *</Form.Label>
             <Form.Control 
             type="text"
-            placeholder='House No., Street, Barangay, Municipality' 
+            placeholder='Barangay, Municipality' 
             value={userData['birthPlace']} 
             onChange={(e) =>setUserData({...userData,"birthPlace" : e.target.value.toUpperCase()})}
             />
@@ -444,7 +445,7 @@ useEffect(() => {
 
             <Form.Group style={{margin:'0px 10px 0px 10px'}} as={Col}>
               <div style={{position:'relative'}}>
-            <Form.Label className='frmlabel'>{t("Mobile Number")}</Form.Label>
+            <Form.Label className='frmlabel'>{t("Mobile Number")} *</Form.Label>
             <span style={{position:'absolute',bottom:'5.5px',left:'17px',fontSize:'15px',color:'black',fontWeight:'bold',display:'flex'}}><p style={{margin:'0px',marginTop:'-2px'}}>+</p>63-</span>
             <Form.Control type="text" placeholder="XXX XXX XXXX"
               value={userData['contactNum']} 
@@ -455,12 +456,15 @@ useEffect(() => {
                {errors.contactNum && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.contactNum}</p>}
             </Form.Group>
           </Row>
+            </div>
+
           </div>
           <div className='containerform'>
-          <h4 style={{color:"#0b4980",marginTop:'10px'}} className='h4head'>{t("Educational Information")}</h4>
+          <h4 style={{width:'100%',backgroundColor:'#043F97'}} className='h4head'>{t("Educational Information")}</h4>
+          <div style={{padding:'20px'}}>
           <Row className="mb-3">
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Last School Attended")}</Form.Label>
+              <Form.Label className='frmlabel'>{t("Last School Attended")} *</Form.Label>
               <Form.Control 
               type="text"
               value={userData['School']} 
@@ -470,7 +474,7 @@ useEffect(() => {
             {errors.School && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.School}</p>}
             </Form.Group>
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("School Address")}</Form.Label>
+              <Form.Label className='frmlabel'>{t("School Address")} *</Form.Label>
               <Form.Control type="text"
                value={userData['SchoolAddress']} 
                placeholder='Please enter the address of your last school ...'
@@ -481,7 +485,7 @@ useEffect(() => {
           </Row>
           <Row className="mb-3">
           <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Year Level")}</Form.Label>
+              <Form.Label className='frmlabel'>{t("Year Level")} *</Form.Label>
               <Form.Select
                 value={userData['yearLevel']} 
                 onChange={(e) =>setUserData({...userData,"yearLevel" : e.target.value})}
@@ -495,7 +499,7 @@ useEffect(() => {
               {errors.yearLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.yearLevel}</p>}
             </Form.Group>
             {userData['yearLevel'] !== '' && (<Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Grade/Year")}:</Form.Label>
+              <Form.Label className='frmlabel'>{t("Grade/Year")} *</Form.Label>
               <Form.Select
               value={userData['gradeLevel']} 
               onChange={(e) =>setUserData({...userData,"gradeLevel" : e.target.value})}
@@ -516,13 +520,11 @@ useEffect(() => {
                 <option value={'GRADE 8'}>GRADE 8</option>
                 <option value={'GRADE 9'}>GRADE 9</option>
                 <option value={'GRADE 10'}>GRADE 10</option>
-
                 </>)}
                 {userData.yearLevel === 'SENIOR HIGHSCHOOL' && (<>
                   <option value={''}>SELECT YOUR GRADE LEVEL</option>
                   <option value={'GRADE 11'}>GRADE 11</option>
                   <option value={'GRADE 12'}>GRADE 12</option>
-
                 </>)}
                 {userData.yearLevel === 'COLLEGE' && (<>
                   <option value={''}>SELECT YOUR GRADE LEVEL</option>
@@ -530,13 +532,12 @@ useEffect(() => {
                   <option value={'2ND YEAR'}>2ND YEAR</option>
                   <option value={'3RD YEAR'}>3RD YEAR</option>
                   <option value={'4TH YEAR'}>4TH YEAR</option>
-
                 </>)}
               </Form.Select>
                  {errors.gradeLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.gradeLevel}</p>}
             </Form.Group>)}
             {userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL' ? (null) : (<Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Course")}</Form.Label>
+              <Form.Label className='frmlabel'>{t("Course")} *</Form.Label>
               <Form.Select 
                 value={userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL' ? 'None' : userData.course}
                 onChange={(e) => {
@@ -549,10 +550,9 @@ useEffect(() => {
                
                   setUserData((prevData) => ({ ...prevData, course: newCourse, }));
                 }}
-              
               >
                 {userData.yearLevel === 'COLLEGE' && (
-                  <>
+                <>
                   <option>SELECT YOUR COURSE</option>
                   <option value={'BACHELOR OF SCIENCE IN RESPIRATORY THERAPY'}>BACHELOR OF SCIENCE IN RESPIRATORY THERAPY</option>
                   <option value={'BACHELOR IN LANDSCAPE ARCHITECTURE'}>BACHELOR IN LANDSCAPE ARCHITECTURE</option>
@@ -672,8 +672,9 @@ useEffect(() => {
             </Form.Group>)}
           </Row>
           </div>
+          </div>
           <div className='frmbtnec'>
-          <Button className='myButton' variant="contained" onClick={Check}>Next</Button>
+           <Button className='myButton' variant="contained" onClick={Check}>Next</Button>
           </div>
           </div>
       </div>

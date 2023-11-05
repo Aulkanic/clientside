@@ -56,6 +56,11 @@
 .link{
     text-decoration: none;
 }
+.activeBar{
+  background-color: aqua;
+  padding: 5px 30px 5px 30px;
+  border-radius: 5px;
+}
 .navsec{
     width: 100%;
     left: 0;
@@ -68,6 +73,7 @@
     margin: 0;
     font-size: 15px;
     list-style-type: none;
+    line-height: 35px;
     justify-content: space-between;
 }
 .dropdown {

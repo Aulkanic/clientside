@@ -35,7 +35,7 @@ const style = {
 
 const Navbar = () => {
     const dispatch = useDispatch();
-    const { userdetails,LoggedIn } = useSelector((state) => state.login);
+    const { userdetails } = useSelector((state) => state.login);
     const { colorlist} = useContext(color);
     const applicantNum = userdetails.applicantNum;
     const [picture, setProfile] = React.useState([]);
@@ -45,6 +45,7 @@ const Navbar = () => {
     const [open, setOpen] = React.useState(false);
     const [notifInf,setNotifDet] = useState([]);
     const [notSub,setNotSub] = useState(0);
+    const [active,setActive] = useState(0)
     const handleClose = () => setOpen(false);
 
     const toggleDrawer = ( open) => (event) => {
@@ -93,14 +94,8 @@ const Navbar = () => {
     
     function formatTimeDifference(date) {
       const timeZone = "Asia/Manila";
-
-      // Get the current time in the specified time zone
       const now = new Date().toLocaleString("en-US", { timeZone });
-    
-      // Convert the input date to the specified time zone
       const timestamp = new Date(date);
-    
-      // Convert both dates to timestamps
       const nowTimestamp = new Date(now).getTime();
       const timestampTimestamp = new Date(timestamp).getTime();
     
@@ -241,7 +236,7 @@ const SetReadNotif = async(val) =>{
       dispatch(setUserDetails([]))
   }
   return (
-    <React.Fragment>
+    <>
               <Drawer
                 anchor={'right'}
                 open={state}
@@ -278,16 +273,18 @@ const SetReadNotif = async(val) =>{
 
           </Box>
         </Fade>
-      </Modal>
+             </Modal>
           <div className='scho-info' style={{backgroundColor:colorlist[0].bgColor}}>
           {profile}
           </div>
           <div className='navbarh'>
                   <div className='navsec' style={{backgroundColor:colorlist[0].bgColor1,margin:'0px',padding:'0px 10px 0px 10px'}}>
                       <ul>
-                          <Link to='/home' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>HOME</Link>
-                          <Link to='/account' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>ACCOUNTS</Link>
-                          <Link to='/scholar' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>
+                          <Link  to='/home'  style={{color:'black',textDecoration:'none',fontWeight:'700'}}>
+                            HOME
+                          </Link>
+                          <Link to='/account' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>ACCOUNTS</Link>
+                          <Link onClick={() => setActive(2)} to='/scholar'  className={active === 2 ? 'activeBar' : 'link'} style={{color:'black',textDecoration:'none',fontWeight:'700'}}>
                           <div className="dropdown">
                           <Badge 
                             anchorOrigin={{
@@ -295,15 +292,20 @@ const SetReadNotif = async(val) =>{
                               horizontal: 'right',
                             }} 
                           sx={{
-                            paddingRight:'10px'
+                            paddingRight:'10px',
+                            position:'absolute',
+                            right:'-15px',
+                            top:'10px'
                           }}                         
-                          badgeContent={notSub} color='primary' showZero><Link to='/scholar' className='droptbn' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>SCHOLAR</Link></Badge>
+                          badgeContent={notSub} color='primary' showZero>
+                            </Badge>
+                          <Link to='/scholar' className='droptbn' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>SCHOLAR</Link>
                           <div className="dropdown-content" style={{color:'black',textDecoration:'none',fontWeight:'700',backgroundColor:colorlist[0].bgColor1}}>
                           <Link to='/scholar' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>Document</Link>
                           <Link to='/scholar/info' className='link' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>Appointment</Link>
                           </div>
                           </div>
-                            </Link>
+                          </Link>
                           <Link to='/news' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>NEWS</Link>
                           <Link to='/announcement' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>ANNOUNCEMENT</Link>
                           <Link to='/trivia' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>TRIVIA</Link>
@@ -311,7 +313,7 @@ const SetReadNotif = async(val) =>{
                       </ul>
                   </div>
           </div>
-    </React.Fragment>
+    </>
   )
 }
 

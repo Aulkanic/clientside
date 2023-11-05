@@ -397,12 +397,11 @@ const Renewal = () => {
                             <Form.Group as={Col}>
                             <Form.Label className='frmlabel'>Phone Number</Form.Label>
                             <div style={{position:'relative'}}>
-                            <span style={{position:'absolute',bottom:'6.5px',left:'8px',fontSize:'15px',color:'black',fontWeight:'bold',display:'flex'}}><p style={{margin:'0px',marginTop:'-2px'}}>+</p>63-</span>
+                          
                             <Form.Control 
                             type="text" 
                             name='Phone Number'
                             value={phoneNum} 
-                            style={{paddingLeft:'42px'}}
                             placeholder={data.phoneNum}
                             onChange={(e) =>setPhoneNum(e.target.value)}
                             />

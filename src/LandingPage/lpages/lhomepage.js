@@ -50,7 +50,7 @@ function Lhomepage() {
             <Card sx={{padding:'10px'}}>
               <Typography sx={{fontSize:'25px'}}>What is Pondo Para sa Iskolar ng Bayan?</Typography>
               <Typography sx={{fontSize:'20px'}}>
-              The Iskolar ng bayan ng Marilao is an ordinance started by Juanito "Tito" Santiago as mayor of the Philippines from 2013-2019. 
+              The Iskolar ng bayan ng Marilao is an ordinance started by Juanito "Tito" Santiago as mayor of the Marilao from 2013-2019. 
               The scholarship program is written by Counselor Willie Diaz and was started in 2014.
                It aims to help working students focus on their academics without worrying about their finances, 
                and will give them more time to learn and have higher chances of having high-performing students in the marilao.

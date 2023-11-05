@@ -137,17 +137,28 @@ function Applicationfrm() {
         </Stepper>
         
     </div>
-    <div className="ribbon-header">
-    <div className="ribbon-header-text">
-      {currentStep === 1 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>{t("Personal Information")}</h2>)}
-      {currentStep === 2 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>{t("Parent's Information")}</h2>)}
-      {currentStep === 3 && (<h2 style={{color:"#0b4980",marginTop:'10px'}}>{t("Other Information")}</h2>)}
-      <LanguageSwitcher />    
+    <div className="ribbon-header" style={{position:'relative',marginBottom:'10px',width:'80%'}}>
+    <div className="ribbon-header-text" style={{width:'100%',backgroundColor:'#043F97'}}>
+      {currentStep === 1 && (<h2 style={{color:"white"}}>{t("Personal Information")}</h2>)}
+      {currentStep === 2 && (<h2 style={{color:"white"}}>{t("Parent's Information")}</h2>)}
+      {currentStep === 3 && (<h2 style={{color:"white"}}>{t("Other Information")}</h2>)}
+
     </div>
-    <div style={{paddingLeft:'15px'}}>
-     {currentStep !== 3 && currentStep !== 4 && <p style={{paddingLeft:'5px',fontStyle:'italic'}}>{t("Please use UPPERCASE FORMAT to fill up this application form")}.</p>}
+    <div style={{paddingLeft:'15px',marginTop:'20px',marginBottom:'20px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+      <div>
+      {currentStep !== 3 && currentStep !== 4 && (<>
+     <p style={{paddingLeft:'5px',fontStyle:'italic',color:'black',fontWeight:'300'}}>{t("Please use UPPERCASE FORMAT to fill up this application form")}.
+     </p>
+     <p style={{paddingLeft:'5px',fontStyle:'italic',color:'black',fontWeight:'300'}}>{t("Please fill in the required fields marked with * to complete the form")}</p>
+     <p style={{paddingLeft:'5px',fontStyle:'italic',color:'black',fontWeight:'300'}}>{t("Review all fields in the online form carefully and provide complete and accurate information.")}</p>
+     </>)}
      {currentStep === 3 && <p style={{paddingLeft:'5px',fontStyle:'italic'}}>Please complete the form by selecting your answers from the available choices.</p>}
      {currentStep === 4 && null}
+      </div>
+
+     <div style={{width:'max-content'}}>
+      <LanguageSwitcher />  
+      </div>
     </div>
   </div>
    

@@ -54,11 +54,11 @@
 }
 .h4head{
     font-size: 30px;
-    color: #0b4980;
+    color: white;
+    padding: 10px;
 }
 .containerform{
     margin-top: -20px;
-    padding: 15px;
     margin-bottom: 20px;
     line-height: 25px;
 }
