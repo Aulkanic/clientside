@@ -335,17 +335,22 @@ function Persona() {
           ...prevUserData,
           siblings: siblings, 
         }));
-        const str1 = userData.motherName.charAt(0).toUpperCase() + userData.motherName.slice(1).toLowerCase();
-        const str2 = userData.motherlName.charAt(0).toUpperCase() + userData.motherlName.slice(1).toLowerCase();
-        const str3 = userData.fatherName.charAt(0).toUpperCase() + userData.fatherName.slice(1).toLowerCase();
-        const str4 = userData.fatherlName.charAt(0).toUpperCase() + userData.fatherlName.slice(1).toLowerCase();
-        const str5 = userData.firstName.charAt(0).toUpperCase() + userData.firstName.slice(1).toLowerCase();
-        const str6 = userData.lastName.charAt(0).toUpperCase() + userData.lastName.slice(1).toLowerCase();
+        function toTitleCase(str) {
+          return str.replace(/\w\S*/g, function(txt){
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+          });
+        }
+        const str1 = toTitleCase(userData.motherName);
+        const str2 = toTitleCase(userData.motherlName);
+        const str3 = toTitleCase(userData.fatherName);
+        const str4 = toTitleCase(userData.fatherlName);
+        const str5 = toTitleCase(userData.firstName);
+        const str6 = toTitleCase(userData.lastName);
         const userName = `${str5} ${str6}`
         const groupedNames = {
           motherName: `${str1} ${str2}`,
           fatherName: `${str3} ${str4}`,
-          siblingNames: siblings.length > 0 ? [...siblings.map(sibling => `${sibling.firstName.charAt(0).toUpperCase() + sibling.firstName.slice(1).toLowerCase()} ${sibling.lastName.charAt(0).toUpperCase() + sibling.lastName.slice(1).toLowerCase()}`), userName].sort() : [],
+          siblingNames: siblings.length > 0 ? [...siblings.map(sibling => `${toTitleCase(sibling.firstName)} ${toTitleCase(sibling.lastName)}`), userName].sort() : [],
 
         };
         
