@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './../css/mainpage.css'
 import './../css/Navbar.css'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { FetchingProfileUser, Logoutuser,FetchNotif,ReadNotifi,FetchingBmccSchoinfo, ListofReq, ListofSub } from '../../Api/request'
 import Avatar from '@mui/material/Avatar';
 import { useContext } from "react";
@@ -37,6 +37,7 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const { userdetails } = useSelector((state) => state.login);
     const { colorlist} = useContext(color);
+    const navigate = useNavigate()
     const applicantNum = userdetails.applicantNum;
     const [picture, setProfile] = React.useState([]);
     const [scholar,setScholar] = useState([])
@@ -261,14 +262,14 @@ const SetReadNotif = async(val) =>{
         <Fade in={open}>
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
-              {notifInf.title}
+              {notifInf.title}.
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              {notifInf.content}{notifInf.title === 'Renewal Application' ? (
+              {notifInf.content}<br/>{notifInf.title === 'Renewal Application' ? (
               <>
               <Link to='/renewal'>Go now</Link>
               </>
-            ) : null}
+            ) : (<Link to={`/${notifInf.link}`}> Go now.</Link>)}
             </Typography>
 
           </Box>
@@ -284,7 +285,7 @@ const SetReadNotif = async(val) =>{
                             HOME
                           </Link>
                           <Link to='/account' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>ACCOUNTS</Link>
-                          <Link onClick={() => setActive(2)} to='/scholar'  className={active === 2 ? 'activeBar' : 'link'} style={{color:'black',textDecoration:'none',fontWeight:'700'}}>
+                          <Link to='/scholar' style={{color:'black',textDecoration:'none',fontWeight:'700'}}>
                           <div className="dropdown">
                           <Badge 
                             anchorOrigin={{

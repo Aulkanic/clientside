@@ -100,18 +100,18 @@ const Schoinfo = () => {
                   <p>Response: {data.canGo}</p>
                   <p>Location: {data.Location}</p>
                   <p>Time: {data.timeStart} - {data.timeEnd}</p>
-                  {data.statusApp === 'Ongoing' && data.isInterview === 'No' ? 
+                  {data.statusApp === 'Ongoing' && data.isInterview === 'No' && data.canGo === 'Pending' ? 
                   (<div>
-                  {data.canGo !== 'Yes' ? (<button style={{marginRight:'10px'}} className='myButton1' onClick={() =>willgo(data,'Yes')}>
+                  <button style={{marginRight:'10px'}} className='myButton1' onClick={() =>willgo(data,'Yes')}>
                     Accept
-                  </button>) : null}
-                  {data.canGo === 'No' ? null : (<button disabled={data.canGo === 'No'} className='myButton2' onClick={() =>handleClickOpen(data)}>
+                  </button>
+                  <button disabled={data.canGo === 'No'} className='myButton2' onClick={() =>handleClickOpen(data)}>
                     Decline
-                  </button>)}
+                  </button>
                   </div>) : data.isInterview === 'Reappoint' ? (<>
                   <p>You've been Re-Appointed</p>
                   </>) : data.isPassed !== 'Pending' ? (<p>
-                    <p>Done</p>
+                    <p>You've already responsed</p>
                   </p>) : null}
                 </div>
                 </div>

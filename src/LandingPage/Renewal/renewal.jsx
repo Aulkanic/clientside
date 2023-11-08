@@ -315,7 +315,7 @@ const Renewal = () => {
         return details
       };
     const isOpen = isRenewalForm();
-      console.log(yearLevel)
+   
   return (
     <>
     <StyledBackdrop open={showBackdrop}>
@@ -401,7 +401,7 @@ const Renewal = () => {
                             <Form.Control 
                             type="text" 
                             name='Phone Number'
-                            value={phoneNum} 
+                            value={phoneNum || data.phoneNum} 
                             placeholder={data.phoneNum}
                             onChange={(e) =>setPhoneNum(e.target.value)}
                             />
@@ -426,13 +426,13 @@ const Renewal = () => {
                                 <option value={'LOMA DE GATO'}>LOMA DE GATO</option>
                                 <option value={'NAGBALON'}>NAGBALON</option>
                                 <option value={'PATUBIG'}>PATUBIG</option>
-                                <option value={'POBLACION I'}>POBLACION I</option>
-                                <option value={'POBLACION II'}>POBLACION II</option>
-                                <option value={'PRENZA I'}>PRENZA I</option>
-                                <option value={'PRENZA II'}>PRENZA II</option>
+                                <option value={'POBLACION 1'}>POBLACION 1</option>
+                                <option value={'POBLACION 2'}>POBLACION 2</option>
+                                <option value={'PRENZA 1'}>PRENZA 1</option>
+                                <option value={'PRENZA 2'}>PRENZA 2</option>
                                 <option value={'SAOG'}>SAOG</option>
-                                <option value={'STA. ROSA I'}>STA. ROSA I</option>
-                                <option value={'STA. ROSA II'}>STA. ROSA II</option>
+                                <option value={'STA. ROSA 1'}>STA. ROSA 1</option>
+                                <option value={'STA. ROSA 2'}>STA. ROSA 2</option>
                                 <option value={'TABING-ILOG'}>TABING-ILOG</option>
                               </Form.Select>
                             </Form.Group>
@@ -454,10 +454,10 @@ const Renewal = () => {
                             onChange={(e) =>setYearlevel(e.target.value)}
                             >
                             <option value={''}>SELECT YOUR YEAR LEVEL</option>
-                            <option disabled={data.yearLevel === 'JUNIOR HIGHSCHOOL' || data.yearLevel === 'SENIOR HIGHSCHOOL' || data.yearLevel === 'COLLEGE'} value={'ELEMENTARY'}>ELEMENTARY</option>
-                            <option disabled={data.yearLevel === 'COLLEGE' || data.yearLevel === 'SENIOR HIGHSCHOOL'} value={'JUNIOR HIGHSCHOOL'}>JUNIOR HIGHSCHOOL</option>
-                            <option disabled={data.yearLevel === 'COLLEGE' || data.yearLevel === 'ELEMENTARY'} value={'SENIOR HIGHSCHOOL'}>SENIOR HIGHSCHOOL</option>
-                            <option disabled={data.yearLevel === 'ELEMENTARY'} value={'COLLEGE'}>COLLEGE</option>
+                            <option disabled={data.yearLevel === 'Junior Highschool' || data.yearLevel === 'Senior Highschool' || data.yearLevel === 'College'} value={'Elementary'}>ELEMENTARY</option>
+                            <option disabled={data.yearLevel === 'College' || data.yearLevel === 'Senior Highschool'} value={'Junior Highschool'}>JUNIOR HIGHSCHOOL</option>
+                            <option disabled={data.yearLevel === 'College' || data.yearLevel === 'Elementary'} value={'Senior Highschool'}>SENIOR HIGHSCHOOL</option>
+                            <option disabled={data.yearLevel === 'Elementary'} value={'College'}>COLLEGE</option>
                             </Form.Select>
                             </Form.Group>
                             <Form.Group as={Col}>
@@ -467,7 +467,7 @@ const Renewal = () => {
                             placeholder={data.gradeLevel}
                             onChange={(e) =>setGradelevel(e.target.value)}
                             >
-                              {(yearLevel ? yearLevel === 'ELEMENTARY' : data.yearLevel === 'ELEMENTARY') && (<>
+                              {(yearLevel ? yearLevel === 'Elementary' : data.yearLevel === 'Elementary') && (<>
                               <option value={''}>SELECT YOUR GRADE LEVEL</option>
                               <option value={'GRADE 1'}>GRADE 1</option>
                               <option value={'GRADE 2'}>GRADE 2</option>
@@ -477,7 +477,7 @@ const Renewal = () => {
                               <option value={'GRADE 6'}>GRADE 6</option>
 
                               </>)}
-                              {(yearLevel ? yearLevel === 'JUNIOR HIGHSCHOOL' : data.yearLevel === 'JUNIOR HIGHSCHOOL') && (<>
+                              {(yearLevel ? yearLevel === 'Junior Highschool' : data.yearLevel === 'Junior Highschool') && (<>
                               <option value={''}>SELECT YOUR GRADE LEVEL</option>
                               <option value={'GRADE 7'}>GRADE 7</option>
                               <option value={'GRADE 8'}>GRADE 8</option>
@@ -485,13 +485,13 @@ const Renewal = () => {
                               <option value={'GRADE 10'}>GRADE 10</option>
 
                               </>)}
-                              {(yearLevel ? yearLevel === 'SENIOR HIGHSCHOOL' : data.yearLevel === 'SENIOR HIGHSCHOOL') && (<>
+                              {(yearLevel ? yearLevel === 'Senior Highschool' : data.yearLevel === 'Senior Highschool') && (<>
                                 <option value={''}>SELECT YOUR GRADE LEVEL</option>
                                 <option value={'GRADE 11'}>GRADE 11</option>
                                 <option value={'GRADE 12'}>GRADE 12</option>
 
                               </>)}
-                              {(yearLevel ? yearLevel === 'COLLEGE' : data.yearLevel === 'COLLEGE') && (<>
+                              {(yearLevel ? yearLevel === 'College' : data.yearLevel === 'College') && (<>
                                 <option value={''}>SELECT YOUR GRADE LEVEL</option>
                                 <option value={'1ST YEAR'}>1ST YEAR</option>
                                 <option value={'2ND YEAR'}>2ND YEAR</option>
@@ -508,7 +508,7 @@ const Renewal = () => {
                             name='guardian'
                             value={guardian} 
                             placeholder={data.guardian}
-                            onChange={(e) =>setGuardian(e.target.value)}
+                            onChange={(e) =>setGuardian(e.target.value.toUpperCase())}
                             />
                             </Form.Group>
                             <br/>
