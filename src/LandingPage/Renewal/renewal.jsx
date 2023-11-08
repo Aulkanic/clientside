@@ -120,9 +120,12 @@ const Renewal = () => {
         try {
             event.preventDefault();
             const errors = {};
-            if (!/^9\d{9}$/.test(phoneNum)) {
-              errors.contactNum = "Invalid phone number.";
+            if(phoneNum){
+              if (!/^9\d{9}$/.test(phoneNum)) {
+                errors.contactNum = "Invalid phone number.";
+              }
             }
+
             if (!errors || Object.keys(errors).length > 0) {
               setErrors(errors);
               return;
@@ -401,7 +404,7 @@ const Renewal = () => {
                             <Form.Control 
                             type="text" 
                             name='Phone Number'
-                            value={phoneNum || data.phoneNum} 
+                            value={phoneNum} 
                             placeholder={data.phoneNum}
                             onChange={(e) =>setPhoneNum(e.target.value)}
                             />
