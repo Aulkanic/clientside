@@ -19,9 +19,10 @@ import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import emptyNotif from '../assets/emptynot.png'
 import MYDO from '../assets/mydo.png';
+import { MdOutlineClear } from 'react-icons/md';
 
 const style = {
-  position: 'absolute',
+  position: 'relative',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
@@ -30,7 +31,7 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  borderRadius:'10px'
+  borderRadius:'5px'
 };
 
 const Navbar = () => {
@@ -261,6 +262,9 @@ const SetReadNotif = async(val) =>{
       >
         <Fade in={open}>
           <Box sx={style}>
+            <button onClick={handleClose} style={{position:'absolute',right:7,top:5,backgroundColor:'red',border:'none',padding:'3px 10px 5px 10px',borderRadius:'5px',color:'white'}}>
+              <MdOutlineClear/>
+            </button>
             <Typography id="transition-modal-title" variant="h6" component="h2">
               {notifInf.title}.
             </Typography>

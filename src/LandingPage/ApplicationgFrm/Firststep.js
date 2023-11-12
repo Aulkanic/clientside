@@ -372,7 +372,7 @@ useEffect(() => {
               <option value={'SAOG'}>SAOG</option>
               <option value={'STA. ROSA 1'}>STA. ROSA 1</option>
               <option value={'STA. ROSA 2'}>STA. ROSA 2</option>
-              <option value={'TABING-ILOG'}>TABING-ILOG</option>
+              <option value={'TABING ILOG'}>TABING ILOG</option>
             </Form.Select>
             {errors.baranggay && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.baranggay}</p>}
           </Form.Group>

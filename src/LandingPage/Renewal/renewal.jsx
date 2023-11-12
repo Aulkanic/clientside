@@ -85,7 +85,7 @@ const Renewal = () => {
         setShowBackdrop(true)
         await FetchingBmccSchocODE.FETCH_SCHOLARSCODE(scholarCode)
         .then(async(res) =>{
-          
+          console.log(res)
             if(res.data.success === 0){
                 setShowBackdrop(false)
                 swal('ERROR',res.data.message,'error')
@@ -204,6 +204,7 @@ const Renewal = () => {
             formData.append('name', user.Name);
             formData.append('scholarCode', user.scholarCode);
             formData.append('schoApplied', user.scholarshipApplied);
+            formData.append('applicantNum', user.applicantNum);
             formData.append('yearLevel', yearLevel || user.yearLevel);
             formData.append('baranggay', baranggay || user.Baranggay);
             formData.append('batch', user.Batch);
@@ -230,7 +231,6 @@ const Renewal = () => {
             } else {
             
                 try {
-                    const errors = [];
                     let counter = 0;
               
                     for (let index = 0; index < file.length; index++) {
@@ -420,23 +420,23 @@ const Renewal = () => {
                                 placeholder={data.Baranggay} 
                                 onChange={(e) => setBaranggay(e.target.value)}
                               >
-                                <option value={''}>PLEASE SELECT BARANGGAY</option>
-                                <option value={'ABANGAN NORTE'}>ABANGAN NORTE</option>
-                                <option value={'ABANGAN SUR'}>ABANGAN SUR</option>
-                                <option value={'IBAYO'}>IBAYO</option>
-                                <option value={'LAMBAKIN'}>LAMBAKIN</option>
-                                <option value={'LIAS'}>LIAS</option>
-                                <option value={'LOMA DE GATO'}>LOMA DE GATO</option>
-                                <option value={'NAGBALON'}>NAGBALON</option>
-                                <option value={'PATUBIG'}>PATUBIG</option>
-                                <option value={'POBLACION 1'}>POBLACION 1</option>
-                                <option value={'POBLACION 2'}>POBLACION 2</option>
-                                <option value={'PRENZA 1'}>PRENZA 1</option>
-                                <option value={'PRENZA 2'}>PRENZA 2</option>
-                                <option value={'SAOG'}>SAOG</option>
-                                <option value={'STA. ROSA 1'}>STA. ROSA 1</option>
-                                <option value={'STA. ROSA 2'}>STA. ROSA 2</option>
-                                <option value={'TABING-ILOG'}>TABING-ILOG</option>
+                                <option value={''}></option>
+                                <option value={'Abangan Norte'}>ABANGAN NORTE</option>
+                                <option value={'Abangan Sur'}>ABANGAN SUR</option>
+                                <option value={'Ibayo'}>IBAYO</option>
+                                <option value={'Lambakin'}>LAMBAKIN</option>
+                                <option value={'Lias'}>LIAS</option>
+                                <option value={'Loma De Gato'}>LOMA DE GATO</option>
+                                <option value={'Nagbalon'}>NAGBALON</option>
+                                <option value={'Patubig'}>PATUBIG</option>
+                                <option value={'Poblacion 1'}>POBLACION 1</option>
+                                <option value={'Poblacion 2'}>POBLACION 2</option>
+                                <option value={'Prenza 1'}>PRENZA 1</option>
+                                <option value={'Prenza 2'}>PRENZA 2</option>
+                                <option value={'Saog'}>SAOG</option>
+                                <option value={'Sta. Rosa 1'}>STA. ROSA 1</option>
+                                <option value={'Sta. Rosa 2'}>STA. ROSA 2</option>
+                                <option value={'Tabing Ilog'}>TABING-ILOG</option>
                               </Form.Select>
                             </Form.Group>
                             <Form.Group as={Col}>
@@ -456,7 +456,7 @@ const Renewal = () => {
                             placeholder={data.yearLevel} 
                             onChange={(e) =>setYearlevel(e.target.value)}
                             >
-                            <option value={''}>SELECT YOUR YEAR LEVEL</option>
+                             <option value={''}></option>
                             <option disabled={data.yearLevel === 'Junior Highschool' || data.yearLevel === 'Senior Highschool' || data.yearLevel === 'College'} value={'Elementary'}>ELEMENTARY</option>
                             <option disabled={data.yearLevel === 'College' || data.yearLevel === 'Senior Highschool'} value={'Junior Highschool'}>JUNIOR HIGHSCHOOL</option>
                             <option disabled={data.yearLevel === 'College' || data.yearLevel === 'Elementary'} value={'Senior Highschool'}>SENIOR HIGHSCHOOL</option>
@@ -471,35 +471,35 @@ const Renewal = () => {
                             onChange={(e) =>setGradelevel(e.target.value)}
                             >
                               {(yearLevel ? yearLevel === 'Elementary' : data.yearLevel === 'Elementary') && (<>
-                              <option value={''}>SELECT YOUR GRADE LEVEL</option>
-                              <option value={'GRADE 1'}>GRADE 1</option>
-                              <option value={'GRADE 2'}>GRADE 2</option>
-                              <option value={'GRADE 3'}>GRADE 3</option>
-                              <option value={'GRADE 4'}>GRADE 4</option>
-                              <option value={'GRADE 5'}>GRADE 5</option>
-                              <option value={'GRADE 6'}>GRADE 6</option>
+                                <option value={''}></option>
+                              <option value={'Grade 1'}>GRADE 1</option>
+                              <option value={'Grade 2'}>GRADE 2</option>
+                              <option value={'Grade 3'}>GRADE 3</option>
+                              <option value={'Grade 4'}>GRADE 4</option>
+                              <option value={'Grade 5'}>GRADE 5</option>
+                              <option value={'Grade 6'}>GRADE 6</option>
 
                               </>)}
                               {(yearLevel ? yearLevel === 'Junior Highschool' : data.yearLevel === 'Junior Highschool') && (<>
-                              <option value={''}>SELECT YOUR GRADE LEVEL</option>
-                              <option value={'GRADE 7'}>GRADE 7</option>
-                              <option value={'GRADE 8'}>GRADE 8</option>
-                              <option value={'GRADE 9'}>GRADE 9</option>
-                              <option value={'GRADE 10'}>GRADE 10</option>
+                                <option value={''}></option>
+                              <option value={'Grade 7'}>GRADE 7</option>
+                              <option value={'Grade 8'}>GRADE 8</option>
+                              <option value={'Grade 9'}>GRADE 9</option>
+                              <option value={'Grade 10'}>GRADE 10</option>
 
                               </>)}
                               {(yearLevel ? yearLevel === 'Senior Highschool' : data.yearLevel === 'Senior Highschool') && (<>
-                                <option value={''}>SELECT YOUR GRADE LEVEL</option>
-                                <option value={'GRADE 11'}>GRADE 11</option>
-                                <option value={'GRADE 12'}>GRADE 12</option>
+                                <option value={''}></option>
+                                <option value={'Grade 11'}>GRADE 11</option>
+                                <option value={'Grade 12'}>GRADE 12</option>
 
                               </>)}
                               {(yearLevel ? yearLevel === 'College' : data.yearLevel === 'College') && (<>
-                                <option value={''}>SELECT YOUR GRADE LEVEL</option>
-                                <option value={'1ST YEAR'}>1ST YEAR</option>
-                                <option value={'2ND YEAR'}>2ND YEAR</option>
-                                <option value={'3RD YEAR'}>3RD YEAR</option>
-                                <option value={'4TH YEAR'}>4TH YEAR</option>
+                                <option value={''}></option>
+                                <option value={'1st Year'}>1ST YEAR</option>
+                                <option value={'2nd Year'}>2ND YEAR</option>
+                                <option value={'3rd Year'}>3RD YEAR</option>
+                                <option value={'4th Year'}>4TH YEAR</option>
 
                               </>)}
                             </Form.Select>
