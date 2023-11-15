@@ -39,7 +39,7 @@ function Firststep() {
   const [rule,setRule] = useState([])
   const [open1, setOpen1] = useState(false);
   const savehnum = localStorage.getItem('housenum')
-  const [housenum,setHousenum] = useState('' || savehnum)
+  const [housenum,setHousenum] = useState(savehnum || savehnum !== null ? savehnum : '')
 
   const handleClose = () => {
     setOpen(false);
@@ -93,6 +93,7 @@ function Firststep() {
         const schodata = scholist.data.SchoCat;
         const schoav = schodata.filter(data => data.status === 'Open')
         const rul = await Rulelist.FETCH_RULE()
+        console.log(rul)
         setRule(rul.data.result[0])
         setScholarProg(schoav);
       } catch (error) {
@@ -128,19 +129,19 @@ function Firststep() {
       errors.birthday = "Birthday is required";
     }
     if (!housenum || housenum === '') {
-      errors.housenum = "This field is required";
+      errors.housenum = "House No./Street is required";
     }
     if (!userData.baranggay || userData.baranggay === '') {
       errors.baranggay = "Select your Baranggay";
     }
     if (!userData.School || userData.School === '') {
-      errors.School = "This field is required";
+      errors.School = "School is required";
     }
     if (!userData.gradeLevel || userData.gradeLevel === '') {
-      errors.gradeLevel = "This field is required";
+      errors.gradeLevel = "Grade Level is required";
     }
     if (!userData.SchoolAddress || userData.SchoolAddress === '') {
-      errors.SchoolAddress = "This field is required";
+      errors.SchoolAddress = "SchoolAddress is required";
     }
     if (!userData.yearLevel || userData.yearLevel === '') {
       errors.yearLevel = "Select your Year Level";
@@ -159,14 +160,14 @@ function Firststep() {
     }else if(userData.age <=5){
       errors.age = 'Minimum age for application is five years old';
     }
-    if (userData.birthPlace === '') {
+    if (userData.birthPlace === '' || !userData.birthPlace) {
       errors.birthPlace = "Birth of Place is required";
-    } else if (userData.birthPlace.length === 1) {
+    } else if (userData.birthPlace?.length === 1) {
       errors.birthPlace = "Input must not contain a single letter.";
     }else if (/[!@#$%^&*/_()?":{}|<>]/.test(userData.age)) {
       errors.age = "Special characters are not allowed.";
     }
-    if (userData.contactNum === '') {
+    if (userData.contactNum === '' || !userData.contactNum) {
       errors.contactNum = "Phone Number is required";
     } else if (!/^9\d{9}$/.test(userData.contactNum)) {
       errors.contactNum = "Invalid phone number.";
@@ -291,20 +292,28 @@ useEffect(() => {
           <div className='containerform'>
             <div style={{padding:'20px'}}>
             <Row className="mb-3">
-          <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
-              <Form.Control 
-              type="text" 
-              value={userData['firstName']} 
-              disabled
-              />
-            </Form.Group>
             <Form.Group as={Col}>
               <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
               <Form.Control
                type="text" 
                value={userData['lastName']} 
-               disabled
+               readOnly
+               />
+            </Form.Group>
+          <Form.Group as={Col}>
+              <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
+              <Form.Control 
+              type="text" 
+              value={userData['firstName']} 
+              readOnly
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
+              <Form.Control
+               type="text" 
+               value={userData['middleName']} 
+               readOnly
                />
             </Form.Group>
             <Form.Group className='col-md-3'>
@@ -333,7 +342,6 @@ useEffect(() => {
             </Form.Select>
             </Form.Group>
             <div>
-
             </div>
           </Row>
           <Row className="mb-3">
@@ -385,7 +393,6 @@ useEffect(() => {
                 value={'Marilao'}
                 name="city"
                 readOnly
-                disabled
               />
             </Form.Group>
 
@@ -396,7 +403,6 @@ useEffect(() => {
                 value={'Bulacan'}
                 name="province"
                 readOnly
-                disabled
               />
             </Form.Group>
           </Row>
@@ -427,7 +433,7 @@ useEffect(() => {
 
             <Form.Group as={Col}>
             <Form.Label className='frmlabel'>{t("Age")}</Form.Label>
-              <Form.Control value={userData['age']} type="number" disabled />
+              <Form.Control value={userData['age']} type="number" readOnly />
               {errors.age && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.age}</p>}
             </Form.Group>
           </Row>

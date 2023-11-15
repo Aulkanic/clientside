@@ -273,7 +273,7 @@ const SetReadNotif = async(val) =>{
               <>
               <Link to='/renewal'>Go now</Link>
               </>
-            ) : (<Link to={`/${notifInf.link}`}> Go now.</Link>)}
+            ) : notifInf.link === '' ? null : (<Link to={`/${notifInf.link}`}> Go now.</Link>)}
             </Typography>
 
           </Box>

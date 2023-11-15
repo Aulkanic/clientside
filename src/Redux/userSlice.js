@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     fname:'',
     lname:'',
+    mname:'',
     email:'',
     applicantNum:'',
 }
@@ -12,9 +13,10 @@ const userSlice = createSlice({
     initialState,
     reducers:{
         setName:(state,action) =>{
-            const { fname,lname,email,applicantNum} = action.payload;
+            const { fname,lname,mname,email,applicantNum} = action.payload;
             state.fname = fname;
             state.lname = lname;
+            state.mname = mname;
             state.email = email;
             state.applicantNum = applicantNum;
         }

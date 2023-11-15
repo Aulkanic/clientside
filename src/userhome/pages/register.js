@@ -61,6 +61,7 @@ const Register = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [fname, setfname] = useState('');
+    const [mname, setmname] = useState('');
     const [lname, setlname] = useState('');
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState(new Array(6).fill(''));
@@ -200,27 +201,27 @@ const Register = () => {
             isValid: !password || !/\s/.test(password),
           },
         ];
-        const validateName = (name,lname) => {
+        const validateName = (name,lname,mname) => {
           return [
             {
               description: 'Capitalize all letter of firstname and lastname.',
-              isValid: !name || !lname || /^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(name) && /^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(lname),
+              isValid: (!name || !lname) || (/^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(name) && /^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(lname) && /^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(mname)),
             },
             {
               description: 'At least 3 to 45 characters only.',
-              isValid: !name || !lname || name.length >= 2 && name.length <= 45 && lname.length >= 2 && lname.length <= 45,
+              isValid: (!name || !lname) || (name.length >= 2 && name.length <= 45 && lname.length >= 2 && lname.length <= 45),
             },
             {
               description: 'No numbers.',
-              isValid: !/\d/.test(name) && !/\d/.test(lname) || !name || !lname, 
+              isValid: (!/\d/.test(name) && !/\d/.test(lname) && !/\d/.test(mname)) || (!name || !lname), 
             },
           ];
         };
-        const validationforName = validateName(fname,lname);
+        const validationforName = validateName(fname,lname,mname);
         setValidationResults1(validationforName)
         setValidationResults(validationCriteria);
 
-    }, [password,fname,lname,validationResults, validationResults1]);
+    }, [password,fname,lname,mname,validationResults, validationResults1]);
 
     useEffect(() => {
       // Check if any of the validation results are invalid
@@ -303,17 +304,18 @@ const Register = () => {
       return;
     }
     setLoading(true)
-    CreatingRegistry.CREATE_REGISTRY({fname,lname,email,password})
+    CreatingRegistry.CREATE_REGISTRY({fname,lname,mname,email,password})
     .then(res => {
       if(res.data.message === 'Created'){
         const applicantNum = res.data.data.applicantNum;
         const fname = res.data.data.fname;
         const lname = res.data.data.lname;
+        const mname = res.data.data.mname;
         setResstat('200')
         setSnackbarMessage('Account Created');
         setSnackbarOpen(true); 
         navigate('/ApplicationForm');
-        dispatch(setName({fname,lname,email,applicantNum}))
+        dispatch(setName({fname,lname,mname,email,applicantNum}))
         setLoading(false)
       
       }else{
@@ -381,6 +383,7 @@ const Register = () => {
       .catch(err => console.log(err));
     }
 const handlerFnameInput = (e) => setfname(e.target.value.toUpperCase())
+const handlerMnameInput = (e) => setmname(e.target.value.toUpperCase())
 const handlerLnameInput = (e) => setlname(e.target.value.toUpperCase())
 const handlerEmailInput = (e) => setEmail(e.target.value)
 const handlerPasswordInput = (e) => setPassword(e.target.value)
@@ -404,9 +407,10 @@ const findCreatedAcc = async() =>{
         const result = res.data.result[0];
         const fname = result.fname;
         const lname = result.lname;
+        const mname = result.mname;
         const email = result.email;
         const applicantNum = result.applicantNum;
-        dispatch(setName({fname,lname,email,applicantNum}))
+        dispatch(setName({fname,lname,mname,email,applicantNum}))
         navigate('/ApplicationForm')
       }else{
         Swal.fire(res.data.message)
@@ -613,8 +617,8 @@ const findCreatedAcc = async() =>{
                         <div className='Fieldlog'>
                         <div className='fdet'>
                         <div className='inputeval'>
-                          <div style={{width:'100%'}}>
-                          <label className='labelsinp' htmlFor="">First Name</label>
+                        <div style={{width:'100%'}}>
+                          <label className='labelsinp' htmlFor="">First Name *</label>
                           <input      
                           id="input-with-icon-textfield"
                           label="First Name"
@@ -633,8 +637,21 @@ const findCreatedAcc = async() =>{
                                   {errors.fname}
                                 </p>}
                           </div>
+                        <div style={{width:'100%'}}>
+                          <label className='labelsinp' htmlFor="">Middle Name</label>
+                          <input      
+                          id="input-with-icon-textfield"
+                          label="Middle Name"
+                          className='inputss'
+                          style={{fontStyle:'italic',fontSize:'14px',paddingLeft:'15px'}}
+                          placeholder='Please enter your middle name ...'
+                          value={mname}
+                          onChange={handlerMnameInput}
+                        />
+
+                          </div>
                           <div style={{width:'100%'}}>
-                          <label className='labelsinp' htmlFor="">Last Name</label>
+                          <label className='labelsinp' htmlFor="">Last Name *</label>
                           <input      
                               id="input-with-icon-textfield"
                               label="Last Name"
@@ -664,7 +681,7 @@ const findCreatedAcc = async() =>{
                         </div>
                         <div className='inputeval'>
                         <div style={{position:'relative'}}>
-                        <label className='labelsinp' htmlFor="">Password</label>
+                        <label className='labelsinp' htmlFor="">Password *</label>
                           <input      
                               id="input-with-icon-textfield"
                               label="Password"

@@ -99,9 +99,15 @@ function Economic() {
       } else {
         console.error("Invalid date format");
       }
-      const fname = userData.firstName.charAt(0).toUpperCase() + userData.firstName.slice(1);
-      const lname = userData.lastName.charAt(0).toUpperCase() + userData.lastName.slice(1);
-      const fullName = `${fname} ${lname}`
+      function toTitleCase(str) {
+        return str?.replace(/\w\S*/g, function(txt){
+          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+      }
+      const fname = toTitleCase(userData.firstName);
+      const lname = toTitleCase(userData.lastName);
+      const mname = toTitleCase(userData.middleName);
+      const fullName = `${fname} ${mname} ${lname}`
       let birthdayValue = formattedBirthday;
 
       const formData = new FormData();
@@ -121,6 +127,7 @@ function Economic() {
       formData.append('fatherEduc', userData.fatherEduc);
       formData.append('fatherName', userData.fatherName);
       formData.append('fatherlName', userData.fatherlName);
+      formData.append('fathermName', userData.fathermName);
       formData.append('fatherOccu', userData.fatherOccu);
       formData.append('fullName', fullName);
       formData.append('gender', userData.gender);
@@ -128,9 +135,11 @@ function Economic() {
       formData.append('guardianAddress', userData.guardianAddress);
       formData.append('guardianName', userData.guardianName);
       formData.append('guardianlName', userData.guardianlName);
+      formData.append('guardianmName', userData.guardianmName);
       formData.append('motherEduc', userData.motherEduc);
       formData.append('motherName', userData.motherName);
       formData.append('motherlName', userData.motherlName);
+      formData.append('mothermName', userData.mothermName);
       formData.append('motherOccu', userData.motherOccu);
       formData.append('relationship', userData.relationship);
       formData.append('gradeLevel', userData.gradeLevel);

@@ -86,7 +86,7 @@ const Faqs = () => {
         <div>
           {faqs?.map((data,index) =>{
             return(
-              <>
+     
               <div style={{margin:'5px'}} key={index}>
               <Accordion expanded={expanded === `panel${index}`} onChange={handleChange(`panel${index}`)}>
               <AccordionSummary
@@ -106,7 +106,7 @@ const Faqs = () => {
               </AccordionDetails>
               </Accordion>
               </div>
-              </>
+  
             )
           })}
 

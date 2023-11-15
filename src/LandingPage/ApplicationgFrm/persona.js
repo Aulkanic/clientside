@@ -69,7 +69,7 @@ function Persona() {
       setSiblings(updatedSiblings);
     };
     const handleAddFields = () =>{
-      setSiblings([...siblings, { firstName: '', lastName: '' }]);
+      setSiblings([...siblings, { firstName: '', lastName: '',middleName:'' }]);
     }
 
     const handleRemoveFields = (index) =>{
@@ -90,6 +90,7 @@ function Persona() {
         setNoFather(true);
         userData.fatherName = 'NONE';
         userData.fatherlName = 'NONE';
+        userData.fathermName = 'NONE';
         userData.fatherEduc = 'NONE'
         userData.fatherOccu = 'NONE'
         setisFather(true);
@@ -100,8 +101,9 @@ function Persona() {
         setNoFather(false)
         userData.fatherName = '';
         userData.fatherlName = '';
-        userData.fatherEduc = ''
-        userData.fatherOccu = ''
+        userData.fathermName = '';
+        userData.fatherEduc = '';
+        userData.fatherOccu = '';
         setisFather(false);
       }
     }
@@ -134,7 +136,7 @@ function Persona() {
    async function Check(){
       const errors = {};
       if (!userData.motherName || userData.motherName === '') {
-        errors.motherName = "This Field is required";
+        errors.motherName = "Mother Name is required";
       } 
       else if (userData.motherName.length === 1) {
         errors.motherName = "Input must not contain a single letter.";
@@ -148,11 +150,8 @@ function Persona() {
       else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.motherName)) {
         errors.motherName = "Special characters are not allowed.";
       }
-       else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.motherName)) {
-        errors.motherName = "First Letter must be Capital";
-      }
       if (!userData.motherlName || userData.motherlName === '') {
-        errors.motherlName = "This Field is required";
+        errors.motherlName = "Mother Lastname is required";
       } 
       else if (userData.motherlName.length === 1) {
         errors.motherlName = "Input must not contain a single letter.";
@@ -166,11 +165,8 @@ function Persona() {
       else if (/[!@#$%^&*/_(),?":{}|<>]/.test(userData.motherlName)) {
         errors.motherlName = "Special characters are not allowed.";
       }
-       else if (userData.motherlName.charAt(0) !== userData.motherlName.charAt(0).toUpperCase()) {
-        errors.motherlName = "First Letter must be Capital";
-      }
       if (!userData.motherOccu || userData.motherOccu === '') {
-        errors.motherOccu = "This Field is required";
+        errors.motherOccu = "Mother Occupation is required";
       } else if (userData.motherOccu.length === 1) {
         errors.motherOccu = "Input must not contain a single letter.";
       } else if (userData.motherOccu.length > 50) {
@@ -183,7 +179,7 @@ function Persona() {
         errors.motherOccu = "First Letter must be Capital";
       }
       if (!userData.motherEduc || userData.motherEduc === '') {
-        errors.motherEduc = "This Field is required";
+        errors.motherEduc = "Mother Education is required";
       } else if (userData.motherEduc.length === 1) {
         errors.motherEduc = "Input must not contain a single letter.";
       } else if (/[0-9]/.test(userData.motherEduc)) {
@@ -194,7 +190,7 @@ function Persona() {
         errors.motherEduc = "First Letter must be Capital";
       }
       if (!userData.fatherName || userData.fatherName === '') {
-        errors.fatherName = "This Field is required";
+        errors.fatherName = "Father Name is required";
       } 
       else if (userData.fatherName.length === 1) {
         errors.fatherName = "Input must not contain a single letter.";
@@ -213,7 +209,7 @@ function Persona() {
       }
 
       if (!userData.fatherlName || userData.fatherlName === '') {
-        errors.fatherlName = "This Field is required";
+        errors.fatherlName = "Father Lastname is required";
       } 
       else if (userData.fatherlName.length === 1) {
         errors.fatherlName = "Input must not contain a single letter.";
@@ -233,7 +229,7 @@ function Persona() {
 
 
       if (!userData.fatherOccu || userData.fatherOccu === '') {
-        errors.fatherOccu = "This Field is required";
+        errors.fatherOccu = "Father Occupation is required";
       } else if (userData.fatherOccu.length === 1) {
         errors.fatherOccu = "Input must not contain a single letter.";
       } else if (userData.fatherOccu.length > 50) {
@@ -246,7 +242,7 @@ function Persona() {
         errors.fatherOccu = "First Letter must be Capital";
       }
       if (!userData.fatherEduc || userData.fatherEduc === '') {
-        errors.fatherEduc = "This Field is required";
+        errors.fatherEduc = "Father Education is required";
       } else if (userData.fatherEduc.length === 1) {
         errors.fatherEduc = "Input must not contain a single letter.";
       } else if (/[0-9]/.test(userData.fatherEduc)) {
@@ -256,11 +252,11 @@ function Persona() {
       } else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.fatherEduc)) {
         errors.fatherEduc = "First Letter must be Capital";
       }
-      if (userData.guardianAddress === '') {
-        errors.guardianAddress = "This Field is required";
+      if (userData.guardianAddress === '' || !userData.guardianAddress) {
+        errors.guardianAddress = "Guardian Address is required";
       } 
       if (!userData.guardianName || userData.guardianName === '') {
-        errors.guardianName = "This Field is required";
+        errors.guardianName = "Guardian Name is required";
       } 
       else if (userData.guardianName.length === 1) {
         errors.guardianName = "Input must not contain a single letter.";
@@ -271,11 +267,8 @@ function Persona() {
       else if (/[!@#$%^&*/_()?":{}|<>]/.test(userData.guardianName)) {
         errors.guardianName = "Special characters are not allowed.";
       }
-       else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.guardianName)) {
-        errors.guardianName = "First Letter must be Capital";
-      }
       if (!userData.guardianlName || userData.guardianlName === '') {
-        errors.guardianlName = "This Field is required";
+        errors.guardianlName = "Guardian Lastname is required";
       } 
       else if (userData.guardianlName.length === 1) {
         errors.guardianlName = "Input must not contain a single letter.";
@@ -290,7 +283,7 @@ function Persona() {
         errors.guardianlName = "First Letter must be Capital";
       }
       if (!userData.relationship || userData.relationship === '') {
-        errors.relationship = "This Field is required";
+        errors.relationship = "Relationship is required";
       } 
       else if (userData.relationship.length === 1) {
         errors.relationship = "Input must not contain a single letter.";
@@ -310,7 +303,7 @@ function Persona() {
         errors.guardianContact = "Invalid phone number.";
       }
       if (!userData.guardianAddress || userData.guardianAddress === '') {
-        errors.guardianAddress = "This field is required";
+        errors.guardianAddress = "Guardian Address is required";
       }
 
       if(!onlyChild){
@@ -336,21 +329,24 @@ function Persona() {
           siblings: siblings, 
         }));
         function toTitleCase(str) {
-          return str.replace(/\w\S*/g, function(txt){
+          return str?.replace(/\w\S*/g, function(txt){
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
           });
         }
         const str1 = toTitleCase(userData.motherName);
         const str2 = toTitleCase(userData.motherlName);
+        const str21 = toTitleCase(userData.mothermName);
         const str3 = toTitleCase(userData.fatherName);
         const str4 = toTitleCase(userData.fatherlName);
+        const str41 = toTitleCase(userData.fathermName);
         const str5 = toTitleCase(userData.firstName);
         const str6 = toTitleCase(userData.lastName);
-        const userName = `${str5} ${str6}`
+        const str61 = toTitleCase(userData.middleName);
+        const userName = `${str5} ${str61} ${str6}`
         const groupedNames = {
-          motherName: `${str1} ${str2}`,
-          fatherName: `${str3} ${str4}`,
-          siblingNames: siblings.length > 0 ? [...siblings.map(sibling => `${toTitleCase(sibling.firstName)} ${toTitleCase(sibling.lastName)}`), userName].sort() : [],
+          motherName: `${str1} ${str21} ${str2}`,
+          fatherName: `${str3} ${str41} ${str4}`,
+          siblingNames: siblings.length > 0 ? [...siblings.map(sibling => `${toTitleCase(sibling.firstName)} ${toTitleCase(sibling.middleName)} ${toTitleCase(sibling.lastName)}`), userName].sort() : [],
 
         };
         
@@ -430,22 +426,25 @@ function Persona() {
       if(value === 'Father'){
         userData.guardianName = userData.fatherName;
         userData.guardianlName = userData.fatherlName;
+        userData.guardianmName = userData.fathermName;
         userData.relationship = 'Father'
         setisGuardiancheck(true);
       }
       if(value === 'Mother'){
         userData.guardianName = userData.motherName;
-        userData.guardianlName= userData.motherlName ;
+        userData.guardianlName= userData.motherlName;
+        userData.guardianmName= userData.mothermName;
         userData.relationship = 'Mother';
         setisGuardiancheck(true)
       }
       if(value === 'Other'){
         userData.guardianName = '';
         userData.guardianlName= '' ;
+        userData.guardianmName= '' ;
         userData.relationship ='';
         setisGuardiancheck(false)
       }
-    },[value])
+    },[value,userData])
     useEffect(() =>{
       localStorage.setItem('nofather',noFather);
       localStorage.setItem('sameaddress',isSameAddress);
@@ -458,6 +457,18 @@ function Persona() {
       <div>
       <Form.Group as={Col}>
       <Form.Label style={{margin:'0px'}} className='frmlabel'>{t("Sibling")} {index + 1}</Form.Label><br/>
+      <Form.Label style={{fontSize:'15px',margin:'0px'}} className='frmlabel'>{t("Last Name")} *</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter sibling's last name"
+          value={sibling.lastName}
+          onChange={(e) => handleInputChange(index, 'lastName', e.target.value.toUpperCase())}
+        />
+      </Form.Group>
+      </div>
+      <div>
+      <Form.Group as={Col}>
+      <Form.Label style={{margin:'0px'}} className='frmlabel'></Form.Label><br/>
       <Form.Label style={{fontSize:'15px',margin:'0px'}} className='frmlabel'>{t("First Name")} *</Form.Label>
         <Form.Control
           type="text"
@@ -470,14 +481,13 @@ function Persona() {
       <div>
       <Form.Group as={Col}>
       <Form.Label style={{margin:'0px'}} className='frmlabel'></Form.Label><br/>
-      <Form.Label style={{fontSize:'15px',margin:'0px'}} className='frmlabel'>{t("Last Name")} *</Form.Label>
+      <Form.Label style={{fontSize:'15px',margin:'0px'}} className='frmlabel'>{t("Middle Name")} </Form.Label>
         <Form.Control
           type="text"
-          placeholder="Enter sibling's last name"
-          value={sibling.lastName}
-          onChange={(e) => handleInputChange(index, 'lastName', e.target.value.toUpperCase())}
+          value={sibling.middleName}
+          placeholder="Enter sibling's middle name"
+          onChange={(e) => handleInputChange(index, 'middleName', e.target.value.toUpperCase())}
         />
-
       </Form.Group>
       </div>
       <div style={{position:'relative',padding:'10px',width:'20%'}}>
@@ -507,18 +517,6 @@ function Persona() {
             <div className='parentcontainer'>
               <div className='parenteach'> 
                 <div>
-                <Form.Group as={Col}>
-                <Form.Label className='frmlabel'>{t("Father's first name")} *</Form.Label>
-                  <Form.Control
-                  placeholder="Your answer"
-                  type="text" 
-                  disabled={noFather}
-                  value={userData['fatherName']} 
-                  onChange={(e) =>setUserData({...userData,"fatherName" : e.target.value.toUpperCase()})} 
-                  />
-                   {errors.fatherName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherName}</p>}
-                </Form.Group>
-                </div>          
                 <div>
                 <Form.Group as={Col}>
                 <Form.Label className='frmlabel'>{t("Father's last name")} *</Form.Label>
@@ -532,6 +530,30 @@ function Persona() {
                   {errors.fatherlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherlName}</p>}
                 </Form.Group>
                 </div>
+                <Form.Group as={Col}>
+                <Form.Label className='frmlabel'>{t("Father's first name")} *</Form.Label>
+                  <Form.Control
+                  placeholder="Your answer"
+                  type="text" 
+                  disabled={noFather}
+                  value={userData['fatherName']} 
+                  onChange={(e) =>setUserData({...userData,"fatherName" : e.target.value.toUpperCase()})} 
+                  />
+                   {errors.fatherName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherName}</p>}
+                </Form.Group>
+                <Form.Group as={Col}>
+                <Form.Label className='frmlabel'>{t("Father's middle name")} </Form.Label>
+                  <Form.Control
+                  placeholder="Your answer"
+                  type="text" 
+                  disabled={noFather}
+                  value={userData['fathermName']} 
+                  onChange={(e) =>setUserData({...userData,"fathermName" : e.target.value.toUpperCase()})} 
+                  />
+                   {errors.fathermName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherName}</p>}
+                </Form.Group>
+                </div>          
+
                 <div>
                 <Form.Group as={Col}>
                 <Form.Label className='frmlabel'>{t("Highest Educational Attaintment")} *</Form.Label>
@@ -573,6 +595,18 @@ function Persona() {
                 <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={noFather} onChange={handleNoFather} />} label={t("No Father")} />
               </div>
               <div className='parenteach'>
+                 <div>
+                  <Form.Group as={Col}>
+                  <Form.Label className='frmlabel'>{t("Mother's last name")} *</Form.Label>
+                    <Form.Control
+                    type="text" 
+                    placeholder="Your answer"
+                    value={userData['motherlName']} 
+                    onChange={(e) =>setUserData({...userData,"motherlName" : e.target.value.toUpperCase()})} 
+                    />
+                    {errors.motherlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherlName}</p>}
+                  </Form.Group>
+                  </div>
                   <div>
                   <Form.Group as={Col}>
                   <Form.Label className='frmlabel'>{t("Mother's first name")} *</Form.Label>
@@ -587,16 +621,17 @@ function Persona() {
                   </div>
                   <div>
                   <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Mother's last name")} *</Form.Label>
-                    <Form.Control
-                    type="text" 
-                    placeholder="Your answer"
-                    value={userData['motherlName']} 
-                    onChange={(e) =>setUserData({...userData,"motherlName" : e.target.value.toUpperCase()})} 
-                    />
-                    {errors.motherlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherlName}</p>}
-                  </Form.Group>
+                  <Form.Label className='frmlabel'>{t("Mother's middle name")}</Form.Label>
+                  <Form.Control
+                  type="text" 
+                  placeholder="Your answer"
+                  value={userData['mothermName']} 
+                  onChange={(e) =>setUserData({...userData,"mothermName" : e.target.value.toUpperCase()})} 
+                  />
+                  {errors.mothermName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherName}</p>}
+                </Form.Group>
                   </div>
+
                   <div>
                   <Form.Group as={Col}>
                   <Form.Label className='frmlabel'>{t("Highest Educational Attaintment")} *</Form.Label>
@@ -639,8 +674,7 @@ function Persona() {
                     <h3>{t("Guardian's Information")}</h3>
             </div>
               <div style={{margin:'20px'}}>
-                  <div className='parenteach1'>
-                          <div>
+              <div>
                             <h3 style={{fontSize:'18px',fontWeight:'bold',color:'rgb(11, 73, 128)',marginLeft:'5px'}}>{t("Guardian")}</h3>
                             <Form.Group as={Col}>
                                   <RadioGroup
@@ -656,22 +690,10 @@ function Persona() {
                                   </RadioGroup>
                             </Form.Group>
                           </div>
-                          <div style={{marginRight:'5px',color:'rgb(11, 73, 128)'}}>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>{t("Guardian's first name")}</Form.Label>
-                                  <Form.Control
-                                  type="text" 
-                                  placeholder="Your answer"
-                                  disabled={isGuardiancheck}
-                                  value={userData['guardianName']} 
-                                  onChange={(e) =>setUserData({...userData,"guardianName" : e.target.value.toUpperCase()})} 
-                                  />
-                                  {errors.guardianName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
-                            </Form.Group>
-                          </div>
+                  <div className='parenteach1'>
                           <div>
                             <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>{t("Guardian's last name")}</Form.Label>
+                            <Form.Label className='frmlabel'>{t("Guardian's last name")} *</Form.Label>
                                       <Form.Control
                                       type="text" 
                                       disabled={isGuardiancheck}
@@ -682,11 +704,38 @@ function Persona() {
                                       {errors.guardianlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianlName}</p>}
                             </Form.Group>
                           </div>
+                          <div style={{marginRight:'5px',color:'rgb(11, 73, 128)',marginLeft:'5px'}}>
+                            <Form.Group as={Col}>
+                            <Form.Label className='frmlabel'>{t("Guardian's first name")} *</Form.Label>
+                                  <Form.Control
+                                  type="text" 
+                                  placeholder="Your answer"
+                                  disabled={isGuardiancheck}
+                                  value={userData['guardianName']} 
+                                  onChange={(e) =>setUserData({...userData,"guardianName" : e.target.value.toUpperCase()})} 
+                                  />
+                                  {errors.guardianName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
+                            </Form.Group>
+                          </div>
+                          <div style={{marginRight:'5px',color:'rgb(11, 73, 128)'}}>
+                            <Form.Group as={Col}>
+                            <Form.Label className='frmlabel'>{t("Guardian's middle name")}</Form.Label>
+                                  <Form.Control
+                                  type="text" 
+                                  placeholder="Your answer"
+                                  disabled={isGuardiancheck}
+                                  value={userData['guardianmName']} 
+                                  onChange={(e) =>setUserData({...userData,"guardianmName" : e.target.value.toUpperCase()})} 
+                                  />
+                                  {errors.guardianmName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
+                            </Form.Group>
+                          </div>
+
                   </div>
                   <div className='parenteach1'>
                     {!isGuardiancheck && <div>
                     <Form.Group as={Col}>
-                    <Form.Label className='frmlabel'>{t("Relationship to guardian")}</Form.Label>
+                    <Form.Label className='frmlabel'>{t("Relationship to guardian")} *</Form.Label>
                             <Form.Select
                             type="text" 
                             disabled={isGuardiancheck}
@@ -713,7 +762,7 @@ function Persona() {
                     </div>}
                     <div style={{margin:'0px 10px 0px 10px'}}>
                     <Form.Group style={{position:'relative'}} as={Col}>
-                    <Form.Label className='frmlabel'>{t("Guardian's Contact No.")}</Form.Label>
+                    <Form.Label className='frmlabel'>{t("Guardian's Contact No.")} *</Form.Label>
                           <span style={{position:'absolute',bottom:'1.5px',left:'6px',fontSize:'15px',color:'black',fontWeight:'bold',display:'flex',top:'47px'}}><p style={{margin:'0px',marginTop:'-2px'}}>+</p>63-</span>
                             <Form.Control
                             type="text" 
@@ -724,12 +773,12 @@ function Persona() {
                             />
                           
                     </Form.Group>
-                    {errors.guardianContact && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianContact}</p>}
+                    {errors.guardianContact && <p style={{color: 'red',fontSize:'12px',margin:'0px',marginLeft:'5px'}}>{errors.guardianContact}</p>}
                     </div>
                     <div>
                     <Form.Group as={Col}>
                       <div style={{display:'flex',whiteSpace:'nowrap'}}>
-                      <Form.Label className='frmlabel'>{t("Guardian's Address")}</Form.Label>
+                      <Form.Label className='frmlabel'>{t("Guardian's Address")} *</Form.Label>
                     <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={isSameAddress} onChange={handleSameAddress} />} label={t("Same address")} />
                       </div>
 
@@ -755,9 +804,11 @@ function Persona() {
               <div style={{position:'relative',height:'30px',marginBottom:'10px'}}>
               <FormControlLabel sx={{whiteSpace:'nowrap',position:'absolute',right:0}} control={<Switch checked={onlyChild} onChange={handleOnlyChild} />} label={t("I am only child")} />
               </div>
-              
+              <div style={{width:'100%',marginLeft:'30px'}}>
               {errors.sibling && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.sibling}</p>}
               {errors.siblingErrors && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.siblingErrors}</p>}
+              </div>
+
               {siblingfrm}
               <div className='addbtnsib'>
               {!onlyChild && <Button
