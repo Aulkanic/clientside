@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import LNav from '../components/navbar'
 import '../css/faqs.css'
-import FAQSImg from '../../userhome/assets/faqs.png'
+import FAQSImg from '../../LandingPage/Assets/mydofaqs.png'
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
@@ -9,7 +8,6 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { motion } from "framer-motion";
-import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { FetchFaqs } from '../../Api/request'
 import Typography from '@mui/material/Typography';
 
@@ -80,7 +78,7 @@ const Faqs = () => {
            transition={{ duration: 1 }}>
       <div className="faqs-card">
       <div className="faqs-header">
-       <img style={{width:'100%'}} src={FAQSImg} alt="" />
+       <img style={{width:'100%',objectFit:'contain'}} src={FAQSImg} alt="" />
       </div>
       <div className="faqs-accordion">
         <div>

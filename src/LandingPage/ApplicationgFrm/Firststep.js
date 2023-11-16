@@ -470,7 +470,7 @@ useEffect(() => {
           <div style={{padding:'20px'}}>
           <Row className="mb-3">
             <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Last School Attended")} *</Form.Label>
+              <Form.Label className='frmlabel'>{t("Last School Attended")}<span style={{fontWeight:'normal'}}>(Do not use acronyms)</span> *</Form.Label>
               <Form.Control 
               type="text"
               value={userData['School']} 

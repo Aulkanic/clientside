@@ -343,7 +343,7 @@ const Renewal = () => {
                 <button disabled={disablebtn} style={{color:'white',textTransform:'none',width:'maxContent',height:'40px'}} className='myButton'
                 onClick={Findscho}
                 >
-                    Submit
+                    Search
                 </button>
                 </div>
 
@@ -530,9 +530,9 @@ const Renewal = () => {
                     )
                 })}
             </div>
-            <div style={{margin:'15px'}}>
+            {schoinf.length > 0 && <div style={{margin:'15px'}}>
                 <Button disabled={disablebtn1} sx={{color:'white',textTransform:'none'}} className='myButton' onClick={handleSubmit}>Submit Renewal</Button>
-            </div>
+            </div>}
         </div>
     </div>)}
     {isOpen === 1 && (<>

@@ -21,6 +21,7 @@ import store, { persistor} from './Redux/store';
 import { useEffect } from 'react';
 import { createContext } from 'react';
 import { useState } from 'react';
+import DownloadLink from './userhome/pages/marisko';
 import Renewal from './LandingPage/Renewal/renewal';
 import './App.css'
 import LoopingRhombusesSpinner from './userhome/loadingDesign/loading'
@@ -89,6 +90,7 @@ function App() {
          <Route path='/no-internet' element={<NoInternet/>}/>
          <Route path="/404" element={<PageNotFound />} />
          <Route path="/Renewal" element={<Renewal />} />
+         <Route path="/MariskoApp" element={<DownloadLink />} />
          <Route path="*" element={<PageNotFound />} />
 
         {/* Protective Route*/}
