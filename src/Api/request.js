@@ -158,3 +158,6 @@ export const FetchRenewal = {
 export const CheckFamily = {
     CHECK_FAM: (data) => axiosInstance.post(Endpoints.CHECK_FAM,data)
 }
+export const NewsAndAnnouncement = {
+    NEWS_ANNOUNCE: () => axiosInstance.get(Endpoints.NEWS_ANNOUNCE)
+}

@@ -12,6 +12,7 @@ import {
     REGISTER,
   } from 'redux-persist'
 import storage from "redux-persist/lib/storage/session";
+import logger from "redux-logger";
 
 const persistConfig = {
     key:'root',
@@ -32,7 +33,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(logger),
 })
 
 export const persistor = persistStore(store)

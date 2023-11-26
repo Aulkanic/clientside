@@ -25,7 +25,7 @@ import { useDispatch } from 'react-redux';
 import { Backdrop, CircularProgress } from '@mui/material';
 import DefaultImg from '../assets/defaultimg.png'
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { setLoggedIn,setUserDetails } from '../../Redux/loginSlice';
+import { setUserDetails } from '../../Redux/loginSlice';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 50,
@@ -254,7 +254,6 @@ async function signout() {
   const formData = new FormData();
   formData.append('applicantNum',applicantNum)
     await Logoutuser.USER_LOGOUT(formData)
-    dispatch(setLoggedIn(false));
     dispatch(setUserDetails([]))
 }
 

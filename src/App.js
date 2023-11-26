@@ -1,18 +1,18 @@
 import Bmccsite from './LandingPage/lpages/Bmccsite'
 import StepContext from './LandingPage/ApplicationgFrm/StepContext';
 import SchoCategory from './LandingPage/lpages/schoCategory';
-import Home from './userhome/pages/Home'
+import Home1 from './userhome/pages/Home'
 import Account from './userhome/pages/account';
 import SCHOLAR from './userhome/pages/scholar';
 import Schoinfo from './userhome/pages/scho-info';
 import PageNotFound from './userhome/pages/PagenotFound';
 import NoInternet from './userhome/pages/NoInternet';
-import News from './userhome/pages/news';
-import Announcement from './userhome/pages/announcement';
-import Trivia from './userhome/pages/trivia';
-import Login from './userhome/pages/login';
+import News1 from './userhome/pages/news';
+import Announcement1 from './userhome/pages/announcement';
+import Trivia1 from './userhome/pages/trivia';
+import Login1 from './userhome/pages/login';
 import Register from './userhome/pages/register'
-import { Route, Routes, useNavigate} from 'react-router-dom';
+import { Route, Routes, createBrowserRouter, useNavigate, RouterProvider} from 'react-router-dom';
 import RequireAuth from './features/authenticate/RequireAuth';
 import { Colorlist,WebImg,Logos } from './Api/request'
 import { Provider } from 'react-redux';
@@ -22,15 +22,17 @@ import { useEffect } from 'react';
 import { createContext } from 'react';
 import { useState } from 'react';
 import DownloadLink from './userhome/pages/marisko';
-import Renewal from './LandingPage/Renewal/renewal';
+import Renewal1 from './LandingPage/Renewal/renewal';
+import { RouteUrl } from './routes/routes';
+import { Public,Private } from './layout';
+import { Home,Login,Registration,ApplicationForm,ScholarshipProgram,
+         Dashboard,Profile,Requirements,Appointment,Announcement,News,Trivia,Renewal } from '../src/Pages';
 import './App.css'
 import LoopingRhombusesSpinner from './userhome/loadingDesign/loading'
 
 
 export const color = createContext();
 function App() {
-  const navigate = useNavigate();
-  const isOnline = navigator.onLine;
   const colorstore = JSON.parse(localStorage.getItem('Color'));
   const imgstore = JSON.parse(localStorage.getItem('Image'));
   const logostore = JSON.parse(localStorage.getItem('Logo'));
@@ -38,12 +40,78 @@ function App() {
   const [imgList,setImglist] = useState(imgstore || null);
   const [logolist,setLogolist] = useState(logostore || null);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!isOnline) {
-      navigate('/no-internet');
+  const router = createBrowserRouter([
+    {
+      path: RouteUrl.HOME,
+      element: <Public/>,
+      children: [
+        {
+          path: RouteUrl.HOME,
+          element: <Home />
+        },
+        {
+          path: RouteUrl.LOGIN,
+          element: <Login />
+        },
+        {
+          path: RouteUrl.APPLICATION_FORM,
+          element: <ApplicationForm/>
+        },
+        {
+          path: RouteUrl.REGISTER,
+          element: <Registration />
+        },
+        {
+          path: RouteUrl.SCHOLARSHIP_PROGRAM,
+          element: <ScholarshipProgram />
+        }
+      ]
+    },
+    {
+      path: RouteUrl.HOME,
+      element: <Private />,
+      children: [
+        {
+          path: RouteUrl.DASHBOARD,
+          element: <Dashboard />
+        },
+        {
+          path: RouteUrl.PROFILE,
+          element: <Profile />
+        },
+        {
+          path: RouteUrl.SCHOLAR_REQUIREMENT,
+          element: <Requirements />
+        },
+        {
+          path: RouteUrl.SCHOLAR_APPOINTMENT,
+          element: <Appointment />
+        },
+        {
+          path: RouteUrl.NEWS,
+          element: <News />
+        },
+        {
+          path: RouteUrl.ANNOUNCEMENT,
+          element: <Announcement />
+        },
+        {
+          path: RouteUrl.TRIVIA,
+          element: <Trivia />
+        },
+        {
+          path: RouteUrl.RENEWAL_FORM,
+          element: <Renewal />
+        }
+      ]
     }
-  }, [isOnline, navigate]);
+  ])
+
+  // useEffect(() => {
+  //   if (!isOnline) {
+  //     navigate('/no-internet');
+  //   }
+  // }, [isOnline, navigate]);
 
   useEffect(() =>{
     async function Fetch(){
@@ -81,31 +149,8 @@ function App() {
     <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
     <color.Provider value={{ colorlist,imgList,logolist }}>
-    <Routes> 
-         <Route exact path='/' element={<Bmccsite/>}/>
-         <Route path='/ScholarshipProgram' element={<SchoCategory/>}/>
-         <Route path='/login' element={<Login/>}/>
-         <Route path='/register' element={<Register/>}/>
-         <Route path='/ApplicationForm' element={<StepContext/>}/>
-         <Route path='/no-internet' element={<NoInternet/>}/>
-         <Route path="/404" element={<PageNotFound />} />
-         <Route path="/Renewal" element={<Renewal />} />
-         <Route path="/MariskoApp" element={<DownloadLink />} />
-         <Route path="*" element={<PageNotFound />} />
 
-        {/* Protective Route*/}
-
-       <Route element={<RequireAuth/>}>
-            <Route path='/home' element={<Home/>}/>
-            <Route path='/account' element={<Account/>}/>
-            <Route path='/scholar' element={<SCHOLAR/>}/>
-            <Route path='/scholar/info' element={<Schoinfo/>}/>
-            <Route path='/news' element={<News/>}/>
-            <Route path='/announcement' element={<Announcement/>}/>
-            <Route path='/trivia' element={<Trivia/>}/>
-        </Route>
-
-    </Routes>  
+    <RouterProvider router={router} fallbackElement={<h6>Loading...</h6>} />
     </color.Provider>
     </PersistGate>
     </Provider>
@@ -114,3 +159,29 @@ function App() {
 }
 
 export default App;
+
+
+{/* <Routes> 
+<Route exact path='/' element={<Bmccsite/>}/>
+<Route path='/ScholarshipProgram' element={<SchoCategory/>}/>
+<Route path='/login' element={<Login1/>}/>
+<Route path='/register' element={<Register/>}/>
+<Route path='/ApplicationForm' element={<StepContext/>}/>
+<Route path='/no-internet' element={<NoInternet/>}/>
+<Route path="/404" element={<PageNotFound />} />
+<Route path="/Renewal" element={<Renewal1 />} />
+<Route path="/MariskoApp" element={<DownloadLink />} />
+<Route path="*" element={<PageNotFound />} />
+
+
+<Route element={<RequireAuth/>}>
+   <Route path='/home' element={<Home1/>}/>
+   <Route path='/account' element={<Account/>}/>
+   <Route path='/scholar' element={<SCHOLAR/>}/>
+   <Route path='/scholar/info' element={<Schoinfo/>}/>
+   <Route path='/news' element={<News1/>}/>
+   <Route path='/announcement' element={<Announcement1/>}/>
+   <Route path='/trivia' element={<Trivia1/>}/>
+</Route>
+
+</Routes>   */}

@@ -15,7 +15,7 @@ import MuiAlert from '@mui/material/Alert';
 import ErrorIcon from '@mui/icons-material/Error';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { setLoggedIn,setUserDetails } from '../../Redux/loginSlice';
+import { setUserDetails } from '../../Redux/loginSlice';
 
 
 
@@ -138,14 +138,12 @@ const Login = () => {
             setSnackbarMessage(res.data.message);
             setSnackbarOpen(true); 
             const user = res.data.result[0]
-            setErrors('')  
-            dispatch(setLoggedIn(true));
+            setErrors('') 
             dispatch(setUserDetails(user))
             setTimeout(() => {
-              navigate('/home');
+              navigate('/dashboard/home');
             }, 2500);
           }else{
-            dispatch(setLoggedIn(false));
             setResstat('500')
             setSnackbarMessage(res.data.message);
             setSnackbarOpen(true); 

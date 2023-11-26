@@ -52,6 +52,7 @@ const Endpoints = {
     SET_RENEW:'RenewalForm/FillRenewal',
     SET_RENEW1:'RenewalForm/FillRenewal1',
     FETCH_RENEW:'RenewalForm/YearlyRenew',
+    NEWS_ANNOUNCE:'announce/NewsAndAnnouncement',
 
 }
 

@@ -8,7 +8,6 @@ import { useContext } from "react";
 import { color } from "../../App";
 
 import Carousel from 'react-bootstrap/Carousel';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Lhomepage() {
   const { colorlist,imgList } = useContext(color);

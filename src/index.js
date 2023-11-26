@@ -11,11 +11,12 @@ root.render(
 
   <React.StrictMode>
     <Provider store={store}>
-    <BrowserRouter>
+    {/* <BrowserRouter>
     <Routes>
       <Route path='/*' element={ <App />} />
     </Routes>
-    </BrowserRouter>
+    </BrowserRouter> */}
+    <App />
     </Provider>
   </React.StrictMode>
 );

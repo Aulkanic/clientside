@@ -8,7 +8,7 @@ import { useContext } from "react";
 import { color } from "../../App";
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
-import { setLoggedIn,setUserDetails } from '../../Redux/loginSlice';
+import { setUserDetails } from '../../Redux/loginSlice';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import Badge from '@mui/material/Badge';
 import Drawer from '@mui/material/Drawer';
@@ -234,7 +234,6 @@ const SetReadNotif = async(val) =>{
     const formData = new FormData();
     formData.append('applicantNum',applicantNum)
       await Logoutuser.USER_LOGOUT(formData)
-      dispatch(setLoggedIn(false));
       dispatch(setUserDetails([]))
   }
   return (
