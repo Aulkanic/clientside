@@ -3,9 +3,6 @@ import { useContext } from 'react';
 import { multiStepContext } from './StepContext';
 import {  useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -15,13 +12,16 @@ import Slide from '@mui/material/Slide';
 import { ScholarCategory,FindRegisteredUser} from '../../Api/request.js'
 import { Rulelist} from '../../Api/request.js';
 import Swal from 'sweetalert2';
-import TextField from '@mui/material/TextField';
-import { useDispatch } from 'react-redux';
-import { setName } from '../../Redux/userSlice';
+import TextInput from '../../Components/InputField/text.jsx';
+import TeleInput from '../../Components/InputField/telephone.jsx';
+import SelectInput from '../../Components/InputField/select.jsx';
+import { useDispatch, useSelector } from 'react-redux';
 import '../css/Firststep.css'
 import '../css/buttonStyle.css'
 import { useTranslation } from 'react-i18next';
-import { ta } from 'date-fns/locale';
+import { suffixList,barangayList,genderList,yearList,elementaryList,juniorhighList,seniorhighList,
+  collegeList,strandList,courseList} from '../../Pages/Public/ApplicationForm/listOptions.js';    
+import { setForm } from '../../Redux/formSlice.js';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -32,6 +32,7 @@ function Firststep() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const form = useSelector((state) => state.form)
   const [open, setOpen] = useState(false);
   const { setStep, userData, setUserData} = useContext(multiStepContext);
   const [errors, setErrors] = useState({}); 
@@ -47,7 +48,48 @@ function Firststep() {
   const handleClose1 = () => {
     setOpen1(false);
   };
+  const handleOptionChange = (data) => {
+    const { name, value } = data; 
+    dispatch(setForm({ [name]: value }));
+  }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    dispatch(setForm({ [name]: value }));
+  };
+  const getOptionsBasedOnYearLevel = () => {
+    const yearLevel = form.yearLevel;
+    switch (yearLevel) {
+      case 'ELEMENTARY':
+        return elementaryList;
+      case 'COLLEGE':
+        return collegeList;
+      case 'JUNIOR HIGHSCHOOL':
+        return juniorhighList;
+      case 'SENIOR HIGHSCHOOL':
+        return seniorhighList;
+      default:
+        return [];
+    }
+  };
+  const getOptionsBasedOnGradeLevel = () => {
+    const yearLevel = form.yearLevel;
+    switch (yearLevel) {
+      case 'ELEMENTARY':
+        dispatch(setForm({ ["course"]: 'NONE' }));
+        return [];
+      case 'COLLEGE':
+        return courseList;
+      case 'JUNIOR HIGHSCHOOL':
+        dispatch(setForm({ ["course"]: 'NONE' }));
+        return [];
+      case 'SENIOR HIGHSCHOOL':
+        return strandList;
+      default:
+        return [];
+    }
+  };
 
+  
 
   const calculateAge = (birthday) => {
     const today = new Date();
@@ -71,7 +113,7 @@ function Firststep() {
     }
   };
   useEffect(() => {
-    const { birthday } = userData;
+    const { birthday } = form;
     const age = calculateAge(birthday);
     if (age > rule.ageNum) {
       errors.age = "Not Qualified";
@@ -83,8 +125,8 @@ function Firststep() {
       });
       setStep(1);
     }
-    setUserData((prevData) => ({ ...prevData, age: age.toString() }));
-  }, [userData.birthday]);
+    dispatch(setForm({ ["age"]: age }));
+  }, [form.birthday]);
   
   useEffect(() => {
     async function fetchData() {
@@ -93,7 +135,7 @@ function Firststep() {
         const schodata = scholist.data.SchoCat;
         const schoav = schodata.filter(data => data.status === 'Open')
         const rul = await Rulelist.FETCH_RULE()
-        console.log(rul)
+       
         setRule(rul.data.result[0])
         setScholarProg(schoav);
       } catch (error) {
@@ -107,12 +149,12 @@ function Firststep() {
 
   function Check(){
     const errors = {};
-    if(!userData.firstName || !userData.lastName || !userData.email){
+    if(!form.firstName || !form.lastName || !form.email){
       setOpen1(true)
       setStep(1);
       return
     }
-    if(userData.firstName === '' || userData.lastName === '' || userData.email === ''){
+    if(form.firstName === '' || form.lastName === '' || form.email === ''){
       Swal.fire({
         title: "Warning",
         text: `The system did not recognized or find registered user information.Please Register first your account to continue filling up the form`,
@@ -122,68 +164,67 @@ function Firststep() {
       setStep(1);
       return
     }
-    if (!userData.gender) {
-      errors.gender = "Please Select your Gender";
+    if (!form.gender) {
+      errors.form = "Please Select your Gender";
     }
-    if (!userData.birthday || userData.birthday === '') {
+    if (!form.birthday || form.birthday === '') {
       errors.birthday = "Birthday is required";
     }
-    if (!housenum || housenum === '') {
+    if (!form.housenum || form.housenum === '') {
       errors.housenum = "House No./Street is required";
     }
-    if (!userData.baranggay || userData.baranggay === '') {
+    if (!form.baranggay || form.baranggay === '') {
       errors.baranggay = "Select your Baranggay";
     }
-    if (!userData.School || userData.School === '') {
+    if (!form.School || form.School === '') {
       errors.School = "School is required";
     }
-    if (!userData.gradeLevel || userData.gradeLevel === '') {
+    if (!form.gradeLevel || form.gradeLevel === '') {
       errors.gradeLevel = "Grade Level is required";
     }
-    if (!userData.SchoolAddress || userData.SchoolAddress === '') {
+    if (!form.SchoolAddress || form.SchoolAddress === '') {
       errors.SchoolAddress = "SchoolAddress is required";
     }
-    if (!userData.yearLevel || userData.yearLevel === '') {
+    if (!form.yearLevel || form.yearLevel === '') {
       errors.yearLevel = "Select your Year Level";
     }
-    if (!userData.course || userData.course === '') {
+    if (!form.course || form.course === '') {
       errors.course = "Select your Course";
     }
-    if (userData.age === '') {
+    if (form.age === '') {
       errors.age = "Age is required";
-    } else if (userData.age <= 0) {
+    } else if (form.age <= 0) {
       errors.age = "Invalid Age";
-    }else if (/[a-zA-Z]/.test(userData.age)) {
+    }else if (/[a-zA-Z]/.test(form.age)) {
       errors.age = "Input must not contain letter value";
-    }else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.age)) {
+    }else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(form.age)) {
       errors.age = "Special characters are not allowed.";
-    }else if(userData.age <=5){
+    }else if(form.age <=5){
       errors.age = 'Minimum age for application is five years old';
     }
-    if (userData.birthPlace === '' || !userData.birthPlace) {
+    if (form.birthPlace === '' || !form.birthPlace) {
       errors.birthPlace = "Birth of Place is required";
-    } else if (userData.birthPlace?.length === 1) {
+    } else if (form.birthPlace?.length === 1) {
       errors.birthPlace = "Input must not contain a single letter.";
-    }else if (/[!@#$%^&*/_()?":{}|<>]/.test(userData.age)) {
+    }else if (/[!@#$%^&*/_()?":{}|<>]/.test(form.age)) {
       errors.age = "Special characters are not allowed.";
     }
-    if (userData.contactNum === '' || !userData.contactNum) {
+    if (form.contactNum === '' || !form.contactNum) {
       errors.contactNum = "Phone Number is required";
-    } else if (!/^9\d{9}$/.test(userData.contactNum)) {
+    } else if (!/^9\d{9}$/.test(form.contactNum)) {
       errors.contactNum = "Invalid phone number.";
     }
-    const fulladress = `${housenum} ${userData.baranggay} MARILAO BULACAN`
-    setUserData((prevData) => ({ ...prevData, address: fulladress }));
+    const fulladress = `${form.housenum} ${form.baranggay} MARILAO BULACAN`;
+    dispatch(setForm({ ["address"]: fulladress }));
     
-    if(userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL'){
-      setUserData((prevData) => ({ ...prevData, course: 'NONE', }));
+    if(form.yearLevel !== 'COLLEGE' && form.yearLevel !== 'SENIOR HIGHSCHOOL'){
+      dispatch(setForm({ ["course"]: "NONE" }));
     }
     if (!errors || Object.keys(errors).length > 0) {
     
       setErrors(errors);
       return;
     }
-    localStorage.setItem('userData',JSON.stringify(userData))
     setErrors('')
     setStep(2)
 };
@@ -203,14 +244,15 @@ const findCreatedAcc = async() =>{
       if(res.data.success === 1){
         const result = res.data.result[0];
         const fname = result.fname;
+        const applicantNum = result.applicantNum
         const lname = result.lname;
+        const mname = result.mname;
         const email = result.email;
-        const applicantNum = result.applicantNum;
-        dispatch(setName({fname,lname,email,applicantNum}))
-        userData.firstName = fname;
-        userData.lastName = lname;
-        userData.email = email;
-        userData.applicantNum = applicantNum;
+        dispatch(setForm({ ["applicantNum"]: applicantNum }));
+        dispatch(setForm({ ["firstName"]: fname }));
+        dispatch(setForm({ ["lastName"]: lname }));
+        dispatch(setForm({ ["middleName"]: mname }));
+        dispatch(setForm({ ["email"]: email }));
         navigate('/ApplicationForm')
         Swal.fire('Successfully Find your Registered Email')
       }else{
@@ -284,406 +326,193 @@ useEffect(() => {
       <Button onClick={handleClose}>Ok</Button>
     </DialogActions>
   </Dialog>
-
   <div className='FirstepFrm'>
-
-      <div className="FFd">
-          <div className="form">
-          <div className='containerform'>
-            <div style={{padding:'20px'}}>
-            <Row className="mb-3">
-            <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Last Name")}</Form.Label>
-              <Form.Control
-               type="text" 
-               value={userData['lastName']} 
-               readOnly
-               />
-            </Form.Group>
-          <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("First Name")}</Form.Label>
-              <Form.Control 
-              type="text" 
-              value={userData['firstName']} 
-              readOnly
-              />
-            </Form.Group>
-            <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Middle Name")}</Form.Label>
-              <Form.Control
-               type="text" 
-               value={userData['middleName']} 
-               readOnly
-               />
-            </Form.Group>
-            <Form.Group className='col-md-3'>
-              <Form.Label className='frmlabel'>Suffix</Form.Label>
-              <Form.Select aria-label="Default select example"
-              value={userData['suffix']} 
-              onChange={(e) =>setUserData({...userData,"suffix" : e.target.value})}
-              >
-              <option value=""></option>
-              <option value="JR">JR</option>
-              <option value="SR">SR</option>
-              <option value="II">II</option>
-              <option value="III">III</option>
-              <option value="IV">IV</option>
-              <option value="IX">IX</option>
-              <option value="V">V</option>
-              <option value="VI">VI</option>
-              <option value="XV">XV</option>
-              <option value="VII">VII</option>
-              <option value="VII">VII</option>
-              <option value="X">X</option>
-              <option value="XI">XI</option>
-              <option value="XI">XII</option>
-              <option value="XIII">XIII</option>
-              <option value="XIV">XIV</option>
-            </Form.Select>
-            </Form.Group>
-            <div>
+          <div className="w-full">
+          <div className='w-full'>
+            <div className='w-full p-8'>
+              <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
+                  <TextInput
+                      label={t("Last Name")}
+                      type={'text'}
+                      required={false}
+                      name='lastName'
+                      value={form['lastName']}
+                      readonly={true}
+                  />  
+                  <TextInput
+                      label={t("First Name")}
+                      type={'text'}
+                      required={false}
+                      name='firstName'
+                      value={form['firstName']}
+                      readonly={true}
+                  />  
+                  <TextInput
+                      label={t("Middle Name")}
+                      type={'text'}
+                      required={false}
+                      name='middleName'
+                      value={form['middleName']}
+                      readonly={true}
+                  />  
+                  <SelectInput
+                    label={t("Suffix")}
+                    required={false}
+                    value={form.suffix}
+                    onChange={handleOptionChange}
+                    options={suffixList}
+                  />
+              </div>
+              <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
+                  <TextInput
+                      label={t("House No/Street")}
+                      required={true}
+                      type={'text'}
+                      name='housenum'
+                      placeholder='e.g., 123 Main Street'
+                      value={form.housenum}
+                      onChange={handleInputChange}
+                      error={errors.housenum}
+                      readonly={false}
+                    />
+                  <SelectInput
+                    label={t("Barangay")}
+                    required={true}
+                    value={form.baranggay}
+                    onChange={handleOptionChange}
+                    options={barangayList}
+                    error={errors.baranggay}
+                  />
+              </div>
+              <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
+                  <TextInput
+                      label={t("City")}
+                      type={'text'}
+                      required={false}
+                      name='city'
+                      value={'Marilao'}
+                      readonly={true}
+                  />
+                  <TextInput
+                      label={t("Province")}
+                      type={'text'}
+                      required={false}
+                      name='province'
+                      value={'Bulacan'}
+                      readonly={true}
+                  />
+              </div>
+              <div className='flex flex-col gap-2 flex-wrap lg:flex-row p-2 w-full'>
+                  <SelectInput
+                    label={t("Gender")}
+                    required={true}
+                    value={form.gender}
+                    onChange={handleOptionChange}
+                    options={genderList}
+                    error={errors.gender}
+                  />
+                  <TextInput
+                      label={t("Birth Date")}
+                      type={'date'}
+                      required={true}
+                      name='birthday'
+                      value={form['birthday']}
+                      onChange={handleInputChange}
+                      error={errors.birthday}
+                      readonly={false}
+                  />
+                  <TextInput
+                      label={t("Age")}
+                      type={'text'}
+                      required={true}
+                      name='age'
+                      value={form['age']}
+                      error={errors.age}
+                      readonly={true}
+                  />
+              </div>
+              <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
+                  <TextInput
+                      label={t("Birth Place")}
+                      type={'text'}
+                      required={true}
+                      name='birthPlace'
+                      onChange={handleInputChange}
+                      error={errors.birthPlace}
+                      value={form['birthPlace']}
+                      readonly={false}
+                  />
+                  <TeleInput
+                      label={t("Mobile Number")}
+                      type={'text'}
+                      required={true}
+                      name='contactNum'
+                      onChange={handleInputChange}
+                      error={errors.contactNum}
+                      value={form['contactNum']}
+                      readonly={false}
+                  />
+              </div>
             </div>
-          </Row>
-          <Row className="mb-3">
-             <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("House No/Street")} *</Form.Label>
-            <Form.Control
-              type="text"
-              name="houseNoStreet"
-              value={housenum}
-              placeholder="e.g., 123 Main Street"
-              onChange={(e) =>setHousenum(e.target.value.toUpperCase())}
-            />
-            {errors.housenum && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.housenum}</p>}
-              </Form.Group>
-           <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("Barangay")} *</Form.Label>
-            <Form.Select
-              as="select"
-              name="barangay"
-              value={userData.baranggay}
-              onChange={(e) =>setUserData({...userData,"baranggay" : e.target.value})}
-            >
-              <option value={''}>PLEASE SELECT BARANGGAY</option>
-              <option value={'ABANGAN NORTE'}>ABANGAN NORTE</option>
-              <option value={'ABANGAN SUR'}>ABANGAN SUR</option>
-              <option value={'IBAYO'}>IBAYO</option>
-              <option value={'LAMBAKIN'}>LAMBAKIN</option>
-              <option value={'LIAS'}>LIAS</option>
-              <option value={'LOMA DE GATO'}>LOMA DE GATO</option>
-              <option value={'NAGBALON'}>NAGBALON</option>
-              <option value={'PATUBIG'}>PATUBIG</option>
-              <option value={'POBLACION 1'}>POBLACION 1</option>
-              <option value={'POBLACION 2'}>POBLACION 2</option>
-              <option value={'PRENZA 1'}>PRENZA 1</option>
-              <option value={'PRENZA 2'}>PRENZA 2</option>
-              <option value={'SAOG'}>SAOG</option>
-              <option value={'STA. ROSA 1'}>STA. ROSA 1</option>
-              <option value={'STA. ROSA 2'}>STA. ROSA 2</option>
-              <option value={'TABING ILOG'}>TABING ILOG</option>
-            </Form.Select>
-            {errors.baranggay && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.baranggay}</p>}
-          </Form.Group>
-          </Row>
-          <Row className='mb-3'>
-            <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("City")}</Form.Label>
-              <Form.Control
-                type="text"
-                value={'Marilao'}
-                name="city"
-                readOnly
-              />
-            </Form.Group>
-
-            <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Province")}</Form.Label>
-              <Form.Control
-                type="text"
-                value={'Bulacan'}
-                name="province"
-                readOnly
-              />
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
-          <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("Gender")} *</Form.Label>
-            <Form.Select aria-label="Default select example"
-              value={userData['gender']} 
-              onChange={(e) =>setUserData({...userData,"gender" : e.target.value})}
-            >
-              <option>Select your gender</option>
-              <option value="MALE">MALE</option>
-              <option value="FEMALE">FEMALE</option>
-              <option value="OTHERS">OTHERS</option>
-            </Form.Select>
-            {errors.gender && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.gender}</p>}
-            </Form.Group>
-
-            <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("Birth Date")} *</Form.Label>
-              <Form.Control 
-              type="date" 
-              value={userData['birthday']} 
-              onChange={(e) =>setUserData({...userData,"birthday" : e.target.value})}       
-              />
-              {errors.birthday && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.birthday}</p>}
-            </Form.Group>
-
-            <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("Age")}</Form.Label>
-              <Form.Control value={userData['age']} type="number" readOnly />
-              {errors.age && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.age}</p>}
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
-          <Form.Group as={Col}>
-            <Form.Label className='frmlabel'>{t("Birth Place")} *</Form.Label>
-            <Form.Control 
-            type="text"
-            placeholder='Barangay, Municipality' 
-            value={userData['birthPlace']} 
-            onChange={(e) =>setUserData({...userData,"birthPlace" : e.target.value.toUpperCase()})}
-            />
-           {errors.birthPlace && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.birthPlace}</p>}
-            </Form.Group>
-
-            <Form.Group style={{margin:'0px 10px 0px 10px'}} as={Col}>
-              <div style={{position:'relative'}}>
-            <Form.Label className='frmlabel'>{t("Mobile Number")} *</Form.Label>
-            <span style={{position:'absolute',bottom:'5.5px',left:'17px',fontSize:'15px',color:'black',fontWeight:'bold',display:'flex'}}><p style={{margin:'0px',marginTop:'-2px'}}>+</p>63-</span>
-            <Form.Control type="text" placeholder="XXX XXX XXXX"
-              value={userData['contactNum']} 
-              style={{paddingLeft:'50px'}}
-              onChange={(e) =>setUserData({...userData,"contactNum" : e.target.value})}
-            />
+          </div>
+          <div className='w-full'>
+            <h4 className='w-full bg-[#043F97] text-white pl-2 py-4 text-lg font-bold'>{t("Educational Information")}</h4>
+            <div className='w-full p-8'>
+                <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
+                  <TextInput
+                        label={t("Last School Attended")}
+                        type={'text'}
+                        required={true}
+                        name='School'
+                        onChange={handleInputChange}
+                        error={errors.School}
+                        value={form['School']}
+                        readonly={false}
+                    />                 
+                  <TextInput
+                        label={t("School Address")}
+                        type={'text'}
+                        required={true}
+                        name='SchoolAddress'
+                        onChange={handleInputChange}
+                        error={errors.SchoolAddress}
+                        value={form['SchoolAddress']}
+                        readonly={false}
+                    />                 
+                </div>
+                <div className='flex flex-col flex-wrap gap-2 lg:flex-row p-2 w-full'>
+                    <SelectInput
+                      label={t("Year Level")}
+                      required={true}
+                      value={form.yearLevel}
+                      onChange={handleOptionChange}
+                      error={errors.yearLevel}
+                      options={yearList}
+                    />
+                    {form['yearLevel'] !== '' && (<SelectInput
+                      label={t("Grade/Year")}
+                      required={true}
+                      value={form.gradeLevel}
+                      onChange={handleOptionChange}
+                      error={errors.gradeLevel}
+                      options={getOptionsBasedOnYearLevel()}
+                    />)}
+                    {form['yearLevel'] !== 'COLLEGE' && form.yearLevel !== 'SENIOR HIGHSCHOOL' ? (null) : (<SelectInput
+                      label={t("Course")}
+                      required={true}
+                      value={form.course}
+                      error={errors.course}
+                      onChange={handleOptionChange}
+                      options={getOptionsBasedOnGradeLevel()}
+                    />)}
+                </div>
             </div>
-               {errors.contactNum && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.contactNum}</p>}
-            </Form.Group>
-          </Row>
-            </div>
-
           </div>
-          <div className='containerform'>
-          <h4 style={{width:'100%',backgroundColor:'#043F97'}} className='h4head'>{t("Educational Information")}</h4>
-          <div style={{padding:'20px'}}>
-          <Row className="mb-3">
-            <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Last School Attended")}<span style={{fontWeight:'normal'}}>(Do not use acronyms)</span> *</Form.Label>
-              <Form.Control 
-              type="text"
-              value={userData['School']} 
-              placeholder='e.g., ABC Elementary School'
-              onChange={(e) =>setUserData({...userData,"School" : e.target.value.toUpperCase()})}
-              />
-            {errors.School && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.School}</p>}
-            </Form.Group>
-            <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("School Address")} *</Form.Label>
-              <Form.Control type="text"
-               value={userData['SchoolAddress']} 
-               placeholder='Please enter the address of your last school ...'
-               onChange={(e) =>setUserData({...userData,"SchoolAddress" : e.target.value.toUpperCase()})}
-              />
-             {errors.SchoolAddress && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.SchoolAddress}</p>}
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
-          <Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Year Level")} *</Form.Label>
-              <Form.Select
-                value={userData['yearLevel']} 
-                onChange={(e) =>setUserData({...userData,"yearLevel" : e.target.value})}
-              >
-              <option value={''}>SELECT YOUR YEAR LEVEL</option>
-              <option value={'ELEMENTARY'}>ELEMENTARY</option>
-              <option value={'JUNIOR HIGHSCHOOL'}>JUNIOR HIGHSCHOOL</option>
-              <option value={'SENIOR HIGHSCHOOL'}>SENIOR HIGHSCHOOL</option>
-              <option value={'COLLEGE'}>COLLEGE</option>
-              </Form.Select>
-              {errors.yearLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.yearLevel}</p>}
-            </Form.Group>
-            {userData['yearLevel'] !== '' && (<Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Grade/Year")} *</Form.Label>
-              <Form.Select
-              value={userData['gradeLevel']} 
-              onChange={(e) =>setUserData({...userData,"gradeLevel" : e.target.value})}
-              >
-                {userData.yearLevel === 'ELEMENTARY' && (<>
-                <option value={''}>SELECT YOUR GRADE LEVEL</option>
-                <option value={'GRADE 1'}>GRADE 1</option>
-                <option value={'GRADE 2'}>GRADE 2</option>
-                <option value={'GRADE 3'}>GRADE 3</option>
-                <option value={'GRADE 4'}>GRADE 4</option>
-                <option value={'GRADE 5'}>GRADE 5</option>
-                <option value={'GRADE 6'}>GRADE 6</option>
 
-                </>)}
-                {userData.yearLevel === 'JUNIOR HIGHSCHOOL' && (<>
-                  <option value={''}>SELECT YOUR GRADE LEVEL</option>
-                <option value={'GRADE 7'}>GRADE 7</option>
-                <option value={'GRADE 8'}>GRADE 8</option>
-                <option value={'GRADE 9'}>GRADE 9</option>
-                <option value={'GRADE 10'}>GRADE 10</option>
-                </>)}
-                {userData.yearLevel === 'SENIOR HIGHSCHOOL' && (<>
-                  <option value={''}>SELECT YOUR GRADE LEVEL</option>
-                  <option value={'GRADE 11'}>GRADE 11</option>
-                  <option value={'GRADE 12'}>GRADE 12</option>
-                </>)}
-                {userData.yearLevel === 'COLLEGE' && (<>
-                  <option value={''}>SELECT YOUR GRADE LEVEL</option>
-                  <option value={'1ST YEAR'}>1ST YEAR</option>
-                  <option value={'2ND YEAR'}>2ND YEAR</option>
-                  <option value={'3RD YEAR'}>3RD YEAR</option>
-                  <option value={'4TH YEAR'}>4TH YEAR</option>
-                </>)}
-              </Form.Select>
-                 {errors.gradeLevel && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.gradeLevel}</p>}
-            </Form.Group>)}
-            {userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL' ? (null) : (<Form.Group as={Col}>
-              <Form.Label className='frmlabel'>{t("Course")} *</Form.Label>
-              <Form.Select 
-                value={userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL' ? 'None' : userData.course}
-                onChange={(e) => {
-                  const selectedValue = e.target.value;
-        
-                  const newCourse = 
-                  userData.yearLevel !== 'COLLEGE' && userData.yearLevel !== 'SENIOR HIGHSCHOOL' 
-                  ? 'None' : 
-                  selectedValue;
-               
-                  setUserData((prevData) => ({ ...prevData, course: newCourse, }));
-                }}
-              >
-                {userData.yearLevel === 'COLLEGE' && (
-                <>
-                  <option>SELECT YOUR COURSE</option>
-                  <option value={'BACHELOR OF SCIENCE IN RESPIRATORY THERAPY'}>BACHELOR OF SCIENCE IN RESPIRATORY THERAPY</option>
-                  <option value={'BACHELOR IN LANDSCAPE ARCHITECTURE'}>BACHELOR IN LANDSCAPE ARCHITECTURE</option>
-                  <option value={'BACHELOR IN SECONDARY EDUCATION MAJOR IN MATHEMATICS'}>BACHELOR IN SECONDARY EDUCATION MAJOR IN MATHEMATICS</option>
-                  <option value={'BACHELOR IN SECONDARY EDUCATION MAJOR IN SCIENCE'}>BACHELOR IN SECONDARY EDUCATION MAJOR IN SCIENCE</option>
-                  <option value={'BACHELOR OF CULTURE AND THE ARTS EDUCATION'}>BACHELOR OF CULTURE AND THE ARTS EDUCATION</option>
-                  <option value={'BACHELOR OF DATA SCIENCE AND ANALYTICS'}>BACHELOR OF DATA SCIENCE AND ANALYTICS</option>
-                  <option value={'BACHELOR OF EARLY CHILDHOOD EDUCATION'}>BACHELOR OF EARLY CHILDHOOD EDUCATION</option>
-                  <option value={'BACHELOR OF FINE ARTS'}>BACHELOR OF FINE ARTS</option>
-                  <option value={'BACHELOR OF LIBRARY AND INFORMATION SCIENCE'}>BACHELOR OF LIBRARY AND INFORMATION SCIENCE</option>
-                  <option value={'BACHELOR OF MEDICAL LABORATORY SCIENCE'}>BACHELOR OF MEDICAL LABORATORY SCIENCE</option>
-                  <option value={'BACHELOR OF SCIENCE IN ACCOUNTANCY'}>BACHELOR OF SCIENCE IN ACCOUNTANCY</option>
-                  <option value={'BACHELOR OF SCIENCE IN AGRIBUSINESS'}>BACHELOR OF SCIENCE IN AGRIBUSINESS</option>
-                  <option value={'BACHELOR OF SCIENCE IN AGRICULTURAL AND BIOSYSTEMS ENGINEERING'}>BACHELOR OF SCIENCE IN AGRICULTURAL AND BIOSYSTEMS ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN AGROFORESTRY'}>BACHELOR OF SCIENCE IN AGROFORESTRY</option>
-                  <option value={'BACHELOR OF SCIENCE IN AIRCRAFT MAINTENANCE TECHNOLOGY'}>BACHELOR OF SCIENCE IN AIRCRAFT MAINTENANCE TECHNOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN APPLIED MATHEMATICS'}>BACHELOR OF SCIENCE IN APPLIED MATHEMATICS</option>
-                  <option value={'BACHELOR OF SCIENCE IN APPLIED PHYSICS'}>BACHELOR OF SCIENCE IN APPLIED PHYSICS</option>
-                  <option value={'BACHELOR OF SCIENCE IN APPLIED STATISTICS'}>BACHELOR OF SCIENCE IN APPLIED STATISTICS</option>
-                  <option value={'BACHELOR OF SCIENCE IN ARCHITECTURE'}>BACHELOR OF SCIENCE IN ARCHITECTURE</option>
-                  <option value={'BACHELOR OF SCIENCE IN AVIATION'}>BACHELOR OF SCIENCE IN AVIATION</option>
-                  <option value={'BACHELOR OF SCIENCE IN AVIATION TECHNOLOGY'}>BACHELOR OF SCIENCE IN AVIATION TECHNOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN BIOCHEMISTRY'}>BACHELOR OF SCIENCE IN BIOCHEMISTRY</option>
-                  <option value={'BACHELOR OF SCIENCE IN BIOLOGY'}>BACHELOR OF SCIENCE IN BIOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN BOTANY'}>BACHELOR OF SCIENCE IN BOTANY</option>
-                  <option value={'BACHELOR OF SCIENCE IN BUSINESS ADMINISTRATION MAJOR IN BUSINESS ANALYTICS'}>BACHELOR OF SCIENCE IN BUSINESS ADMINISTRATION MAJOR IN BUSINESS ANALYTICS</option>
-                  <option value={'BACHELOR OF SCIENCE IN BUSINESS ANALYTICS'}>BACHELOR OF SCIENCE IN BUSINESS ANALYTICS</option>
-                  <option value={'BACHELOR OF SCIENCE IN CERAMIC ENGINEERING'}>BACHELOR OF SCIENCE IN CERAMIC ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN CHEMICAL ENGINEERING'}>BACHELOR OF SCIENCE IN CHEMICAL ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN CHEMISTRY'}>BACHELOR OF SCIENCE IN CHEMISTRY</option>
-                  <option value={'BACHELOR OF SCIENCE IN CIVIL ENGINEERING'}>BACHELOR OF SCIENCE IN CIVIL ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN CLIMATE CHANGE'}>BACHELOR OF SCIENCE IN CLIMATE CHANGE</option>
-                  <option value={'BACHELOR OF SCIENCE IN COMMUNITY DEVELOPMENT'}>BACHELOR OF SCIENCE IN COMMUNITY DEVELOPMENT</option>
-                  <option value={'BACHELOR OF SCIENCE IN COMPUTER ENGINEERING'}>BACHELOR OF SCIENCE IN COMPUTER ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN COMPUTER SCIENCE'}>BACHELOR OF SCIENCE IN COMPUTER SCIENCE</option>
-                  <option value={'BACHELOR OF SCIENCE IN CYBER SECURITY'}>BACHELOR OF SCIENCE IN CYBER SECURITY</option>
-                  <option value={'BACHELOR OF SCIENCE IN DISASTER RISK MANAGEMENT'}>BACHELOR OF SCIENCE IN DISASTER RISK MANAGEMENT</option>
-                  <option value={'BACHELOR OF SCIENCE IN ELECTRICAL ENGINEERING'}>BACHELOR OF SCIENCE IN ELECTRICAL ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN ELECTRONICS AND COMMUNICATIONS ENGINEERING'}>BACHELOR OF SCIENCE IN ELECTRONICS AND COMMUNICATIONS ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN ELECTRONICS ENGINEERING'}>BACHELOR OF SCIENCE IN ELECTRONICS ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN ENGINEERING TECHNOLOGY'}>BACHELOR OF SCIENCE IN ENGINEERING TECHNOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN ENTERTAINMENT AND MULTIMEDIA COMPUTING'}>BACHELOR OF SCIENCE IN ENTERTAINMENT AND MULTIMEDIA COMPUTING</option>
-                  <option value={'BACHELOR OF SCIENCE IN ENVIRONMENTAL PLANNING'}>BACHELOR OF SCIENCE IN ENVIRONMENTAL PLANNING</option>
-                  <option value={'BACHELOR OF SCIENCE IN ENVIRONMENTAL SCIENCE'}>BACHELOR OF SCIENCE IN ENVIRONMENTAL SCIENCE</option>
-                  <option value={'BACHELOR OF SCIENCE IN FOOD ENGINEERING'}>BACHELOR OF SCIENCE IN FOOD ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN GAME DEVELOPMENT AND ANIMATION'}>BACHELOR OF SCIENCE IN GAME DEVELOPMENT AND ANIMATION</option>
-                  <option value={'BACHELOR OF SCIENCE IN GEODETIC ENGINEERING'}>BACHELOR OF SCIENCE IN GEODETIC ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN GEOLOGY'}>BACHELOR OF SCIENCE IN GEOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN HOSPITALITY MANAGEMENT'}>BACHELOR OF SCIENCE IN HOSPITALITY MANAGEMENT</option>
-                  <option value={'BACHELOR OF SCIENCE IN HUMAN BIOLOGY'}>BACHELOR OF SCIENCE IN HUMAN BIOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN HUMAN SERVICES'}>BACHELOR OF SCIENCE IN HUMAN SERVICES</option>
-                  <option value={'BACHELOR OF SCIENCE IN INDIGENOUS PEOPLES EDUCATION'}>BACHELOR OF SCIENCE IN INDIGENOUS PEOPLES EDUCATION</option>
-                  <option value={'BACHELOR OF SCIENCE IN INDIGENOUS PEOPLES STUDIES'}>BACHELOR OF SCIENCE IN INDIGENOUS PEOPLES STUDIES</option>
-                  <option value={'BACHELOR OF SCIENCE IN INDUSTRIAL ENGINEERING'}>BACHELOR OF SCIENCE IN INDUSTRIAL ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN INDUSTRIAL TECHNOLOGY'}>BACHELOR OF SCIENCE IN INDUSTRIAL TECHNOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN INFORMATION SYSTEMS'}>BACHELOR OF SCIENCE IN INFORMATION SYSTEMS</option>
-                  <option value={'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY'}>BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN INTERIOR DESIGN'}>BACHELOR OF SCIENCE IN INTERIOR DESIGN</option>
-                  <option value={'BACHELOR OF SCIENCE IN MANUFACTURING ENGINEERING'}>BACHELOR OF SCIENCE IN MANUFACTURING ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN MARINE BIOLOGY'}>BACHELOR OF SCIENCE IN MARINE BIOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN MARINE ENGINEERING'}>BACHELOR OF SCIENCE IN MARINE ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN MARINE TRANSPORTATION'}>BACHELOR OF SCIENCE IN MARINE TRANSPORTATION</option>
-                  <option value={'BACHELOR OF SCIENCE IN MATERIALS ENGINEERING'}>BACHELOR OF SCIENCE IN MATERIALS ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN MATHEMATICS'}>BACHELOR OF SCIENCE IN MATHEMATICS</option>
-                  <option value={'BACHELOR OF SCIENCE IN MECHANICAL ENGINEERING'}>BACHELOR OF SCIENCE IN MECHANICAL ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN MECHATRONICS ENGINEERING'}>BACHELOR OF SCIENCE IN MECHATRONICS ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN MECHATRONICS ENGINEERING TECHNOLOGY'}>BACHELOR OF SCIENCE IN MECHATRONICS ENGINEERING TECHNOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN MEDICAL TECHNOLOGY'}>BACHELOR OF SCIENCE IN MEDICAL TECHNOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN METALLURGICAL ENGINEERING'}>BACHELOR OF SCIENCE IN METALLURGICAL ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN METEOROLOGY'}>BACHELOR OF SCIENCE IN METEOROLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN MIDWIFERY'}>BACHELOR OF SCIENCE IN MIDWIFERY</option>
-                  <option value={'BACHELOR OF SCIENCE IN MINING ENGINEERING'}>BACHELOR OF SCIENCE IN MINING ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN MOLECULAR BIOLOGY AND BIOTECHNOLOGY'}>BACHELOR OF SCIENCE IN MOLECULAR BIOLOGY AND BIOTECHNOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN NURSING'}>BACHELOR OF SCIENCE IN NURSING</option>
-                  <option value={'BACHELOR OF SCIENCE IN NUTRITION AND DIETETICS'}>BACHELOR OF SCIENCE IN NUTRITION AND DIETETICS</option>
-                  <option value={'BACHELOR OF SCIENCE IN OCCUPATIONAL THERAPY'}>BACHELOR OF SCIENCE IN OCCUPATIONAL THERAPY</option>
-                  <option value={'BACHELOR OF SCIENCE IN PEACE EDUCATION'}>BACHELOR OF SCIENCE IN PEACE EDUCATION</option>
-                  <option value={'BACHELOR OF SCIENCE IN PEACE STUDIES'}>BACHELOR OF SCIENCE IN PEACE STUDIES</option>
-                  <option value={'BACHELOR OF SCIENCE IN PETROLEUM ENGINEERING'}>BACHELOR OF SCIENCE IN PETROLEUM ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN PHYSICAL THERAPY'}>BACHELOR OF SCIENCE IN PHYSICAL THERAPY</option>
-                  <option value={'BACHELOR OF SCIENCE IN PHYSICS'}>BACHELOR OF SCIENCE IN PHYSICS</option>
-                  <option value={'BACHELOR OF SCIENCE IN PRODUCTION ENGINEERING'}>BACHELOR OF SCIENCE IN PRODUCTION ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN RADIOLOGIC TECHNOLOGY'}>BACHELOR OF SCIENCE IN RADIOLOGIC TECHNOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN RENEWABLE ENERGY'}>BACHELOR OF SCIENCE IN RENEWABLE ENERGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN ROBOTICS ENGINEERING'}>BACHELOR OF SCIENCE IN ROBOTICS ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN SANITARY ENGINEERING'}>BACHELOR OF SCIENCE IN SANITARY ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN SOCIAL WORK'}>BACHELOR OF SCIENCE IN SOCIAL WORK</option>
-                  <option value={'BACHELOR OF SCIENCE IN SPEECH-LANGUAGE PATHOLOGY'}>BACHELOR OF SCIENCE IN SPEECH-LANGUAGE PATHOLOGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN STATISTICS'}>BACHELOR OF SCIENCE IN STATISTICS</option>
-                  <option value={'BACHELOR OF SCIENCE IN STRUCTURAL ENGINEERING'}>BACHELOR OF SCIENCE IN STRUCTURAL ENGINEERING</option>
-                  <option value={'BACHELOR OF SCIENCE IN SUSTAINABLE ENERGY'}>BACHELOR OF SCIENCE IN SUSTAINABLE ENERGY</option>
-                  <option value={'BACHELOR OF SCIENCE IN TOURISM'}>BACHELOR OF SCIENCE IN TOURISM</option>
-                  <option value={'BACHELOR OF SCIENCE IN TOURISM MANAGEMENT'}>BACHELOR OF SCIENCE IN TOURISM MANAGEMENT</option>
-                  <option value={'BACHELOR OF SCIENCE/BACHELOR OF ARTS IN PSYCHOLOGY'}>BACHELOR OF SCIENCE/BACHELOR OF ARTS IN PSYCHOLOGY</option>
-                  <option value={'BACHELOR OF SPECIAL NEEDS EDUCATION'}>BACHELOR OF SPECIAL NEEDS EDUCATION</option>
-                  <option value={'BACHELOR OF SPORTS AND EXERCISE SCIENCE'}>BACHELOR OF SPORTS AND EXERCISE SCIENCE</option>
-                  <option value={'DOCTOR OF DENTAL MEDICINE'}>DOCTOR OF DENTAL MEDICINE</option>
-                  <option value={'DOCTOR OF OPTOMETRY'}>DOCTOR OF OPTOMETRY</option>
-
-                </>
-                )}
-                {userData.yearLevel === 'SENIOR HIGHSCHOOL' && (<>
-                  <option>SELECT YOUR COURSE</option>
-                  <option value={'SCIENCE TECHNOLOGY ENGINEERING AND MATHEMATICS (STEM)'}>SCIENCE TECHNOLOGY ENGINEERING AND MATHEMATICS (STEM)</option>
-                  <option value={'HUMANITIES AND SOCIAL SCIENCES (HUMSS)'}>HUMANITIES AND SOCIAL SCIENCES (HUMSS)</option>
-                  <option value={'ACCOUNTANCY BUSINESS AND MANAGEMENT (ABM)'}>ACCOUNTANCY BUSINESS AND MANAGEMENT (ABM)</option>
-                  <option value={'GENERAL ACADEMIC STRAND (GAS)'}>GENERAL ACADEMIC STRAND (GAS)</option>
-                  <option value={'HOME ECONOMICS'}>HOME ECONOMICS</option>
-                  <option value={'AGRI-FISHERY ARTS'}>AGRI-FISHERY ARTS</option>
-                  <option value={'INDUSTRIAL ARTS'}>INDUSTRIAL ARTS</option>
-                  <option value={'INFORMATION AND COMMUNICATIONS TECHNOLOGY'}>INFORMATION AND COMMUNICATIONS TECHNOLOGY</option>
-
-                </>)}
-
-              </Form.Select>
-              {errors.course && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.course}</p>}
-            </Form.Group>)}
-          </Row>
-          </div>
-          </div>
-          <div className='frmbtnec'>
+          <div className='w-full flex justify-end items-end pr-4 pb-4'>
            <Button className='myButton' variant="contained" onClick={Check}>Next</Button>
           </div>
           </div>
-      </div>
   </div>
   </>
 )

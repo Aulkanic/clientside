@@ -149,7 +149,6 @@ function App() {
     <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
     <color.Provider value={{ colorlist,imgList,logolist }}>
-
     <RouterProvider router={router} fallbackElement={<h6>Loading...</h6>} />
     </color.Provider>
     </PersistGate>

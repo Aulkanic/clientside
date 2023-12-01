@@ -11,6 +11,12 @@ input[type="password"]::-ms-reveal {
 input[type="password"]::-ms-clear {
   display: none;
 }
+.bg-registration-image {
+  background-image: url('../src/userhome/assets/municipal.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';

@@ -1,6 +1,7 @@
 import { configureStore,combineReducers } from "@reduxjs/toolkit";
 import userReducer from './userSlice'
 import loginReducer from './loginSlice'
+import formReducer from './formSlice'
 import {
     persistStore,
     persistReducer,
@@ -22,6 +23,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     user: userReducer,
     login: loginReducer,
+    form: formReducer
   });
   
 const persistedReducer = persistReducer(persistConfig, rootReducer);

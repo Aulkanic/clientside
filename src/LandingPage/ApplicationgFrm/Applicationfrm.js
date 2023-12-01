@@ -137,14 +137,14 @@ function Applicationfrm() {
         </Stepper>
         
     </div>
-    <div className="ribbon-header" style={{position:'relative',marginBottom:'10px',width:'80%'}}>
+    <div className="ribbon-header" style={{position:'relative',width:'80%'}}>
     <div className="ribbon-header-text" style={{width:'100%',backgroundColor:'#043F97'}}>
       {currentStep === 1 && (<h2 style={{color:"white"}}>{t("Personal Information")}</h2>)}
       {currentStep === 2 && (<h2 style={{color:"white"}}>{t("Parent's Information")}</h2>)}
       {currentStep === 3 && (<h2 style={{color:"white"}}>{t("Other Information")}</h2>)}
 
     </div>
-    <div style={{paddingLeft:'15px',marginTop:'20px',marginBottom:'20px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+    <div style={{paddingLeft:'15px',marginTop:'20px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
       <div>
       {currentStep !== 3 && currentStep !== 4 && (<>
      <p style={{paddingLeft:'5px',fontStyle:'italic',color:'black',fontWeight:'300'}}>{t("Please use UPPERCASE FORMAT to fill up this application form")}.

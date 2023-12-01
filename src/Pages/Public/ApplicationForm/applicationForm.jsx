@@ -1,7 +1,7 @@
 import React from 'react'
-
+import StepContext from '../../../LandingPage/ApplicationgFrm/StepContext'
 export const ApplicationForm = () => {
   return (
-    <div>ApplicationForm</div>
+    <div><StepContext/></div>
   )
 }

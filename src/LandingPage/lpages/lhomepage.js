@@ -6,8 +6,31 @@ import { Card,Typography } from '@mui/material'
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { useContext } from "react";
 import { color } from "../../App";
+import CustomSlider from '../../Components/Slider/slider';
 
-import Carousel from 'react-bootstrap/Carousel';
+var settings = {
+  dots: true,
+  infinite: false,
+  speed: 500,
+  lazyLoad: true,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  initialSlide: 0,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 1,
+      }
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 1,
+      }
+    },
+  ]
+};
 
 function Lhomepage() {
   const { colorlist,imgList } = useContext(color);
@@ -41,54 +64,30 @@ function Lhomepage() {
   return (
     <>
     {colorlist && imgList ? (<div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',width:'100vw'}}>
-    <div className='lconthome'>
+    <div className='flex flex-col w-11/12'>
     {content()}
       
-        <div className="lcarou" style={{width:'100%'}}>
-          <div className='definescho'>
-            <Card sx={{padding:'10px'}}>
-              <Typography sx={{fontSize:'25px'}}>What is Pondo Para sa Iskolar ng Bayan?</Typography>
-              <Typography sx={{fontSize:'20px'}}>
+        <div className='flex my-4 h-full'>
+          <div className='w-1/2 bg-white leading-9 p-4 flex flex-col justify-center items-center'>
+              <p className='font-bold'>What is Pondo Para sa Iskolar ng Bayan?</p>
+              <p>
               The Iskolar ng bayan ng Marilao is an ordinance started by Juanito "Tito" Santiago as mayor of the Marilao from 2013-2019. 
               The scholarship program is written by Counselor Willie Diaz and was started in 2014.
                It aims to help working students focus on their academics without worrying about their finances, 
                and will give them more time to learn and have higher chances of having high-performing students in the marilao.
-              </Typography>
-            </Card>
+              </p>
           </div>
-          <Carousel>
-      <Carousel.Item style={{width:'100%'}}>
-        <img
-          className="d-block w-100 carousel-image"
-          src={imgList[1].File}
-          alt="First slide"
-        />
-        <Carousel.Caption>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          className="d-block w-100 carousel-image"
-          src={imgList[3].File}
-          alt="Second slide"
-        />
-
-        <Carousel.Caption>
-
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          className="d-block w-100 carousel-image"
-          src={imgList[2].File}
-          alt="Third slide"
-        />
-
-        <Carousel.Caption>
-
-        </Carousel.Caption>
-      </Carousel.Item>
-          </Carousel>
+          <div className='w-1/2 mb-4 '>
+          <CustomSlider settings={settings}>
+            {imgList?.map((data, index) => {
+              return(
+              <div key={index} className='m-2'>
+                <img className='w-full h-full' 
+                src={data.File} alt=""/>
+              </div>
+            )})}
+          </CustomSlider>
+          </div>
       </div>
     </div>
     </div>)

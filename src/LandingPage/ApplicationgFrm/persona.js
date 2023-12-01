@@ -17,6 +17,12 @@ import Switch from '@mui/material/Switch';
 import { useTranslation } from 'react-i18next';
 import { Backdrop, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import TextInput from '../../Components/InputField/text.jsx';
+import TeleInput from '../../Components/InputField/telephone.jsx';
+import SelectInput from '../../Components/InputField/select.jsx';
+import { fatherEducationOptions,motherEducationOptions } from '../../Pages/Public/ApplicationForm/listOptions.js';
+import { setForm } from '../../Redux/formSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 50,
@@ -24,7 +30,9 @@ const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
 }));
 
 function Persona() {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const form = useSelector((state) => state.form)
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
     const [showBackdrop, setShowBackdrop] = useState(false);
@@ -62,8 +70,16 @@ function Persona() {
         setisGuardiancheck(false)
       }
     };
+    const handleOptionChange = (data) => {
+      const { name, value } = data; 
+      dispatch(setForm({ [name]: value }));
+    }
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      dispatch(setForm({ [name]: value }));
+    };
 
-    const handleInputChange = (index, field, value) => {
+    const handleInputChange1 = (index, field, value) => {
       const updatedSiblings = [...siblings];
       updatedSiblings[index][field] = value;
       setSiblings(updatedSiblings);
@@ -509,325 +525,276 @@ function Persona() {
       <StyledBackdrop open={showBackdrop}>
         <CircularProgress color="inherit" />
       </StyledBackdrop>
-    <div className='Persona'>
-        <div className="personad"> 
-           
-           <div className='form'>
-
-            <div className='parentcontainer'>
-              <div className='parenteach'> 
-                <div>
-                <div>
-                <Form.Group as={Col}>
-                <Form.Label className='frmlabel'>{t("Father's last name")} *</Form.Label>
-                  <Form.Control
-                  placeholder="Your answer"
-                  type="text" 
-                  disabled={noFather}
-                  value={userData['fatherlName']} 
-                  onChange={(e) =>setUserData({...userData,"fatherlName" : e.target.value.toUpperCase()})} 
-                  />
-                  {errors.fatherlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherlName}</p>}
-                </Form.Group>
-                </div>
-                <Form.Group as={Col}>
-                <Form.Label className='frmlabel'>{t("Father's first name")} *</Form.Label>
-                  <Form.Control
-                  placeholder="Your answer"
-                  type="text" 
-                  disabled={noFather}
-                  value={userData['fatherName']} 
-                  onChange={(e) =>setUserData({...userData,"fatherName" : e.target.value.toUpperCase()})} 
-                  />
-                   {errors.fatherName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherName}</p>}
-                </Form.Group>
-                <Form.Group as={Col}>
-                <Form.Label className='frmlabel'>{t("Father's middle name")} </Form.Label>
-                  <Form.Control
-                  placeholder="Your answer"
-                  type="text" 
-                  disabled={noFather}
-                  value={userData['fathermName']} 
-                  onChange={(e) =>setUserData({...userData,"fathermName" : e.target.value.toUpperCase()})} 
-                  />
-                   {errors.fathermName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherName}</p>}
-                </Form.Group>
-                </div>          
-
-                <div>
-                <Form.Group as={Col}>
-                <Form.Label className='frmlabel'>{t("Highest Educational Attaintment")} *</Form.Label>
-                  <Form.Select
-                  type="text" 
-                  disabled={noFather}
-                  value={userData['fatherEduc']} 
-                  onChange={(e) =>setUserData({...userData,"fatherEduc" : e.target.value})} 
-                  >
-                {noFather && <option value={userData['fatherEduc']}>{userData['fatherEduc']}</option>}
-                <option value={''}>Please select</option>
-                <option value="NO GRADE COMPLETED">NO GRADE COMPLETED</option>
-                <option value="ELEMENTARY UNDERGRADUATE">ELEMENTARY UNDERGRADUATE</option>
-                <option value="ELEMENTARY GRADUATE">ELEMENTARY GRADUATE</option>
-                <option value="HIGH SCHOOL UNDERGRADUATE">HIGH SCHOOL UNDERGRADUATE</option>
-                <option value="HIGH SCHOOL GRADUATE">HIGH SCHOOL GRADUATE</option>
-                <option value="POST SECONDARY UNDERGRADUATE">POST SECONDARY UNDERGRADUATE</option>
-                <option value="POST SECONDARY GRADUATE">POST SECONDARY GRADUATE</option>
-                <option value="COLLEGE UNDERGRADUATE">COLLEGE UNDERGRADUATE</option>
-                <option value="COLLEGE GRADUATE">COLLEGE GRADUATE</option>
-                <option value="POST BACCALAUREATE">POST BACCALAUREATE</option>
-                  </Form.Select>
-                  {errors.fatherEduc && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherEduc}</p>}
-                </Form.Group>
-                </div>
-                <div>
-                <Form.Group as={Col}>
-                <Form.Label className='frmlabel'>{t("Father's Occupation")} *</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  disabled={noFather}
-                  placeholder="Your answer"
-                  value={userData['fatherOccu']} 
-                  onChange={(e) =>setUserData({...userData,"fatherOccu" : e.target.value.toUpperCase()})} 
-                  />
-                  {errors.fatherOccu && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.fatherOccu}</p>}
-                </Form.Group>
-                </div>
-                <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={noFather} onChange={handleNoFather} />} label={t("No Father")} />
-              </div>
-              <div className='parenteach'>
-                 <div>
-                  <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Mother's last name")} *</Form.Label>
-                    <Form.Control
-                    type="text" 
-                    placeholder="Your answer"
-                    value={userData['motherlName']} 
-                    onChange={(e) =>setUserData({...userData,"motherlName" : e.target.value.toUpperCase()})} 
-                    />
-                    {errors.motherlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherlName}</p>}
-                  </Form.Group>
-                  </div>
-                  <div>
-                  <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Mother's first name")} *</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  placeholder="Your answer"
-                  value={userData['motherName']} 
-                  onChange={(e) =>setUserData({...userData,"motherName" : e.target.value.toUpperCase()})} 
-                  />
-                  {errors.motherName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherName}</p>}
-                </Form.Group>
-                  </div>
-                  <div>
-                  <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Mother's middle name")}</Form.Label>
-                  <Form.Control
-                  type="text" 
-                  placeholder="Your answer"
-                  value={userData['mothermName']} 
-                  onChange={(e) =>setUserData({...userData,"mothermName" : e.target.value.toUpperCase()})} 
-                  />
-                  {errors.mothermName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherName}</p>}
-                </Form.Group>
-                  </div>
-
-                  <div>
-                  <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Highest Educational Attaintment")} *</Form.Label>
-                    <Form.Select
-                    type="text" 
-                    value={userData['motherEduc']} 
-                    onChange={(e) =>setUserData({...userData,"motherEduc" : e.target.value})} 
-                    >
-                  <option value={''}>Please select</option>
-                  <option value="NO GRADE COMPLETED">NO GRADE COMPLETED</option>
-                  <option value="ELEMENTARY UNDERGRADUATE">ELEMENTARY UNDERGRADUATE</option>
-                  <option value="ELEMENTARY GRADUATE">ELEMENTARY GRADUATE</option>
-                  <option value="HIGH SCHOOL UNDERGRADUATE">HIGH SCHOOL UNDERGRADUATE</option>
-                  <option value="HIGH SCHOOL GRADUATE">HIGH SCHOOL GRADUATE</option>
-                  <option value="POST SECONDARY UNDERGRADUATE">POST SECONDARY UNDERGRADUATE</option>
-                  <option value="POST SECONDARY GRADUATE">POST SECONDARY GRADUATE</option>
-                  <option value="COLLEGE UNDERGRADUATE">COLLEGE UNDERGRADUATE</option>
-                  <option value="COLLEGE GRADUATE">COLLEGE GRADUATE</option>
-                  <option value="POST BACCALAUREATE">POST BACCALAUREATE</option>
-                    </Form.Select>
-                    {errors.motherEduc && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherEduc}</p>}
-                  </Form.Group>
-                  </div>
-                  <div>
-                  <Form.Group as={Col}>
-                  <Form.Label className='frmlabel'>{t("Mother's Occupation")} *</Form.Label>
-                    <Form.Control
-                    type="text" 
-                    placeholder="Your answer"
-                    value={userData['motherOccu']} 
-                    onChange={(e) =>setUserData({...userData,"motherOccu" : e.target.value.toUpperCase()})} 
-                    />
-                    {errors.motherOccu && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.motherOccu}</p>}
-                  </Form.Group>
-                  </div>
-              </div>
-            </div>
-            <div className='parentcontainer1'>
-            <div className='parenteach2'>
-                    <h3>{t("Guardian's Information")}</h3>
-            </div>
-              <div style={{margin:'20px'}}>
-              <div>
-                            <h3 style={{fontSize:'18px',fontWeight:'bold',color:'rgb(11, 73, 128)',marginLeft:'5px'}}>{t("Guardian")}</h3>
-                            <Form.Group as={Col}>
-                                  <RadioGroup
-                                    row
-                                    aria-labelledby="demo-radio-buttons-group-label"
-                                    name="radio-buttons-group"
-                                    value={value || userData.relationship}
-                                    onChange={handleChangeRadio}
-                                  >
-                                    <FormControlLabel value="Mother" control={<Radio />} label={t("Mother")} />
-                                    <FormControlLabel disabled={noFather} value="Father" control={<Radio />} label={t("Father")} />
-                                    <FormControlLabel value="Other" control={<Radio />} label={t("Other")} />
-                                  </RadioGroup>
-                            </Form.Group>
-                          </div>
-                  <div className='parenteach1'>
-                          <div>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>{t("Guardian's last name")} *</Form.Label>
-                                      <Form.Control
-                                      type="text" 
-                                      disabled={isGuardiancheck}
-                                      placeholder="Your answer"
-                                      value={userData['guardianlName']} 
-                                      onChange={(e) =>setUserData({...userData,"guardianlName" : e.target.value.toUpperCase()})} 
-                                      />
-                                      {errors.guardianlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianlName}</p>}
-                            </Form.Group>
-                          </div>
-                          <div style={{marginRight:'5px',color:'rgb(11, 73, 128)',marginLeft:'5px'}}>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>{t("Guardian's first name")} *</Form.Label>
+    <div className='Persona'> 
+      <div className='w-full bg-white'>
+        <div className='w-full flex p-8 sm:flex-col md:flex-row'>
+          <div className='flex flex-col gap-2 flex-wrap p-2 w-full'> 
+             <TextInput
+                label={t("Father's last name")}
+                required={true}
+                type={'text'}
+                name='fatherlName'
+                placeholder="Your answer"
+                value={form.fatherlName}
+                onChange={handleInputChange}
+                error={errors.fatherlName}
+                readonly={false}
+              />
+             <TextInput
+                label={t("Father's first name")}
+                required={true}
+                type={'text'}
+                name='fatherName'
+                placeholder="Your answer"
+                value={form.fatherName}
+                onChange={handleInputChange}
+                error={errors.fatherName}
+                readonly={false}
+              />
+             <TextInput
+                label={t("Father's middle name")}
+                required={false}
+                type={'text'}
+                name='fathermName'
+                placeholder="Your answer"
+                value={form.fathermName}
+                onChange={handleInputChange}
+                error={errors.fathermName}
+                readonly={false}
+              />  
+             <TextInput
+                label={t("Father's Occupation")}
+                required={false}
+                type={'text'}
+                name='fatherOccu'
+                placeholder="Your answer"
+                value={form.fatherOccu}
+                onChange={handleInputChange}
+                error={errors.fatherOccu}
+                readonly={false}
+              />   
+              <SelectInput
+                label={t("Highest Educational Attaintment")}
+                required={true}
+                value={form.fatherEduc}
+                onChange={handleOptionChange}
+                options={fatherEducationOptions}
+                error={errors.fatherEduc}
+              />  
+            <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={noFather} onChange={handleNoFather} />} label={t("No Father")} />
+          </div>
+          <div className='flex flex-col gap-2 flex-wrap p-2 w-full'>
+          <TextInput
+                label={t("Mother's last name")}
+                required={true}
+                type={'text'}
+                name='motherlName'
+                placeholder="Your answer"
+                value={form.motherlName}
+                onChange={handleInputChange}
+                error={errors.motherlName}
+                readonly={false}
+              />
+             <TextInput
+                label={t("Mother's first name")}
+                required={true}
+                type={'text'}
+                name='motherName'
+                placeholder="Your answer"
+                value={form.motherName}
+                onChange={handleInputChange}
+                error={errors.motherName}
+                readonly={false}
+              />
+             <TextInput
+                label={t("Mother's middle name")}
+                required={false}
+                type={'text'}
+                name='mothermName'
+                placeholder="Your answer"
+                value={form.mothermName}
+                onChange={handleInputChange}
+                error={errors.mothermName}
+                readonly={false}
+              />  
+             <TextInput
+                label={t("Mother's Occupation")}
+                required={false}
+                type={'text'}
+                name='motherOccu'
+                placeholder="Your answer"
+                value={form.motherOccu}
+                onChange={handleInputChange}
+                error={errors.motherOccu}
+                readonly={false}
+              /> 
+              <SelectInput
+                label={t("Highest Educational Attaintment")}
+                required={true}
+                value={form.motherEduc}
+                onChange={handleOptionChange}
+                options={motherEducationOptions}
+                error={errors.motherEduc}
+              /> 
+          </div>
+        </div>
+        <div className='w-full'>
+        <div className='parenteach2'>
+                <h3>{t("Guardian's Information")}</h3>
+        </div>
+          <div style={{margin:'20px'}}>
+          <div>
+                        <h3 style={{fontSize:'18px',fontWeight:'bold',color:'rgb(11, 73, 128)',marginLeft:'5px'}}>{t("Guardian")}</h3>
+                        <Form.Group as={Col}>
+                              <RadioGroup
+                                row
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="radio-buttons-group"
+                                value={value || userData.relationship}
+                                onChange={handleChangeRadio}
+                              >
+                                <FormControlLabel value="Mother" control={<Radio />} label={t("Mother")} />
+                                <FormControlLabel disabled={noFather} value="Father" control={<Radio />} label={t("Father")} />
+                                <FormControlLabel value="Other" control={<Radio />} label={t("Other")} />
+                              </RadioGroup>
+                        </Form.Group>
+                      </div>
+              <div className='parenteach1'>
+                      <div>
+                        <Form.Group as={Col}>
+                        <Form.Label className='frmlabel'>{t("Guardian's last name")} *</Form.Label>
                                   <Form.Control
                                   type="text" 
-                                  placeholder="Your answer"
                                   disabled={isGuardiancheck}
-                                  value={userData['guardianName']} 
-                                  onChange={(e) =>setUserData({...userData,"guardianName" : e.target.value.toUpperCase()})} 
-                                  />
-                                  {errors.guardianName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
-                            </Form.Group>
-                          </div>
-                          <div style={{marginRight:'5px',color:'rgb(11, 73, 128)'}}>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>{t("Guardian's middle name")}</Form.Label>
-                                  <Form.Control
-                                  type="text" 
                                   placeholder="Your answer"
-                                  disabled={isGuardiancheck}
-                                  value={userData['guardianmName']} 
-                                  onChange={(e) =>setUserData({...userData,"guardianmName" : e.target.value.toUpperCase()})} 
+                                  value={userData['guardianlName']} 
+                                  onChange={(e) =>setUserData({...userData,"guardianlName" : e.target.value.toUpperCase()})} 
                                   />
-                                  {errors.guardianmName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
-                            </Form.Group>
-                          </div>
-
-                  </div>
-                  <div className='parenteach1'>
-                    {!isGuardiancheck && <div>
-                    <Form.Group as={Col}>
-                    <Form.Label className='frmlabel'>{t("Relationship to guardian")} *</Form.Label>
-                            <Form.Select
-                            type="text" 
-                            disabled={isGuardiancheck}
-                            value={userData['relationship']} 
-                            onChange={(e) =>setUserData({...userData,"relationship" : e.target.value})} 
-                            >
-                      {isGuardiancheck && <option value={userData['relationship']}>{userData['relationship']}</option>}
-                      <option value={''}>Please select</option>
-                      <option value={'LEGAL GUARDIAN'}>LEGAL GUARDIAN</option>
-                      <option value={'STEPMOTHER'}>STEPMOTHER</option>
-                      <option value={'STEPFATHER'}>STEPFATHER</option>
-                      <option value={'FOSTER PARENT'}>FOSTER PARENT</option>
-                      <option value={'GRANDPARENT'}>GRANDPARENT</option>
-                      <option value={'AUNT OR UNCLE'}>AUNT OR UNCLE</option>
-                      <option value={'OTHER RELATIVE'}>OTHER RELATIVE</option>
-                      <option value={'CUSTODIAN'}>CUSTODIAN</option>
-                      <option value={'NANNY OR CARETAKER'}>NANNY OR CARETAKER</option>
-                      <option value={'LEGAL GUARDIAN APPOINTED BY WILL'}>LEGAL GUARDIAN APPOINTED BY WILL</option>
-                      <option value={'GUARDIAN AD LITEM'}>GUARDIAN AD LITEM</option>
-                      <option value={'FAMILY FRIEND'}>FAMILY FRIEND</option>
-                            </Form.Select>
-                            {errors.relationship && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.relationship}</p>}
-                    </Form.Group>
-                    </div>}
-                    <div style={{margin:'0px 10px 0px 10px'}}>
-                    <Form.Group style={{position:'relative'}} as={Col}>
-                    <Form.Label className='frmlabel'>{t("Guardian's Contact No.")} *</Form.Label>
-                          <span style={{position:'absolute',bottom:'1.5px',left:'6px',fontSize:'15px',color:'black',fontWeight:'bold',display:'flex',top:'47px'}}><p style={{margin:'0px',marginTop:'-2px'}}>+</p>63-</span>
-                            <Form.Control
-                            type="text" 
-                            style={{paddingLeft:'45px'}}
-                            placeholder="XXX XXX XXXX"
-                            value={userData['guardianContact']} 
-                            onChange={(e) =>setUserData({...userData,"guardianContact" : e.target.value})} 
-                            />
-                          
-                    </Form.Group>
-                    {errors.guardianContact && <p style={{color: 'red',fontSize:'12px',margin:'0px',marginLeft:'5px'}}>{errors.guardianContact}</p>}
-                    </div>
-                    <div>
-                    <Form.Group as={Col}>
-                      <div style={{display:'flex',whiteSpace:'nowrap'}}>
-                      <Form.Label className='frmlabel'>{t("Guardian's Address")} *</Form.Label>
-                    <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={isSameAddress} onChange={handleSameAddress} />} label={t("Same address")} />
+                                  {errors.guardianlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianlName}</p>}
+                        </Form.Group>
+                      </div>
+                      <div style={{marginRight:'5px',color:'rgb(11, 73, 128)',marginLeft:'5px'}}>
+                        <Form.Group as={Col}>
+                        <Form.Label className='frmlabel'>{t("Guardian's first name")} *</Form.Label>
+                              <Form.Control
+                              type="text" 
+                              placeholder="Your answer"
+                              disabled={isGuardiancheck}
+                              value={userData['guardianName']} 
+                              onChange={(e) =>setUserData({...userData,"guardianName" : e.target.value.toUpperCase()})} 
+                              />
+                              {errors.guardianName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
+                        </Form.Group>
+                      </div>
+                      <div style={{marginRight:'5px',color:'rgb(11, 73, 128)'}}>
+                        <Form.Group as={Col}>
+                        <Form.Label className='frmlabel'>{t("Guardian's middle name")}</Form.Label>
+                              <Form.Control
+                              type="text" 
+                              placeholder="Your answer"
+                              disabled={isGuardiancheck}
+                              value={userData['guardianmName']} 
+                              onChange={(e) =>setUserData({...userData,"guardianmName" : e.target.value.toUpperCase()})} 
+                              />
+                              {errors.guardianmName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
+                        </Form.Group>
                       </div>
 
-                            <Form.Control
-                            type="text" 
-                            placeholder="House No., Street, Barangay, Municipality"
-                            value={userData['guardianAddress']} 
-                            onChange={(e) =>setUserData({...userData,"guardianAddress" : e.target.value.toUpperCase()})} 
-                            />
-                            {errors.guardianAddress && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianAddress}</p>}
-                    </Form.Group>
-                    </div>
-
-
+              </div>
+              <div className='parenteach1'>
+                {!isGuardiancheck && <div>
+                <Form.Group as={Col}>
+                <Form.Label className='frmlabel'>{t("Relationship to guardian")} *</Form.Label>
+                        <Form.Select
+                        type="text" 
+                        disabled={isGuardiancheck}
+                        value={userData['relationship']} 
+                        onChange={(e) =>setUserData({...userData,"relationship" : e.target.value})} 
+                        >
+                  {isGuardiancheck && <option value={userData['relationship']}>{userData['relationship']}</option>}
+                  <option value={''}>Please select</option>
+                  <option value={'LEGAL GUARDIAN'}>LEGAL GUARDIAN</option>
+                  <option value={'STEPMOTHER'}>STEPMOTHER</option>
+                  <option value={'STEPFATHER'}>STEPFATHER</option>
+                  <option value={'FOSTER PARENT'}>FOSTER PARENT</option>
+                  <option value={'GRANDPARENT'}>GRANDPARENT</option>
+                  <option value={'AUNT OR UNCLE'}>AUNT OR UNCLE</option>
+                  <option value={'OTHER RELATIVE'}>OTHER RELATIVE</option>
+                  <option value={'CUSTODIAN'}>CUSTODIAN</option>
+                  <option value={'NANNY OR CARETAKER'}>NANNY OR CARETAKER</option>
+                  <option value={'LEGAL GUARDIAN APPOINTED BY WILL'}>LEGAL GUARDIAN APPOINTED BY WILL</option>
+                  <option value={'GUARDIAN AD LITEM'}>GUARDIAN AD LITEM</option>
+                  <option value={'FAMILY FRIEND'}>FAMILY FRIEND</option>
+                        </Form.Select>
+                        {errors.relationship && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.relationship}</p>}
+                </Form.Group>
+                </div>}
+                <div style={{margin:'0px 10px 0px 10px'}}>
+                <Form.Group style={{position:'relative'}} as={Col}>
+                <Form.Label className='frmlabel'>{t("Guardian's Contact No.")} *</Form.Label>
+                      <span style={{position:'absolute',bottom:'1.5px',left:'6px',fontSize:'15px',color:'black',fontWeight:'bold',display:'flex',top:'47px'}}><p style={{margin:'0px',marginTop:'-2px'}}>+</p>63-</span>
+                        <Form.Control
+                        type="text" 
+                        style={{paddingLeft:'45px'}}
+                        placeholder="XXX XXX XXXX"
+                        value={userData['guardianContact']} 
+                        onChange={(e) =>setUserData({...userData,"guardianContact" : e.target.value})} 
+                        />
+                      
+                </Form.Group>
+                {errors.guardianContact && <p style={{color: 'red',fontSize:'12px',margin:'0px',marginLeft:'5px'}}>{errors.guardianContact}</p>}
+                </div>
+                <div>
+                <Form.Group as={Col}>
+                  <div style={{display:'flex',whiteSpace:'nowrap'}}>
+                  <Form.Label className='frmlabel'>{t("Guardian's Address")} *</Form.Label>
+                <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={isSameAddress} onChange={handleSameAddress} />} label={t("Same address")} />
                   </div>
-              </div>
-            </div>
 
-            <div className='siblingcontainer'>
-              <div style={{width:'100%',backgroundColor:'gray'}}>
-              <h3>{t("List of Siblings")}</h3>
-              </div>
-              <div style={{position:'relative',height:'30px',marginBottom:'10px'}}>
-              <FormControlLabel sx={{whiteSpace:'nowrap',position:'absolute',right:0}} control={<Switch checked={onlyChild} onChange={handleOnlyChild} />} label={t("I am only child")} />
-              </div>
-              <div style={{width:'100%',marginLeft:'30px'}}>
-              {errors.sibling && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.sibling}</p>}
-              {errors.siblingErrors && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.siblingErrors}</p>}
-              </div>
+                        <Form.Control
+                        type="text" 
+                        placeholder="House No., Street, Barangay, Municipality"
+                        value={userData['guardianAddress']} 
+                        onChange={(e) =>setUserData({...userData,"guardianAddress" : e.target.value.toUpperCase()})} 
+                        />
+                        {errors.guardianAddress && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianAddress}</p>}
+                </Form.Group>
+                </div>
 
-              {siblingfrm}
-              <div className='addbtnsib'>
-              {!onlyChild && <Button
-                className='myButton1'
-                variant='primary'
-                onClick={handleAddFields}
-                disabled={onlyChild}
-                sx={{color:'white',textTransform:'none',fontWeight:'bold',position:'absolute',left:'37%'}}
-              >
-                <AddIcon sx={{color:'white'}}/>{t("Add more siblings")}
-              </Button>}
+
               </div>
-            </div>
-            <div className='btnfrmn'>
-            <Button style={{marginRight:'10px'}} className='myButton' variant="contained" onClick={() => setStep(1)}>Previous</Button>
-            <Button className='myButton1' variant="contained" onClick={Check}>Next</Button>
-            </div>
-            </div>
+          </div>
         </div>
+        <div className='w-full'>
+          <div style={{width:'100%',backgroundColor:'gray'}}>
+          <h3>{t("List of Siblings")}</h3>
+          </div>
+          <div style={{position:'relative',height:'30px',marginBottom:'10px'}}>
+          <FormControlLabel sx={{whiteSpace:'nowrap',position:'absolute',right:0}} control={<Switch checked={onlyChild} onChange={handleOnlyChild} />} label={t("I am only child")} />
+          </div>
+          <div style={{width:'100%',marginLeft:'30px'}}>
+          {errors.sibling && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.sibling}</p>}
+          {errors.siblingErrors && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.siblingErrors}</p>}
+          </div>
+
+          {siblingfrm}
+          <div className='addbtnsib'>
+          {!onlyChild && <Button
+            className='myButton1'
+            variant='primary'
+            onClick={handleAddFields}
+            disabled={onlyChild}
+            sx={{color:'white',textTransform:'none',fontWeight:'bold',position:'absolute',left:'37%'}}
+          >
+            <AddIcon sx={{color:'white'}}/>{t("Add more siblings")}
+          </Button>}
+          </div>
+        </div>
+        <div className='btnfrmn'>
+        <Button style={{marginRight:'10px'}} className='myButton' variant="contained" onClick={() => setStep(1)}>Previous</Button>
+        <Button className='myButton1' variant="contained" onClick={Check}>Next</Button>
+        </div>
+      </div>
     </div>
     </>
   )
