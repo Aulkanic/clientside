@@ -9,7 +9,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import { ScholarCategory,FindRegisteredUser} from '../../Api/request.js'
+import { FindRegisteredUser} from '../../Api/request.js'
 import { Rulelist} from '../../Api/request.js';
 import Swal from 'sweetalert2';
 import TextInput from '../../Components/InputField/text.jsx';
@@ -22,11 +22,11 @@ import { useTranslation } from 'react-i18next';
 import { suffixList,barangayList,genderList,yearList,elementaryList,juniorhighList,seniorhighList,
   collegeList,strandList,courseList} from '../../Pages/Public/ApplicationForm/listOptions.js';    
 import { setForm } from '../../Redux/formSlice.js';
+import { validateText,validateCellphoneNumber,validateField } from '../../helper/validateField.js';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
 
 function Firststep() {
   const { t } = useTranslation();
@@ -34,13 +34,10 @@ function Firststep() {
   const navigate = useNavigate();
   const form = useSelector((state) => state.form)
   const [open, setOpen] = useState(false);
-  const { setStep, userData, setUserData} = useContext(multiStepContext);
+  const { setStep} = useContext(multiStepContext);
   const [errors, setErrors] = useState({}); 
-  const [scholarprog, setScholarProg] = useState([]);
   const [rule,setRule] = useState([])
   const [open1, setOpen1] = useState(false);
-  const savehnum = localStorage.getItem('housenum')
-  const [housenum,setHousenum] = useState(savehnum || savehnum !== null ? savehnum : '')
 
   const handleClose = () => {
     setOpen(false);
@@ -49,12 +46,13 @@ function Firststep() {
     setOpen1(false);
   };
   const handleOptionChange = (data) => {
-    const { name, value } = data; 
+    const { name, value } = data;    
     dispatch(setForm({ [name]: value }));
   }
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    dispatch(setForm({ [name]: value }));
+    const caps = value.toUpperCase()
+    dispatch(setForm({ [name]: caps }));
   };
   const getOptionsBasedOnYearLevel = () => {
     const yearLevel = form.yearLevel;
@@ -88,31 +86,29 @@ function Firststep() {
         return [];
     }
   };
-
-  
-
   const calculateAge = (birthday) => {
-    const today = new Date();
-    const birthDate = new Date(birthday);
-    const yearDiff = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    const dayDiff = today.getDate() - birthDate.getDate();
+      const today = new Date();
+      const birthDate = new Date(birthday);
+      const yearDiff = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      const dayDiff = today.getDate() - birthDate.getDate();
 
-    if (
-      yearDiff > 0 ||
-      (yearDiff === 0 && monthDiff > 0) ||
-      (yearDiff === 0 && monthDiff === 0 && dayDiff >= 0)
-    ) {
-      let age = yearDiff;
-      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-        age--;
+      if (
+        yearDiff > 0 ||
+        (yearDiff === 0 && monthDiff > 0) ||
+        (yearDiff === 0 && monthDiff === 0 && dayDiff >= 0)
+      ) {
+        let age = yearDiff;
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+          age--;
+        }
+        return age;
+      } else {
+        return 0; // Return 0 if the entered birthday is in the current year or a future year
       }
-      return age;
-    } else {
-      return 0; // Return 0 if the entered birthday is in the current year or a future year
-    }
   };
-  useEffect(() => {
+
+useEffect(() => {
     const { birthday } = form;
     const age = calculateAge(birthday);
     if (age > rule.ageNum) {
@@ -126,28 +122,20 @@ function Firststep() {
       setStep(1);
     }
     dispatch(setForm({ ["age"]: age }));
-  }, [form.birthday]);
-  
-  useEffect(() => {
+},[form.birthday]); 
+useEffect(() => {
     async function fetchData() {
       try {
-        const scholist = await ScholarCategory.ScholarshipProgram();
-        const schodata = scholist.data.SchoCat;
-        const schoav = schodata.filter(data => data.status === 'Open')
         const rul = await Rulelist.FETCH_RULE()
-       
         setRule(rul.data.result[0])
-        setScholarProg(schoav);
       } catch (error) {
         console.error(error);
       }
-    }
-    
+    }    
     fetchData();
-
-  }, []);
-
-  function Check(){
+},[]);
+  
+async function Check(){
     const errors = {};
     if(!form.firstName || !form.lastName || !form.email){
       setOpen1(true)
@@ -164,33 +152,15 @@ function Firststep() {
       setStep(1);
       return
     }
-    if (!form.gender) {
-      errors.form = "Please Select your Gender";
-    }
-    if (!form.birthday || form.birthday === '') {
-      errors.birthday = "Birthday is required";
-    }
-    if (!form.housenum || form.housenum === '') {
-      errors.housenum = "House No./Street is required";
-    }
-    if (!form.baranggay || form.baranggay === '') {
-      errors.baranggay = "Select your Baranggay";
-    }
-    if (!form.School || form.School === '') {
-      errors.School = "School is required";
-    }
-    if (!form.gradeLevel || form.gradeLevel === '') {
-      errors.gradeLevel = "Grade Level is required";
-    }
-    if (!form.SchoolAddress || form.SchoolAddress === '') {
-      errors.SchoolAddress = "SchoolAddress is required";
-    }
-    if (!form.yearLevel || form.yearLevel === '') {
-      errors.yearLevel = "Select your Year Level";
-    }
-    if (!form.course || form.course === '') {
-      errors.course = "Select your Course";
-    }
+    errors.gender = await validateText(form.gender,50,'Gender');
+    errors.birthday = await validateField(form.birthday,50,'Birthday');
+    errors.housenum = await validateField(form.housenum,50,'House Numer/Street');
+    errors.baranggay =await validateField(form.baranggay,50,'Barangay');
+    errors.School = await validateField(form.School,300,'School');
+    errors.gradeLevel = await validateField(form.gradeLevel,50,'Grade Level');
+    errors.SchoolAddress = await validateField(form.SchoolAddress,500,'School Address');
+    errors.yearLevel = await validateField(form.yearLevel,50,'Year Level');
+    errors.course = await validateField(form.course,150,'Course');
     if (form.age === '') {
       errors.age = "Age is required";
     } else if (form.age <= 0) {
@@ -202,18 +172,9 @@ function Firststep() {
     }else if(form.age <=5){
       errors.age = 'Minimum age for application is five years old';
     }
-    if (form.birthPlace === '' || !form.birthPlace) {
-      errors.birthPlace = "Birth of Place is required";
-    } else if (form.birthPlace?.length === 1) {
-      errors.birthPlace = "Input must not contain a single letter.";
-    }else if (/[!@#$%^&*/_()?":{}|<>]/.test(form.age)) {
-      errors.age = "Special characters are not allowed.";
-    }
-    if (form.contactNum === '' || !form.contactNum) {
-      errors.contactNum = "Phone Number is required";
-    } else if (!/^9\d{9}$/.test(form.contactNum)) {
-      errors.contactNum = "Invalid phone number.";
-    }
+    errors.birthPlace =await validateField(form.birthPlace,200,'Birth Place');
+    errors.contactNum =await validateCellphoneNumber(form.contactNum,'Contact Number');
+    console.log(errors)
     const fulladress = `${form.housenum} ${form.baranggay} MARILAO BULACAN`;
     dispatch(setForm({ ["address"]: fulladress }));
     
@@ -261,29 +222,9 @@ const findCreatedAcc = async() =>{
      })
   }
 }
-
-useEffect(() =>{
-    localStorage.setItem('housenum',housenum)
-},[housenum])
 const handleRegister = () => {
   navigate('/register');
 };
-
-useEffect(() => {
-  const fieldsToCheck = ['housenum', 'birthPlace', 'School', 'SchoolAddress'];
-  const errors = {};
-
-  fieldsToCheck?.forEach((field) => {
-    const fieldValue = field === 'housenum' ? housenum : userData[field];
-    if (fieldValue && fieldValue.trim() !== '' && !/^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(fieldValue)) {
-      errors[field] = 'Use uppercase format only';
-    } else {
-      delete errors[field];
-    }
-  });
-
-  setErrors(errors);
-}, [housenum, userData.birthPlace, userData.School, userData.SchoolAddress]);
 
   return (
   <>
@@ -326,193 +267,192 @@ useEffect(() => {
       <Button onClick={handleClose}>Ok</Button>
     </DialogActions>
   </Dialog>
-  <div className='FirstepFrm'>
-          <div className="w-full">
-          <div className='w-full'>
-            <div className='w-full p-8'>
-              <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
-                  <TextInput
-                      label={t("Last Name")}
-                      type={'text'}
-                      required={false}
-                      name='lastName'
-                      value={form['lastName']}
-                      readonly={true}
-                  />  
-                  <TextInput
-                      label={t("First Name")}
-                      type={'text'}
-                      required={false}
-                      name='firstName'
-                      value={form['firstName']}
-                      readonly={true}
-                  />  
-                  <TextInput
-                      label={t("Middle Name")}
-                      type={'text'}
-                      required={false}
-                      name='middleName'
-                      value={form['middleName']}
-                      readonly={true}
-                  />  
-                  <SelectInput
-                    label={t("Suffix")}
-                    required={false}
-                    value={form.suffix}
-                    onChange={handleOptionChange}
-                    options={suffixList}
-                  />
-              </div>
-              <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
-                  <TextInput
-                      label={t("House No/Street")}
-                      required={true}
-                      type={'text'}
-                      name='housenum'
-                      placeholder='e.g., 123 Main Street'
-                      value={form.housenum}
-                      onChange={handleInputChange}
-                      error={errors.housenum}
-                      readonly={false}
-                    />
-                  <SelectInput
-                    label={t("Barangay")}
+  <div className='w-full bg-white'>
+    <div className="w-full">
+      <div className='w-full'>
+        <div className='w-full p-8'>
+          <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
+              <TextInput
+                  label={t("Last Name")}
+                  type={'text'}
+                  required={false}
+                  name='lastName'
+                  value={form['lastName']}
+                  readonly={true}
+              />  
+              <TextInput
+                  label={t("First Name")}
+                  type={'text'}
+                  required={false}
+                  name='firstName'
+                  value={form['firstName']}
+                  readonly={true}
+              />  
+              <TextInput
+                  label={t("Middle Name")}
+                  type={'text'}
+                  required={false}
+                  name='middleName'
+                  value={form['middleName']}
+                  readonly={true}
+              />  
+              <SelectInput
+                label={t("Suffix")}
+                required={false}
+                value={form.suffix}
+                onChange={handleOptionChange}
+                options={suffixList}
+              />
+          </div>
+          <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
+              <TextInput
+                  label={t("House No/Street")}
+                  required={true}
+                  type={'text'}
+                  name='housenum'
+                  placeholder='e.g., 123 Main Street'
+                  value={form.housenum}
+                  onChange={handleInputChange}
+                  error={errors.housenum}
+                  readonly={false}
+                />
+              <SelectInput
+                label={t("Barangay")}
+                required={true}
+                value={form.baranggay}
+                onChange={handleOptionChange}
+                options={barangayList}
+                error={errors.baranggay}
+              />
+          </div>
+          <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
+              <TextInput
+                  label={t("City")}
+                  type={'text'}
+                  required={false}
+                  name='city'
+                  value={'Marilao'}
+                  readonly={true}
+              />
+              <TextInput
+                  label={t("Province")}
+                  type={'text'}
+                  required={false}
+                  name='province'
+                  value={'Bulacan'}
+                  readonly={true}
+              />
+          </div>
+          <div className='flex flex-col gap-2 flex-wrap lg:flex-row p-2 w-full'>
+              <SelectInput
+                label={t("Gender")}
+                required={true}
+                value={form.gender}
+                onChange={handleOptionChange}
+                options={genderList}
+                error={errors.gender}
+              />
+              <TextInput
+                  label={t("Birth Date")}
+                  type={'date'}
+                  required={true}
+                  name='birthday'
+                  value={form['birthday']}
+                  onChange={handleInputChange}
+                  error={errors.birthday}
+                  readonly={false}
+              />
+              <TextInput
+                  label={t("Age")}
+                  type={'text'}
+                  required={true}
+                  name='age'
+                  value={form['age']}
+                  error={errors.age}
+                  readonly={true}
+              />
+          </div>
+          <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
+              <TextInput
+                  label={t("Birth Place")}
+                  type={'text'}
+                  required={true}
+                  name='birthPlace'
+                  onChange={handleInputChange}
+                  error={errors.birthPlace}
+                  value={form['birthPlace']}
+                  readonly={false}
+              />
+              <TeleInput
+                  label={t("Mobile Number")}
+                  type={'text'}
+                  required={true}
+                  name='contactNum'
+                  onChange={handleInputChange}
+                  error={errors.contactNum}
+                  value={form['contactNum']}
+                  readonly={false}
+              />
+          </div>
+        </div>
+      </div>
+      <div className='w-full'>
+        <h4 className='w-full bg-[#043F97] text-white pl-2 py-4 text-lg font-bold'>{t("Educational Information")}</h4>
+        <div className='w-full p-8'>
+            <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
+              <TextInput
+                    label={t("Last School Attended")}
+                    type={'text'}
                     required={true}
-                    value={form.baranggay}
-                    onChange={handleOptionChange}
-                    options={barangayList}
-                    error={errors.baranggay}
-                  />
-              </div>
-              <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
-                  <TextInput
-                      label={t("City")}
-                      type={'text'}
-                      required={false}
-                      name='city'
-                      value={'Marilao'}
-                      readonly={true}
-                  />
-                  <TextInput
-                      label={t("Province")}
-                      type={'text'}
-                      required={false}
-                      name='province'
-                      value={'Bulacan'}
-                      readonly={true}
-                  />
-              </div>
-              <div className='flex flex-col gap-2 flex-wrap lg:flex-row p-2 w-full'>
-                  <SelectInput
-                    label={t("Gender")}
+                    name='School'
+                    onChange={handleInputChange}
+                    error={errors.School}
+                    value={form['School']}
+                    readonly={false}
+                />                 
+              <TextInput
+                    label={t("School Address")}
+                    type={'text'}
                     required={true}
-                    value={form.gender}
-                    onChange={handleOptionChange}
-                    options={genderList}
-                    error={errors.gender}
-                  />
-                  <TextInput
-                      label={t("Birth Date")}
-                      type={'date'}
-                      required={true}
-                      name='birthday'
-                      value={form['birthday']}
-                      onChange={handleInputChange}
-                      error={errors.birthday}
-                      readonly={false}
-                  />
-                  <TextInput
-                      label={t("Age")}
-                      type={'text'}
-                      required={true}
-                      name='age'
-                      value={form['age']}
-                      error={errors.age}
-                      readonly={true}
-                  />
-              </div>
-              <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
-                  <TextInput
-                      label={t("Birth Place")}
-                      type={'text'}
-                      required={true}
-                      name='birthPlace'
-                      onChange={handleInputChange}
-                      error={errors.birthPlace}
-                      value={form['birthPlace']}
-                      readonly={false}
-                  />
-                  <TeleInput
-                      label={t("Mobile Number")}
-                      type={'text'}
-                      required={true}
-                      name='contactNum'
-                      onChange={handleInputChange}
-                      error={errors.contactNum}
-                      value={form['contactNum']}
-                      readonly={false}
-                  />
-              </div>
+                    name='SchoolAddress'
+                    onChange={handleInputChange}
+                    error={errors.SchoolAddress}
+                    value={form['SchoolAddress']}
+                    readonly={false}
+                />                 
             </div>
-          </div>
-          <div className='w-full'>
-            <h4 className='w-full bg-[#043F97] text-white pl-2 py-4 text-lg font-bold'>{t("Educational Information")}</h4>
-            <div className='w-full p-8'>
-                <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
-                  <TextInput
-                        label={t("Last School Attended")}
-                        type={'text'}
-                        required={true}
-                        name='School'
-                        onChange={handleInputChange}
-                        error={errors.School}
-                        value={form['School']}
-                        readonly={false}
-                    />                 
-                  <TextInput
-                        label={t("School Address")}
-                        type={'text'}
-                        required={true}
-                        name='SchoolAddress'
-                        onChange={handleInputChange}
-                        error={errors.SchoolAddress}
-                        value={form['SchoolAddress']}
-                        readonly={false}
-                    />                 
-                </div>
-                <div className='flex flex-col flex-wrap gap-2 lg:flex-row p-2 w-full'>
-                    <SelectInput
-                      label={t("Year Level")}
-                      required={true}
-                      value={form.yearLevel}
-                      onChange={handleOptionChange}
-                      error={errors.yearLevel}
-                      options={yearList}
-                    />
-                    {form['yearLevel'] !== '' && (<SelectInput
-                      label={t("Grade/Year")}
-                      required={true}
-                      value={form.gradeLevel}
-                      onChange={handleOptionChange}
-                      error={errors.gradeLevel}
-                      options={getOptionsBasedOnYearLevel()}
-                    />)}
-                    {form['yearLevel'] !== 'COLLEGE' && form.yearLevel !== 'SENIOR HIGHSCHOOL' ? (null) : (<SelectInput
-                      label={t("Course")}
-                      required={true}
-                      value={form.course}
-                      error={errors.course}
-                      onChange={handleOptionChange}
-                      options={getOptionsBasedOnGradeLevel()}
-                    />)}
-                </div>
+            <div className='flex flex-col flex-wrap gap-2 lg:flex-row p-2 w-full'>
+                <SelectInput
+                  label={t("Year Level")}
+                  required={true}
+                  value={form.yearLevel}
+                  onChange={handleOptionChange}
+                  error={errors.yearLevel}
+                  options={yearList}
+                />
+                {form['yearLevel'] !== '' && (<SelectInput
+                  label={t("Grade/Year")}
+                  required={true}
+                  value={form.gradeLevel}
+                  onChange={handleOptionChange}
+                  error={errors.gradeLevel}
+                  options={getOptionsBasedOnYearLevel()}
+                />)}
+                {form['yearLevel'] !== 'COLLEGE' && form.yearLevel !== 'SENIOR HIGHSCHOOL' ? (null) : (<SelectInput
+                  label={t("Course")}
+                  required={true}
+                  value={form.course}
+                  error={errors.course}
+                  onChange={handleOptionChange}
+                  options={getOptionsBasedOnGradeLevel()}
+                />)}
             </div>
-          </div>
-
-          <div className='w-full flex justify-end items-end pr-4 pb-4'>
-           <Button className='myButton' variant="contained" onClick={Check}>Next</Button>
-          </div>
-          </div>
+        </div>
+      </div>
+      <div className='w-full flex justify-end items-end pr-4 pb-4'>
+        <Button className='myButton' variant="contained" onClick={Check}>Next</Button>
+      </div>
+    </div>
   </div>
   </>
 )

@@ -539,7 +539,7 @@ const findCreatedAcc = async() =>{
                 {otp.map((digit, index) => (
                     <input
                       key={index}
-                      className="w-10 h-10 border-2 border-gray-400 outline-0 rounded-sm"
+                      className="w-10 h-10 text-center border-2 border-gray-400 outline-0 rounded-sm"
                       type="text"
                       maxLength="1"
                       value={digit}

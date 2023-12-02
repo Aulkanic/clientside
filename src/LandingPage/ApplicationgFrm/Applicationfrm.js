@@ -122,48 +122,47 @@ function Applicationfrm() {
         }
     }
   return (
-    <div style={{display:'flex',flexDirection:'column'}}>
-    <div className='stepdiv'>
-    <div className="backgroundstep">
-        <h1>SCHOLARSHIP APPLICATION FORM</h1>
-    <div className='stepper'>
+    <div className='w-screen flex flex-col'>
+    <div className='w-full h-max mb-20 flex flex-col justify-center items-center'>
+      <h1 className='bg-[#043F97] md:bg-transparent w-full text-white md:text-black pl-4 py-4 text-lg font-bold'>SCHOLARSHIP APPLICATION FORM</h1>
+    <div className='flex items-center justify-center w-full md:w-4/5 text-blue-700 h-max py-2 bg-teal-500 md:rounded-tl-2xl md:rounded-tr-2xl'>
         <Stepper alternativeLabel style={{width:'100%',paddingTop:'20px',height:'max-Content',color:'white'}} activeStep={currentStep - 1} orientation='horizontal' connector={<ColorlibConnector />}>
-
         {steps.map((label,index) => (
           <Step key={label}>
             <CustomStepLabel  sx={{color:"white"}} active={currentStep === (index + 1)} StepIconComponent={ColorlibStepIcon}>{label}</CustomStepLabel>
           </Step>
         ))}
-        </Stepper>
-        
+        </Stepper> 
     </div>
-    <div className="ribbon-header" style={{position:'relative',width:'80%'}}>
-    <div className="ribbon-header-text" style={{width:'100%',backgroundColor:'#043F97'}}>
-      {currentStep === 1 && (<h2 style={{color:"white"}}>{t("Personal Information")}</h2>)}
-      {currentStep === 2 && (<h2 style={{color:"white"}}>{t("Parent's Information")}</h2>)}
-      {currentStep === 3 && (<h2 style={{color:"white"}}>{t("Other Information")}</h2>)}
-
-    </div>
-    <div style={{paddingLeft:'15px',marginTop:'20px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-      <div>
-      {currentStep !== 3 && currentStep !== 4 && (<>
-     <p style={{paddingLeft:'5px',fontStyle:'italic',color:'black',fontWeight:'300'}}>{t("Please use UPPERCASE FORMAT to fill up this application form")}.
-     </p>
-     <p style={{paddingLeft:'5px',fontStyle:'italic',color:'black',fontWeight:'300'}}>{t("Please fill in the required fields marked with * to complete the form")}</p>
-     <p style={{paddingLeft:'5px',fontStyle:'italic',color:'black',fontWeight:'300'}}>{t("Review all fields in the online form carefully and provide complete and accurate information.")}</p>
-     </>)}
-     {currentStep === 3 && <p style={{paddingLeft:'5px',fontStyle:'italic'}}>Please complete the form by selecting your answers from the available choices.</p>}
-     {currentStep === 4 && null}
+    <div className="relative sm:w-full md:w-4/5 bg-white shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)]">
+      <div className=' bg-[#043F97] w-full flex justify-between items-center h-16 md:h-auto'>
+        <div className=''>
+        {currentStep === 1 && (<h2 className="hidden md:flex bg-[#043F97] w-full text-white pl-4 py-4 text-lg font-bold">{t("Personal Information")}</h2>)}
+        {currentStep === 2 && (<h2 className="hidden md:flex bg-[#043F97] w-full text-white pl-4 py-4 text-lg font-bold">{t("Parent's Information")}</h2>)}
+        {currentStep === 3 && (<h2 className="hidden md:flex bg-[#043F97] w-full text-white pl-4 py-4 text-lg font-bold">{t("Other Information")}</h2>)}
+        {currentStep === 4 && (<h2 className="hidden md:flex bg-[#043F97] w-full text-white pl-4 py-4 text-lg font-bold"></h2>)}
+        </div>
+        <div className=''>
+        <LanguageSwitcher />  
+        </div>
       </div>
+      <div className='sm:block md:flex py-4 px-2'>
 
-     <div style={{width:'max-content'}}>
-      <LanguageSwitcher />  
+        <div>
+        {currentStep !== 3 && currentStep !== 4 && (<>
+      <p style={{paddingLeft:'5px',fontStyle:'italic',color:'black',fontWeight:'300'}}>{t("Please use UPPERCASE FORMAT to fill up this application form")}.
+      </p>
+      <p style={{paddingLeft:'5px',fontStyle:'italic',color:'black',fontWeight:'300'}}>{t("Please fill in the required fields marked with * to complete the form")}</p>
+      <p style={{paddingLeft:'5px',fontStyle:'italic',color:'black',fontWeight:'300'}}>{t("Review all fields in the online form carefully and provide complete and accurate information.")}</p>
+      </>)}
+      {currentStep === 3 && <p style={{paddingLeft:'5px',fontStyle:'italic'}}>Please complete the form by selecting your answers from the available choices.</p>}
+      {currentStep === 4 && null}
+        </div>
+
       </div>
     </div>
-  </div>
-   
+    <div className='block w-full md:w-4/5 shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)]'>
     {showStep(currentStep)}
-    
     </div>
     </div>
     </div>

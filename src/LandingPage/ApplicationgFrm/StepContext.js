@@ -8,7 +8,7 @@ import { I18nextProvider } from 'react-i18next';
 export const multiStepContext = React.createContext();
 function StepContext() {
     const user = useSelector((state) => state.user);
-    const [currentStep, setStep] = useState(2);
+    const [currentStep, setStep] = useState(1);
 
     const [userData, setUserData] = useState(() => {
       const saveData = localStorage.getItem('userData');
@@ -55,24 +55,6 @@ function StepContext() {
     const [finalData, setFinalData] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() =>{
-      setUserData((prevUserData) => ({
-        ...prevUserData,
-        applicantNum: user.applicantNum, 
-        firstName:user.fname,
-        lastName:user.lname,
-        middleName:user.mname,
-        email:user.email,
-      }));
-        localStorage.setItem('userData',JSON.stringify(userData))
-    },[userData])
-
-    useEffect(() =>{
-      const saveData = localStorage.getItem('userData');
-      if(saveData){
-        setUserData(JSON.parse(saveData))
-      }
-    },[])
 
     function SubmitData(){
       setFinalData(finalData => [...finalData,userData])

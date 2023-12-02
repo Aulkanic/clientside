@@ -213,6 +213,21 @@ const motherEducationOptions = [
     { value: 'COLLEGE GRADUATE', label: 'COLLEGE GRADUATE', name: 'motherEduc' },
     { value: 'POST BACCALAUREATE', label: 'POST BACCALAUREATE', name: 'motherEduc' },
   ];
-
+const relationshipList = [
+    { label: 'Please select', value: '', name: 'relationship' },
+    { label: 'LEGAL GUARDIAN', value: 'LEGAL GUARDIAN', name: 'relationship' },
+    { label: 'STEPMOTHER', value: 'STEPMOTHER', name: 'relationship' },
+    { label: 'STEPFATHER', value: 'STEPFATHER', name: 'relationship' },
+    { label: 'FOSTER PARENT', value: 'FOSTER PARENT', name: 'relationship' },
+    { label: 'GRANDPARENT', value: 'GRANDPARENT', name: 'relationship' },
+    { label: 'AUNT OR UNCLE', value: 'AUNT OR UNCLE', name: 'relationship' },
+    { label: 'OTHER RELATIVE', value: 'OTHER RELATIVE', name: 'relationship' },
+    { label: 'CUSTODIAN', value: 'CUSTODIAN', name: 'relationship' },
+    { label: 'NANNY OR CARETAKER', value: 'NANNY OR CARETAKER', name: 'relationship' },
+    { label: 'LEGAL GUARDIAN APPOINTED BY WILL', value: 'LEGAL GUARDIAN APPOINTED BY WILL', name: 'relationship' },
+    { label: 'GUARDIAN AD LITEM', value: 'GUARDIAN AD LITEM', name: 'relationship' },
+    { label: 'FAMILY FRIEND', value: 'FAMILY FRIEND', name: 'relationship' }
+  ];
 export {suffixList,barangayList,genderList,yearList,elementaryList,juniorhighList,seniorhighList,
-                collegeList,strandList,courseList,fatherEducationOptions,motherEducationOptions}
+                collegeList,strandList,courseList,fatherEducationOptions,motherEducationOptions,
+                relationshipList};

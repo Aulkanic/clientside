@@ -11,8 +11,8 @@ function LanguageSwitcher() {
   };
 
   return (
-    <div style={{display:'flex',whiteSpace:'nowrap',alignItems:'center',marginRight:'25px'}} >
-      <Form.Label style={{marginRight:'10px',color:"#0b4980"}} className='frmlabel'>Choose Language:</Form.Label>
+    <div className='flex mr-4 z-50 justify-center items-center gap-2' >
+      <Form.Label className='text-white'>Choose Language: </Form.Label>
       <Form.Select size="sm"  onChange={(e) => changeLanguage(e.target.value)}>
         <option value="en">English</option>
         <option value="tl">Tagalog</option>

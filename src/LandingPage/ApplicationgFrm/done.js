@@ -63,18 +63,17 @@ function Educational() {
 
   return (
     <>
-              <StyledBackdrop open={showBackdrop}>
-                <CircularProgress color="inherit" />
-              </StyledBackdrop>
-      <div className="donepage">
-        <h2>Your Application Form is Submitted</h2><br/>
-        
-        <p style={{marginBottom:'20px'}}>Please Login to your account to keep updated to your Application Status</p>
-        <div className='btnlogchoice'>
-        <Button sx={{marginRight:'10px',textTransform:'none'}} className='myButton'>
+      <StyledBackdrop open={showBackdrop}>
+        <CircularProgress color="inherit" />
+      </StyledBackdrop>
+      <div className="w-full bg-white px-8">
+        <h2 className='m-0 text-lg font-bold'>Your Application Form is Submitted</h2>
+        <p className='text-base font-semibold'>Please Login to your account to keep updated to your Application Status</p>
+        <div className='flex justify-end items-end gap-2 pb-4'>
+        <button className='myButton'>
           <Link style={{color:'white',textDecoration:'none'}} to='/login'>Redirect to Login Page in Website</Link>
-        </Button>
-        <Button sx={{color:'white',textTransform:'none'}} onClick={handleClickOpen} className='myButton'>Download Mobile Application and Login</Button>
+        </button>
+        <button onClick={handleClickOpen} className='myButton'>Download Mobile Application and Login</button>
         </div>
 
         <Dialog open={open} onClose={handleClose}>

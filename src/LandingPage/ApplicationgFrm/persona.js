@@ -20,9 +20,10 @@ import { styled } from '@mui/material/styles';
 import TextInput from '../../Components/InputField/text.jsx';
 import TeleInput from '../../Components/InputField/telephone.jsx';
 import SelectInput from '../../Components/InputField/select.jsx';
-import { fatherEducationOptions,motherEducationOptions } from '../../Pages/Public/ApplicationForm/listOptions.js';
+import { fatherEducationOptions,motherEducationOptions,relationshipList } from '../../Pages/Public/ApplicationForm/listOptions.js';
 import { setForm } from '../../Redux/formSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
+import { validateText,validateCellphoneNumber,validateNumber,validateField } from '../../helper/validateField.js';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 50,
@@ -33,18 +34,17 @@ function Persona() {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const form = useSelector((state) => state.form)
-    const { setStep, userData, setUserData} = useContext(multiStepContext);
+    const { setStep, userData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
     const [showBackdrop, setShowBackdrop] = useState(false);
-    const [famlist, setFamlist] = useState([]);
     const [rule,setRule] = useState([]);
-    const [siblings, setSiblings] = useState(userData.siblings || [])
+    const [siblings, setSiblings] = useState(form.siblings || [])
     const saveonlychi = localStorage.getItem('onlychild')
     const savesameaddress = localStorage.getItem('sameaddress')
     const [onlyChild, setOnlyChild] = useState(saveonlychi === 'true');
     const savenofat = localStorage.getItem('nofather')
     const [noFather, setNoFather] = useState(savenofat === 'true');
-    const [value, setValue] = useState('' || userData.relationship);
+    const [value, setValue] = useState('' || form.relationship);
     const [isGuardiancheck,setisGuardiancheck] = useState(false)
     const [isFather,setisFather] = useState(false);
     const [isSameAddress,setSameAddress] = useState(savesameaddress === 'true')
@@ -52,21 +52,24 @@ function Persona() {
       setValue(event.target.value);
       const isGuardian = event.target.value;
       if(isGuardian === 'Father'){
-        userData.guardianName = userData.fatherName;
-        userData.guardianlName = userData.fatherlName;
-        userData.relationship = 'FATHER'
+        dispatch(setForm({ ['guardianName']: form.fatherName }));
+        dispatch(setForm({ ['guardianlName']: form.fatherlName }));
+        dispatch(setForm({ ['guardianmName']: form.fathermName }));
+        dispatch(setForm({ ['relationship']: 'FATHER' }));
         setisGuardiancheck(true);
       }
       if(isGuardian === 'Mother'){
-        userData.guardianName = userData.motherName;
-        userData.guardianlName= userData.motherlName ;
-        userData.relationship = 'MOTHER';
+        dispatch(setForm({ ['guardianName']: form.motherName }));
+        dispatch(setForm({ ['guardianlName']: form.motherlName }));
+        dispatch(setForm({ ['guardianmName']: form.mothermName }));
+        dispatch(setForm({ ['relationship']: 'MOTHER' }));
         setisGuardiancheck(true)
       }
       if(isGuardian === 'Other'){
-        userData.guardianName = '';
-        userData.guardianlName= '' ;
-        userData.relationship ='';
+        dispatch(setForm({ ['guardianName']: '' }));
+        dispatch(setForm({ ['guardianlName']: '' }));
+        dispatch(setForm({ ['guardianmName']: '' }));
+        dispatch(setForm({ ['relationship']: '' }));
         setisGuardiancheck(false)
       }
     };
@@ -76,7 +79,8 @@ function Persona() {
     }
     const handleInputChange = (e) => {
       const { name, value } = e.target;
-      dispatch(setForm({ [name]: value }));
+      const caps = value.toUpperCase()
+      dispatch(setForm({ [name]: caps }));
     };
 
     const handleInputChange1 = (index, field, value) => {
@@ -87,7 +91,6 @@ function Persona() {
     const handleAddFields = () =>{
       setSiblings([...siblings, { firstName: '', lastName: '',middleName:'' }]);
     }
-
     const handleRemoveFields = (index) =>{
       const values = [...siblings]
       values.splice(index, 1);
@@ -104,224 +107,50 @@ function Persona() {
     const handleNoFather = () =>{
       if(!noFather){
         setNoFather(true);
-        userData.fatherName = 'NONE';
-        userData.fatherlName = 'NONE';
-        userData.fathermName = 'NONE';
-        userData.fatherEduc = 'NONE'
-        userData.fatherOccu = 'NONE'
+        dispatch(setForm({ ['fatherName']: 'NONE' }));
+        dispatch(setForm({ ['fatherlName']: 'NONE' }));
+        dispatch(setForm({ ['fathermName']: 'NONE' }));
+        dispatch(setForm({ ['fatherEduc']: 'NONE' }));
+        dispatch(setForm({ ['fatherOccu']: 'NONE' }));
         setisFather(true);
         if(value === 'Father'){
           setValue('Other')
         }
       }else{
         setNoFather(false)
-        userData.fatherName = '';
-        userData.fatherlName = '';
-        userData.fathermName = '';
-        userData.fatherEduc = '';
-        userData.fatherOccu = '';
+        dispatch(setForm({ ['fatherName']: '' }));
+        dispatch(setForm({ ['fatherlName']: '' }));
+        dispatch(setForm({ ['fathermName']: '' }));
+        dispatch(setForm({ ['fatherEduc']: '' }));
+        dispatch(setForm({ ['fatherOccu']: '' }));
         setisFather(false);
       }
     }
     const handleSameAddress = () =>{
       if(!isSameAddress){
         setSameAddress(true);
-        userData.guardianAddress = userData.address;
+        dispatch(setForm({ ['guardianAddress']: form.address }));
       }else{
         setSameAddress(false)
-        userData.guardianAddress = '';
+        dispatch(setForm({ ['guardianAddress']: '' }));
       }
     }
-
-    useEffect(() =>{
-          async function Fetch(){
-            const rul = await Rulelist.FETCH_RULE()
-            const famdata = await FetchingFamily.FETCH_FAM();
-            const datafam = famdata.data.Familylist;
-            const famrecord = datafam?.filter(data => 
-              data.motherName !== 'None' &&
-              data.fatherName !== 'None' 
-              )
-            setFamlist(famrecord)
-            setRule(rul.data.result[0])
-          }
-          Fetch()
-    },[])
-
-
    async function Check(){
       const errors = {};
-      if (!userData.motherName || userData.motherName === '') {
-        errors.motherName = "Mother Name is required";
-      } 
-      else if (userData.motherName.length === 1) {
-        errors.motherName = "Input must not contain a single letter.";
-      }
-      else if (userData.motherName.length > 50) {
-        errors.motherName = "Input should contain less than 50 characters.";
-      }
-      else if (/[0-9]/.test(userData.motherName)) {
-        errors.motherName = "Input must not contain numeric value.";
-      }
-      else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.motherName)) {
-        errors.motherName = "Special characters are not allowed.";
-      }
-      if (!userData.motherlName || userData.motherlName === '') {
-        errors.motherlName = "Mother Lastname is required";
-      } 
-      else if (userData.motherlName.length === 1) {
-        errors.motherlName = "Input must not contain a single letter.";
-      }
-      else if (userData.motherlName.length > 50) {
-        errors.motherlName = "Input should contain less than 50 characters.";
-      }
-      else if (/[0-9]/.test(userData.motherlName)) {
-        errors.motherlName = "Input must not contain numeric value.";
-      }
-      else if (/[!@#$%^&*/_(),?":{}|<>]/.test(userData.motherlName)) {
-        errors.motherlName = "Special characters are not allowed.";
-      }
-      if (!userData.motherOccu || userData.motherOccu === '') {
-        errors.motherOccu = "Mother Occupation is required";
-      } else if (userData.motherOccu.length === 1) {
-        errors.motherOccu = "Input must not contain a single letter.";
-      } else if (userData.motherOccu.length > 50) {
-        errors.motherOccu = "Input should contain less than 50 characters.";
-      } else if (/[0-9]/.test(userData.motherOccu)) {
-        errors.motherOccu = "Input must not contain numeric value";
-      } else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.motherOccu)) {
-        errors.motherOccu = "Special characters are not allowed.";
-      } else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.motherOccu)) {
-        errors.motherOccu = "First Letter must be Capital";
-      }
-      if (!userData.motherEduc || userData.motherEduc === '') {
-        errors.motherEduc = "Mother Education is required";
-      } else if (userData.motherEduc.length === 1) {
-        errors.motherEduc = "Input must not contain a single letter.";
-      } else if (/[0-9]/.test(userData.motherEduc)) {
-        errors.motherEduc = "Input must not contain numeric value";
-      } else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.motherEduc)) {
-        errors.motherEduc = "Special characters are not allowed.";
-      } else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.motherEduc)) {
-        errors.motherEduc = "First Letter must be Capital";
-      }
-      if (!userData.fatherName || userData.fatherName === '') {
-        errors.fatherName = "Father Name is required";
-      } 
-      else if (userData.fatherName.length === 1) {
-        errors.fatherName = "Input must not contain a single letter.";
-      }
-      else if (userData.fatherName.length > 50) {
-        errors.fatherName = "Input should contain less than 50 characters.";
-      } 
-      else if (/[0-9]/.test(userData.fatherName)) {
-        errors.fatherName = "Input must not contain numeric value.";
-      }
-      else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.fatherName)) {
-        errors.fatherName = "Special characters are not allowed.";
-      }
-       else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.fatherName)) {
-        errors.fatherName = "First Letter must be Capital";
-      }
-
-      if (!userData.fatherlName || userData.fatherlName === '') {
-        errors.fatherlName = "Father Lastname is required";
-      } 
-      else if (userData.fatherlName.length === 1) {
-        errors.fatherlName = "Input must not contain a single letter.";
-      }
-      else if (userData.fatherlName.length > 50) {
-        errors.fatherlName = "Input should contain less than 50 characters.";
-      } 
-      else if (/[0-9]/.test(userData.fatherlName)) {
-        errors.fatherlName = "Input must not contain numeric value.";
-      }
-      else if (/[!@#$%^&*/_(),?":{}|<>]/.test(userData.fatherlName)) {
-        errors.fatherlName = "Special characters are not allowed.";
-      }
-       else if (userData.fatherlName.charAt(0) !== userData.fatherlName.charAt(0).toUpperCase()) {
-        errors.fatherlName = "First Letter must be Capital";
-      }
-
-
-      if (!userData.fatherOccu || userData.fatherOccu === '') {
-        errors.fatherOccu = "Father Occupation is required";
-      } else if (userData.fatherOccu.length === 1) {
-        errors.fatherOccu = "Input must not contain a single letter.";
-      } else if (userData.fatherOccu.length > 50) {
-        errors.fatherOccu = "Input should contain less than 50 characters.";
-      }  else if (/[0-9]/.test(userData.fatherOccu)) {
-        errors.fatherOccu = "Input must not contain numeric value";
-      } else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.fatherOccu)) {
-        errors.fatherOccu = "Special characters are not allowed.";
-      } else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.fatherOccu)) {
-        errors.fatherOccu = "First Letter must be Capital";
-      }
-      if (!userData.fatherEduc || userData.fatherEduc === '') {
-        errors.fatherEduc = "Father Education is required";
-      } else if (userData.fatherEduc.length === 1) {
-        errors.fatherEduc = "Input must not contain a single letter.";
-      } else if (/[0-9]/.test(userData.fatherEduc)) {
-        errors.fatherEduc = "Input must not contain numeric value";
-      } else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.fatherEduc)) {
-        errors.fatherEduc = "Special characters are not allowed.";
-      } else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.fatherEduc)) {
-        errors.fatherEduc = "First Letter must be Capital";
-      }
-      if (userData.guardianAddress === '' || !userData.guardianAddress) {
-        errors.guardianAddress = "Guardian Address is required";
-      } 
-      if (!userData.guardianName || userData.guardianName === '') {
-        errors.guardianName = "Guardian Name is required";
-      } 
-      else if (userData.guardianName.length === 1) {
-        errors.guardianName = "Input must not contain a single letter.";
-      }
-      else if (/[0-9]/.test(userData.guardianName)) {
-        errors.guardianName = "Input must not contain numeric value.";
-      }
-      else if (/[!@#$%^&*/_()?":{}|<>]/.test(userData.guardianName)) {
-        errors.guardianName = "Special characters are not allowed.";
-      }
-      if (!userData.guardianlName || userData.guardianlName === '') {
-        errors.guardianlName = "Guardian Lastname is required";
-      } 
-      else if (userData.guardianlName.length === 1) {
-        errors.guardianlName = "Input must not contain a single letter.";
-      }
-      else if (/[0-9]/.test(userData.guardianlName)) {
-        errors.guardianlName = "Input must not contain numeric value.";
-      }
-      else if (/[!@#$%^&*/_()?":{}|<>]/.test(userData.guardianlName)) {
-        errors.guardianlName = "Special characters are not allowed.";
-      }
-       else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.guardianlName)) {
-        errors.guardianlName = "First Letter must be Capital";
-      }
-      if (!userData.relationship || userData.relationship === '') {
-        errors.relationship = "Relationship is required";
-      } 
-      else if (userData.relationship.length === 1) {
-        errors.relationship = "Input must not contain a single letter.";
-      }
-      else if (/[0-9]/.test(userData.relationship)) {
-        errors.relationship = "Input must not contain numeric value.";
-      }
-      else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(userData.relationship)) {
-        errors.relationship = "Special characters are not allowed.";
-      }
-       else if (!/^[A-Z][A-Za-z,\s]*$/.test(userData.relationship)) {
-        errors.relationship = "First Letter must be Capital";
-      }
-      if (!userData.guardianContact || userData.guardianContact === '') {
-        errors.guardianContact = "Phone Number is required";
-      } else if (!/^9\d{9}$/.test(userData.guardianContact)) {
-        errors.guardianContact = "Invalid phone number.";
-      }
-      if (!userData.guardianAddress || userData.guardianAddress === '') {
-        errors.guardianAddress = "Guardian Address is required";
-      }
-
+      errors.motherName = await validateText(form.motherName, 50, 'Mother Name');
+      errors.motherlName = await validateText(form.motherlName,50, 'Mother Lastname');
+      errors.motherOccu = await validateField(form.motherOccu, 50, 'Mother Occupation');
+      errors.motherEduc = await validateField(form.motherEduc, 50, 'Mother Education');
+      errors.fatherName = await validateText(form.fatherName,50,'Father Name');
+      errors.fatherlName = await validateText(form.fatherlName,50,'Father Lastname');
+      errors.fatherOccu = await validateField(form.fatherOccu, 50,'Father Occupation');
+      errors.fatherEduc = await validateField(form.fatherEduc, 50,  'Father Education');
+      errors.guardianName = await validateText(form.guardianName, 50,'Guardian Name');
+      errors.guardianlName = await validateText(form.guardianlName, 50,'Guardian Lastname');
+      errors.relationship = await validateField(form.relationship, 50,'Relationship to Guardian');
+      errors.guardianContact = await validateCellphoneNumber(form.guardianContact,'Guardian Contact');
+      errors.guardianAddress = await validateField(form.guardianAddress, 50,'Guardian Address');
+      console.log(errors)
       if(!onlyChild){
         const hasEmptyFields = siblings.some(
           (sibling) =>
@@ -340,24 +169,21 @@ function Persona() {
           setErrors(errors);
           return;
         }
-        setUserData((prevUserData) => ({
-          ...prevUserData,
-          siblings: siblings, 
-        }));
+        dispatch(setForm({ ['siblings']: siblings }));
         function toTitleCase(str) {
           return str?.replace(/\w\S*/g, function(txt){
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
           });
         }
-        const str1 = toTitleCase(userData.motherName);
-        const str2 = toTitleCase(userData.motherlName);
-        const str21 = toTitleCase(userData.mothermName);
-        const str3 = toTitleCase(userData.fatherName);
-        const str4 = toTitleCase(userData.fatherlName);
-        const str41 = toTitleCase(userData.fathermName);
-        const str5 = toTitleCase(userData.firstName);
-        const str6 = toTitleCase(userData.lastName);
-        const str61 = toTitleCase(userData.middleName);
+        const str1 = toTitleCase(form.motherName);
+        const str2 = toTitleCase(form.motherlName);
+        const str21 = toTitleCase(form.mothermName);
+        const str3 = toTitleCase(form.fatherName);
+        const str4 = toTitleCase(form.fatherlName);
+        const str41 = toTitleCase(form.fathermName);
+        const str5 = toTitleCase(form.firstName);
+        const str6 = toTitleCase(form.lastName);
+        const str61 = toTitleCase(form.middleName);
         const userName = `${str5} ${str61} ${str6}`
         const groupedNames = {
           motherName: `${str1} ${str21} ${str2}`,
@@ -385,7 +211,7 @@ function Persona() {
             return
           }else{
             setErrors('')
-            setUserData((prevData) => ({ ...prevData, familyCode: res.data.familyCode, }));
+            dispatch(setForm({ ['familyCode']: res.data.familyCode }));
             setShowBackdrop(false)
             localStorage.setItem('userData',JSON.stringify(userData))
             setStep(3)
@@ -410,15 +236,16 @@ function Persona() {
       ];
     
       fieldsToCheck?.forEach((field) => {
-        const fieldValue = userData[field];
+        const fieldValue = form[field];
         if (fieldValue && fieldValue.trim() !== '' && /[a-z]/.test(fieldValue)) {
           errors[field] = 'Use uppercase format only.';
         } else {
           delete errors[field];
         }
       });
+    
       const siblingErrors = [];
-
+    
       siblings?.forEach((sibling, index) => {
         const siblingFirstName = sibling.firstName;
         const siblingLastName = sibling.lastName;
@@ -429,95 +256,113 @@ function Persona() {
           siblingErrors.push(`Sibling ${index + 1} - Last Name should be in uppercase.`);
         }
       });
-      
+    
       if (siblingErrors.length > 0) {
-        errors.siblingErrors = 'Please Capitalize all letters for all your Siblings information.'; 
+        errors.siblingErrors = 'Please Capitalize all letters for all your Siblings information.';
       } else {
         delete errors.siblingErrors;
       }
+    
       setErrors(errors);
-    }, []);
+    
+    }, [form, siblings]);
+    useEffect(() =>{
+      async function Fetch(){
+        const rul = await Rulelist.FETCH_RULE()
+        setRule(rul.data.result[0])
+      }
+      Fetch()
+    },[rule])
+    useEffect(() => {
+      const updateGuardianInfo = () => {
+        const guardianInfo = value === 'Father'
+          ? {
+              guardianName: form.fatherName,
+              guardianlName: form.fatherlName,
+              guardianmName: form.fathermName,
+              relationship: 'Father',
+            }
+          : value === 'Mother'
+          ? {
+              guardianName: form.motherName,
+              guardianlName: form.motherlName,
+              guardianmName: form.mothermName,
+              relationship: 'Mother',
+            }
+          : {
+              guardianName: '',
+              guardianlName: '',
+              guardianmName: '',
+              relationship: '',
+            };
 
+        // Check if the new state is different before updating
+        const isGuardianCheckChanged = value === 'Father' || value === 'Mother';
+        if (isGuardianCheckChanged !== isGuardiancheck) {
+          dispatch(setForm(guardianInfo));
+          setisGuardiancheck(isGuardianCheckChanged);
+        }
+      };
+      updateGuardianInfo();
+    }, [value, form, dispatch, isGuardiancheck]);
     useEffect(() =>{
-      if(value === 'Father'){
-        userData.guardianName = userData.fatherName;
-        userData.guardianlName = userData.fatherlName;
-        userData.guardianmName = userData.fathermName;
-        userData.relationship = 'Father'
-        setisGuardiancheck(true);
-      }
-      if(value === 'Mother'){
-        userData.guardianName = userData.motherName;
-        userData.guardianlName= userData.motherlName;
-        userData.guardianmName= userData.mothermName;
-        userData.relationship = 'Mother';
-        setisGuardiancheck(true)
-      }
-      if(value === 'Other'){
-        userData.guardianName = '';
-        userData.guardianlName= '' ;
-        userData.guardianmName= '' ;
-        userData.relationship ='';
-        setisGuardiancheck(false)
-      }
-    },[value,userData])
-    useEffect(() =>{
-      localStorage.setItem('nofather',noFather);
-      localStorage.setItem('sameaddress',isSameAddress);
-      localStorage.setItem('onlychild',onlyChild);
-      
-  },[noFather,isSameAddress,onlyChild])
+          localStorage.setItem('nofather',noFather);
+          localStorage.setItem('sameaddress',isSameAddress);
+          localStorage.setItem('onlychild',onlyChild);
+          
+      },[noFather,isSameAddress,onlyChild])
 
    const siblingfrm = siblings?.map((sibling, index) => (
-    <div className='siblinginf' key={index}>
-      <div>
-      <Form.Group as={Col}>
-      <Form.Label style={{margin:'0px'}} className='frmlabel'>{t("Sibling")} {index + 1}</Form.Label><br/>
-      <Form.Label style={{fontSize:'15px',margin:'0px'}} className='frmlabel'>{t("Last Name")} *</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Enter sibling's last name"
-          value={sibling.lastName}
-          onChange={(e) => handleInputChange(index, 'lastName', e.target.value.toUpperCase())}
-        />
-      </Form.Group>
+    <>
+    <div className='flex flex-col p-4'>
+      <h1 className='m-0'>{`${t("Sibling")} ${index + 1}`}</h1>
+      <div className='sm:block md:flex' key={index}>
+          <TextInput
+            label={`${t("Last Name")} ${index + 1}`}
+            required={true}
+            type={'text'}
+            name='lastName'
+            placeholder="Enter sibling's last name"
+            value={sibling.lastName}
+            onChange={handleInputChange1}
+            error={errors.lastName}
+            readonly={false}
+          />
+          <TextInput
+            label={`${t("First Name")} ${index + 1}`}
+            required={true}
+            type={'text'}
+            name='firstName'
+            placeholder="Enter sibling's first name"
+            value={sibling.firstName}
+            onChange={handleInputChange1}
+            error={errors.firstName}
+            readonly={false}
+          />
+          <TextInput
+            label={`${t("Middle Name")} ${index + 1}`}
+            required={true}
+            type={'text'}
+            name='middleName'
+            placeholder="Enter sibling's middle name"
+            value={sibling.middleName}
+            onChange={handleInputChange1}
+            error={errors.middleName}
+            readonly={false}
+          />
+        <div className='relative sm:mt-0 md:mt-6'>
+        <button
+          className='myButton2'
+          variant='secondary'
+          onClick={() => handleRemoveFields(index)}
+        >
+          <DeleteIcon sx={{color:'white'}}/>
+        </button>
+        </div>
       </div>
-      <div>
-      <Form.Group as={Col}>
-      <Form.Label style={{margin:'0px'}} className='frmlabel'></Form.Label><br/>
-      <Form.Label style={{fontSize:'15px',margin:'0px'}} className='frmlabel'>{t("First Name")} *</Form.Label>
-        <Form.Control
-          type="text"
-          value={sibling.firstName}
-          placeholder="Enter sibling's first name"
-          onChange={(e) => handleInputChange(index, 'firstName', e.target.value.toUpperCase())}
-        />
-      </Form.Group>
-      </div>
-      <div>
-      <Form.Group as={Col}>
-      <Form.Label style={{margin:'0px'}} className='frmlabel'></Form.Label><br/>
-      <Form.Label style={{fontSize:'15px',margin:'0px'}} className='frmlabel'>{t("Middle Name")} </Form.Label>
-        <Form.Control
-          type="text"
-          value={sibling.middleName}
-          placeholder="Enter sibling's middle name"
-          onChange={(e) => handleInputChange(index, 'middleName', e.target.value.toUpperCase())}
-        />
-      </Form.Group>
-      </div>
-      <div style={{position:'relative',padding:'10px',width:'20%'}}>
-      <Button
-        className='myButton2'
-        variant='secondary'
-        onClick={() => handleRemoveFields(index)}
-        sx={{marginTop:'20px',position:'absolute',top:'-4px'}}
-      >
-        <DeleteIcon sx={{color:'white'}}/>
-      </Button>
-      </div>
-
     </div>
+
+    </>
      ))
 
     return (
@@ -525,10 +370,10 @@ function Persona() {
       <StyledBackdrop open={showBackdrop}>
         <CircularProgress color="inherit" />
       </StyledBackdrop>
-    <div className='Persona'> 
-      <div className='w-full bg-white'>
-        <div className='w-full flex p-8 sm:flex-col md:flex-row'>
-          <div className='flex flex-col gap-2 flex-wrap p-2 w-full'> 
+    <div className='w-full bg-white'> 
+      <div className='w-full'>
+        <div className='w-full leading-8 sm:block md:flex flex-wrap h-auto p-2'>
+          <div className='flex-1 flex-col gap-4 p-2'> 
              <TextInput
                 label={t("Father's last name")}
                 required={true}
@@ -538,7 +383,7 @@ function Persona() {
                 value={form.fatherlName}
                 onChange={handleInputChange}
                 error={errors.fatherlName}
-                readonly={false}
+                readonly={isFather}
               />
              <TextInput
                 label={t("Father's first name")}
@@ -549,7 +394,7 @@ function Persona() {
                 value={form.fatherName}
                 onChange={handleInputChange}
                 error={errors.fatherName}
-                readonly={false}
+                readonly={isFather}
               />
              <TextInput
                 label={t("Father's middle name")}
@@ -560,18 +405,18 @@ function Persona() {
                 value={form.fathermName}
                 onChange={handleInputChange}
                 error={errors.fathermName}
-                readonly={false}
+                readonly={isFather}
               />  
              <TextInput
                 label={t("Father's Occupation")}
-                required={false}
+                required={true}
                 type={'text'}
                 name='fatherOccu'
                 placeholder="Your answer"
                 value={form.fatherOccu}
                 onChange={handleInputChange}
                 error={errors.fatherOccu}
-                readonly={false}
+                readonly={isFather}
               />   
               <SelectInput
                 label={t("Highest Educational Attaintment")}
@@ -580,10 +425,15 @@ function Persona() {
                 onChange={handleOptionChange}
                 options={fatherEducationOptions}
                 error={errors.fatherEduc}
-              />  
-            <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={noFather} onChange={handleNoFather} />} label={t("No Father")} />
+                read={isFather}
+              />
+              <div>
+              <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={noFather} onChange={handleNoFather} />}
+               label={t("No Father")} />
+              </div>  
+            
           </div>
-          <div className='flex flex-col gap-2 flex-wrap p-2 w-full'>
+          <div className='flex-1 flex-col gap-4 p-2'>
           <TextInput
                 label={t("Mother's last name")}
                 required={true}
@@ -619,7 +469,7 @@ function Persona() {
               />  
              <TextInput
                 label={t("Mother's Occupation")}
-                required={false}
+                required={true}
                 type={'text'}
                 name='motherOccu'
                 placeholder="Your answer"
@@ -638,139 +488,104 @@ function Persona() {
               /> 
           </div>
         </div>
-        <div className='w-full'>
-        <div className='parenteach2'>
-                <h3>{t("Guardian's Information")}</h3>
-        </div>
-          <div style={{margin:'20px'}}>
-          <div>
-                        <h3 style={{fontSize:'18px',fontWeight:'bold',color:'rgb(11, 73, 128)',marginLeft:'5px'}}>{t("Guardian")}</h3>
-                        <Form.Group as={Col}>
-                              <RadioGroup
-                                row
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="radio-buttons-group"
-                                value={value || userData.relationship}
-                                onChange={handleChangeRadio}
-                              >
-                                <FormControlLabel value="Mother" control={<Radio />} label={t("Mother")} />
-                                <FormControlLabel disabled={noFather} value="Father" control={<Radio />} label={t("Father")} />
-                                <FormControlLabel value="Other" control={<Radio />} label={t("Other")} />
-                              </RadioGroup>
-                        </Form.Group>
-                      </div>
-              <div className='parenteach1'>
-                      <div>
-                        <Form.Group as={Col}>
-                        <Form.Label className='frmlabel'>{t("Guardian's last name")} *</Form.Label>
-                                  <Form.Control
-                                  type="text" 
-                                  disabled={isGuardiancheck}
-                                  placeholder="Your answer"
-                                  value={userData['guardianlName']} 
-                                  onChange={(e) =>setUserData({...userData,"guardianlName" : e.target.value.toUpperCase()})} 
-                                  />
-                                  {errors.guardianlName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianlName}</p>}
-                        </Form.Group>
-                      </div>
-                      <div style={{marginRight:'5px',color:'rgb(11, 73, 128)',marginLeft:'5px'}}>
-                        <Form.Group as={Col}>
-                        <Form.Label className='frmlabel'>{t("Guardian's first name")} *</Form.Label>
-                              <Form.Control
-                              type="text" 
-                              placeholder="Your answer"
-                              disabled={isGuardiancheck}
-                              value={userData['guardianName']} 
-                              onChange={(e) =>setUserData({...userData,"guardianName" : e.target.value.toUpperCase()})} 
-                              />
-                              {errors.guardianName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
-                        </Form.Group>
-                      </div>
-                      <div style={{marginRight:'5px',color:'rgb(11, 73, 128)'}}>
-                        <Form.Group as={Col}>
-                        <Form.Label className='frmlabel'>{t("Guardian's middle name")}</Form.Label>
-                              <Form.Control
-                              type="text" 
-                              placeholder="Your answer"
-                              disabled={isGuardiancheck}
-                              value={userData['guardianmName']} 
-                              onChange={(e) =>setUserData({...userData,"guardianmName" : e.target.value.toUpperCase()})} 
-                              />
-                              {errors.guardianmName && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianName}</p>}
-                        </Form.Group>
-                      </div>
-
+        <div className='mt-4 w-full '>
+            <h3 className='bg-[#043F97] w-full text-white pl-4 py-4 mb-4 text-lg font-bold'>{t("Guardian's Information")}</h3>
+          <div className='w-full flex flex-col h-auto p-2'>
+              <div className=''>
+                <h3 style={{fontSize:'18px',fontWeight:'bold',color:'rgb(11, 73, 128)',marginLeft:'5px'}}>{t("Guardian")}</h3>
+                <Form.Group as={Col}>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  name="radio-buttons-group"
+                  value={value || userData.relationship}
+                  onChange={handleChangeRadio}
+                >
+                  <FormControlLabel value="Mother" control={<Radio />} label={t("Mother")} />
+                  <FormControlLabel disabled={noFather} value="Father" control={<Radio />} label={t("Father")} />
+                  <FormControlLabel value="Other" control={<Radio />} label={t("Other")} />
+                </RadioGroup>
+                </Form.Group>
               </div>
-              <div className='parenteach1'>
-                {!isGuardiancheck && <div>
-                <Form.Group as={Col}>
-                <Form.Label className='frmlabel'>{t("Relationship to guardian")} *</Form.Label>
-                        <Form.Select
-                        type="text" 
-                        disabled={isGuardiancheck}
-                        value={userData['relationship']} 
-                        onChange={(e) =>setUserData({...userData,"relationship" : e.target.value})} 
-                        >
-                  {isGuardiancheck && <option value={userData['relationship']}>{userData['relationship']}</option>}
-                  <option value={''}>Please select</option>
-                  <option value={'LEGAL GUARDIAN'}>LEGAL GUARDIAN</option>
-                  <option value={'STEPMOTHER'}>STEPMOTHER</option>
-                  <option value={'STEPFATHER'}>STEPFATHER</option>
-                  <option value={'FOSTER PARENT'}>FOSTER PARENT</option>
-                  <option value={'GRANDPARENT'}>GRANDPARENT</option>
-                  <option value={'AUNT OR UNCLE'}>AUNT OR UNCLE</option>
-                  <option value={'OTHER RELATIVE'}>OTHER RELATIVE</option>
-                  <option value={'CUSTODIAN'}>CUSTODIAN</option>
-                  <option value={'NANNY OR CARETAKER'}>NANNY OR CARETAKER</option>
-                  <option value={'LEGAL GUARDIAN APPOINTED BY WILL'}>LEGAL GUARDIAN APPOINTED BY WILL</option>
-                  <option value={'GUARDIAN AD LITEM'}>GUARDIAN AD LITEM</option>
-                  <option value={'FAMILY FRIEND'}>FAMILY FRIEND</option>
-                        </Form.Select>
-                        {errors.relationship && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.relationship}</p>}
-                </Form.Group>
-                </div>}
-                <div style={{margin:'0px 10px 0px 10px'}}>
-                <Form.Group style={{position:'relative'}} as={Col}>
-                <Form.Label className='frmlabel'>{t("Guardian's Contact No.")} *</Form.Label>
-                      <span style={{position:'absolute',bottom:'1.5px',left:'6px',fontSize:'15px',color:'black',fontWeight:'bold',display:'flex',top:'47px'}}><p style={{margin:'0px',marginTop:'-2px'}}>+</p>63-</span>
-                        <Form.Control
-                        type="text" 
-                        style={{paddingLeft:'45px'}}
-                        placeholder="XXX XXX XXXX"
-                        value={userData['guardianContact']} 
-                        onChange={(e) =>setUserData({...userData,"guardianContact" : e.target.value})} 
-                        />
-                      
-                </Form.Group>
-                {errors.guardianContact && <p style={{color: 'red',fontSize:'12px',margin:'0px',marginLeft:'5px'}}>{errors.guardianContact}</p>}
-                </div>
-                <div>
-                <Form.Group as={Col}>
-                  <div style={{display:'flex',whiteSpace:'nowrap'}}>
-                  <Form.Label className='frmlabel'>{t("Guardian's Address")} *</Form.Label>
-                <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={isSameAddress} onChange={handleSameAddress} />} label={t("Same address")} />
-                  </div>
-
-                        <Form.Control
-                        type="text" 
-                        placeholder="House No., Street, Barangay, Municipality"
-                        value={userData['guardianAddress']} 
-                        onChange={(e) =>setUserData({...userData,"guardianAddress" : e.target.value.toUpperCase()})} 
-                        />
-                        {errors.guardianAddress && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.guardianAddress}</p>}
-                </Form.Group>
-                </div>
-
-
+              <div className='sm:block md:flex gap-2 p-2'>
+                  <TextInput
+                    label={t("Guardian's last name")}
+                    required={true}
+                    type={'text'}
+                    name='guardianlName'
+                    placeholder="Your answer"
+                    value={form.guardianlName}
+                    onChange={handleInputChange}
+                    error={errors.guardianlName}
+                    readonly={isGuardiancheck}
+                  />
+                  <TextInput
+                    label={t("Guardian's first name")}
+                    required={true}
+                    type={'text'}
+                    name='guardianName'
+                    placeholder="Your answer"
+                    value={form.guardianName}
+                    onChange={handleInputChange}
+                    error={errors.guardianName}
+                    readonly={isGuardiancheck}
+                  />
+                  <TextInput
+                    label={t("Guardian's middle name")}
+                    required={true}
+                    type={'text'}
+                    name='guardianmName'
+                    placeholder="Your answer"
+                    value={form.guardianmName}
+                    onChange={handleInputChange}
+                    error={errors.guardianmName}
+                    readonly={isGuardiancheck}
+                  />
+              </div>
+              <div className='sm:block md:flex gap-2 p-2 mb-2'>
+                   <div className='flex-1 m-2'>
+                   <TextInput
+                      label={t("Guardian's Address")}
+                      required={true}
+                      type={'text'}
+                      name='guardianmName'
+                      placeholder="Your answer"
+                      value={form.guardianAddress}
+                      onChange={handleInputChange}
+                      error={errors.guardianAddress}
+                      readonly={false}
+                    />
+                     <FormControlLabel 
+                     control={<Switch checked={isSameAddress} onChange={handleSameAddress} />}
+                      label={t("Same address")} />
+                   </div>
+                   {!isGuardiancheck && <SelectInput
+                      label={t("Relationship to guardian")}
+                      required={true}
+                      value={form.relationship}
+                      onChange={handleOptionChange}
+                      options={relationshipList}
+                      error={errors.relationship}
+                    />} 
+                    <TeleInput
+                        label={t("Guardian's Contact No.")}
+                        type={'text'}
+                        required={true}
+                        name='guardianContact'
+                        onChange={handleInputChange}
+                        error={errors.guardianContact}
+                        value={form['guardianContact']}
+                        readonly={false}
+                    /> 
               </div>
           </div>
         </div>
         <div className='w-full'>
-          <div style={{width:'100%',backgroundColor:'gray'}}>
-          <h3>{t("List of Siblings")}</h3>
+          <div className='w-full'>
+          <h3 className='bg-[#043F97] w-full text-white pl-4 py-4 text-lg font-bold'>{t("List of Siblings")}</h3>
           </div>
-          <div style={{position:'relative',height:'30px',marginBottom:'10px'}}>
-          <FormControlLabel sx={{whiteSpace:'nowrap',position:'absolute',right:0}} control={<Switch checked={onlyChild} onChange={handleOnlyChild} />} label={t("I am only child")} />
+          <div className='relative h-10'>
+          <FormControlLabel className='absolute right-0 ' control={<Switch checked={onlyChild} onChange={handleOnlyChild} />} label={t("I am only child")} />
           </div>
           <div style={{width:'100%',marginLeft:'30px'}}>
           {errors.sibling && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.sibling}</p>}
@@ -778,19 +593,18 @@ function Persona() {
           </div>
 
           {siblingfrm}
-          <div className='addbtnsib'>
-          {!onlyChild && <Button
+          <div className='flex justify-center items-center my-2'>
+          {!onlyChild && <button
             className='myButton1'
-            variant='primary'
             onClick={handleAddFields}
             disabled={onlyChild}
             sx={{color:'white',textTransform:'none',fontWeight:'bold',position:'absolute',left:'37%'}}
           >
             <AddIcon sx={{color:'white'}}/>{t("Add more siblings")}
-          </Button>}
+          </button>}
           </div>
         </div>
-        <div className='btnfrmn'>
+        <div className='flex justify-end items-end gap-2 pr-8 py-8'>
         <Button style={{marginRight:'10px'}} className='myButton' variant="contained" onClick={() => setStep(1)}>Previous</Button>
         <Button className='myButton1' variant="contained" onClick={Check}>Next</Button>
         </div>

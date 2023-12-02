@@ -51,26 +51,24 @@ function Economic() {
         return updatedValues;
       });
     };
-
-
-    useEffect(() => {
-      async function fetchData() {
-        const scholist = await ScholarCategory.ScholarshipProgram();
-        const schodata = scholist.data.SchoCat;
-        setScholarProg(schodata);
+    // useEffect(() => {
+    //   async function fetchData() {
+    //     const scholist = await ScholarCategory.ScholarshipProgram();
+    //     const schodata = scholist.data.SchoCat;
+    //     setScholarProg(schodata);
   
-        const frm = await ApplicationForm.FETCH_FORM();
-        setFormq(frm.data.Questions);
-        setFormc(frm.data.Answers);
-      }
+    //     const frm = await ApplicationForm.FETCH_FORM();
+    //     setFormq(frm.data.Questions);
+    //     setFormc(frm.data.Answers);
+    //   }
   
-      fetchData();
-    }, []);
+    //   fetchData();
+    // }, []);
 
-    useEffect(() => {
+    // useEffect(() => {
       
-      setSelectedValues([]);
-    }, [userData.schoID]);
+    //   setSelectedValues([]);
+    // }, [userData.schoID]);
 
    
     function Check(){
@@ -233,10 +231,10 @@ function Economic() {
        <StyledBackdrop open={showBackdrop}>
         <CircularProgress color="inherit" />
       </StyledBackdrop>    
-    <div className='Econ'>
-        <div className="Econd">
-            <div className="form">
-              <div className='infocontainer'>
+    <div className='w-full bg-white'>
+        <div className="w-full">
+            <div className="w-full ">
+              <div className='w-full'>
                 {errors.frm && (
               <Alert severity="error">
                 <AlertTitle sx={{fontWeight:700}}>Incomplete</AlertTitle>
@@ -254,7 +252,7 @@ function Economic() {
           <Form.Group as={Col}>
             
             {!schoid ? (<>
-            <Form.Label className='frmlabel'>Scholarship Program</Form.Label>
+            <h1 className='frmlabel'>Scholarship Program</h1>
             <Form.Select aria-label="Default select example"
               value={userData['schoID'] || schoid} 
               onChange={(e) =>setUserData({...userData,"schoID" : e.target.value})}
@@ -271,7 +269,7 @@ function Economic() {
                 })}
             </Form.Select></>) : (
             <div>
-            <h1 style={{fontSize:'20px'}}>
+            <h1 className='bg-[#043F97] w-full text-white pl-4 py-4 mb-4 text-lg font-bold'>
               {schoid}
             </h1>
             </div>)}
@@ -279,22 +277,22 @@ function Economic() {
           </Row>
                 {FormTemplate}
               </div>
-            <div className='frmbtnec'>
-            <Button sx={{color:'white',textTransform:'none',marginRight:'15px'}} className='myButton' variant="contained" onClick={() => setStep(2)}>Previous</Button>
-            <Button
-                sx={{color:'white',textTransform:'none'}}
-                className='myButton1'
-                onClick={Check}
-              >
-                Submit
-              </Button>
+              <div className='flex justify-end items-end gap-2 pr-4 pb-4'>
+              <button 
+              className='myButton' 
+              onClick={() => setStep(2)}>Previous</button>
+              <button
+                  className='myButton1'
+                  onClick={Check}
+                >
+                  Submit
+                </button>
+              </div>
             </div>
-            </div>
-           
         </div>
     </div>
     <ScrollToTopButton/>
-    </>
+      </>
   )
 }
 

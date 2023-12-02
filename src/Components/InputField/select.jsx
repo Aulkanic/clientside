@@ -2,9 +2,9 @@
 import React from 'react';
 import Select from 'react-select';// Import your select library
 
-const SelectInput = ({ label,required, value, onChange, options,error }) => {
+const SelectInput = ({ label,required, value, onChange, options,error,read }) => {
   return (
-    <div className='flex-1 relative'>
+    <div className='flex-1 my-4 flex h-max flex-col relative'>
       <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor="baranggay">
         {label} {required && '*'}
       </label>
@@ -16,6 +16,7 @@ const SelectInput = ({ label,required, value, onChange, options,error }) => {
         placeholder=""
         isSearchable={false}
         options={options}
+        isDisabled={read ? read : false}
       />
       {error && <p className='text-[#C42B1C] text-sm ml-2 absolute -bottom-6'>{error}!</p>}
     </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './login.css'
 import { useNavigate, Link } from 'react-router-dom'
-import BMCC from '../assets/mydo.png'
+import MYDO from '../assets/mydo.png'
 import TextField from '@mui/material/TextField';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -16,8 +16,10 @@ import ErrorIcon from '@mui/icons-material/Error';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { setUserDetails } from '../../Redux/loginSlice';
-
-
+import TextInput from '../../Components/InputField/text';
+import PasswordInput from '../../Components/InputField/password';
+import BMCC from '../../Images/logo.png';
+import BGIMG from '../../Images/headerBmcc.png'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -368,337 +370,187 @@ const Login = () => {
         </Alert>)}
     </Snackbar>
 
-    <div className="loginpage">
-                <div className="lgform">
-                    {step === 0 && (
-                    <div className="lgcon">
-                    <div className="logbmcc">
-                        <img  src={BMCC} alt="" />
-                        <p>USER LOGIN</p>
-                    </div>
-                  <form action="">
-                    <div className="email-input-container">
-                    <label className='labellogin' htmlFor="Email">Email</label>
-                      <input      
-                      id="Email"
-                      label="Email"
-                      value={email}
-                      className='inputemail'
-                      onChange={handlerEmailInput}
-                    />
-                    {errors.email && <p
-                    style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }}
-                     >
-                        {errors.email}
-                      </p>}
-                    </div>
-                    <div className="password-input-container">
-                    <label className='labellogin' htmlFor="password">Password</label>
-                   <input type={!showPassword ? "password" : "text"} 
-                    id='password'
-                   className='inputpass'
-                   value={password}
-                   onChange={handlerPasswordInput}
-                   />
-                   {!password ? null : (<button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'27px',width:'max-content',padding:'0px',margin:'0px'}}>
-                   {!showPassword ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                   </button>)}
-                    {errors.password && <p 
-                    style={{ width: '87%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }} 
+    <div className="w-full h-screen flex justify-center items-center bg-registration-image">
+      <div className="bg-white w-4/5 md:w-2/3 lg:w-1/2 h-4/5 md:h-auto rounded-lg">
+          {step === 0 && (
+          <div className="w-full h-full flex flex-wrap rounded-md ">
+            <div className="hidden md:flex w-full flex-1 bg-background-image md:bg-blueish md:rounded-r-3xl relative">
+            </div>
+            <div className='flex-1 bg-blue-300 rounded-lg md:bg-transparent md:rounded-none'>
+              <div className='flex justify-center items-center flex-col mt-4 '>
+                <img className='w-16 h-10 rounded-full' 
+                src={BMCC} alt="" />
+                <p className='text-blueish font-bold'>LOGIN</p>
+              </div>
+                <form className='px-4 pb-4' 
+                action="">
+                  <TextInput
+                    label={'Email'}
+                    value={email}
+                    onChange={handlerEmailInput}
+                    error={errors.email}
+                  />
+                  <PasswordInput
+                    label={'Password'}
+                    value={password}
+                    name={'Password'}
+                    onChange={handlerPasswordInput}
+                    onClick={() => setShowPassword(!showPassword)}
+                    show={showPassword}
+                    error={errors.password}
+                  />
+                  <div className='flex flex-col'>
+                    <Link className='text-blue-700 mt-2 mb-4' onClick={handlerForgotPasswordLink}>Forgot your Password?</Link>
+                    <button 
+                    className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'
+                    type='submit'
+                    onClick={handleSubmit}
                     >
-                        {errors.password}
-                      </p>}
-                    </div>
+                      Login
+                    </button>
+                  </div>
 
+                </form>
+            </div>
+          </div>
+            )}
+          {step === 1 && (
+              <div className="w-full h-full flex flex-wrap rounded-md ">
+                <div className="hidden md:flex w-full flex-1 bg-background-image md:bg-blueish md:rounded-r-3xl relative">
+                </div>
+                <div className='flex-1 bg-blue-300 rounded-lg md:bg-transparent md:rounded-none'>
+                  <div className='flex justify-center items-center flex-col mt-4 '>
+                    <img className='w-16 h-10 rounded-full' 
+                    src={BMCC} alt="" />
+                    <p className='text-blueish font-bold'>FIND YOUR ACCOUNT</p>
+                  </div>
+                    <form className='px-4 pb-4' 
+                    action="">
+                      <p>Enter your email here to send a confirmation for a password reset.</p>
+                          <TextInput
+                          label={'Email'}
+                          value={fpemail}
+                          onChange={handlerFPEmailInput}
+                          error={errors.fpemail}
+                          />
+                      <div className='flex flex-col md:flex-row md:justify-end md:items-end gap-2 m-4'>
+                        <button 
+                        className='order-last md:order-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'
+                        type='submit'
+                        onClick={handlerBackInput}
+                        >
+                          Cancel
+                        </button>
+                        <button 
+                        className='order-1 md:order-last bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'
+                        type='submit'
+                        onClick={findUser}
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </form>
+                </div>
+              </div>
+            )}
+          {step === 2 && (
+              <div className="w-full h-full flex flex-wrap rounded-md ">
+              <div className="hidden md:flex w-full flex-1 bg-background-image md:bg-blueish md:rounded-r-3xl relative">
+              </div>
+              <div className='flex-1 bg-blue-300 rounded-lg md:bg-transparent md:rounded-none'>
+                <div className='flex justify-center items-center flex-col mt-4 '>
+                  <img className='w-16 h-10 rounded-full' 
+                  src={BMCC} alt="" />
+                  <p className='text-blueish font-bold'>OTP VERIFICATION</p>
+                </div>
+                  <form className='px-4 pb-4' 
+                  action="">
+                    <p>An OTP has been sent to your email. Please enter it below:</p>
+                    <div className="flex gap-2 mt-8 flex flex-col">
+                      <label htmlFor="">OTP:</label>
+                      <div className='flex gap-2'>
+                      {otp.map((digit, index) => (
+                          <input
+                            key={index}
+                            className="w-12 px-4 py-2 h-10 border-2 border-gray-400 outline-0 rounded-sm focus:outline-none focus:ring focus:border-'blue-300' transition duration-300 ease-in-out"
+                            type="text"
+                            maxLength="1"
+                            value={digit}
+                            onChange={(e) => handleChange(e, index)}
+                            onKeyDown={(e) => handleKeyPress(e, index)}
+                            ref={(ref) => (inputRefs.current[index] = ref)}
+                          />
+                        ))}
+                      </div>
+                      </div>
+                        <p style={{color:'black',margin:'20px 10px 10px 10px',fontStyle:'italic'}}>Didn't get the code?
+                        <Link
+                        className='text-blueish cursor-pointer'
+                        onClick={handleResendClick}
+                      >
+                          Resend
+                      </Link>
+                        </p>
+                    <div className='flex flex-col md:flex-row md:justify-end md:items-end gap-2 m-4'>
+                      <button 
+                      className='order-1 md:order-last bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'
+                      type='submit'
+                      onClick={ValidateOtp}
+                      >
+                        Verify
+                      </button>
+                    </div>
                   </form>
-                  <div className="loglink">
-                    <Link className='lglink' onClick={handlerForgotPasswordLink}>Forgot your Password?</Link>
-                  </div>
-                  <div className='signforgot'>
-                        <div className="lgbtn">
-                            <LoadingButton
-                            loading={loading}
-                            loadingPosition="end"
-                            variant="elevated"
-                            fullWidth
-                            sx={{
-                              margin: '10px',
-                              cursor: 'pointer',
-                              fontWeight: '700',
-                              backgroundColor: 'blue',
-                              color: 'white',
-                              fontSize: '15px',
-                              letterSpacing: '2px',
-                              textTransform:'capitalize',
-                              transition: 'background 0.3s ease-in-out, clip-path 0.3s ease-in-out',
-                              '&:hover': {
-                                backgroundColor: 'rgba(32, 76, 234, 1) ',
-                              },
-                              fontFamily:
-                                'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                            }}
-                            onClick={handleSubmit}
-                          >
-                            Login
-                          </LoadingButton>
-                        </div>
-                  </div>
-
-                    </div>
-                      )}
-                    {step === 1 && (
-        <div className='findtocon'>
-                    <div className="logbmcc">
-                        <img  src={BMCC} alt="" />
-                        <p>FIND YOUR ACCOUNT</p>
-                    </div>
-          <div className="otpfform">
-          <p>Enter your email here to send a confirmation for a password reset.</p>
-          <CssTextField      
-            id="input-with-icon-textfield"
-            label="Email"
-            fullWidth
-            value={fpemail}
-            onChange={handlerFPEmailInput}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <AccountCircle />
-                </InputAdornment>
-              ),
-              endAdornment:(
-                <InputAdornment position="end">
-                {errors.fpemail && <ErrorIcon sx={{color:'red'}}/>}
-                </InputAdornment>   
-              )
-            }}
-            variant="outlined"
-            style={{
-              cursor: 'pointer', 
-            }}
-          />
-          {errors.fpemail && (<p style={{ width: '100%', margin: '10px', color:'red', fontSize:'12px',height:'max-Content' }}>
-            {errors.fpemail}
-          </p>)}
-          </div>
-
-        <div className="otpfnsc">
-          <div>
-          <LoadingButton
-            loading={loading1}
-            loadingPosition="end"
-            variant="elevated"
-            fullWidth
-            sx={{
-              '&:hover': {
-                background: 'rgba(76, 234, 32, 1)',
-                transform: 'scale(1.1)'
-              },
-              background:'#B9E6B0',
-              color: 'white',
-              marginLeft:'10px',
-              textTransform:'capitalize'
-            }}
-            onClick={findUser}
-          >
-            Submit
-          </LoadingButton>
-          </div>
-          <div>
-          <LoadingButton variant="elevated" 
-                  sx={{
-                    background: '#B0C4DE',
-                    color: 'white',
-                    textTransform:'capitalize',
-                    '&:hover': {
-                      background: 'rgba(32, 76, 234, 1)',
-                      transform: 'scale(1.1)'
-                    },
-                  }}
-                  onClick={handlerBackInput}
-                  >Cancel
-          </LoadingButton>
-          </div>
-        </div>
-        </div>
-                      )}
-                    {step === 2 && (
-        <div className='otpverifycon'>
-                    <div className="logbmcc">
-                        <img  src={BMCC} alt="" />
-                        <p>OTP VERIFICATION</p>
-                    </div>
-          <div className="formotpvalif">
-          <p style={{color:'black'}}>An OTP has been sent to your email. Please enter it below:</p>
-          <label>
-          <div className="otp-input-container">
-                    {otp.map((digit, index) => (
-                        <input
-                          key={index}
-                          className="otp-input"
-                          type="text"
-                          maxLength="1"
-                          value={digit}
-                          onChange={(e) => handleChange(e, index)}
-                          onKeyDown={(e) => handleKeyPress(e, index)}
-                          ref={(ref) => (inputRefs.current[index] = ref)}
-                        />
-                      ))}
-          </div>
-          <div style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>
-          {remainingSeconds > 0 ? (<p className={errors.otp ? 'red' : ''}>{remainingSeconds} seconds before requesting another OTP</p>) : (null)}
-          </div>
-          
-          </label>
-          </div>
-          <div className='bacreotp'>    
-            <div>
-            <p style={{color:'black'}}>Didn't get a code?<Link
-              style={{color:'#252525'}}
-              onClick={handleResendClick}
-            >
-              Resend
-            </Link></p>
-
+              </div>
             </div>
-            <div>
-            <LoadingButton
-              loading={loading2}
-              loadingPosition="end"
-              variant="outlined"
-              fullWidth
-              sx={{
-                '&:hover': {
-                  background: 'rgba(76, 234, 32, 1)',
-                  transform: 'scale(1.1)'
-                },
-                background:'#B9E6B0',
-                color: 'white',
-                marginLeft:'10px',
-                marginTop:'20px',
-                textTransform:'capitalize'
-              }}
-              onClick={ValidateOtp}
-            >
-              Verify
-            </LoadingButton>
-            </div>
-            </div>
-        </div>
-                       )}
-                    {step === 3 && (
-        <div className='restfrmpass'>
-                    <div className="logbmcc">
-                        <img  src={BMCC} alt="" />
-                        <p>CHANGE PASSWORD</p>
-                    </div>
-          <div className="updatepassresfrm">
-          <div style={{position:'relative'}}>
-          <CssTextField      
-                      id="input-with-icon-textfield"
-                      label="New Password"
-                      type={showPassword ? 'text' : 'password'}
-                      fullWidth
+            )}
+          {step === 3 && (
+              <div className="w-full h-full flex flex-wrap rounded-md ">
+              <div className="hidden md:flex w-full flex-1 bg-background-image md:bg-blueish md:rounded-r-3xl relative">
+              </div>
+              <div className='flex-1 bg-blue-300 rounded-lg md:bg-transparent md:rounded-none'>
+                <div className='flex justify-center items-center flex-col mt-4 '>
+                  <img className='w-16 h-10 rounded-full' 
+                  src={BMCC} alt="" />
+                  <p className='text-blueish font-bold'>CHANGE PASSWORD</p>
+                </div>
+                  <form className='px-4 pb-4' 
+                  action="">
+                    <PasswordInput
+                      label={'New Password'}
+                      name={'New Password'}
                       value={newpassword}
                       onChange={handlerNewPasswordInput}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <LockRoundedIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      style={{
-                        margin: '10px', 
-                        marginBottom: '0px',
-                        cursor: 'pointer', 
-                      }}
+                      onClick={() => setShowPassword(!showPassword)}
+                      show={showPassword}
+                      error={errors.newpassword}
                     />
-                   {!newpassword ? null : (<button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'25px',backgroundColor:'transparent',color:'black',top:'23px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
-                   {!showPassword ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                   </button>)}
-          </div>
-          {errors.newpassword && (<p
-         style={{ 
-          width: '79%', 
-          margin: '10px', 
-          color:'red', 
-          fontSize:'10px',
-          height:'max-Content',
-          background:'white',
-          boxShadow:'none' }}
-           variant="outlined" severity="error">
-        {errors.newpassword}
-      </p>)}
-          <div style={{marginTop:'10px',position:'relative'}}>
-          <CssTextField      
-                      id="input-with-icon-textfield"
-                      label="Re-Type New Password"
-                      type={showPassword1 ? 'text' : 'password'}
+                    <PasswordInput
+                      label={'Re-Type New Password'}
+                      name={'Re-Type New Password'}
                       value={renewpassword}
                       onChange={handlerRenewPasswordInput}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <LockRoundedIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      style={{
-                        margin: '10px', 
-                        marginBottom: '0px',
-                        cursor: 'pointer', 
-                      }}
+                      onClick={() => setShowPassword1(!showPassword1)}
+                      show={showPassword1}
+                      error={errors.renewpassword}
                     />
-                     {!renewpassword ? null : (<button type='button' onClick={() => setShowPassword1(!showPassword1)} style={{position:'absolute',right:'25px',backgroundColor:'transparent',color:'black',top:'23px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
-                   {!showPassword1 ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                   </button>)}
-          </div>
-          {errors.renewpassword && (<p
-         style={{ 
-          width: '79%', 
-          margin: '10px', 
-          color:'red', 
-          fontSize:'10px',
-          height:'max-Content',
-          background:'white',
-          boxShadow:'none' }}
-           variant="outlined" severity="error">
-        {errors.renewpassword}
-      </p>)}
-          </div>
-          <div>
-        <LoadingButton
-        loading={loading}
-        fullWidth
-        loadingPosition="end"
-        variant="elevated"
-        sx={{
-          '&:hover': {
-            background: 'rgba(76, 234, 32, 1)',
-            transform: 'scale(1.1)'
-          },
-          background:'#B9E6B0',
-          color: 'white',
-          marginBottom:'10px',
-          marginTop:'10px',
-          textTransform:'capitalize'
-        }}
-        onClick={UpdateUserPass}
-      >
-        Submit
-      </LoadingButton>
+                    <div className='flex flex-col md:flex-row md:justify-end md:items-end gap-2 m-4'>
+                      <button 
+                      className='order-1 md:order-last bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'
+                      type='submit'
+                      onClick={UpdateUserPass}
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </form>
+              </div>
+            </div>
+            )}
       </div>
-        </div>
-                       )}
-                </div>
     </div>
     </>
     ) 
 }
 
 export default Login
-
-

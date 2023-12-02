@@ -2,8 +2,8 @@ import React from 'react';
 
 const TeleInput = ({ label,required,type, name, placeholder, value, onChange, error,readonly }) => {
   return (
-    <div className='flex-1 mb-4 lg:mb-0 lg:mr-2'>
-      <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor={name}>
+    <div className='flex-1 my-4 lg:mb-0 lg:mr-2'>
+      <label className='block text-gray-700 text-sm font-bold mb-1' htmlFor={name}>
         {label} {required && '*'}
       </label>
     <div className='relative'>
