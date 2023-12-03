@@ -1,6 +1,5 @@
-import React from 'react'
-import './account.css'
-import Homepage from '../components/Homepage'
+import React from 'react';
+import './account.css';
 import { FetchingProfileUser,ChangingProfile, Change_Password,FetchingApplicantsInfo,EditUserinfo } from '../../Api/request'
 import {useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
@@ -9,13 +8,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
-import PasswordRoundedIcon from '@mui/icons-material/PasswordRounded';
-import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
-import ListRoundedIcon from '@mui/icons-material/ListRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import { FaCamera } from "react-icons/fa";
 import { FetchNotif,FetchUnreadNotif,ReadNotifi,UserActivity,Logoutuser } from '../../Api/request';
 import swal from 'sweetalert';
 import Form from 'react-bootstrap/Form';
@@ -26,6 +19,7 @@ import { Backdrop, CircularProgress } from '@mui/material';
 import DefaultImg from '../assets/defaultimg.png'
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { setUserDetails } from '../../Redux/loginSlice';
+import PasswordInput from '../../Components/InputField/password';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 50,
@@ -47,10 +41,11 @@ const style = {
 
 const Account = () => {
   const dispatch = useDispatch();
-  const { userdetails,LoggedIn } = useSelector((state) => state.login);
+  const user = useSelector((state) => state.login);
   const [post, setPost] = useState([]);
   const [userpicture, setProfileuser] = React.useState([]);
-  const applicantNum = userdetails.applicantNum
+  const applicantNum = user.info.applicantNum;
+
   const [value, setValue] = useState(0);
   const [userprofile, setProfilepic] = useState(null);
   const [userlog,setUserlog] = useState([])
@@ -290,171 +285,60 @@ async function signout() {
           </Box>
         </Fade>
       </Modal>
-      <Homepage/>
-      <div className="acccontainer">
-       <div className='accleftbar'>
-        <h1>Settings</h1>
-        <div className='settingTabs'>
-          <ul>
-            <li onClick={() => setValue(0)}><PersonRoundedIcon 
-            sx={{
-              fontSize:'30px',
-              marginRight:'10px',
-              borderRadius:'50%'}}
-            />Account Details</li>
-            <li onClick={() => setValue(1)}><CameraAltRoundedIcon 
-             sx={{
-              fontSize:'30px',
-              marginRight:'10px',
-              borderRadius:'50%'}}           
-            />Change Profile</li>
-            <li onClick={() => setValue(2)}><PasswordRoundedIcon 
-            sx={{
-              fontSize:'30px',
-              marginRight:'10px',
-              borderRadius:'50%'}}            
-            />Change Password</li>
-            <li onClick={() => setValue(3)}><NotificationsRoundedIcon 
-             sx={{
-              fontSize:'30px',
-              marginRight:'10px',
-              borderRadius:'50%'}}             
-            />Notifications</li>
-            <li onClick={() => setValue(4)}><ListRoundedIcon 
-             sx={{
-              fontSize:'30px',
-              marginRight:'10px',
-              borderRadius:'50%'}}            
-            />Activity Log</li>
-            <li onClick={signout}><LogoutRoundedIcon 
-             sx={{
-              fontSize:'30px',
-              marginRight:'10px',
-              borderRadius:'50%'}}             
-            />Logout</li>
-          </ul>
-        </div>
-       </div>
-       <div className="accrigthbar">
-          {value === 0 && 
-          <>
-          <div className="accountDetgen">
-          <h1>General Information</h1>
-           <div className='accAccountD'>
-            <div className="headerdetails">
-              <p>Name</p>
-              <p>Email</p>
-              <p>Contact Number</p>
-              <p>Applicant Code</p>
-              <p>Account Created on</p>
+       <div className="w-full flex flex-col">
+          <div className="w-full bg-white flex py-8 md:px-2 mb-4">
+            <div className='relative w-max'>
+              <p className='absolute -top-6 left-4 text-md font-bold'>Profile</p>
+            <img className='w-40 rounded-full'
+            src={preview || post.profile || DefaultImg} 
+            alt="" />
+            <FaCamera  className='absolute right-2 bottom-4 text-3xl'/>
             </div>
-            <div className="valuedetails">
-              <p>{post.Name}</p>
-              <p>{post.email}</p>
-              <p>{post.contactNum}</p>
-              <p>{post.applicantCode}</p>
-              <p>{post.date}</p>              
+            <div className='pl-4'>
+            <p className='truncate'><strong>Name:</strong>{user.info.Name}</p>
+            <p className='truncate'><strong>{user.info.status !== "Approved" ? "Applicant Code" : "Scholar Code"}:</strong>
+            {user.info.status !== "Approved" ? user.info.applicantCode : user.info.scholarCode}</p>
+            <p className='truncate'><strong>Age:</strong>{user.info.age}</p>
+            <p className='truncate'><strong>Gender:</strong>{user.info.gender}</p>
+            <p className='truncate'><strong>Status:</strong>{user.info.status}</p>
+            <p className='truncate'><strong>Batch:</strong>{user.info.batch}</p>
             </div>
-          </div>  
           </div>
-          </>
-          }
-          {value === 1 &&
-          <>
-          <h1 className='acch1'>Account Profile</h1>
-          <div className='accProfile'>
-          <img src={preview || post.profile || DefaultImg} alt="" />
-      <label>
-        <PhotoCameraIcon
-          sx={{
-            fontSize: '60px',
-            borderRadius: '10px',
-            backgroundColor: 'white',
-            cursor: 'pointer'
-          }}
-        />
-        <input
-          type="file"
-          accept=".jpg, .jpeg, .png"
-          onChange={e=> setProfilepic(e.target.files[0])}
-          style={{ display: 'none' }} 
-        />
-      </label>
-          </div>
-          <div style={{margin:'15px'}}>
-          {preview && (<button className='myButton' onClick={ChangeProf}>Upload Image</button>)}
-          </div>
-         
-          </>
-          }
-          {value === 2 &&
-          <>
-          <div className='accPassword'>
-            <h1>Change Password</h1>
-            <Form>
-              <Form.Group style={{position:'relative'}} className="mb-3" controlId="formGroupEmail">
-                <Form.Label>Old Password</Form.Label>
-                <Form.Control style={{backgroundColor:'#f1f3fa'}} type={!showPassword ? "password" : 'text'} 
-                value={currentpassword}
-                onChange={handlerCPasswordInput}
+          <div className='w-full flex-col md:flex-row flex'>
+            <div className='bg-white p-4'>
+            <h1 className='text-2xl font-bold'>Change Password</h1>
+              <form action="">
+                <PasswordInput
+                  label={'Current Password'}
+                  name={'current_password'}
+                  onChange={handlerCPasswordInput}
+                  onClick={() => setShowPassword(!showPassword)}
+                  show={showPassword}
+                  error={errors.currentpassword}
                 />
-                <button type='button' onClick={() => setShowPassword(!showPassword)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'29px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
-                   {!showPassword ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                </button>
-                {errors.currentpassword && <p variant='outlined' 
-                  style={{ 
-                    width: '87%', 
-                    color:'red', 
-                    fontSize:'10px',
-                    height:'30px',
-                    background:'white' }} elevation={0} severity="error">
-                        {errors.currentpassword}
-                </p>} 
-              </Form.Group>
-              <Form.Group style={{position:'relative'}} className="mb-3" controlId="formGroupPassword">
-                <Form.Label>New Password</Form.Label>
-                <Form.Control style={{backgroundColor:'#f1f3fa'}} type={!showPassword1 ? "password" : 'text'}
-                value={newpassword}
-                onChange={handlerNPasswordInput}
+                <PasswordInput
+                  label={'New Password'}
+                  name={'New Password'}
+                  onChange={handlerNPasswordInput}
+                  onClick={() => setShowPassword1(!showPassword1)}
+                  show={showPassword1}
+                  error={errors.newpassword}
                 />
-                {!newpassword ? null : (<button type='button' onClick={() => setShowPassword1(!showPassword1)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'29px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
-                   {!showPassword1 ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                </button>)}
-                      {errors.newpassword && <p variant='outlined' 
-                      style={{ 
-                        width: '87%',
-                        color:'red', 
-                        fontSize:'10px',
-                        height:'30px',
-                        background:'white' }} elevation={0} severity="error">
-                            {errors.newpassword}
-                      </p>} 
-              </Form.Group>
-              <Form.Group style={{position:'relative'}} className="mb-3" controlId="formGroupPassword">
-                <Form.Label>Confirm new Password</Form.Label>
-                <Form.Control style={{backgroundColor:'#f1f3fa'}} type={!showPassword2 ? "password" : 'text'}
-                value={repass}
-                onChange={handlerRPasswordInput}
+                <PasswordInput
+                  label={'Confirm new Password'}
+                  name={'Confirm new Password'}
+                  onChange={handlerRPasswordInput}
+                  onClick={() => setShowPassword2(!showPassword2)}
+                  show={showPassword2}
+                  error={errors.repass}
                 />
-                {!repass ? null : (<button type='button' onClick={() => setShowPassword2(!showPassword2)} style={{position:'absolute',right:'10px',backgroundColor:'transparent',color:'black',top:'29px',width:'max-content',padding:'0px',margin:'0px',border:'none'}}>
-                   {!showPassword2 ? <FaEyeSlash style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} /> : <FaEye style={{height:'30px',width:'20px',padding:'0px',margin:'0px'}} />}
-                </button>)}
-                {errors.repass && <p variant='outlined' 
-                style={{ 
-                  width: '87%',
-                  color:'red', 
-                  fontSize:'10px',
-                  height:'30px',
-                  background:'white' }} elevation={0} severity="error">
-                      {errors.repass}
-                </p>} 
-              </Form.Group>
-            </Form>
-            <p>Make sure it's at least 15 characters OR at least 8 characters including a number and a lowercase letter.</p>
-            <button  onClick={ChangePassword} className='myButton'>Update password</button>
+                <p>Make sure it's at least 15 characters OR at least 8 characters including a number and a lowercase letter.</p>
+                <button  onClick={ChangePassword} className='myButton'>Update password</button>
+              </form>
+            </div>
+
+
           </div>
-          </>
-          }
           {value === 3 &&
           <>
           <div className="accNotifify">
@@ -513,8 +397,6 @@ async function signout() {
           </>
           }
        </div>
-      </div>
-
     </>
   )
 }

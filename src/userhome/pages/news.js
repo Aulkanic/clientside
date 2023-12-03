@@ -28,7 +28,6 @@ const News = () => {
   const newslist = post.slice(1);
   return (
     <>
-        <Homepage/>
   {activeState === 'News' && <div className='newsec'>
     {post.length > 0 ? (
     <div className='ncard'>
@@ -80,7 +79,7 @@ const News = () => {
   {activeState === 'NewsHead' &&
     <>
     <div style={{margin:'15px 0px 0px 30px'}}>
-      <Button onClick={tabschange} sx={{color:'white'}} className='myButton2'><ArrowBackIosNewIcon/>Back</Button>
+      <button onClick={tabschange} className='myButton2'><ArrowBackIosNewIcon/>Back</button>
     </div>
     <div style={{width:'100%',height:'85%',padding:'30px 30px 100px 30px'}}>
       <Card sx={{width:'97%',padding:'15px'}}>

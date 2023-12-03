@@ -1,4 +1,4 @@
-import React, { useCallback,useState } from 'react';
+import React, { useCallback,useEffect,useState } from 'react';
 import { Link, Navigate, Outlet } from 'react-router-dom';
 import { RouteUrl } from '../routes/routes';
 import _ from 'lodash';
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from '../Redux/loginSlice';
 import { FaHome } from "react-icons/fa";
 import { MdManageAccounts } from "react-icons/md";
+import { FetchNotif } from '../Api/request';
 import { HiClipboardDocumentList } from "react-icons/hi2";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { ImNewspaper } from "react-icons/im";
@@ -14,14 +15,18 @@ import { TfiAnnouncement } from "react-icons/tfi";
 import { GiGiftOfKnowledge } from "react-icons/gi";
 import { IoNotifications } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { RiArrowDropDownLine } from "react-icons/ri";
-import MYDO from '../Images/mydo.png'
+import MYDO from '../Images/mydo.png';
+import formatTimeDifference from '../helper/formatTimeDiff';
 
 
 export default function Private(){
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.login)
-    console.log(user.info)
+    const user = useSelector((state) => state.login);
+    const [notification,setNotification] = useState([])
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [selectedMenu,setSelectedMenu] = useState({
+        id:0
+    })
     const links = [
       {
         id:0,
@@ -66,10 +71,18 @@ export default function Private(){
         icon: <GiGiftOfKnowledge />
       }
     ]
-    const [selectedMenu,setSelectedMenu] = useState({
-        id:0
-    })
-
+    useEffect(() =>{
+      async function Fetch(){
+          const applicantNum = user.info.applicantNum;
+          const res = await FetchNotif.FETCH_NOTIF(applicantNum)
+          setNotification(res.data.reverse())
+      }
+      Fetch()
+      const intervalId = setInterval(Fetch, 5000);
+      return () => {
+        clearInterval(intervalId);
+      };
+    },[notification])
     const onSelectedMenu = useCallback((item) => {
         setSelectedMenu({ ...item });
       }, []);
@@ -77,11 +90,43 @@ export default function Private(){
     const logOut = () => {
         dispatch(signOut());
       };
+    const notifList = notification?.map((data,index) =>{
+      const rawDate = data.date.replace("at", ""); 
+      const formattedDate = new Date(rawDate);        
+      let content;
+      if(data.content.length <= 30){
+        content = <p className='truncated-text'>{data.content}</p>
+      }else{
+        const truncated = data.content.substring(0, 30) + '...';
+        content = <p className='truncated-text'>{truncated}</p>
+      }
+      return (
+        <div key={index} className='notifcontainer'>
+          <img src={MYDO} alt="" />
+          <div style={{display:'flex',flexDirection:'column'}}>
+          <p style={{
+            fontWeight:'700',
+            margin:'0'
+          }}>{data.title}</p>
+          {content}
+          <div style={{display:'flex',position:'relative'}}>
+          <p className={data.remarks === 'unread' ? 'unreadnotif' : 'none'}>{formatTimeDifference(formattedDate)}</p>
+          {data.remarks === 'unread' && (<div className='rightnotif'>
+                      <div className='circle'></div>
+            </div>)}
+          </div>
 
+          </div>
+        </div>
+      )
+    })
     return (
       <div className="flex w-screen border-black">
         {/* Sidebar */}
-        <div className="hidden md:flex md:basis-1/5 bg-gray-600 h-screen text-white flex flex-col justify-between">
+        <div className={clsx(
+          isSidebarOpen ? 'block' : 'hidden',
+          'md:block md:basis-1/5 bg-gray-600 h-screen text-white flex flex-col justify-between'
+        )}>
           <div className="w-160 min-w-120">
             <div className="w-120 min-w-120 p-5 bg-gray-500">
               <div className='w-40 h-20 pb-2'>
@@ -120,13 +165,17 @@ export default function Private(){
           </div>
         </div>
         {/* Body */}
-        <div className="flex h-screen flex-1 w-screen flex-col">
-          <nav className="bg-gray-700 text-white h-20 flex truncate justify-between items-center">
+        <div className="flex h-screen flex-1 w-screen flex-col pt-32 relative">
+          <nav className="bg-gray-700 text-white absolute w-full h-24 top-0 flex truncate justify-between items-center">
             <div>
-             <GiHamburgerMenu className='sm:flex md:hidden lg:hidden text-3xl ml-4' />
+             <GiHamburgerMenu className={clsx(
+                'sm:flex',
+                'md:hidden lg:hidden text-3xl ml-4 cursor-pointer'
+              )}
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
             </div>
-            <div className='sm:w-1/4 md:w-max lg:w-max flex mr-4 justify-between items-center'>
-              <button className='sm:mr-2 md:mr-4'>
+            <div className='w-1/2 md:w-max lg:w-max flex gap-2 justify-end items-center'>
+              <button className=''>
               <IoNotifications className='text-3xl' />
               </button>
               <div className='flex items-center justify-between'>
@@ -135,17 +184,14 @@ export default function Private(){
                   src={user.info.profile || MYDO} 
                   alt="" />
                 </div>
-                <div className='hidden md:flex flex-col mr-2'>
+                <div className='hidden md:flex flex-col mr-4'>
                     <p className='font-bold text m-0'>{user.info.Name}</p>
                     <p className='text-slate-300 text-sm m-0 truncate'><strong>Status:</strong> {user.info.remarks}</p>
                 </div>
-                <button>
-                <RiArrowDropDownLine className='text-4xl' />
-                </button>
               </div>
             </div>
           </nav>
-          <div className="p-4 h-max  ml-4">
+          <div className="md:p-4 md:ml-4 overflow-y-auto">
             <Outlet />
           </div>
         </div>

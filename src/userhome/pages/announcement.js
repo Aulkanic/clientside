@@ -1,6 +1,5 @@
 import React from 'react'
 import './announcement.css'
-import axios from 'axios'
 import Announceimg from '../assets/announce.png'
 import Homepage from '../components/Homepage'
 import { FetchingAnnouncement } from '../../Api/request'
@@ -31,7 +30,6 @@ const Announcement = () => {
   });
   return (
     <>
-        <Homepage/>
     <div className='anncard'>
       <div className='annhead'><p>ANNOUNCEMENT</p><span><img src={Announceimg} alt="" /></span></div>
       {anno.length > 0 ? (<div className='anncontent'>

@@ -40,7 +40,6 @@ export default function Trivia() {
 
   return (
     <>
-      <Homepage/>
       <div className="trvdaycon">
       <h1 className="trivhead">Trivia of the Day</h1>
     <div className="tcard">

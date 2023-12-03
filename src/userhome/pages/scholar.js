@@ -153,7 +153,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 }));
 
 const Scholar = () => {
-const { userdetails } = useSelector((state) => state.login);
+const user = useSelector((state) => state.login);
 const [docs, setDocs] = useState([]);
 const [submitted1, setSubmittedDocs1] = useState([]);
 const [fileValues, setFileValues] = useState([]);
@@ -163,9 +163,8 @@ const [loading, setLoading] = useState(false);
 const [images, setImages] = useState([]);
 const [disabledInputs, setDisabledInputs] = useState([]);
 const [userFiles, setUserFiles] = useState([]);
-const applicantNum = userdetails.applicantNum;
+const applicantNum = user.info.applicantNum;
 const [userInfo,setUserInfo] = useState([]);
-const [errors,setErrors] = useState([]);
 const [value, setValue] = React.useState('1');
 
 const handleChange = (event,newValue) => {
@@ -263,13 +262,13 @@ const validateFile = (file, docu) => {
 };
 
 const createFormData = (file, docu) => {
-  const applicantNum = userdetails.applicantNum;
+  const applicantNum = user.info.applicantNum;
   const formData = new FormData();
   formData.append('file', file);
   formData.append('Reqname', docu.requirementName);
   formData.append('applicantNum', applicantNum);
   formData.append('docsFor', docu.docsfor);
-  formData.append('Name', userdetails.Name);
+  formData.append('Name', user.info.Name);
   return formData;
 };
 
@@ -410,12 +409,15 @@ useEffect(() => {
         ListofSub.FETCH_SUB(applicantNum),
         FetchingApplicantsInfo.FETCH_INFO(applicantNum)
       ]);
-      const schoCat = response[2].data.results[0].SchoIarshipApplied
-      const Batch = response[2].data.results[0].Batch
-      const RequireDocs = response[0].data.Requirements.results1?.filter(docs => docs.schoName === schoCat && docs.batch === Batch && docs.docsfor === 'Application')
+      const data1 = response[0].data;
+      const data2 = response[1].data;
+      const data3 = response[2].data;
+      const schoCat = data3.results[0].SchoIarshipApplied
+      const Batch = data3.results[0].Batch
+      const RequireDocs = data1.Requirements.results?.filter(docs => docs.schoName === schoCat && docs.batch === Batch && docs.docsfor === 'Application')
       setDocs(RequireDocs);
-      setUserInfo(response[2].data.results[0]);
-      setSubmittedDocs1(response[1].data.Document);
+      setUserInfo(data3.results[0]);
+      setSubmittedDocs1(data2.Document);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -427,29 +429,24 @@ useEffect(() => {
     clearInterval(intervalId);
   };
 }, []);
-
 const requirements = docs?.map((docu, index) => {
       const isDisabled = disabledInputs[index] || false;
       const valueToCheck = docu.requirementName;
       const hassubmit = submitted1.some((item) => item.requirement_Name === valueToCheck);
       const deadline = new Date(docu.deadline);
       const currentDate = new Date(); 
-      const error = errors[index];
       const isPastDue = currentDate > deadline && !hassubmit;
     
       return (
-        <React.Fragment key={index}>
-          <Box sx={{height:'200px'}}>
-            <Card elevated={15} sx={{height:'100%'}}>
-              <div className='reqlistcontainer'>
-                <div className="requirelist">
-                  <div className="requireprev">
-                    {images[index] ? (<img src={images[index]} alt='No Image' />) : (<img src={Noimageprev} alt='No Image' />)}
+            <div key={index} className=' w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 bg-gray-200'>
+                <div className="flex flex-col flex-wrap gap-2">
+                  <div className="flex-1 relative whitespace-normal md:truncate">
+                    <h1 className='absolute text-base font-bold md:left-16'>{docu.requirementName}</h1>
+                    <img className='w-20'
+                    src={Noimageprev} alt='No Image' />
                   </div>
-                  <div className='userlistreq'>
-                    <label htmlFor="">{docu.requirementName}</label>
+                  <div className='flex-1 flex flex-col'>
                     <span>Deadline: {docu.deadline}</span>
-                    <span>For: {docu.docsfor}</span>
                     {isPastDue ? (
                       <p style={{margin:0}}>Past due: Document submission is no longer possible.</p>
                     ) : (
@@ -467,11 +464,7 @@ const requirements = docs?.map((docu, index) => {
                     )}
                   </div>
                 </div>
-                {(index + 1) % 4 === 0 && <br />}
-              </div>
-            </Card>
-          </Box>
-        </React.Fragment>
+            </div>
       );
     });
 
@@ -484,7 +477,7 @@ const requirements = docs?.map((docu, index) => {
        {
         field: 'File',
         headerName: 'File',
-        width: 200, 
+        width: 100, 
         renderCell: (params) => {     
           return (
                 <img
@@ -497,7 +490,7 @@ const requirements = docs?.map((docu, index) => {
        {
          field: 'Date', 
           headerName: 'Date Submitted',
-        width: 250
+        width: 150
         },
       {
         field: 'Comments',
@@ -549,12 +542,15 @@ const requirements = docs?.map((docu, index) => {
           return(
             <>
             {params.row.Status !== 'Approved' ? 
-            (<div>
-              <Button onClick={() =>EditReq(params.row)} sx={{color:'white',textTransform:'none',marginRight:'10px'}} className='myButton1'><EditIcon sx={{fontSize:'15px'}}/></Button>
-              <Button onClick={() =>DeleteReq(params.row)} sx={{color:'white',textTransform:'none'}} className='myButton2'><ClearRoundedIcon sx={{fontSize:'15px'}}/></Button>
+            (<div className='flex gap-2'>
+              <button onClick={() =>EditReq(params.row)} 
+              className='myButton1'><EditIcon /></button>
+              <button onClick={() =>DeleteReq(params.row)}
+               className='myButton2'><ClearRoundedIcon /></button>
             </div>) :
             (
-              <Button onClick={() => viewFile(params.row)} sx={{color:'white',display:'flex',alignItems:'center',textTransform:'none'}} className='myButton'><RemoveRedEyeIcon sx={{marginTop:'-2px',marginRight:'2px'}}/>View</Button>
+              <button onClick={() => viewFile(params.row)} 
+               className='myButton'><RemoveRedEyeIcon />View</button>
             )
             }
             </>
@@ -568,59 +564,46 @@ return(
   <StyledBackdrop open={showBackdrop}>
     <CircularProgress color="inherit" />
   </StyledBackdrop>
-    <Homepage/>
   <div>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box>
           <StyledTabList onChange={handleChange} aria-label="lab API tabs example">
             <StyledTab label="Requirements List" value="1" />
-            <StyledTab label="Requirements Submitted" value="2" />
+            <StyledTab label="Submitted" value="2" />
           </StyledTabList>
         </Box>
-        <TransitionGroup>
-        <CSSTransition key={value} classNames="fade" timeout={300}>
         <TabPanel value="1">
-            <div className='schousercont'>
-          <div className='reqheadtitle'>
-            <h1 style={{margin:'0px'}}>Requirements</h1>
-            <p>Please upload the documents required below</p>
-            <ul>
-              <li>File format in JPEG(.jpg) and PNG are the only acceptable file for upload.</li>
-              <li>A maximum of 5mb file size is allowed per attached file.</li>
-            </ul>
-          </div>
-          <div className="userequirements">
-              {requirements}
-          </div>
-          <div>
-              <LoadingButton
-                loading={loading}
-                loadingPosition="end"
-                variant="elevated"
-                fullWidth
-                sx={{color:'white'}}
+          <div className='flex flex-col gap-4 w-full'>
+            <div className=''>
+              <h1 className='font-bold text-lg'>Requirements</h1>
+              <p>Please upload the documents required below</p>
+              <ul>
+                <li>File format in JPEG(.jpg) and PNG are the only acceptable file for upload.</li>
+                <li>A maximum of 5mb file size is allowed per attached file.</li>
+              </ul>
+            </div>
+            <div className="flex flex-wrap gap-4">
+                {requirements}
+            </div>
+          <div className='flex justify-end items-end'>
+              <button
                 className='myButton1'
                 onClick={handleSubmit}
               >
                 Upload
-              </LoadingButton>
+              </button>
           </div>
-            </div>
+          </div>
         </TabPanel>
-        </CSSTransition>
-      </TransitionGroup>
-      <TransitionGroup>
-        <CSSTransition key={value} classNames="fade" timeout={300}>
         <TabPanel value="2">
-          <div className="userdocusub">
-            <div className="userschocont">
+          <div className="w-full">
             <div>
-              <h1>Requirements Submitted</h1>
+              <h1 className='text-2xl font-bold'>Requirements Submitted</h1>
             </div>
-            <div className='usersbumtdoc'>
+            <div className='w-full bg-white overflow-x-auto'>
             {submitted1.length > 0 ? 
             (
-              <Box sx={{backgroundColor:'white',color:'black',borderRadius:'5px',overflow:'auto'}}>
+              <Box>
               <StyledDataGrid
               rows={submitted1}
               columns={columns}
@@ -647,13 +630,9 @@ return(
               </div>)}
             </div>
           </div>
-          </div>
         </TabPanel>
-        </CSSTransition>
-      </TransitionGroup>
       </TabContext>
   </div>
-
   </>
 )
 }

@@ -15,9 +15,9 @@ import '../Button/buttonstyle.css'
 
 
 const Schoinfo = () => {
-      const { userdetails } = useSelector((state) => state.login);
+      const user = useSelector((state) => state.login);
       const [PA, setPA] = useState([]);
-      const applicantNum = userdetails.applicantNum;
+      const applicantNum = user.info.applicantNum;
       const currentDate = new Date();
       const [open, setOpen] = React.useState(false);
       const [appointuser,setAppointment] = useState([]);
@@ -144,7 +144,6 @@ const Schoinfo = () => {
           <Button className='myButton1' sx={{color:'white'}} onClick={Cannotgo}>SUBMIT</Button>
         </DialogActions>
       </Dialog>
-        <Homepage/>
         <h1 className='appointheader'>Appointment Schedule</h1>
         <div className="contappoint">
         {appointuser.length > 0 ? (<div className='sicard'>
