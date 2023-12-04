@@ -236,12 +236,12 @@ const handleRegister = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button className='myButton' sx={{color:'white',textTransform:'none'}} onClick={handleRegister} color="primary">
+          <button className='myButton' onClick={handleRegister}>
            Go to Register
-          </Button>
-          <Button className='myButton' sx={{color:'white',textTransform:'none'}} onClick={findCreatedAcc} color="primary">
+          </button>
+          <button className='myButton' onClick={findCreatedAcc}>
             Already Registered?Find your Email now!
-          </Button>
+          </button>
         </DialogActions>
   </Dialog>
   <Dialog

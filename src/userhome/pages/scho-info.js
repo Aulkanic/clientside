@@ -120,7 +120,7 @@ const Schoinfo = () => {
            </Box>           
         )
     })
-
+    
   return (
     <>
       <Dialog open={open} onClose={handleClose}>

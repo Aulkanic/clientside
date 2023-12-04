@@ -161,3 +161,4 @@ export const CheckFamily = {
 export const NewsAndAnnouncement = {
     NEWS_ANNOUNCE: () => axiosInstance.get(Endpoints.NEWS_ANNOUNCE)
 }
+

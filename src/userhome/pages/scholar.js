@@ -441,7 +441,7 @@ const requirements = docs?.map((docu, index) => {
             <div key={index} className=' w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 bg-gray-200'>
                 <div className="flex flex-col flex-wrap gap-2">
                   <div className="flex-1 relative whitespace-normal md:truncate">
-                    <h1 className='absolute text-base font-bold md:left-16'>{docu.requirementName}</h1>
+                    <h1 className='absolute text-base font-bold md:left-20'>{docu.requirementName}</h1>
                     <img className='w-20'
                     src={Noimageprev} alt='No Image' />
                   </div>
