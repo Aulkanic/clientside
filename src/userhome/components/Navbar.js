@@ -118,20 +118,18 @@ const Navbar = () => {
         return `${days} ${days === 1 ? 'day' : 'days'} ago`;
       }
     }
-
-const SetReadNotif = async(val) =>{
-  setOpen(true)
-  setNotifDet(val)
-  const formData = new FormData();
-  formData.append('notifId',val.id)
-  formData.append('applicantNum',applicantNum)
- await ReadNotifi.READ_NOTIFICATION(formData)
- .then((response)=>{
-  const rev = response.data
-  setNotification(rev.reverse());
-  })
-}
-
+    const SetReadNotif = async(val) =>{
+      setOpen(true)
+      setNotifDet(val)
+      const formData = new FormData();
+      formData.append('notifId',val.id)
+      formData.append('applicantNum',applicantNum)
+    await ReadNotifi.READ_NOTIFICATION(formData)
+    .then((response)=>{
+      const rev = response.data
+      setNotification(rev.reverse());
+      })
+    }
     const list = () => (
       <Box
       sx={{width:'400px',backgroundColor:'white'}}
@@ -177,7 +175,6 @@ const SetReadNotif = async(val) =>{
       </div>)}
       </Box>
     );
-
     const profile = picture?.map((data,index) =>{
         const notifCount = notification?.filter(data => data.remarks === 'unread').length
       return (
@@ -230,12 +227,12 @@ const SetReadNotif = async(val) =>{
         </>
       );
     });
- async function signout() {
-    const formData = new FormData();
-    formData.append('applicantNum',applicantNum)
-      await Logoutuser.USER_LOGOUT(formData)
-      dispatch(setUserDetails([]))
-  }
+  async function signout() {
+      const formData = new FormData();
+      formData.append('applicantNum',applicantNum)
+        await Logoutuser.USER_LOGOUT(formData)
+        dispatch(setUserDetails([]))
+    }
   return (
     <>
               <Drawer

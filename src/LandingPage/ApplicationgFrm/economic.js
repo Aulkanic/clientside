@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useContext } from 'react';
 import { multiStepContext } from './StepContext';
-import Button from '@mui/material/Button';
+import { useDispatch } from 'react-redux';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -14,7 +14,6 @@ import ScrollToTopButton from '../../userhome/components/scrollButton.jsx'
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { ApplicationForm,ScholarCategory,ApplyForm } from '../../Api/request';
-import LoadingButton from '@mui/lab/LoadingButton';
 import swal from 'sweetalert';
 import '../css/economic.css'
 import '../css/buttonStyle.css'
@@ -22,6 +21,10 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Backdrop, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useSelector } from 'react-redux';
+import { setForm } from '../../Redux/formSlice.js';
+import SelectInput from '../../Components/InputField/select.jsx';
+import CustomButton from '../../Components/Button/button.jsx';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 50,
@@ -30,12 +33,13 @@ const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
 
 function Economic() {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const form = useSelector((state) => state.form)
     const [showBackdrop, setShowBackdrop] = useState(false);
     const { setStep, userData, setUserData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
     const navigate = useNavigate();
     const schoid = localStorage.getItem('schoId');
-    userData.schoID = schoid ? schoid : userData.schoID;
     const [loading,setLoading] = useState(false)
     const [scholarprog, setScholarProg] = useState([]);
     const [formq,setFormq] = useState([]);
@@ -51,26 +55,36 @@ function Economic() {
         return updatedValues;
       });
     };
-    // useEffect(() => {
-    //   async function fetchData() {
-    //     const scholist = await ScholarCategory.ScholarshipProgram();
-    //     const schodata = scholist.data.SchoCat;
-    //     setScholarProg(schodata);
+    useEffect(() => {
+      async function fetchData() {
+        const scholist = await ScholarCategory.ScholarshipProgram();
+        const schodata = scholist.data.SchoCat.filter(data => data.status === 'Open');
+        const list = schodata.map((data =>{
+          return({
+            label: data.name,
+            value: data.name,
+            name:'schoID'
+          })
+        }))
+        setScholarProg(list);
   
-    //     const frm = await ApplicationForm.FETCH_FORM();
-    //     setFormq(frm.data.Questions);
-    //     setFormc(frm.data.Answers);
-    //   }
+        const frm = await ApplicationForm.FETCH_FORM();
+        setFormq(frm.data.Questions);
+        setFormc(frm.data.Answers);
+      }
   
-    //   fetchData();
-    // }, []);
+      fetchData();
+    }, []);
 
-    // useEffect(() => {
+    useEffect(() => {
       
-    //   setSelectedValues([]);
-    // }, [userData.schoID]);
+      setSelectedValues([]);
+    }, [form.schoID]);
 
-   
+    const handleOptionChange = (data) => {
+      const { name, value } = data;    
+      dispatch(setForm({ [name]: value }));
+    }
     function Check(){
       const errors = {};
       if(userData.schoID === ''){
@@ -187,13 +201,10 @@ function Economic() {
      setLoading(false)
 
   };
-    const schoav = scholarprog.filter(data => data.status === 'Open');
-    const sch = userData.schoID ? userData.schoID :  schoid;
-    const Questionlist = formq?.filter(data => data.scholarshipProg === sch)
 
-
+    const Questionlist = formq?.filter(data => data.scholarshipProg === form.schoID || schoid)
     const FormTemplate = Questionlist?.map((data,index) =>{
-      const choices = formc?.filter(question => question.questionsid === data.id)
+    const choices = formc?.filter(question => question.questionsid === data.id)
 
         return(
           <div key={index} style={{padding:'10px 50px 10px 50px'}}>
@@ -231,7 +242,7 @@ function Economic() {
        <StyledBackdrop open={showBackdrop}>
         <CircularProgress color="inherit" />
       </StyledBackdrop>    
-    <div className='w-full bg-white'>
+    <div className='w-full bg-white pt-4'>
         <div className="w-full">
             <div className="w-full ">
               <div className='w-full'>
@@ -252,22 +263,18 @@ function Economic() {
           <Form.Group as={Col}>
             
             {!schoid ? (<>
-            <h1 className='frmlabel'>Scholarship Program</h1>
-            <Form.Select aria-label="Default select example"
-              value={userData['schoID'] || schoid} 
-              onChange={(e) =>setUserData({...userData,"schoID" : e.target.value})}
-              style={{height:'maxContent'}}
-            >
-              {schoav?.map((data,index) =>{
-           
-                  return(
-                    <>
-                    {index === 0 && <option key={index} value=''>Select Scholarship Program</option>}
-                    {index >= 0 && <option key={data.name} value={data.name}>{data.name}</option>}
-                    </>
-                  )
-                })}
-            </Form.Select></>) : (
+            <div className='px-4'>
+             <SelectInput
+                label={t("Scholarship Program")}
+                required={true}
+                value={form.schoID}
+                onChange={handleOptionChange}
+                options={scholarprog}
+                error={errors.schoID}
+              />
+            </div>
+
+            </>) : (
             <div>
             <h1 className='bg-[#043F97] w-full text-white pl-4 py-4 mb-4 text-lg font-bold'>
               {schoid}
@@ -278,15 +285,19 @@ function Economic() {
                 {FormTemplate}
               </div>
               <div className='flex justify-end items-end gap-2 pr-4 pb-4'>
-              <button 
-              className='myButton' 
-              onClick={() => setStep(2)}>Previous</button>
-              <button
-                  className='myButton1'
-                  onClick={Check}
-                >
-                  Submit
-                </button>
+              <CustomButton
+                label={'Previous'}
+                color={'blue'}
+                loading={false}
+                onClick={() => setStep(2)}
+              />
+              <CustomButton
+                label={'Submit form'}
+                color={'green'}
+                loading={loading}
+                disabled={loading}
+                onClick={Check}
+              />
               </div>
             </div>
         </div>

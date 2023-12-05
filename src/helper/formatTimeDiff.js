@@ -1,4 +1,4 @@
-async function formatTimeDifference(date) {
+ function formatTimeDifference(date) {
     const timeZone = "Asia/Manila";
     const now = new Date().toLocaleString("en-US", { timeZone });
     const timestamp = new Date(date);

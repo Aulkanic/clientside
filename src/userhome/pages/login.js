@@ -12,40 +12,15 @@ import {loginUserAcc, GetUserAcc, GenerateOtp, ValidateUserOtp, ChangePassbyOtp}
 import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
-import ErrorIcon from '@mui/icons-material/Error';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import CustomButton from '../../Components/Button/button';
 import { useDispatch } from 'react-redux';
 import { setUserDetails } from '../../Redux/loginSlice';
 import TextInput from '../../Components/InputField/text';
 import PasswordInput from '../../Components/InputField/password';
 import BMCC from '../../Images/logo.png';
-import BGIMG from '../../Images/headerBmcc.png'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-
-const CssTextField = styled(TextField)({
-  backgroundColor: 'white',
-  width: 'auto',
-  '& label.Mui-focused': {
-    color: 'black',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: '#B2BAC2',
-  },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: '#E0E3E7',
-    },
-    '&:hover fieldset': {
-      borderColor: '#B2BAC2',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#6F7E8C',
-    },
-  },
 });
 
 const Login = () => {
@@ -132,7 +107,6 @@ const Login = () => {
         }
         setErrors('')  
         setLoading(true)
-        
         loginUserAcc.USER_LOGIN({email,password})
         .then(res => {
           if(res.data.message === 'Login Successfully'){
@@ -144,6 +118,7 @@ const Login = () => {
             dispatch(setUserDetails(user))
             setTimeout(() => {
               navigate('/dashboard/home');
+              setLoading(false)
             }, 2500);
           }else{
             setResstat('500')
@@ -399,15 +374,18 @@ const Login = () => {
                     show={showPassword}
                     error={errors.password}
                   />
-                  <div className='flex flex-col'>
+                  <div className='flex flex-col w-full'>
                     <Link className='text-blue-700 mt-2 mb-4' onClick={handlerForgotPasswordLink}>Forgot your Password?</Link>
-                    <button 
-                    className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'
-                    type='submit'
+                    <div className='w-full flex justify-center items-center'>
+                    <CustomButton
+                    label={'Login'}
+                    color={'blue'}
+                    loading={loading}
+                    disabled={loading}
                     onClick={handleSubmit}
-                    >
-                      Login
-                    </button>
+                   />
+                    </div>
+
                   </div>
 
                 </form>

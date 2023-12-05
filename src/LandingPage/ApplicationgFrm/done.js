@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../css/done.css'
 import '../css/buttonStyle.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { APK } from '../../Api/request';
@@ -14,6 +14,7 @@ import '../css/newexpage.css'
 import swal from 'sweetalert';
 import { styled } from '@mui/material';
 import { Backdrop, CircularProgress } from '@mui/material';
+import CustomButton from '../../Components/Button/button';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 50,
@@ -21,6 +22,7 @@ const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
 }));
 
 function Educational() {
+  const navigate = useNavigate()
   const [open, setOpen] = React.useState(false);
   const [email,setEmail] = useState('')
   const [loading,setLoading] = useState(false)
@@ -60,7 +62,9 @@ function Educational() {
        )
       .catch(err => console.log(err));
   }
-
+  const buttonClick = () =>{
+    navigate('/login')
+  }
   return (
     <>
       <StyledBackdrop open={showBackdrop}>
@@ -69,11 +73,21 @@ function Educational() {
       <div className="w-full bg-white px-8">
         <h2 className='m-0 text-lg font-bold'>Your Application Form is Submitted</h2>
         <p className='text-base font-semibold'>Please Login to your account to keep updated to your Application Status</p>
-        <div className='flex justify-end items-end gap-2 pb-4'>
-        <button className='myButton'>
-          <Link style={{color:'white',textDecoration:'none'}} to='/login'>Redirect to Login Page in Website</Link>
-        </button>
-        <button onClick={handleClickOpen} className='myButton'>Download Mobile Application and Login</button>
+        <div className='flex justify-end items-end gap-2 pb-4 m-4'>
+              <CustomButton
+                label={'Redirect to Login Page in Website'}
+                color={'blue'}
+                loading={false}
+                disabled={false}
+                onClick={buttonClick}
+              />
+              <CustomButton
+                label={'Download Mobile Application and Login'}
+                color={'blue'}
+                loading={false}
+                disabled={false}
+                onClick={handleClickOpen}
+              />
         </div>
 
         <Dialog open={open} onClose={handleClose}>

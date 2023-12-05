@@ -23,6 +23,7 @@ import SelectInput from '../../Components/InputField/select.jsx';
 import { fatherEducationOptions,motherEducationOptions,relationshipList } from '../../Pages/Public/ApplicationForm/listOptions.js';
 import { setForm } from '../../Redux/formSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
+import CustomButton from '../../Components/Button/button.jsx';
 import { validateText,validateCellphoneNumber,validateNumber,validateField } from '../../helper/validateField.js';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
@@ -36,6 +37,7 @@ function Persona() {
     const form = useSelector((state) => state.form)
     const { setStep, userData} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
+    const [loading,setLoading] = useState(false);
     const [showBackdrop, setShowBackdrop] = useState(false);
     const [rule,setRule] = useState([]);
     const [siblings, setSiblings] = useState(form.siblings || [])
@@ -150,7 +152,6 @@ function Persona() {
       errors.relationship = await validateField(form.relationship, 50,'Relationship to Guardian');
       errors.guardianContact = await validateCellphoneNumber(form.guardianContact,'Guardian Contact');
       errors.guardianAddress = await validateField(form.guardianAddress, 50,'Guardian Address');
-      console.log(errors)
       if(!onlyChild){
         const hasEmptyFields = siblings.some(
           (sibling) =>
@@ -163,8 +164,6 @@ function Persona() {
           errors.sibling = `Please fill out all sibling information fields.`
         }
       }
-
-
         if (Object.keys(errors).length > 0) {
           setErrors(errors);
           return;
@@ -194,12 +193,11 @@ function Persona() {
         
         const formData = new FormData();
         formData.append('familyNames', JSON.stringify(groupedNames));
-        setShowBackdrop(true)
+        setLoading(true)
         await CheckFamily.CHECK_FAM(formData)
-        .then((res) =>{
-        
+        .then((res) =>{    
           if(res.data.results.length === rule.famNum){
-            setShowBackdrop(false)
+            setLoading(false)
             swal({
               title: "Warning",
               text: 'One Family Per head',
@@ -212,7 +210,7 @@ function Persona() {
           }else{
             setErrors('')
             dispatch(setForm({ ['familyCode']: res.data.familyCode }));
-            setShowBackdrop(false)
+            setLoading(false)
             localStorage.setItem('userData',JSON.stringify(userData))
             setStep(3)
           }
@@ -350,14 +348,14 @@ function Persona() {
             error={errors.middleName}
             readonly={false}
           />
-        <div className='relative sm:mt-0 md:mt-6'>
-        <button
-          className='myButton2'
-          variant='secondary'
-          onClick={() => handleRemoveFields(index)}
-        >
-          <DeleteIcon sx={{color:'white'}}/>
-        </button>
+        <div className='relative pt-0 md:pt-10'>
+        <CustomButton
+            label={<DeleteIcon className='text-white'/>}
+            color={'red'}
+            loading={false}
+            onClick={() => handleRemoveFields(index)}
+            disabled={false}
+        /> 
         </div>
       </div>
     </div>
@@ -375,7 +373,7 @@ function Persona() {
         <div className='w-full leading-8 sm:block md:flex flex-wrap h-auto p-2'>
           <div className='flex-1 flex-col gap-4 p-2'> 
              <TextInput
-                label={t("Father's last name")}
+                label={"Father's last name"}
                 required={true}
                 type={'text'}
                 name='fatherlName'
@@ -386,7 +384,7 @@ function Persona() {
                 readonly={isFather}
               />
              <TextInput
-                label={t("Father's first name")}
+                label={"Father's first name"}
                 required={true}
                 type={'text'}
                 name='fatherName'
@@ -397,7 +395,7 @@ function Persona() {
                 readonly={isFather}
               />
              <TextInput
-                label={t("Father's middle name")}
+                label={"Father's middle name"}
                 required={false}
                 type={'text'}
                 name='fathermName'
@@ -408,7 +406,7 @@ function Persona() {
                 readonly={isFather}
               />  
              <TextInput
-                label={t("Father's Occupation")}
+                label={"Father's Occupation"}
                 required={true}
                 type={'text'}
                 name='fatherOccu'
@@ -419,7 +417,7 @@ function Persona() {
                 readonly={isFather}
               />   
               <SelectInput
-                label={t("Highest Educational Attaintment")}
+                label={"Highest Educational Attaintment"}
                 required={true}
                 value={form.fatherEduc}
                 onChange={handleOptionChange}
@@ -429,13 +427,13 @@ function Persona() {
               />
               <div>
               <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={noFather} onChange={handleNoFather} />}
-               label={t("No Father")} />
+               label={"No Father"} />
               </div>  
             
           </div>
           <div className='flex-1 flex-col gap-4 p-2'>
           <TextInput
-                label={t("Mother's last name")}
+                label={"Mother's last name"}
                 required={true}
                 type={'text'}
                 name='motherlName'
@@ -446,7 +444,7 @@ function Persona() {
                 readonly={false}
               />
              <TextInput
-                label={t("Mother's first name")}
+                label={"Mother's first name"}
                 required={true}
                 type={'text'}
                 name='motherName'
@@ -457,7 +455,7 @@ function Persona() {
                 readonly={false}
               />
              <TextInput
-                label={t("Mother's middle name")}
+                label={"Mother's middle name"}
                 required={false}
                 type={'text'}
                 name='mothermName'
@@ -468,7 +466,7 @@ function Persona() {
                 readonly={false}
               />  
              <TextInput
-                label={t("Mother's Occupation")}
+                label={"Mother's Occupation"}
                 required={true}
                 type={'text'}
                 name='motherOccu'
@@ -479,7 +477,7 @@ function Persona() {
                 readonly={false}
               /> 
               <SelectInput
-                label={t("Highest Educational Attaintment")}
+                label={"Highest Educational Attaintment"}
                 required={true}
                 value={form.motherEduc}
                 onChange={handleOptionChange}
@@ -509,7 +507,7 @@ function Persona() {
               </div>
               <div className='sm:block md:flex gap-2 p-2'>
                   <TextInput
-                    label={t("Guardian's last name")}
+                    label={"Guardian's last name"}
                     required={true}
                     type={'text'}
                     name='guardianlName'
@@ -545,7 +543,7 @@ function Persona() {
               <div className='sm:block md:flex gap-2 p-2 mb-2'>
                    <div className='flex-1 m-2'>
                    <TextInput
-                      label={t("Guardian's Address")}
+                      label={"Guardian's Address"}
                       required={true}
                       type={'text'}
                       name='guardianmName'
@@ -567,6 +565,7 @@ function Persona() {
                       options={relationshipList}
                       error={errors.relationship}
                     />} 
+                    <div className='mt-8 md:mt-0'>
                     <TeleInput
                         label={t("Guardian's Contact No.")}
                         type={'text'}
@@ -577,6 +576,8 @@ function Persona() {
                         value={form['guardianContact']}
                         readonly={false}
                     /> 
+                    </div>
+
               </div>
           </div>
         </div>
@@ -594,19 +595,30 @@ function Persona() {
 
           {siblingfrm}
           <div className='flex justify-center items-center my-2'>
-          {!onlyChild && <button
-            className='myButton1'
+          {!onlyChild && 
+          <CustomButton
+            label={'+ Add more siblings'}
+            color={'green'}
+            loading={false}
             onClick={handleAddFields}
             disabled={onlyChild}
-            sx={{color:'white',textTransform:'none',fontWeight:'bold',position:'absolute',left:'37%'}}
-          >
-            <AddIcon sx={{color:'white'}}/>{t("Add more siblings")}
-          </button>}
+          /> }
           </div>
         </div>
         <div className='flex justify-end items-end gap-2 pr-8 py-8'>
-        <Button style={{marginRight:'10px'}} className='myButton' variant="contained" onClick={() => setStep(1)}>Previous</Button>
-        <Button className='myButton1' variant="contained" onClick={Check}>Next</Button>
+          <CustomButton
+            label={'Previous'}
+            color={'blue'}
+            loading={false}
+            onClick={() => setStep(1)}
+          /> 
+          <CustomButton
+            label={'Next'}
+            color={'blue'}
+            loading={loading}
+            disabled={loading}
+            onClick={Check}
+          /> 
         </div>
       </div>
     </div>

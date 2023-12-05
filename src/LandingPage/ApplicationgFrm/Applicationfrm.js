@@ -134,7 +134,7 @@ function Applicationfrm() {
         ))}
         </Stepper> 
     </div>
-    <div className="relative sm:w-full md:w-4/5 bg-white shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)]">
+    <div className="relative sm:w-full md:w-4/5 bg-white">
       <div className=' bg-[#043F97] w-full flex justify-between items-center h-16 md:h-auto'>
         <div className=''>
         {currentStep === 1 && (<h2 className="hidden md:flex bg-[#043F97] w-full text-white pl-4 py-4 text-lg font-bold">{t("Personal Information")}</h2>)}

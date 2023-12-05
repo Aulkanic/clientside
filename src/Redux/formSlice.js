@@ -37,6 +37,7 @@ const initialState = {
     schoID:'',
     suffix:'',
     siblings: [],
+    userType:''
 }
 
 const userSlice = createSlice({

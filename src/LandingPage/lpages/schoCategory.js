@@ -7,6 +7,7 @@ import Avatar from '@mui/material/Avatar';
 import { useContext } from "react";
 import { color } from "../../App";
 import { useNavigate } from 'react-router-dom';
+import CustomButton from '../../Components/Button/button.jsx';
 
 function SchoCategory() {
   const [post, setPost] = React.useState([]);
@@ -40,13 +41,27 @@ function SchoCategory() {
       />
       </div>
       <div className="schoDet">
-        <div className='ntitle'><h4>{contact.name}</h4></div>
+        <div className='text-lg font-bold'><h4>{contact.name}</h4></div>
         <div className='ndate'><h6>{contact.description}</h6></div>
         
       </div>
       <div className='btncontainerscho'>
-      {contact.status === 'open' || contact.status === 'Open' ? (<Button onClick={() =>setSchoforForm(contact.name)} variant="contained"><Link className='linkingscho'  >APPLY NOW</Link></Button>)
-        : (<Button variant="contained" disabled><Link className='linkingscho' >{contact.status}</Link></Button>)}
+      {contact.status === 'open' || contact.status === 'Open' ? 
+      (
+        <CustomButton
+          label={'Apply Now'}
+          color={'blue'}
+          loading={false}
+          onClick={() =>setSchoforForm(contact.name)}
+        />)
+        : (
+          <CustomButton
+            label={contact.status}
+            color={'gray'}
+            loading={false}
+            disabled={true}
+            onClick={() =>setSchoforForm(contact.name)}
+          />)}
       </div>
     </div>
     {(index + 1) % 2 === 0 && <br />}
@@ -62,6 +77,7 @@ function SchoCategory() {
     <div className='lschoCat'>
         {schoCat}
     </div>
+
     </div>
     </>
   )

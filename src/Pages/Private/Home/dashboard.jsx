@@ -3,6 +3,7 @@ import { NewsAndAnnouncement,FetchingUserappoint,Rulelist,FetchRenewal } from '.
 import CustomSlider from '../../../Components/Slider/slider';
 import Mydo from  '../../../Images/mydo.png'
 import { useSelector } from 'react-redux';
+import clsx from 'clsx';
 import MYDO_Calendar from '../../../Components/Calendar/calendar';
 import VerticalStepper from '../../../Components/Stepper/vertical';
 import { convertToPesos } from '../../../helper/convertPesos';
@@ -104,13 +105,15 @@ const formattedDate = date.toLocaleString('en-US', {
 });
   return (
     <div className='sm:w-[350px] md:w-[450px] lg:w-[800px] xl:w-[1100px] flex flex-col'>
-      <div>
+      <div className={clsx(
+        newsAnnounce.length === 0 ? 'animate-pulse' : '',
+        'bg-white p-2 rounded-lg')}>
         <h1 className='sm:text-base md:text-xl lg:text-3xl font-bold'>Latest News/Announcement</h1>
           {newsAnnounce.length > 0 ? (
           <CustomSlider settings={settings}>
             {newsAnnounce?.map((data, index) => {
               return(
-              <div key={index} className='m-2 border-2 border-gray-800 rounded-tr-md rounded-tl-md'>
+              <div key={index} className='m-2 rounded-tr-md rounded-tl-md'>
                 <img className='w-full h-32 rounded-tr-md rounded-tl-md bg-gray-400' 
                 src={data.picture || Mydo} alt=""/>
                 <div className='bg-white h-12 p-2'>

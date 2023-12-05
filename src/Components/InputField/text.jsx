@@ -1,10 +1,13 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const TextInput = ({ label,required,type, name, placeholder, value, onChange, error,readonly }) => {
+  const { t } = useTranslation();
+
   return (
     <div className='flex-1 my-4 lg:mb-0 lg:mr-2'>
       <label className='block text-gray-700 text-sm font-bold mb-1' htmlFor={name}>
-        {label} {required && '*'}
+        {t(label)} {required && '*'}
       </label>
       <input
         className={`w-full px-4 py-1.5 border rounded-md focus:outline-none focus:ring focus:border-'blue-300' transition duration-300 ease-in-out`}

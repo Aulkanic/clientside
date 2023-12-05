@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { suffixList,barangayList,genderList,yearList,elementaryList,juniorhighList,seniorhighList,
   collegeList,strandList,courseList} from '../../Pages/Public/ApplicationForm/listOptions.js';    
 import { setForm } from '../../Redux/formSlice.js';
+import CustomButton from '../../Components/Button/button.jsx';
 import { validateText,validateCellphoneNumber,validateField } from '../../helper/validateField.js';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -273,28 +274,31 @@ const handleRegister = () => {
         <div className='w-full p-8'>
           <div className='flex flex-col flex-wrap lg:flex-row p-2 w-full'>
               <TextInput
-                  label={t("Last Name")}
+                  label={form.userType === 'Guardian' ? "Student Last Name" : "Last Name"}
                   type={'text'}
-                  required={false}
+                  required={form.userType === 'Guardian' ? true : false}
                   name='lastName'
                   value={form['lastName']}
-                  readonly={true}
+                  onChange={handleInputChange}
+                  readonly={form.userType === 'Guardian' ? false : true}
               />  
               <TextInput
-                  label={t("First Name")}
+                  label={form.userType === 'Guardian' ? "Student First Name" : "First Name"}
                   type={'text'}
-                  required={false}
+                  required={form.userType === 'Guardian' ? true : false}
                   name='firstName'
                   value={form['firstName']}
-                  readonly={true}
+                  onChange={handleInputChange}
+                  readonly={form.userType === 'Guardian' ? false : true}
               />  
               <TextInput
-                  label={t("Middle Name")}
+                  label={form.userType === 'Guardian' ? "Student Middle Name" : "Middle Name"}
                   type={'text'}
-                  required={false}
+                  required={form.userType === 'Guardian' ? true : false}
                   name='middleName'
                   value={form['middleName']}
-                  readonly={true}
+                  onChange={handleInputChange}
+                  readonly={form.userType === 'Guardian' ? false : true}
               />  
               <SelectInput
                 label={t("Suffix")}
@@ -450,7 +454,12 @@ const handleRegister = () => {
         </div>
       </div>
       <div className='w-full flex justify-end items-end pr-4 pb-4'>
-        <Button className='myButton' variant="contained" onClick={Check}>Next</Button>
+          <CustomButton
+            label={'Next'}
+            color={'blue'}
+            loading={false}
+            onClick={Check}
+          />
       </div>
     </div>
   </div>

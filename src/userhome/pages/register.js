@@ -25,6 +25,9 @@ import Swal from 'sweetalert2';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Backdrop, CircularProgress } from '@mui/material';
 import { setForm } from '../../Redux/formSlice';
+import CustomButton from '../../Components/Button/button';
+import SelectInput from '../../Components/InputField/select';
+import { useSelector } from 'react-redux';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 50,
@@ -61,13 +64,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const Register = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const form = useSelector((state) => state.form)
+    const [userDetails,setUserDetails] = useState('')
     const [fname, setfname] = useState('');
     const [mname, setmname] = useState('');
     const [lname, setlname] = useState('');
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState(new Array(6).fill(''));
     const inputRefs = useRef([]);
-    const [step, setStep] = useState(1); 
+    const [step, setStep] = useState(3); 
     const [password, setPassword] = useState('');
     const [loading,setLoading] = useState(false);
     const [loading1,setLoading1] = useState(false);
@@ -113,9 +118,7 @@ const Register = () => {
       setSnackbarOpen(false);
     };
     const handleRegisterClick = async () => {
-  
       const errors = {};
-
       if (!email) {
         errors.email = "Email is required";
       } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email)) {
@@ -123,13 +126,12 @@ const Register = () => {
       }
       if (Object.keys(errors).length > 0) {
         setErrors(errors);
-      
         return;
       }
     
     const formData = new FormData();
     formData.append('email', email);
-    setShowBackdrop(true)
+    setLoading(true)
      await RegistryOtp.REGISTRY_OTP(formData)
      .then(res => {
       if(res.data.success === 0){
@@ -137,7 +139,7 @@ const Register = () => {
         setSnackbarMessage(res.data.message);
         setSnackbarOpen(true); 
         setStep(1);
-        setShowBackdrop(false)
+        setLoading(false)
       
       }else{
         setResstat('200')
@@ -146,7 +148,7 @@ const Register = () => {
         setRemainingSeconds(60);
         setStep(2);
         setErrors('')
-        setShowBackdrop(false)
+        setLoading(false)
       }
   
     }
@@ -174,70 +176,68 @@ const Register = () => {
         return () => clearInterval(timer);
       }
     }, [remainingSeconds]);
-
     useEffect(() => {
-        const validationCriteria = [
-          {
-            description: '8 - 45 characters',
-            isValid: !password || password.length >= 8 && password.length <= 45,
-          },
-          {
-            description: 'At least one uppercase letter (A to Z)',
-            isValid: !password || /[A-Z]/.test(password),
-          },
-          {
-            description: 'At least one lowercase letter (a to z)',
-            isValid: !password || /[a-z]/.test(password),
-          },
-          {
-            description: 'At least one number (0 to 9)',
-            isValid: !password || /[0-9]/.test(password),
-          },
-          {
-            description: "Don't use : ; , * \" / \\",
-            isValid: !password || !/[:;,*"\/\\]/.test(password),
-          },
-          {
-            description: 'No spaces',
-            isValid: !password || !/\s/.test(password),
-          },
-        ];
-        const validateName = (name,lname,mname) => {
-          return [
-            {
-              description: 'Capitalize all letter of firstname and lastname.',
-              isValid: (!name || !lname) || (/^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(name) && /^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(lname) && /^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(mname)),
-            },
-            {
-              description: 'At least 3 to 45 characters only.',
-              isValid: (!name || !lname) || (name.length >= 2 && name.length <= 45 && lname.length >= 2 && lname.length <= 45),
-            },
-            {
-              description: 'No numbers.',
-              isValid: (!/\d/.test(name) && !/\d/.test(lname) && !/\d/.test(mname)) || (!name || !lname), 
-            },
-          ];
-        };
-        const validationforName = validateName(fname,lname,mname);
-        setValidationResults1(validationforName)
-        setValidationResults(validationCriteria);
-
-    }, [password,fname,lname,mname,validationResults, validationResults1]);
-
-    useEffect(() => {
+      const validationCriteria = [
+        {
+          description: '8 - 45 characters',
+          isValid: !password || (password.length >= 8 && password.length <= 45),
+        },
+        {
+          description: 'At least one uppercase letter (A to Z)',
+          isValid: !password || /[A-Z]/.test(password),
+        },
+        {
+          description: 'At least one lowercase letter (a to z)',
+          isValid: !password || /[a-z]/.test(password),
+        },
+        {
+          description: 'At least one number (0 to 9)',
+          isValid: !password || /[0-9]/.test(password),
+        },
+        {
+          description: "Don't use : ; , * \" / \\",
+          isValid: !password || !/[:;,*"\/\\]/.test(password),
+        },
+        {
+          description: 'No spaces',
+          isValid: !password || !/\s/.test(password),
+        },
+      ];
+    
+      const validateName = (name, lname, mname) => [
+        {
+          description: 'Capitalize all letters of firstname and lastname.',
+          isValid: (!name || !lname) || (/^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(name) && /^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(lname) && /^[A-Z\s!@#$%^&*()_+{}\[\]:;"'<>,.?|\\/0-9]*$/.test(mname)),
+        },
+        {
+          description: 'At least 3 to 45 characters only.',
+          isValid: (!name || !lname) || (name.length >= 2 && name.length <= 45 && lname.length >= 2 && lname.length <= 45),
+        },
+        {
+          description: 'No numbers.',
+          isValid: (!/\d/.test(name) && !/\d/.test(lname) && !/\d/.test(mname)) || (!name || !lname),
+        },
+      ];
+    
+      const validationforName = validateName(fname, lname, mname);
+      setValidationResults1(validationforName);
+      setValidationResults(validationCriteria);
+    
       // Check if any of the validation results are invalid
-      const isPasswordValid = validationResults.every((result) => result.isValid);
-      const isNameValid = validationResults1.every((result) => result.isValid);
-  
+      const isPasswordValid = validationCriteria.every((result) => result.isValid);
+      const isNameValid = validationforName.every((result) => result.isValid);
+    
       // Enable or disable the submit button based on validation results
       setIsSubmitDisabled(!isPasswordValid || !isNameValid);
-    }, [validationResults, validationResults1]);
+    }, [password, fname, lname, mname, validationResults, validationResults1]);
+    
+    
     const handleVerifyClick = (e) => {
       e.preventDefault()
       const errors = {}; 
       const checkotp = otp.join('')
       if(!checkotp || checkotp === ''){
-        errors.otp = 'Please input OTP'
+        errors.otp = 'Please input otp first'
       }
       if (Object.keys(errors).length > 0) {
         setErrors(errors);
@@ -299,29 +299,41 @@ const Register = () => {
     } else if (!/^[a-zA-Z0-9]*$/.test(password)) {
       errors.password = "Password can only contain alphanumeric characters";
     }
+    if(!userDetails){
+      errors.userDetails = 'Please select user type first'
+    }
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
      
       return;
     }
     setLoading(true)
-    CreatingRegistry.CREATE_REGISTRY({fname,lname,mname,email,password})
+    const formData = new FormData();
+    formData.append('fname',fname);
+    formData.append('lname',lname);
+    formData.append('mname',mname);
+    formData.append('email',email);
+    formData.append('password',password);
+    formData.append('userType',userDetails);
+    CreatingRegistry.CREATE_REGISTRY(formData)
     .then(res => {
       if(res.data.message === 'Created'){
-        const applicantNum = res.data.data.applicantNum;
-        const fname = res.data.data.fname;
-        const lname = res.data.data.lname;
-        const mname = res.data.data.mname;
-        const email = res.data.data.email;
-        setResstat('200')
+        const { applicantNum, fname, lname, mname, email,userType } = res.data.data;
+      
+        setResstat('200');
         setSnackbarMessage('Account Created');
-        setSnackbarOpen(true); 
+        setSnackbarOpen(true);
         navigate('/ApplicationForm');
-        dispatch(setForm({ ["applicantNum"]: applicantNum }));
-        dispatch(setForm({ ["firstName"]: fname }));
-        dispatch(setForm({ ["lastName"]: lname }));
-        dispatch(setForm({ ["middleName"]: mname }));
-        dispatch(setForm({ ["email"]: email }));
+      
+        const formFields = {
+          applicantNum,
+          firstName: fname,
+          lastName: lname,
+          middleName: mname,
+          email,
+          userType,
+        };
+        Object.entries(formFields).forEach(([key, value]) => dispatch(setForm({ [key]: value })));
         setLoading(false)
       
       }else{
@@ -396,8 +408,6 @@ const handlerPasswordInput = (e) => setPassword(e.target.value)
 const handlerBackInput = (e) => {
   setStep(1)
 }
-
-
 const findCreatedAcc = async() =>{
   const { value: email } = await Swal.fire({
     title: 'Input email address',
@@ -424,6 +434,15 @@ const findCreatedAcc = async() =>{
      })
   }
 }
+const handleOptionChange = (data) => {
+  const { name, value } = data;    
+  setUserDetails(value)
+}
+const user = [
+{name:'userType',label:'Select user type',value:''},
+{name:'userType',label:'Student',value:'Student'},
+{name:'userType',label:'Guardian',value:'Guardian'}
+]
 
   return (
     <>
@@ -497,23 +516,13 @@ const findCreatedAcc = async() =>{
                 </div>
                 <div className="my-4">
                   <div className='w-full flex justify-center items-center'>
-                    <button
-                    className='myButton'
-                    style={{
-                      cursor: 'pointer', 
-                      fontWeight: '700',
-                      color: 'white',
-                      fontSize:'12px',
-                      textTransform:'capitalize',
-                      fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-                      marginBottom:'-5px',
-                      height:'45px',
-                      fontWeight:'bold'
-                    }}
-                    onClick={handleRegisterClick}
-                  >
-                    CONTINUE
-                  </button>
+                    <CustomButton
+                      label={'Continue'}
+                      color={'blue'}
+                      loading={loading}
+                      disabled={loading}
+                      onClick={handleRegisterClick}
+                    />
                   </div>
                 </div>
                 <Link className='italic cursor-pointer' onClick={findCreatedAcc}>
@@ -535,8 +544,9 @@ const findCreatedAcc = async() =>{
                 </div>
 
 
-                <div className="flex gap-2 mt-8">
-                {otp.map((digit, index) => (
+                <div className="flex flex-col gap-2 mt-8">
+                  <div className='flex gap-2 mt-8'>
+                  {otp.map((digit, index) => (
                     <input
                       key={index}
                       className="w-10 h-10 text-center border-2 border-gray-400 outline-0 rounded-sm"
@@ -549,73 +559,51 @@ const findCreatedAcc = async() =>{
                     />
                   ))}
                   </div>
-                  <p style={{color:'black',margin:'20px 10px 10px 10px',fontStyle:'italic'}}>Didn't get the code?
+                  {errors.otp && <p className='text-red-600'>{errors.otp}</p>}
+                  </div>
+                  <p className='m-4 italic text-black'>Didn't get the code?
                   <Link
-                  style={{color:'#252525',cursor:'pointer',marginLeft:'5px',textDecoration:'none',color:'lightblue'}}
+                  className='text-blue-600 cursor-pointer'
                   onClick={handleResendClick}
-                >
+                  >
                     Resend
-                </Link>
+                  </Link>
                   </p>
                   <div style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',fontStyle:'italic'}}>
                     {remainingSeconds > 0 ? (<p className={errors.otp ? 'red' : ''}>{remainingSeconds} seconds before requesting another OTP</p>) : (null)}
                   </div>
-            <div className='w-full h-auto flex items-center gap-4 justify-center'>
-              <div>
-              <LoadingButton 
-                    
-                    fullWidth
-                    sx={{
-                      cursor: 'pointer', 
-                      fontWeight: 'bold',
-                      color: 'white',
-                      fontSize:'14px',
-                      textTransform:'capitalize',
-                      fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-                      height:'50px',
-                      backgroundColor:'rgba(0, 32, 203, 1) ',
-                      border:'none',
-                      '&:hover': {
-                        backgroundColor: 'rgba(0, 32, 203, 0.8)', // Change background color on hover
-                      },
-                    }}
-                    variant="outlined" onClick={handlerBackInput}>BACK
-              </LoadingButton>
-              </div>
-              <div>
-              <LoadingButton
+            <div className='w-full h-auto flex items-center gap-4 justify-center mb-8'>
+              <CustomButton
+                label={'Back'}
+                color={'blue'}
                 loading={loading}
-                loadingPosition="end"
-                variant="outlined"
-                fullWidth
-                sx={{
-                  margin: '10px 0px 10px 0px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  color: 'white',
-                  fontSize: '14px',
-                  textTransform: 'capitalize',
-                  fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                  height: '50px',
-                  backgroundColor: 'rgba(0, 255, 102, 1)',
-                  border: 'none',
-                  transition: 'background-color 0.3s ease', // Add transition property
-                  '&:hover': {
-                    backgroundColor: 'rgba(0, 255, 102, 0.8)', // Change background color on hover
-                  },
-                }}
+                disabled={loading}
+                onClick={handlerBackInput}
+              />
+              <CustomButton
+                label={'Verify'}
+                color={'green'}
+                loading={loading}
+                disabled={loading}
                 onClick={handleVerifyClick}
-              >
-                VERIFY
-              </LoadingButton>
-              </div>
+              />
             </div>
               </div>
-              )}
+            )}
 
             {step === 3 && (
-              <div className='bg-white flex flex-col p-4 rounded-lg'>
+              <div className='w-full bg-white flex flex-col p-4 rounded-lg'>
               <h2  className='text-sky-700 font-bold text-2xl mt-4'>Create Account</h2>
+              <div className='flex gap-2 w-full md:w-1/2 items-center justify-center'>
+              <h1 className='font-bold text-lg'>User Type:</h1>
+                <SelectInput 
+                  options={user}
+                  value={user.find(data => data.value === userDetails)}
+                  onChange={(handleOptionChange)}
+                  error={errors.userDetails}
+                />
+              </div>
+
                 <div className=' flex flex-wrap justify-between md:flex-row sm:flex-col '>
                 <div className='w-full md:w-1/2 sm:w-full'>
                   <div>
@@ -715,32 +703,17 @@ const findCreatedAcc = async() =>{
                 </div>
                 </div>
                 </div>
-
-                  <div style={{marginBottom:'20px',width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>  
-                  <LoadingButton
-                  loading={loading}
-                  loadingPosition="end"
-                  variant="elevated"
-                  fullWidth
-                  disabled={isSubmitDisabled}
-                  style={{
-                    cursor: 'pointer', 
-                    fontWeight: '700',
-                    color: 'white',
-                    fontSize:'14px',
-                    textTransform:'capitalize',
-                    fontFamily: 'Source Sans Pro, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"', 
-                    height:'40px',
-                    width:'150px',
-                    backgroundColor:'rgba(0, 255, 102, 1)'
-                  }}
-                  onClick={handleSubmitReg}
-                >
-                  CREATE
-                </LoadingButton>
-                  </div> 
+                <div className='w-full flex items-center justify-center'>  
+                  <CustomButton
+                    label={'Creat Account'}
+                    color={'green'}
+                    loading={loading}
+                    disabled={loading}
+                    onClick={handleSubmitReg}
+                  />
+                </div> 
               </div>
-              )}
+            )}
           </div>
         </div>
       </div>
