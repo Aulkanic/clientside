@@ -10,7 +10,7 @@ async function validateField(value, maxLength, isName) {
         return "Input must not contain spaces only.";
       }
   
-    return '';
+    return ;
   }
 // Validate normal text input
 async function validateText(value, maxLength, isName) {
@@ -28,7 +28,7 @@ async function validateText(value, maxLength, isName) {
         return "Numbers are not allowed.";
       }
 
-    return '';
+    return ;
   }
   
   // Validate numbers
@@ -40,7 +40,7 @@ async function validateText(value, maxLength, isName) {
       } else if ( value <= 0) {
         return "Number must be greater than 0.";
       }
-    return '';
+    return ;
   }
   
   // Validate cellphone numbers
@@ -51,6 +51,21 @@ async function validateText(value, maxLength, isName) {
         return "Invalid cellphone number. It should start with '9' and have a total length of 10 digits.";
       }
   
-    return '';
+    return ;
   }
-  export { validateText, validateNumber, validateCellphoneNumber,validateField };
+  async function validateAge(value) {
+    if (value === '') {
+      return "Age is required";
+    } else if (value <= 0) {
+      return "Invalid Age";
+    }else if (/[a-zA-Z]/.test(value)) {
+      return "Input must not contain letter value";
+    }else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(value)) {
+      return "Special characters are not allowed.";
+    }else if(value <= 5){
+      return 'Minimum age for application is five years old';
+    }
+  
+    return ;
+  }
+  export { validateText, validateNumber, validateCellphoneNumber,validateField,validateAge };

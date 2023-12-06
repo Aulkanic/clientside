@@ -40,15 +40,18 @@ const initialState = {
     userType:''
 }
 
-const userSlice = createSlice({
+const formSlice = createSlice({
     name:'form',
     initialState,
     reducers:{
         setForm:(state,action) =>{
             return { ...state, ...action.payload };
-        }
+        },
+        resetForm: (state) => {
+            return initialState; // Reset the form to the initial state
+        },
     }
 })
 
-export const { setForm } = userSlice.actions;
-export default userSlice.reducer;
+export const { setForm,resetForm } = formSlice.actions;
+export default formSlice.reducer;

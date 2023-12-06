@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import '../css/schoCategory.css'
 import { ScholarCategory } from '../../Api/request.js'
-import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { setForm } from '../../Redux/formSlice.js';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import { useContext } from "react";
 import { color } from "../../App";
@@ -10,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../Components/Button/button.jsx';
 
 function SchoCategory() {
+  const dispatch = useDispatch();
+  const form = useSelector((state) => state.form)
   const [post, setPost] = React.useState([]);
   const navigate = useNavigate()
   const { colorlist } = useContext(color);
@@ -25,6 +28,7 @@ function SchoCategory() {
 
   const setSchoforForm = (schoname) =>{
     localStorage.setItem('schoId',schoname)
+    dispatch(setForm({ 'schoId': schoname}))
     navigate('/register')
   }
 

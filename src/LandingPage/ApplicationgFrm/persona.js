@@ -115,6 +115,7 @@ function Persona() {
         dispatch(setForm({ ['fatherEduc']: 'NONE' }));
         dispatch(setForm({ ['fatherOccu']: 'NONE' }));
         setisFather(true);
+        localStorage.setItem('nofather',isFather)
         if(value === 'Father'){
           setValue('Other')
         }
@@ -164,7 +165,8 @@ function Persona() {
           errors.sibling = `Please fill out all sibling information fields.`
         }
       }
-        if (Object.keys(errors).length > 0) {
+      const isError = Object.values(errors).every(error => error === undefined)
+        if (isError !== true) {
           setErrors(errors);
           return;
         }

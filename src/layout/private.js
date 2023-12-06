@@ -19,12 +19,12 @@ import MYDO from '../Images/mydo.png';
 import formatTimeDifference from '../helper/formatTimeDiff';
 import Popover from '@mui/material/Popover';
 import Badge from '@mui/material/Badge';
-
+import { CiLogout } from "react-icons/ci";
 
 export default function Private(){
     const dispatch = useDispatch();
     const user = useSelector((state) => state.login);
-    const applicantNum = user.info.applicantNum;
+    const applicantNum = user.info?.applicantNum;
     const [notification,setNotification] = useState([])
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -139,12 +139,14 @@ export default function Private(){
     }
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined
-    return (
+    return _.isNil(user?.info && applicantNum) ? (
+      <Navigate replace to={'/login'} />
+    ) : (
       <div className="flex w-screen border-black">
         {/* Sidebar */}
         <div className={clsx(
           isSidebarOpen ? 'block' : 'hidden',
-          'md:block md:basis-1/5 bg-gray-600 h-screen text-white flex flex-col justify-between'
+          'md:block md:basis-1/5 relative bg-gray-600 h-screen text-white flex flex-col justify-between'
         )}>
           <div className="w-160 min-w-120">
             <div className="w-120 min-w-120 p-5 bg-gray-500">
@@ -178,10 +180,10 @@ export default function Private(){
               ))}
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={logOut}
-            />
+          <div className="absolute bottom-0 bg-gray-500 w-full h-10 flex justify-center font-bold items-center">
+            <button onClick={logOut} className='flex items-center justify-center gap-2 w-max -ml-4'>
+            <CiLogout /> <p>Logout</p>
+            </button>
           </div>
         </div>
         {/* Body */}

@@ -72,7 +72,7 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState(new Array(6).fill(''));
     const inputRefs = useRef([]);
-    const [step, setStep] = useState(3); 
+    const [step, setStep] = useState(1); 
     const [password, setPassword] = useState('');
     const [loading,setLoading] = useState(false);
     const [loading1,setLoading1] = useState(false);
@@ -333,7 +333,9 @@ const Register = () => {
           email,
           userType,
         };
-        Object.entries(formFields).forEach(([key, value]) => dispatch(setForm({ [key]: value })));
+        if(userType !== 'Guardian'){
+          Object.entries(formFields).forEach(([key, value]) => dispatch(setForm({ [key]: value })));
+        }
         setLoading(false)
       
       }else{
@@ -562,12 +564,12 @@ const user = [
                   {errors.otp && <p className='text-red-600'>{errors.otp}</p>}
                   </div>
                   <p className='m-4 italic text-black'>Didn't get the code?
-                  <Link
-                  className='text-blue-600 cursor-pointer'
+                  <button
+                  className='text-blue-600 cursor-pointer bg-transparent ml-1 italic'
                   onClick={handleResendClick}
                   >
-                    Resend
-                  </Link>
+                   {loading1 ? 'Sending...' : 'Resend'}
+                  </button>
                   </p>
                   <div style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center',fontStyle:'italic'}}>
                     {remainingSeconds > 0 ? (<p className={errors.otp ? 'red' : ''}>{remainingSeconds} seconds before requesting another OTP</p>) : (null)}
@@ -576,8 +578,8 @@ const user = [
               <CustomButton
                 label={'Back'}
                 color={'blue'}
-                loading={loading}
-                disabled={loading}
+                loading={false}
+                disabled={false}
                 onClick={handlerBackInput}
               />
               <CustomButton

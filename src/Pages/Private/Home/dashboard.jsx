@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { NewsAndAnnouncement,FetchingUserappoint,Rulelist,FetchRenewal } from '../../../Api/request'
+import { NewsAndAnnouncement,FetchingUserappoint,Rulelist,FetchRenewal,FetchingProfileUser,FetchingBmccSchoinfo } from '../../../Api/request'
 import CustomSlider from '../../../Components/Slider/slider';
 import Mydo from  '../../../Images/mydo.png'
 import { useSelector } from 'react-redux';
@@ -7,6 +7,8 @@ import clsx from 'clsx';
 import MYDO_Calendar from '../../../Components/Calendar/calendar';
 import VerticalStepper from '../../../Components/Stepper/vertical';
 import { convertToPesos } from '../../../helper/convertPesos';
+import { updateInfo } from '../../../Redux/loginSlice';
+import { useDispatch } from 'react-redux';
 
   var settings = {
     dots: true,
@@ -33,10 +35,12 @@ import { convertToPesos } from '../../../helper/convertPesos';
   };
 
 export const Dashboard = () => {
+  const dispatch = useDispatch()
   const user = useSelector((state) => state.login);
-  const status = user.info.status === 'For Evaluation' ? 0 
-                : user.info.status === 'Assessment' ? 1
-                : user.info.status === 'Qualified' ? 2
+  const userDet = user.info;
+  const status = user.info.remarks === 'For Evaluation' ? 0 
+                : user.info.remarks === 'Assessment' ? 1
+                : user.info.remarks === 'Qualified' ? 2
                 : 3;
   const [newsAnnounce,setNewsAnnouncement] = useState([]);
   const [appointments,setAppointment] = useState([]);
@@ -47,6 +51,16 @@ export const Dashboard = () => {
   useEffect(() =>{
     async function Fetch(){
       const applicantNum = user.info.applicantNum
+      const profileUserResponse = await FetchingProfileUser.FETCH_PROFILEUSER(applicantNum);
+      console.log(profileUserResponse.data.Profile);
+      const val = profileUserResponse.data.Profile
+      dispatch(updateInfo({ userDet,'remarks': val[0].remarks }));
+
+      if (profileUserResponse.data.Profile[0].status === 'Approved') {
+        const scholarInfoResponse = await FetchingBmccSchoinfo.FETCH_SCHOLARSINFO(applicantNum);
+        console.log(scholarInfoResponse.data.ScholarInf.results2[0]);
+      }
+
       let res = await NewsAndAnnouncement.NEWS_ANNOUNCE();
       let res1 = await FetchingUserappoint.FETCH_USERAPPOINTMENT(applicantNum);
       let res2 = await Rulelist.FETCH_RULE();

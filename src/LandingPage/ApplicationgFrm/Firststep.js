@@ -23,7 +23,7 @@ import { suffixList,barangayList,genderList,yearList,elementaryList,juniorhighLi
   collegeList,strandList,courseList} from '../../Pages/Public/ApplicationForm/listOptions.js';    
 import { setForm } from '../../Redux/formSlice.js';
 import CustomButton from '../../Components/Button/button.jsx';
-import { validateText,validateCellphoneNumber,validateField } from '../../helper/validateField.js';
+import { validateText,validateCellphoneNumber,validateField,validateAge } from '../../helper/validateField.js';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -162,28 +162,18 @@ async function Check(){
     errors.SchoolAddress = await validateField(form.SchoolAddress,500,'School Address');
     errors.yearLevel = await validateField(form.yearLevel,50,'Year Level');
     errors.course = await validateField(form.course,150,'Course');
-    if (form.age === '') {
-      errors.age = "Age is required";
-    } else if (form.age <= 0) {
-      errors.age = "Invalid Age";
-    }else if (/[a-zA-Z]/.test(form.age)) {
-      errors.age = "Input must not contain letter value";
-    }else if (/[!@#$%^&*/_(),.?":{}|<>]/.test(form.age)) {
-      errors.age = "Special characters are not allowed.";
-    }else if(form.age <=5){
-      errors.age = 'Minimum age for application is five years old';
-    }
-    errors.birthPlace =await validateField(form.birthPlace,200,'Birth Place');
-    errors.contactNum =await validateCellphoneNumber(form.contactNum,'Contact Number');
-    console.log(errors)
+    errors.age = await validateAge(form.age)
+    errors.birthPlace = await validateField(form.birthPlace,200,'Birth Place');
+    errors.contactNum = await validateCellphoneNumber(form.contactNum,'Contact Number');
     const fulladress = `${form.housenum} ${form.baranggay} MARILAO BULACAN`;
     dispatch(setForm({ ["address"]: fulladress }));
     
-    if(form.yearLevel !== 'COLLEGE' && form.yearLevel !== 'SENIOR HIGHSCHOOL'){
+    if(form.yearLevel === 'ELEMENTARY'){
       dispatch(setForm({ ["course"]: "NONE" }));
     }
-    if (!errors || Object.keys(errors).length > 0) {
-    
+    const isError = Object.values(errors).every(error => error === undefined)
+
+    if (isError !== true) {
       setErrors(errors);
       return;
     }

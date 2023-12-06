@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { Backdrop, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
-import { setForm } from '../../Redux/formSlice.js';
+import { setForm,resetForm } from '../../Redux/formSlice.js';
 import SelectInput from '../../Components/InputField/select.jsx';
 import CustomButton from '../../Components/Button/button.jsx';
 
@@ -36,7 +36,7 @@ function Economic() {
     const dispatch = useDispatch();
     const form = useSelector((state) => state.form)
     const [showBackdrop, setShowBackdrop] = useState(false);
-    const { setStep, userData, setUserData} = useContext(multiStepContext);
+    const { setStep} = useContext(multiStepContext);
     const [errors, setErrors] = useState({}); 
     const navigate = useNavigate();
     const schoid = localStorage.getItem('schoId');
@@ -63,11 +63,10 @@ function Economic() {
           return({
             label: data.name,
             value: data.name,
-            name:'schoID'
+            name:'schoId'
           })
         }))
         setScholarProg(list);
-  
         const frm = await ApplicationForm.FETCH_FORM();
         setFormq(frm.data.Questions);
         setFormc(frm.data.Answers);
@@ -87,8 +86,8 @@ function Economic() {
     }
     function Check(){
       const errors = {};
-      if(userData.schoID === ''){
-        errors.scho = 'Please select Scholarship Program'
+      if(form.schoId === ''){
+        errors.schoId = 'Please select Scholarship Program'
       }
       setErrors('')
       const isComplete = selectedValues.some((item) => typeof item === 'undefined')
@@ -103,7 +102,7 @@ function Economic() {
       }
       setErrors('')
       let formattedBirthday = '';      
-      const birthdayDate = new Date(userData.birthday);
+      const birthdayDate = new Date(form.birthday);
 
       if (birthdayDate instanceof Date) {
         const options = { month: 'long', day: 'numeric', year: 'numeric' };
@@ -116,66 +115,62 @@ function Economic() {
           return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
       }
-      const fname = toTitleCase(userData.firstName);
-      const lname = toTitleCase(userData.lastName);
-      const mname = toTitleCase(userData.middleName);
+      const fname = toTitleCase(form.firstName);
+      const lname = toTitleCase(form.lastName);
+      const mname = toTitleCase(form.middleName);
       const fullName = `${fname} ${mname} ${lname}`
       let birthdayValue = formattedBirthday;
 
       const formData = new FormData();
-      formData.append('applicantNum', userData.applicantNum);
-      formData.append('address', userData.address);
-      formData.append('age', userData.age);
-      formData.append('baranggay', userData.baranggay);
+      formData.append('applicantNum', form.applicantNum);
+      formData.append('address', form.address);
+      formData.append('age', form.age);
+      formData.append('baranggay', form.baranggay);
       formData.append('birthday', birthdayValue);
-      formData.append('birthPlace', userData.birthPlace);
-      formData.append('schoolAddress', userData.SchoolAddress);
-      formData.append('citizenship', userData.citizenship);
-      formData.append('contactNum', userData.contactNum);
-      formData.append('course', userData.course);
-      formData.append('school', userData.School);
-      formData.append('yearLevel', userData.yearLevel);
-      formData.append('email', userData.email);
-      formData.append('fatherEduc', userData.fatherEduc);
-      formData.append('fatherName', userData.fatherName);
-      formData.append('fatherlName', userData.fatherlName);
-      formData.append('fathermName', userData.fathermName);
-      formData.append('fatherOccu', userData.fatherOccu);
+      formData.append('birthPlace', form.birthPlace);
+      formData.append('schoolAddress', form.SchoolAddress);
+      formData.append('citizenship', form.citizenship);
+      formData.append('contactNum', form.contactNum);
+      formData.append('course', form.course);
+      formData.append('school', form.School);
+      formData.append('yearLevel', form.yearLevel);
+      formData.append('email', form.email);
+      formData.append('fatherEduc', form.fatherEduc);
+      formData.append('fatherName', form.fatherName);
+      formData.append('fatherlName', form.fatherlName);
+      formData.append('fathermName', form.fathermName);
+      formData.append('fatherOccu', form.fatherOccu);
       formData.append('fullName', fullName);
-      formData.append('gender', userData.gender);
-      formData.append('guardianContact', userData.guardianContact);
-      formData.append('guardianAddress', userData.guardianAddress);
-      formData.append('guardianName', userData.guardianName);
-      formData.append('guardianlName', userData.guardianlName);
-      formData.append('guardianmName', userData.guardianmName);
-      formData.append('motherEduc', userData.motherEduc);
-      formData.append('motherName', userData.motherName);
-      formData.append('motherlName', userData.motherlName);
-      formData.append('mothermName', userData.mothermName);
-      formData.append('motherOccu', userData.motherOccu);
-      formData.append('relationship', userData.relationship);
-      formData.append('gradeLevel', userData.gradeLevel);
-      formData.append('scholarID', userData.schoID);
-      formData.append('familyCode', userData.familyCode);
+      formData.append('gender', form.gender);
+      formData.append('guardianContact', form.guardianContact);
+      formData.append('guardianAddress', form.guardianAddress);
+      formData.append('guardianName', form.guardianName);
+      formData.append('guardianlName', form.guardianlName);
+      formData.append('guardianmName', form.guardianmName);
+      formData.append('motherEduc', form.motherEduc);
+      formData.append('motherName', form.motherName);
+      formData.append('motherlName', form.motherlName);
+      formData.append('mothermName', form.mothermName);
+      formData.append('motherOccu', form.motherOccu);
+      formData.append('relationship', form.relationship);
+      formData.append('gradeLevel', form.gradeLevel);
+      formData.append('scholarId', form.schoId);
+      formData.append('familyCode', form.familyCode);
       for (let i = 0; i < selectedValues.length; i++) {
         formData.append(`userfrm[${i}]`, JSON.stringify(selectedValues[i]));
       }
-      for (let i = 0; i < userData.siblings.length; i++) {
-        formData.append(`siblings[${i}]`, JSON.stringify(userData.siblings[i]));
+      for (let i = 0; i < form.siblings.length; i++) {
+        formData.append(`siblings[${i}]`, JSON.stringify(form.siblings[i]));
       }
-      setShowBackdrop(true)
+      setLoading(true)
       ApplyForm.CREATE_APPINFO(formData)
       .then(res => {
-   
           if(res.data.success === 1){
-           
-            setUserData('');
-            localStorage.removeItem("userData");
-            sessionStorage.removeItem('persist:root')
+            dispatch(resetForm());
             localStorage.removeItem('nofather');
             localStorage.removeItem('sameaddress');
             localStorage.removeItem('onlychild');
-            setShowBackdrop(false)
+            setLoading(false)
             setStep(4)
             swal({
               title: "Success",
@@ -186,7 +181,7 @@ function Economic() {
           
           }
           else{
-            setShowBackdrop(false)
+            setLoading(false)
             swal({
               title: "Error",
               text: "Something Went Wrong!",
@@ -202,7 +197,7 @@ function Economic() {
 
   };
 
-    const Questionlist = formq?.filter(data => data.scholarshipProg === form.schoID || schoid)
+    const Questionlist = formq?.filter(data => data.scholarshipProg === form.schoId)
     const FormTemplate = Questionlist?.map((data,index) =>{
     const choices = formc?.filter(question => question.questionsid === data.id)
 
@@ -267,10 +262,10 @@ function Economic() {
              <SelectInput
                 label={t("Scholarship Program")}
                 required={true}
-                value={form.schoID}
+                value={form.schoId}
                 onChange={handleOptionChange}
                 options={scholarprog}
-                error={errors.schoID}
+                error={errors.schoId}
               />
             </div>
 
