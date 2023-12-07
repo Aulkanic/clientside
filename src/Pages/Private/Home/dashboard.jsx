@@ -35,9 +35,7 @@ import { useDispatch } from 'react-redux';
   };
 
 export const Dashboard = () => {
-  const dispatch = useDispatch()
   const user = useSelector((state) => state.login);
-  const userDet = user.info;
   const status = user.info.remarks === 'For Evaluation' ? 0 
                 : user.info.remarks === 'Assessment' ? 1
                 : user.info.remarks === 'Qualified' ? 2
@@ -51,15 +49,6 @@ export const Dashboard = () => {
   useEffect(() =>{
     async function Fetch(){
       const applicantNum = user.info.applicantNum
-      const profileUserResponse = await FetchingProfileUser.FETCH_PROFILEUSER(applicantNum);
-      console.log(profileUserResponse.data.Profile);
-      const val = profileUserResponse.data.Profile
-      dispatch(updateInfo({ userDet,'remarks': val[0].remarks }));
-
-      if (profileUserResponse.data.Profile[0].status === 'Approved') {
-        const scholarInfoResponse = await FetchingBmccSchoinfo.FETCH_SCHOLARSINFO(applicantNum);
-        console.log(scholarInfoResponse.data.ScholarInf.results2[0]);
-      }
 
       let res = await NewsAndAnnouncement.NEWS_ANNOUNCE();
       let res1 = await FetchingUserappoint.FETCH_USERAPPOINTMENT(applicantNum);

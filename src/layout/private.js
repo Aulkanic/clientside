@@ -1,5 +1,5 @@
 import React, { useCallback,useEffect,useState } from 'react';
-import { Link, Navigate, Outlet } from 'react-router-dom';
+import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { RouteUrl } from '../routes/routes';
 import _ from 'lodash';
 import clsx from 'clsx';
@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from '../Redux/loginSlice';
 import { FaHome } from "react-icons/fa";
 import { MdManageAccounts } from "react-icons/md";
-import { FetchNotif,ReadNotifi } from '../Api/request';
+import { FetchNotif,ReadNotifi,FetchingBmccSchoinfo,FetchingProfileUser } from '../Api/request';
 import { HiClipboardDocumentList } from "react-icons/hi2";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { ImNewspaper } from "react-icons/im";
@@ -19,15 +19,19 @@ import MYDO from '../Images/mydo.png';
 import formatTimeDifference from '../helper/formatTimeDiff';
 import Popover from '@mui/material/Popover';
 import Badge from '@mui/material/Badge';
+import { updateInfo } from '../Redux/loginSlice';
 import { CiLogout } from "react-icons/ci";
 
 export default function Private(){
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const user = useSelector((state) => state.login);
+    const userDet = user.info;
     const applicantNum = user.info?.applicantNum;
     const [notification,setNotification] = useState([])
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [isRequesting, setIsRequesting] = useState(false);
     const [selectedMenu,setSelectedMenu] = useState({
         id:0
     })
@@ -76,16 +80,40 @@ export default function Private(){
       }
     ]
     useEffect(() =>{
-      async function Fetch(){
-          const res = await FetchNotif.FETCH_NOTIF(applicantNum)
-          setNotification(res.data.reverse())
+      async function fetchData(){
+        if (isRequesting) {
+          return; // If a request is already in progress, skip this iteration
+        }
+  
+        setIsRequesting(true); // Set the flag to indicate that a request is in progress
+  
+        try {
+          const res = await FetchNotif.FETCH_NOTIF(applicantNum);
+          const profileUserResponse = await FetchingProfileUser.FETCH_PROFILEUSER(applicantNum);
+          const val = profileUserResponse.data.Profile;
+  
+          dispatch(updateInfo({ key: 'remarks', value: val[0].remarks }));
+  
+          if (val[0].status === 'Approved') {
+            await FetchingBmccSchoinfo.FETCH_SCHOLARSINFO(applicantNum);
+          }
+  
+          setNotification(res.data.reverse());
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        } finally {
+          setIsRequesting(false); // Reset the flag regardless of success or failure
+        }
       }
-      Fetch()
-      const intervalId = setInterval(Fetch, 5000);
+  
+      fetchData();
+  
+      const intervalId = setInterval(fetchData, 5000);
+  
       return () => {
         clearInterval(intervalId);
       };
-    },[notification])
+    },[notification, applicantNum, dispatch, isRequesting,userDet])
     const onSelectedMenu = useCallback((item) => {
         setSelectedMenu({ ...item });
       }, []);
@@ -128,14 +156,20 @@ export default function Private(){
       setAnchorEl(null);
     };
     const SetReadNotif = async(val) =>{
-      const formData = new FormData();
-      formData.append('notifId',val.id)
-      formData.append('applicantNum',applicantNum)
-      await ReadNotifi.READ_NOTIFICATION(formData)
-      .then((response)=>{
-        const rev = response.data
-        setNotification(rev.reverse());
-        })
+      if(val.remarks === 'unread'){
+        const formData = new FormData();
+        formData.append('notifId',val.id)
+        formData.append('applicantNum',applicantNum)
+        await ReadNotifi.READ_NOTIFICATION(formData)
+        .then((response)=>{
+          const rev = response.data
+          setNotification(rev.reverse());
+          navigate(`/dashboard/${val.link}`)
+          })
+      }else{
+        navigate(`/dashboard/${val.link}`)
+      }
+
     }
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined
@@ -156,7 +190,7 @@ export default function Private(){
               alt="" />
               </div>
               <p className='m-none text-xs truncate'>MARILAO YOUTH DEVELOPMENT OFFICE</p>
-              <p>BATCH {user.info.Batch}</p>
+              <p>BATCH {userDet.Batch}</p>
             </div>
             <div className="bg-white h-[1px]"></div>
             <div className="flex flex-col w-full py-2 px-4">
@@ -238,8 +272,8 @@ export default function Private(){
                   alt="" />
                 </div>
                 <div className='hidden md:flex flex-col mr-4'>
-                    <p className='font-bold text m-0'>{user.info.Name}</p>
-                    <p className='text-slate-300 text-sm m-0 truncate'><strong>Status:</strong> {user.info.remarks}</p>
+                    <p className='font-bold text m-0'>{userDet.Name}</p>
+                    <p className='text-slate-300 text-sm m-0 truncate'><strong>Status:</strong> {userDet.remarks}</p>
                 </div>
               </div>
             </div>
