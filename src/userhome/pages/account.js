@@ -1,6 +1,6 @@
 import React from 'react';
 import './account.css';
-import { FetchingProfileUser,ChangingProfile, Change_Password,FetchingApplicantsInfo,EditUserinfo } from '../../Api/request'
+import { FetchingProfileUser,ChangingProfile, Change_Password,FetchingApplicantsInfo } from '../../Api/request'
 import {useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import '../Button/buttonstyle.css'
@@ -9,17 +9,16 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import { FaCamera } from "react-icons/fa";
-import { FetchNotif,FetchUnreadNotif,ReadNotifi,UserActivity,Logoutuser } from '../../Api/request';
+import { FetchNotif,FetchUnreadNotif,ReadNotifi,UserActivity } from '../../Api/request';
 import swal from 'sweetalert';
-import Form from 'react-bootstrap/Form';
 import MYDO from '../assets/mydo.png'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
 import { Backdrop, CircularProgress } from '@mui/material';
 import DefaultImg from '../assets/defaultimg.png'
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { setUserDetails } from '../../Redux/loginSlice';
 import PasswordInput from '../../Components/InputField/password';
+import CustomButton from '../../Components/Button/button';
+import { updateInfo } from '../../Redux/loginSlice';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 50,
@@ -126,6 +125,8 @@ useEffect(() => {
     .then(res => {
       setProfileuser(res.data.Result[0])
       setShowBackdrop(false)
+      dispatch(updateInfo({ key: 'profile', value: res.data.Result[0].profile }));
+      setProfilepic(null)
       swal({
         text: 'Profile has been Changed',
         timer: 2000,
@@ -245,12 +246,6 @@ function formatTimeDifference(date) {
   }
 }
 
-async function signout() {
-  const formData = new FormData();
-  formData.append('applicantNum',applicantNum)
-    await Logoutuser.USER_LOGOUT(formData)
-    dispatch(setUserDetails([]))
-}
 
 
   const handlerCPasswordInput = (e) => setCurrent(e.target.value)
@@ -287,12 +282,25 @@ async function signout() {
       </Modal>
        <div className="w-full flex flex-col">
           <div className="w-full bg-white flex py-8 md:px-2 mb-4">
-            <div className='relative w-max'>
+            <div className='relative h-40 w-max'>
               <p className='absolute -top-6 left-4 text-md font-bold'>Profile</p>
             <img className='w-40 rounded-full'
             src={preview || post.profile || DefaultImg} 
             alt="" />
-            <FaCamera  className='absolute right-2 bottom-4 text-3xl'/>
+            <label className='absolute right-2 bottom-8 cursor-pointer' htmlFor="fileImg">
+            <FaCamera  className=' text-3xl'/>
+            <input id='fileImg' onChange={(e) => setProfilepic(e.target.files[0])} type="file" className='hidden' />
+            </label>
+            {userprofile && 
+            <div className='absolute -bottom-6 left-1'>
+            <CustomButton
+              label={'Change Profile'}
+              color={'blue'}
+              disabled={showBackdrop}
+              onClick={ChangeProf}
+            />
+            </div>
+              }
             </div>
             <div className='pl-4'>
             <p className='truncate'><strong>Name:</strong>{user.info.Name}</p>

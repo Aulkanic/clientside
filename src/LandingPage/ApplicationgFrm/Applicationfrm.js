@@ -161,7 +161,7 @@ function Applicationfrm() {
 
       </div>
     </div>
-    <div className='block w-full md:w-4/5 shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)]'>
+    <div className='block w-full md:w-4/5 bg-white'>
     {showStep(currentStep)}
     </div>
     </div>

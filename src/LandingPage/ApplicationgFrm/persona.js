@@ -142,17 +142,17 @@ function Persona() {
       const errors = {};
       errors.motherName = await validateText(form.motherName, 50, 'Mother Name');
       errors.motherlName = await validateText(form.motherlName,50, 'Mother Lastname');
-      errors.motherOccu = await validateField(form.motherOccu, 50, 'Mother Occupation');
-      errors.motherEduc = await validateField(form.motherEduc, 50, 'Mother Education');
+      errors.motherOccu = await validateField(form.motherOccu, 150, 'Mother Occupation');
+      errors.motherEduc = await validateField(form.motherEduc, 150, 'Mother Education');
       errors.fatherName = await validateText(form.fatherName,50,'Father Name');
       errors.fatherlName = await validateText(form.fatherlName,50,'Father Lastname');
       errors.fatherOccu = await validateField(form.fatherOccu, 50,'Father Occupation');
-      errors.fatherEduc = await validateField(form.fatherEduc, 50,  'Father Education');
-      errors.guardianName = await validateText(form.guardianName, 50,'Guardian Name');
+      errors.fatherEduc = await validateField(form.fatherEduc, 150,  'Father Education');
+      errors.guardianName = await validateText(form.guardianName, 150,'Guardian Name');
       errors.guardianlName = await validateText(form.guardianlName, 50,'Guardian Lastname');
       errors.relationship = await validateField(form.relationship, 50,'Relationship to Guardian');
       errors.guardianContact = await validateCellphoneNumber(form.guardianContact,'Guardian Contact');
-      errors.guardianAddress = await validateField(form.guardianAddress, 50,'Guardian Address');
+      errors.guardianAddress = await validateField(form.guardianAddress, 500,'Guardian Address');
       if(!onlyChild){
         const hasEmptyFields = siblings.some(
           (sibling) =>
@@ -517,7 +517,7 @@ function Persona() {
                     value={form.guardianlName}
                     onChange={handleInputChange}
                     error={errors.guardianlName}
-                    readonly={isGuardiancheck}
+                    readonly={isGuardiancheck || form.userType === 'Guardian'}
                   />
                   <TextInput
                     label={t("Guardian's first name")}
@@ -528,7 +528,7 @@ function Persona() {
                     value={form.guardianName}
                     onChange={handleInputChange}
                     error={errors.guardianName}
-                    readonly={isGuardiancheck}
+                    readonly={isGuardiancheck || form.userType === 'Guardian'}
                   />
                   <TextInput
                     label={t("Guardian's middle name")}
@@ -539,7 +539,7 @@ function Persona() {
                     value={form.guardianmName}
                     onChange={handleInputChange}
                     error={errors.guardianmName}
-                    readonly={isGuardiancheck}
+                    readonly={isGuardiancheck || form.userType === 'Guardian'}
                   />
               </div>
               <div className='sm:block md:flex gap-2 p-2 mb-2'>

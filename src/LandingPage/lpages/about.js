@@ -99,27 +99,28 @@ const About = () => {
   ]
   return (
     <>
-    {colorlist && <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-
-    <motion.div className='labout'
+    {colorlist && 
+    <div className='flex justify-center items-center'>
+    <motion.div className='w-11/12 bg-white'
        initial="hidden"
        animate="visible"
        variants={textVariants}
        transition={{ duration: 1 }}>
+      <div className='px-8 w-full flex gap-4 py-4 flex-col md:flex-row justify-center items-center'>
+        <div className='flex flex-1 flex-col'>
+          <div className="flex flex-col justify-center items-center">
+          <img src={MYDO} style={{widt:'100px',height:'70px',objectFit:'contain'}} alt="" />
+          <h1 style={{fontWeight:'700'}}>Marilao Youth Development Office</h1>
+          </div>
+          <p className='whitespace-normal'>
+          Marilao Youth Development Office will be the responsible agency in implementing the process of Application and in Coordination
+            with the Municipal Treasurer Office on releasing of the Financial Assistance to the Scholars.
+          </p>
+        </div>
 
-      <div className="latitle">
-        <img src={MYDO} style={{widt:'100px',height:'70px',objectFit:'contain'}} alt="" />
-        <h1 style={{fontWeight:'700'}}>Marilao Youth Development Office</h1>
-      </div>
-      <Card elevation={0} sx={{width:'100%',padding:'15px',display:'flex',justifyContent:'center',alignItems:'center'}}>
-      <Typography sx={{fontSize:'20px'}}>
-      Marilao Youth Development Office will be the responsible agency in implementing the process of Application and in Coordination
-        with the Municipal Treasurer Office on releasing of the Financial Assistance to the Scholars.
-      </Typography>
-      </Card>
-      <div className='mvcontainer'>
-        <div className='wrapper'>
-        <motion.div className="amvp"
+        <div className='flex-1'>
+        <div className='flex flex-col gap-2'>
+        <motion.div className="w-full"
         ref={ref2}
         initial='hidden'
         animate={inView2 ? 'visible' : 'hidden'}
@@ -133,7 +134,7 @@ const About = () => {
             efficiently utilizing all resources, and actively engaging all stakeholders.
           </Typography>
         </motion.div>
-        <motion.div className="amvp"
+        <motion.div className="w-full"
         ref={ref3}
         initial='hidden'
         animate={inView3 ? 'visible' : 'hidden'}
@@ -148,7 +149,9 @@ const About = () => {
           </Typography>
         </motion.div>
         </div>
+        </div>
       </div>
+
     <div ref={ref1} className='bmccofficials'>
       <div>
         <h1 className='mydoofficials'>MYDO OFFICIALS</h1>
@@ -159,35 +162,31 @@ const About = () => {
       animate={inView1 ? "visible" : "hidden"}
       variants={container}
       >
-          {BmccOfficial.map((data,index) =>{
-            return(
-              <motion.div key={index} className='cardprofile'
-              variants={item}
-              >
-              <Card className='profileoffic' elevation={3} 
-              sx={{
-                display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',padding:'0px 0px 10px 0px',height:'max-Content',width:'190px',minHeight:'150px',border:'none',
-                
-                
-                }}>
-              <div className='backgroundimg' style={{backgroundImage:`url(${logolist[0].logo})`}}>
-                <div className='circular' style={{padding:'5px',borderRadius:'50%',position:'relative'}}>
-                <Avatar sx={{width:100,height:90}} alt="Remy Sharp" src={data.profile} size="lg" />
-                </div>
+        {BmccOfficial.map((data,index) =>{
+          return(
+            <motion.div key={index} className='w-full border-2 border-black'
+            variants={item}
+            >
+            <Card className='w-full p-2' elevation={3}>
+            <div className='backgroundimg' style={{backgroundImage:`url(${logolist[0].logo})`}}>
+              <div className='circular' style={{padding:'5px',borderRadius:'50%',position:'relative'}}>
+              <Avatar sx={{width:100,height:90}} alt="Remy Sharp" src={data.profile} size="lg" />
               </div>
-                <div style={{margin:'5px',textAlign:'center',height:'30px'}}>
-                <h2 style={{fontSize:'12px',fontWeight:'600'}}>{data.name}</h2>
-                <h2 style={{fontSize:'12px',fontWeight:'300'}}>{data.job}</h2>
-                </div>
+            </div>
+              <div style={{margin:'5px',textAlign:'center',height:'30px'}}>
+              <h2 style={{fontSize:'12px',fontWeight:'600'}}>{data.name}</h2>
+              <h2 style={{fontSize:'12px',fontWeight:'300'}}>{data.job}</h2>
+              </div>
 
-              </Card>
-              </motion.div>
-            )
-          })}
+            </Card>
+            </motion.div>
+          )
+        })}
       </motion.div>
       </div>
     </motion.div>
-    </div>}{!colorlist && <>
+    </div>}
+    {!colorlist && <>
     <div style={{width:'100vw',height:'100vh'}}>
       <LoopingRhombusesSpinner />
     </div>

@@ -37,68 +37,68 @@ const Bmccsite = () => {
         );
       }
   return (
-    <div className='page'>
+    <div className='flex flex-col bg-grayish'>
         <Navbar/>
-        <div className='pagecontent'>
-        <Section>
-        <section id='home'>
-            <Lhomepage/>
-        </section>
-        </Section>
-        <div 
-        className="hrhead" 
-        style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
-            ABOUT US
-        </div>
-        <Section>
-        <section id='about'>
-            <About/>
-        </section>
-        </Section>
-        <div 
-        className="hrhead" 
-        style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
-            CONTACT US
-        </div>
-        <Section>
-        <section id='contact'>
-            <Contact/>
-        </section>
-        </Section>
-        <div 
-        className="hrhead" 
-        style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
-            SCHOLARSHIP PROGRAM
-        </div>
-        <Section>
-        <section id='Scholarshipprogram'>
-            <Scholarship/>
-        </section>
-        </Section>
-        <div 
-        className="hrhead" 
-        style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
-            FREQUENTLY ASK QUESTIONS
-        </div>
-        <Section>
-        <section id='Faqs'>
-            <Faqs/>
-        </section>
-        </Section>
-        <div className="lfooter" style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
-            <div className='copyr'>
-                <p>Terms of Service</p>
+        <div className='w-full flex flex-col justify-center items-center'>
+            <Section>
+            <section id='home'>
+                <Lhomepage/>
+            </section>
+            </Section>
+            <div 
+            className="w-full md:w-11/12 py-4 pl-4 font-bold text-xl flex justify-center items-center" 
+            style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
+                ABOUT US
             </div>
-            <div className='location'>
-                <PlaceIcon/><span>Tabing Ilog Marilao, Bulacan</span>
+            <Section>
+            <section id='about'>
+                <About/>
+            </section>
+            </Section>
+            <div 
+        className="w-full md:w-11/12 py-4 pl-4 font-bold text-xl flex justify-center items-center" 
+            style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
+                CONTACT US
             </div>
-            <div className='contact'>
-                <LocalPhoneIcon /><span>{colorlist[0].telephone}</span>
+            <Section>
+            <section id='contact'>
+                <Contact/>
+            </section>
+            </Section>
+            <div 
+        className="w-full md:w-11/12 py-4 pl-4 font-bold text-xl flex justify-center items-center" 
+            style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
+                SCHOLARSHIP PROGRAM
             </div>
-            <div className='url'>
-                <LanguageIcon /><span>http://Marisko.com</span>
-        </div>
-        </div>
+            <Section>
+            <section id='Scholarshipprogram'>
+                <Scholarship/>
+            </section>
+            </Section>
+            <div 
+        className="w-full md:w-11/12 py-4 pl-4 font-bold text-xl flex justify-center items-center"  
+            style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
+                FREQUENTLY ASK QUESTIONS
+            </div>
+            <Section>
+            <section id='Faqs'>
+                <Faqs/>
+            </section>
+            </Section>
+            <div className="w-full md:w-11/12 py-4 pl-4 font-bold gap-4 text-md hidden md:flex justify-center items-center" style={{backgroundColor:colorlist[0].bgColor,color:'white'}}>
+                <div className='copyr'>
+                    <p>Terms of Service</p>
+                </div>
+                <div className='location'>
+                    <PlaceIcon/><span>Tabing Ilog Marilao, Bulacan</span>
+                </div>
+                <div className='contact'>
+                    <LocalPhoneIcon /><span>{colorlist[0].telephone}</span>
+                </div>
+                <div className='url'>
+                    <LanguageIcon /><span>http://Marisko.com</span>
+            </div>
+            </div>
         </div>
         <ScrollToTopButton />
     </div>

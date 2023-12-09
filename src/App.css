@@ -23,6 +23,12 @@ input[type="password"]::-ms-clear {
   background-repeat: no-repeat;
   background-size: contain;
 }
+.bg-homebg-image {
+  background-image: url('../src/Images/mydo.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
 @layer utilities {
   .shadow-custom {
     box-shadow: 2px 2px 15px 7px rgba(0, 0, 0, 0.58);

@@ -335,6 +335,14 @@ const Register = () => {
         };
         if(userType !== 'Guardian'){
           Object.entries(formFields).forEach(([key, value]) => dispatch(setForm({ [key]: value })));
+        }else{
+          dispatch(setForm({ 'userType': userType }))
+          dispatch(setForm({ 'email': email }))
+          dispatch(setForm({ 'userType': userType }))
+          dispatch(setForm({ 'email': email }))
+          dispatch(setForm({ 'guardianName': fname.toUpperCase() }))
+          dispatch(setForm({ 'guardianlName': lname.toUpperCase() }))
+          dispatch(setForm({ 'guardianmName': mname.toUpperCase() }))
         }
         setLoading(false)
       
@@ -423,12 +431,26 @@ const findCreatedAcc = async() =>{
      .then((res) =>{
       if(res.data.success === 1){
         const result = res.data.result[0];
-        const fname = result.fname;
-        const lname = result.lname;
-        const mname = result.mname;
-        const email = result.email;
-        const applicantNum = result.applicantNum;
-        dispatch(setName({fname,lname,mname,email,applicantNum}))
+        const { applicantNum, fname, lname, mname, email,userType } = result;
+        const formFields = {
+          applicantNum,
+          firstName: fname,
+          lastName: lname,
+          middleName: mname,
+          email,
+          userType,
+        };
+        if(userType !== 'Guardian'){
+          Object.entries(formFields).forEach(([key, value]) => dispatch(setForm({ [key]: value })));
+        }else{
+          dispatch(setForm({ 'userType': userType }))
+          dispatch(setForm({ 'email': email }))
+          dispatch(setForm({ 'userType': userType }))
+          dispatch(setForm({ 'email': email }))
+          dispatch(setForm({ 'guardianName': fname.toUpperCase() }))
+          dispatch(setForm({ 'guardianlName': lname.toUpperCase() }))
+          dispatch(setForm({ 'guardianmName': mname.toUpperCase() }))
+        }
         navigate('/ApplicationForm')
       }else{
         Swal.fire(res.data.message)

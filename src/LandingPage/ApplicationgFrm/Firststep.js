@@ -195,16 +195,24 @@ const findCreatedAcc = async() =>{
      .then((res) =>{
       if(res.data.success === 1){
         const result = res.data.result[0];
-        const fname = result.fname;
-        const applicantNum = result.applicantNum
-        const lname = result.lname;
-        const mname = result.mname;
-        const email = result.email;
-        dispatch(setForm({ ["applicantNum"]: applicantNum }));
-        dispatch(setForm({ ["firstName"]: fname }));
-        dispatch(setForm({ ["lastName"]: lname }));
-        dispatch(setForm({ ["middleName"]: mname }));
-        dispatch(setForm({ ["email"]: email }));
+        const { applicantNum, fname, lname, mname, email,userType } = result;  
+        const formFields = {
+          applicantNum,
+          firstName: fname,
+          lastName: lname,
+          middleName: mname,
+          email,
+          userType,
+        };
+        if(userType !== 'Guardian'){
+          Object.entries(formFields).forEach(([key, value]) => dispatch(setForm({ [key]: value })));
+        }else{
+          dispatch(setForm({ 'userType': userType }))
+          dispatch(setForm({ 'email': email }))
+          dispatch(setForm({ 'guardianName': fname.toUpperCase() }))
+          dispatch(setForm({ 'guardianlName': lname.toUpperCase() }))
+          dispatch(setForm({ 'guardianmName': mname.toUpperCase() }))
+        }
         navigate('/ApplicationForm')
         Swal.fire('Successfully Find your Registered Email')
       }else{

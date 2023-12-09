@@ -38,15 +38,21 @@ function Lhomepage() {
   const content = () =>{
     const imgUrl = imgList[0]?.File;
       return (
-        <>
-       <div className="lapply" style={{backgroundImage: `url(${imgUrl})`}}>
-        <div className="lslogan">
-            <h1>
+       <div className="relative">
+        <div className='w-full h-96'>
+          <img className='w-full h-full object-cover'
+           src={imgUrl} alt="" />
+        </div>
+        <div className="absolute top-0 left-0 w-full h-28 md:h-24 backdrop-blur-sm bg-white/30">
+
+        </div>
+        <div className="absolute top-4 left-10 md:left-1/3">
+            <h1 className='font-bold text-2xl'>
               BATANG MARILENYO PROTEKTADO
             </h1>
             <p>Be part of our Scholarship Program</p>
         </div>
-        <div className="lbtnapp">
+        <div className="absolute bottom-2 md:bottom-10 w-full flex justify-center items-center">
           <Link to='/ScholarshipProgram' 
                 className='llinkapp'>
           <motion.button style={{backgroundColor:colorlist[0].bgColor,color:'white'}} whileHover={{
@@ -57,18 +63,18 @@ function Lhomepage() {
           APPLY NOW
           </motion.button></Link>
         </div>
-     </div>       
-        </>
+       </div>       
+
       )
   }
   return (
     <>
-    {colorlist && imgList ? (<div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',width:'100vw'}}>
-    <div className='flex flex-col w-11/12'>
-    {content()}
-      
-        <div className='flex my-4 h-full'>
-          <div className='w-1/2 bg-white leading-9 p-4 flex flex-col justify-center items-center'>
+    {colorlist && imgList ? (
+    <div className='flex flex-col justify-center items-center w-screen h-max'>
+    <div className='flex bg-white h-1/2 flex-col w-full md:w-11/12'>
+      {content()}
+      <div className='flex flex-col md:flex-row my-4 h-1/2'>
+          <div className='w-full md:w-1/2 bg-white leading-9 p-4 flex flex-col justify-center items-center'>
               <p className='font-bold'>What is Pondo Para sa Iskolar ng Bayan?</p>
               <p>
               The Iskolar ng bayan ng Marilao is an ordinance started by Juanito "Tito" Santiago as mayor of the Marilao from 2013-2019. 
@@ -77,7 +83,7 @@ function Lhomepage() {
                and will give them more time to learn and have higher chances of having high-performing students in the marilao.
               </p>
           </div>
-          <div className='w-1/2 mb-4 '>
+          <div className='w-full md:w-1/2 mb-4 '>
           <CustomSlider settings={settings}>
             {imgList?.map((data, index) => {
               return(

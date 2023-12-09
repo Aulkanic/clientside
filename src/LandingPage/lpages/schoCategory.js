@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { color } from "../../App";
 import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../Components/Button/button.jsx';
+import dayjs from 'dayjs';
 
 function SchoCategory() {
   const dispatch = useDispatch();
@@ -20,7 +21,16 @@ function SchoCategory() {
 
     async function Fetch(){
       const req = await ScholarCategory.ScholarshipProgram()
-      setPost(req.data.SchoCat)
+      const list = req.data.SchoCat?.map((data) =>{
+        const start = dayjs(data.startDate).format('MMMM DD, YYYY');
+        const end = dayjs(data.endDate).format('MMMM DD, YYYY');
+        return({
+          ...data,
+          startDate: start,
+          endDate: end
+        })
+      })
+      setPost(list)
     }
     Fetch()
 
@@ -47,7 +57,8 @@ function SchoCategory() {
       <div className="schoDet">
         <div className='text-lg font-bold'><h4>{contact.name}</h4></div>
         <div className='ndate'><h6>{contact.description}</h6></div>
-        
+        <div><p className='text-sm italic'>Start: {contact.startDate}</p></div>
+        <div><p className='text-sm italic'>End: {contact.endDate}</p></div>
       </div>
       <div className='btncontainerscho'>
       {contact.status === 'open' || contact.status === 'Open' ? 

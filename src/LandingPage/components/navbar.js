@@ -12,9 +12,12 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import moment from 'moment';
 import MenuIcon from '@mui/icons-material/Menu';
+import { MdOutlineClear } from "react-icons/md";
+import clsx from 'clsx';
 
 function Navbar() {
   const { colorlist,logolist } = useContext(color);
+  const [open,setOpen] = useState(false)
   const [currentDateTime, setCurrentDateTime] = useState(moment().format('MMMM Do YYYY, h:mm:ss a'));
 
   useEffect(() => {
@@ -30,12 +33,12 @@ function Navbar() {
   return (
     <>
     {colorlist && logolist ? (
-    <div className='headnavfont' style={{display:'flex',flexDirection:'column'}}>
-        <div className='timelink' style={{width:'100%',height:'40px',backgroundColor:colorlist[0].bgColor,display:'flex',justifyContent:'space-between'}}>
-        <div style={{display:'flex',justifyContent:'center',alignItems:'center',color:'white',marginLeft:'20px'}}>
+    <div className='flex flex-col bg-white'>
+        <div className='flex justify-between items-center h-18 py-2 px-2' style={{backgroundColor:colorlist[0].bgColor}}>
+        <div className='flex text-white'>
           {currentDateTime}
         </div>
-        <div style={{display:'flex',justifyContent:'space-between',width:'100px',alignItems:'center',marginRight:'20px',color:'white'}}>
+        <div className='flex gap-2 hidden md:flex'>
         <a href={colorlist[0].fblink} target="_blank" rel="noopener noreferrer">
            <FacebookIcon sx={{color:'blue'}} />
         </a>
@@ -47,59 +50,82 @@ function Navbar() {
         </a>
         </div>
         </div>
-        <div className='lheadbmcc'>
-          <div className='leftlogo' style={{display:'flex'}}>
-            <div className="lheadlogo">
-            <img
-            className='bmccava'
-            alt="BMCC"
-            style={{border:"2px solid",borderColor:colorlist[0].bgColor}}
-            src={logolist[0].logo}
-                />
+        <div className='flex justify-between h-20'>
+            <div className='flex flex-1 gap-2'>
+              <div className="w-16 md:w-24 h-16 md:h-24 relative border-2 md:border-4 rounded-full ml-2 mt-2 md:mt-4" 
+              style={{borderColor:colorlist[0].bgColor}}>
+              <img
+              className='w-full h-full object-cover rounded-full absolute'
+              alt="BMCC"
+              src={logolist[0].logo}
+              />
+              </div>
+              <div className='p-2'>
+                  <h1 className='text-md md:text-2xl font-bold' style={{color:colorlist[0].bgColor}}>
+                    Pondo para sa Iskolar ng Bayan<br/> ng Marilao
+                  </h1>
+              </div>
             </div>
-            <div className='bmccslog'>
-                <h1 style={{color:colorlist[0].bgColor,margin:'10px',marginLeft:'0px'}}>Pondo para sa Iskolar ng Bayan<br/> ng Marilao</h1>
-            </div>
-            </div>
-          
-            <div className='rightlogo'>
-            <div style={{margin:'2px'}}>
+            <div className='hidden md:flex flex-1 justify-end items-center pr-2 gap-2'>
+                <div>
                       <Avatar
                         alt="Remy Sharp"
                         src={Bmcc}
                         sx={{ width: 56, height: 56 }}
                       />
                 </div>
-                <div style={{margin:'2px'}}>
+                <div>
                       <Avatar
                         alt="Remy Sharp"
                         src={marilao}
                         sx={{ width: 56, height: 56 }}
                       />
                 </div>
-                <div style={{margin:'2px'}}>
+                <div>
                       <Avatar
                         alt="Remy Sharp"
                         src={logolist[1].logo}
                         sx={{ width: 56, height: 56 }}
                       />
                 </div>
-
             </div>
         </div>
-        <div className='navstabs' style={{backgroundColor: colorlist[0].bgColor}}>
-            <div className='menu'>
-            <MenuIcon />
+        <div className='flex h-14 items-center' style={{backgroundColor: colorlist[0].bgColor}}>
+            <div className='block md:hidden text-white pl-4 text-2xl'>
+            <MenuIcon onClick={() => setOpen(!open)}/>
             </div>
-            <ul style={{listStyleType:'none',justifyContent:'space-around',alignItems:'center',width:'100%',margin:0,marginLeft:'25px'}}>
-        <a href='#home' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> HOME </a>
-        <a href='#about' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> ABOUT </a>
-        <a href='#contact' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> CONTACT </a>
-        <a href='#Scholarshipprogram' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> SCHOLARSHIP </a>
-        <a href='#Faqs' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> FAQS </a>
-        <Link to='/login' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> SIGN-IN </Link>
-
+            <ul className='hidden md:flex list-none w-full justify-between px-4 ml-32'>
+              <a href='#home' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> HOME </a>
+              <a href='#about' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> ABOUT </a>
+              <a href='#contact' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> CONTACT </a>
+              <a href='#Scholarshipprogram' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> SCHOLARSHIP </a>
+              <a href='#Faqs' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> FAQS </a>
+              <Link to='/login' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> SIGN-IN </Link>
             </ul>
+        </div>
+        <div className={clsx('transition-all duration-500 ease-in fixed flex flex-col h-[400px] z-40 bg-gray-600 w-full', open ? 'top-0' : 'top-[-400px]')}>
+          <div className='relative w-full h-16 flex justify-end bg-registration-image backdrop-saturate-50 bg-white/30'>
+            <div className='w-full z-0 absolute top-0 h-16 backdrop-blur-sm bg-white/30'>
+            </div>
+          </div>
+          <div className='py-2 px-8'>
+            <ul className='flex flex-col gap-8'>
+              <li><a href='#home' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> HOME </a></li>
+              <li><a href='#about' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> ABOUT </a></li>
+              <li><a href='#contact' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> CONTACT </a></li>
+              <li className='bg-gray-600 hover:bg-gray-400 w-full'><a href='#Scholarshipprogram' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> SCHOLARSHIP </a></li>
+              <li className='bg-gray-600 hover:bg-gray-400 w-full'><a href='#Faqs' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> FAQS </a></li>
+              <li className='bg-gray-600 hover:bg-gray-400 w-full'><Link to='/login' style={{color:'white',fontWeight:1000,textDecoration:'none'}}> SIGN-IN </Link></li>
+            </ul>
+          </div>
+          <div className='p-2 absolute top-0'>
+              <h1 className='text-md md:text-2xl z-50 font-bold'>
+                Pondo para sa Iskolar ng Bayan<br/> ng Marilao
+              </h1>
+          </div>
+          <div className='absolute right-20 top-4 z-50 text-3xl'>
+            <MdOutlineClear onClick={() => setOpen(!open)} className='text-white z-50'/>
+          </div>
         </div>
     </div>) :(
       <>

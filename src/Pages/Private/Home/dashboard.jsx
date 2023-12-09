@@ -7,8 +7,6 @@ import clsx from 'clsx';
 import MYDO_Calendar from '../../../Components/Calendar/calendar';
 import VerticalStepper from '../../../Components/Stepper/vertical';
 import { convertToPesos } from '../../../helper/convertPesos';
-import { updateInfo } from '../../../Redux/loginSlice';
-import { useDispatch } from 'react-redux';
 
   var settings = {
     dots: true,

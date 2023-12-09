@@ -84,7 +84,7 @@ function Economic() {
       const { name, value } = data;    
       dispatch(setForm({ [name]: value }));
     }
-    function Check(){
+  async function Check(){
       const errors = {};
       if(form.schoId === ''){
         errors.schoId = 'Please select Scholarship Program'
@@ -101,6 +101,7 @@ function Economic() {
         return;
       }
       setErrors('')
+      setLoading(true)
       let formattedBirthday = '';      
       const birthdayDate = new Date(form.birthday);
 
@@ -123,6 +124,9 @@ function Economic() {
 
       const formData = new FormData();
       formData.append('applicantNum', form.applicantNum);
+      formData.append('firstName', form.firstName);
+      formData.append('lastName', form.lastName);
+      formData.append('middleName', form.middleName);
       formData.append('address', form.address);
       formData.append('age', form.age);
       formData.append('baranggay', form.baranggay);
@@ -154,6 +158,7 @@ function Economic() {
       formData.append('motherOccu', form.motherOccu);
       formData.append('relationship', form.relationship);
       formData.append('gradeLevel', form.gradeLevel);
+      formData.append('userType', form.userType);
       formData.append('scholarId', form.schoId);
       formData.append('familyCode', form.familyCode);
       for (let i = 0; i < selectedValues.length; i++) {
@@ -162,8 +167,8 @@ function Economic() {
       for (let i = 0; i < form.siblings.length; i++) {
         formData.append(`siblings[${i}]`, JSON.stringify(form.siblings[i]));
       }
-      setLoading(true)
-      ApplyForm.CREATE_APPINFO(formData)
+     
+      await ApplyForm.CREATE_APPINFO(formData)
       .then(res => {
           if(res.data.success === 1){
             dispatch(resetForm());
@@ -193,7 +198,6 @@ function Economic() {
       }}
       )
      .catch(err => console.log(err));
-     setLoading(false)
 
   };
 

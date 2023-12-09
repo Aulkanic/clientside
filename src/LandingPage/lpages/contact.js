@@ -1,100 +1,120 @@
-import React, { useState,useEffect } from 'react'
-import LHeader from '../components/navbar'
+import React, { useState } from 'react'
 import '../css/lcontact.css'
 import { motion } from "framer-motion";
-import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Box, Card, CardContent, Typography, Link, Button, styled } from '@mui/material';
+import { Box,Link, Button, styled } from '@mui/material';
 import FacebookSharpIcon from '@mui/icons-material/FacebookSharp';
 import EmailSharpIcon from '@mui/icons-material/EmailSharp';
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { useContext } from "react";
 import { color } from "../../App";
+import CustomSlider from '../../Components/Slider/slider';
 
 const GreenButton = styled(Button)({
   backgroundColor: 'green',
   '&:hover': {
     backgroundColor: 'darkgreen',
   },
+  width:'max-content'
 });
+var settings = {
+  dots: true,
+  infinite: false,
+  speed: 500,
+  lazyLoad: true,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  initialSlide: 0,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 1,
+      }
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 1,
+      }
+    },
+  ]
+};
+
 function Contact() {
 
   const [loading,Setloading] = useState(false)
-  const { colorlist,imgList } = useContext(color);
+  const { imgList } = useContext(color);
 
   const textVariants = {
     hidden: { opacity: 0, x: -70 },
     visible: { opacity: 1, x: 0 }
   };
-const imagelist = imgList?.map((image, index) => {
 
-        return (
-        <div key={index} className="carousel-slide">
-          <img style={{width: '100%',height:'500px'}} src={image.File} alt={`Carousel Image ${index}`} />
-        </div>
-        )
-    })
   return (
     <>
-    {!loading && <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-    <div className="containcont">
-    <div className='carocon'>
-    <Carousel className='carousel'
-            autoPlay
-            infiniteLoop
-            interval={2000}
-            showArrows={true}
-            showStatus={false}
-            showThumbs={false}
-            transitionTime={1000}
-            swipeable={true}
-    >
-      {imagelist}
-    </Carousel>
-    </div>
-    <motion.div className='lcontact'
-           initial="hidden"
-           animate="visible"
-           variants={textVariants}
-           transition={{ duration: 1 }}>
-        <div className='contactdetails'>
-        <div className="lcntctcon">
-          <div className="cntctde">
-            <Box display="flex" justifyContent="center">
-            <div className="cntcthder">
-            <h1>Marilao Youth Development Office</h1>
-            <p>Office Address: 3/F Annex Bldg., Marilao Municipal Bldg, Patubig Marilao, Bulacan</p>
-            <Link href="https://web.facebook.com/BatangMarilenyo"><p>Facebook Page: https://web.facebook.com/BatangMarilenyo</p></Link>
+    {!loading && 
+    <div className='flex flex-col justify-center items-center w-screen h-max'>
+    <div className='w-full flex justify-center items-center'>
+      <div className="w-full md:w-11/12 flex flex-col bg-white">
+        <div className='w-full flex flex-col p-4 md:p-0 md:flex-row mb-4 justify-center items-center'>
+          <div className='flex flex-col gap-4'>
+            <div className="w-full">
+              <div className="flex flex-col">
+                <h1>Marilao Youth Development Office</h1>
+                <p>Office Address: 3/F Annex Bldg., Marilao Municipal Bldg, Patubig Marilao, Bulacan</p>
+                <Link href="https://web.facebook.com/BatangMarilenyo">
+                  <p>Facebook Page: https://web.facebook.com/BatangMarilenyo</p>
+                </Link>
+              </div>
             </div>
-            </Box>
+            <div className="flex flex-col">
+              <h1>Connect with Us</h1>
+              <p style={{marginBottom:'20px'}}>For inquiries regarding the Scholarhip Program,please send us a message to any of the following platforms</p>
+              <div className='flex gap-4'>
+              <GreenButton variant="contained" href="https://web.facebook.com/BatangMarilenyo">
+                <FacebookSharpIcon/>
+              </GreenButton>
+              <GreenButton variant="contained" href="mailto:batangmarilenyooffice@gmail.com">
+                <EmailSharpIcon sx={{ color: 'white' }}/>
+              </GreenButton>
+              </div>
+
+            </div>
+          </div>
+          <div className='w-96'>
+              <CustomSlider settings={settings}>
+                {imgList?.map((data, index) => {
+                  return(
+                  <div key={index} className='m-2'>
+                    <img className='w-full h-full' 
+                    src={data.File} alt=""/>
+                  </div>
+                )})}
+              </CustomSlider>
           </div>
         </div>
-        <div className="logcontac">
-          <h1>Connect with Us</h1>
-          <p style={{marginBottom:'20px'}}>For inquiries regarding the Scholarhip Program,please send us a message to any of the following platforms</p>
-          <GreenButton variant="contained" href="https://web.facebook.com/BatangMarilenyo">
-            <FacebookSharpIcon/>
-          </GreenButton>
-          <GreenButton sx={{marginLeft: '10px'}} variant="contained" href="mailto:batangmarilenyooffice@gmail.com">
-            <EmailSharpIcon sx={{ color: 'white' }}/>
-          </GreenButton>
-        </div>
-        </div>
+        <motion.div 
+        className='w-full p-4'
+        initial="hidden"
+        animate="visible"
+        variants={textVariants}
+        transition={{ duration: 1 }}>
 
-          <motion.div className='maploc'>
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3857.9130242154506!2d120.95668217497754!3d14.773928885733268!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b273fea7697b%3A0x602bd049e77e7c8a!2sMunicipality%20Of%20Marilao%20Bulacan!5e0!3m2!1sen!2sph!4v1687064264766!5m2!1sen!2sph" 
-          width="600" 
-          height="450" 
-          style={{ border: '0'}} 
-          allowfullscreen="" 
-          loading="lazy" 
-          referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
-          </motion.div>
-
-    </motion.div>
+            <motion.div className='w-full'>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3857.9130242154506!2d120.95668217497754!3d14.773928885733268!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b273fea7697b%3A0x602bd049e77e7c8a!2sMunicipality%20Of%20Marilao%20Bulacan!5e0!3m2!1sen!2sph!4v1687064264766!5m2!1sen!2sph" 
+            className='w-full h-96'
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            </motion.div>
+        </motion.div>
+      </div>
     </div>
-    </div>}{loading && <>
+    </div>
+
+    }{loading && <>
     <div style={{width:'100vw',height:'100vh'}}>
       <LoopingRhombusesSpinner />
     </div>
