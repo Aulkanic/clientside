@@ -147,7 +147,7 @@ const Login = () => {
         setErrors('')
         const formData = new FormData()
         formData.append('fpemail',fpemail)
-        setLoading1(true)
+        setLoading(true)
        await GetUserAcc.FETCH_USERACCS(formData)
         .then(res => {
      
@@ -156,8 +156,6 @@ const Login = () => {
             setSnackbarMessage(res.data.message);
             setSnackbarOpen(true); 
             setStep(1);
-            setLoading1(false)
-          
           }else{
             const formData = new FormData();
             formData.append('fpemail', fpemail);
@@ -169,14 +167,14 @@ const Login = () => {
                 setSnackbarMessage(res.data.message);
                 setSnackbarOpen(true); 
                 setStep(1);
-                setLoading1(false)
+                setLoading(false)
                 setErrors('')
               
               }else{
                 setRemainingSeconds(60);
+                setLoading(false)
                 setStep(2);
                 setErrors('')
-                setLoading1(false)
                 setResstat('200')
                 setSnackbarMessage('OTP is sent into your Email Account');
                 setSnackbarOpen(true); 
@@ -200,7 +198,7 @@ const Login = () => {
           return;
         }
         const checkotp = otp.join('')
-        setLoading2(true)
+        setLoading(true)
         const formData = new FormData();
         formData.append('fpemail', fpemail);
         formData.append('otp', checkotp);
@@ -209,13 +207,13 @@ const Login = () => {
           if(res.data.success === 0){
             setResstat('500')
             setSnackbarMessage(res.data.message);
-            setSnackbarOpen(true); 
+            setSnackbarOpen(true);
+            setLoading(false) 
             setStep(2);
-            setLoading2(false)
             setErrors('')
           
           }else{
-            setLoading2(false)
+            setLoading(false)
             setStep(3);
             setResstat('200')
             setSnackbarMessage(res.data.message);
@@ -377,13 +375,13 @@ const Login = () => {
                   <div className='flex flex-col w-full'>
                     <Link className='text-blue-700 mt-2 mb-4' onClick={handlerForgotPasswordLink}>Forgot your Password?</Link>
                     <div className='w-full flex justify-center items-center'>
-                    <CustomButton
-                    label={'Login'}
-                    color={'blue'}
-                    loading={loading}
-                    disabled={loading}
-                    onClick={handleSubmit}
-                   />
+                      <CustomButton
+                      label={'Login'}
+                      color={'blue'}
+                      loading={loading}
+                      disabled={loading}
+                      onClick={handleSubmit}
+                    />
                     </div>
 
                   </div>
@@ -412,20 +410,20 @@ const Login = () => {
                           error={errors.fpemail}
                           />
                       <div className='flex flex-col md:flex-row md:justify-end md:items-end gap-2 m-4'>
-                        <button 
-                        className='order-last md:order-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'
-                        type='submit'
-                        onClick={handlerBackInput}
-                        >
-                          Cancel
-                        </button>
-                        <button 
-                        className='order-1 md:order-last bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'
-                        type='submit'
-                        onClick={findUser}
-                        >
-                          Submit
-                        </button>
+                        <CustomButton
+                          label={'Cancel'}
+                          color={'blue'}
+                          loading={false}
+                          disabled={false}
+                          onClick={handlerBackInput}
+                        />
+                        <CustomButton
+                          label={'Submit'}
+                          color={'blue'}
+                          loading={loading}
+                          disabled={loading}
+                          onClick={findUser}
+                        />
                       </div>
                     </form>
                 </div>
@@ -470,13 +468,13 @@ const Login = () => {
                       </Link>
                         </p>
                     <div className='flex flex-col md:flex-row md:justify-end md:items-end gap-2 m-4'>
-                      <button 
-                      className='order-1 md:order-last bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'
-                      type='submit'
-                      onClick={ValidateOtp}
-                      >
-                        Verify
-                      </button>
+                      <CustomButton
+                          label={'Submit'}
+                          color={'blue'}
+                          loading={loading}
+                          disabled={loading}
+                          onClick={ValidateOtp}
+                      />
                     </div>
                   </form>
               </div>
@@ -513,13 +511,13 @@ const Login = () => {
                       error={errors.renewpassword}
                     />
                     <div className='flex flex-col md:flex-row md:justify-end md:items-end gap-2 m-4'>
-                      <button 
-                      className='order-1 md:order-last bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'
-                      type='submit'
+                      <CustomButton
+                      label={'Update Password'}
+                      color={'blue'}
+                      loading={loading}
+                      disabled={loading}
                       onClick={UpdateUserPass}
-                      >
-                        Submit
-                      </button>
+                    />
                     </div>
                   </form>
               </div>

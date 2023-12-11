@@ -60,18 +60,21 @@ export const Dashboard = () => {
           start: new Date(schedStart),
           end: new Date(schedEnd)
         })
-      })
+      }) || [];
       res.data.forEach(item => {
         item.date = new Date(item.date);
       });
       res.data.sort((a,b) => b.date - a.date)
+      console.log(res3.data)
       const rules = res2.data.result;
       const ruling = rules ? (await convertToPesos(Number(user.info.yearLevel === 'Elementary' ? rules[0].priv1
                      : user.info.yearLevel === 'College' ? rules[0].priv3
                      : rules[0].priv2) * 10)) : 0;
       setPriviledge(ruling)
-      setRenewal(res3.data.list[0]);
-      setRule(res2.data.result[0])
+      if(res3.data.success !== 0){
+        setRenewal(res3.data?.list[0]);
+      }
+      setRule(res2.data?.result[0])
       setAppointment(datapp)
       setNewsAnnouncement(res.data)
     }

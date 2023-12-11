@@ -215,6 +215,8 @@ const motherEducationOptions = [
   ];
 const relationshipList = [
     { label: 'Please select', value: '', name: 'relationship' },
+    { label: 'Mother', value: 'MOTHER', name: 'relationship' },
+    { label: 'Father', value: 'FATHER', name: 'relationship' },
     { label: 'LEGAL GUARDIAN', value: 'LEGAL GUARDIAN', name: 'relationship' },
     { label: 'STEPMOTHER', value: 'STEPMOTHER', name: 'relationship' },
     { label: 'STEPFATHER', value: 'STEPFATHER', name: 'relationship' },

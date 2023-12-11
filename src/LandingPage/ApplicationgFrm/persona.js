@@ -41,33 +41,27 @@ function Persona() {
     const [showBackdrop, setShowBackdrop] = useState(false);
     const [rule,setRule] = useState([]);
     const [siblings, setSiblings] = useState(form.siblings || [])
-    const saveonlychi = localStorage.getItem('onlychild')
-    const savesameaddress = localStorage.getItem('sameaddress')
-    const [onlyChild, setOnlyChild] = useState(saveonlychi === 'true');
-    const savenofat = localStorage.getItem('nofather')
-    const [noFather, setNoFather] = useState(savenofat === 'true');
     const [value, setValue] = useState('' || form.relationship);
-    const [isGuardiancheck,setisGuardiancheck] = useState(false)
-    const [isFather,setisFather] = useState(false);
-    const [isSameAddress,setSameAddress] = useState(savesameaddress === 'true')
+    const [isGuardiancheck,setisGuardiancheck] = useState(false);
+
     const handleChangeRadio = (event) => {
       setValue(event.target.value);
       const isGuardian = event.target.value;
-      if(isGuardian === 'Father'){
+      if(isGuardian === 'FATHER'){
         dispatch(setForm({ ['guardianName']: form.fatherName }));
         dispatch(setForm({ ['guardianlName']: form.fatherlName }));
         dispatch(setForm({ ['guardianmName']: form.fathermName }));
         dispatch(setForm({ ['relationship']: 'FATHER' }));
         setisGuardiancheck(true);
       }
-      if(isGuardian === 'Mother'){
+      if(isGuardian === 'MOTHER'){
         dispatch(setForm({ ['guardianName']: form.motherName }));
         dispatch(setForm({ ['guardianlName']: form.motherlName }));
         dispatch(setForm({ ['guardianmName']: form.mothermName }));
         dispatch(setForm({ ['relationship']: 'MOTHER' }));
         setisGuardiancheck(true)
       }
-      if(isGuardian === 'Other'){
+      if(isGuardian === 'OTHERS'){
         dispatch(setForm({ ['guardianName']: '' }));
         dispatch(setForm({ ['guardianlName']: '' }));
         dispatch(setForm({ ['guardianmName']: '' }));
@@ -84,7 +78,6 @@ function Persona() {
       const caps = value.toUpperCase()
       dispatch(setForm({ [name]: caps }));
     };
-
     const handleInputChange1 = (index, field, value) => {
       const updatedSiblings = [...siblings];
       updatedSiblings[index][field] = value;
@@ -98,47 +91,48 @@ function Persona() {
       values.splice(index, 1);
       setSiblings(values)
     }
-    const handleOnlyChild = () =>{
-      if(!onlyChild){
-        setOnlyChild(true);
+    const handleOnlyChild = (event) =>{
+      const isChecked = event.target.checked;
+      console.log(isChecked)
+      if(isChecked === true){
+        dispatch(setForm({ ['onlyChild']: isChecked }));
         setSiblings([])
       }else{
-        setOnlyChild(false)
+        dispatch(setForm({ ['onlyChild']: isChecked }));
       }
     }
-    const handleNoFather = () =>{
-      if(!noFather){
-        setNoFather(true);
+    const handleNoFather = (event) =>{
+      const isChecked = event.target.checked;
+      if(isChecked === true){
         dispatch(setForm({ ['fatherName']: 'NONE' }));
         dispatch(setForm({ ['fatherlName']: 'NONE' }));
         dispatch(setForm({ ['fathermName']: 'NONE' }));
         dispatch(setForm({ ['fatherEduc']: 'NONE' }));
         dispatch(setForm({ ['fatherOccu']: 'NONE' }));
-        setisFather(true);
-        localStorage.setItem('nofather',isFather)
-        if(value === 'Father'){
-          setValue('Other')
+        dispatch(setForm({ ['noFather']: true }));
+        if(value === 'FATHER'){
+          setValue('OTHERS')
         }
       }else{
-        setNoFather(false)
         dispatch(setForm({ ['fatherName']: '' }));
         dispatch(setForm({ ['fatherlName']: '' }));
         dispatch(setForm({ ['fathermName']: '' }));
         dispatch(setForm({ ['fatherEduc']: '' }));
         dispatch(setForm({ ['fatherOccu']: '' }));
-        setisFather(false);
+        dispatch(setForm({ ['noFather']: false }));
       }
     }
-    const handleSameAddress = () =>{
-      if(!isSameAddress){
-        setSameAddress(true);
+    const handleSameAddress = (event) =>{
+      const isChecked = event.target.checked;
+      if(isChecked){
         dispatch(setForm({ ['guardianAddress']: form.address }));
+        dispatch(setForm({ ['isSameAddress']: isChecked }));
       }else{
-        setSameAddress(false)
+        dispatch(setForm({ ['isSameAddress']: isChecked }));
         dispatch(setForm({ ['guardianAddress']: '' }));
       }
     }
-   async function Check(){
+    async function Check(){
       const errors = {};
       errors.motherName = await validateText(form.motherName, 50, 'Mother Name');
       errors.motherlName = await validateText(form.motherlName,50, 'Mother Lastname');
@@ -153,7 +147,7 @@ function Persona() {
       errors.relationship = await validateField(form.relationship, 50,'Relationship to Guardian');
       errors.guardianContact = await validateCellphoneNumber(form.guardianContact,'Guardian Contact');
       errors.guardianAddress = await validateField(form.guardianAddress, 500,'Guardian Address');
-      if(!onlyChild){
+      if(!form.onlyChild){
         const hasEmptyFields = siblings.some(
           (sibling) =>
             sibling.firstName.trim() === '' ||
@@ -213,59 +207,13 @@ function Persona() {
             setErrors('')
             dispatch(setForm({ ['familyCode']: res.data.familyCode }));
             setLoading(false)
-            localStorage.setItem('userData',JSON.stringify(userData))
             setStep(3)
           }
         })
 
     };
 
-    useEffect(() => {
-      const errors = {};
-    
-      const fieldsToCheck = [
-        'fatherName',
-        'fatherlName',
-        'fatherOccu',
-        'motherName',
-        'motherlName',
-        'motherOccu',
-        'guardianName',
-        'guardianlName',
-        'guardianAddress',
-      ];
-    
-      fieldsToCheck?.forEach((field) => {
-        const fieldValue = form[field];
-        if (fieldValue && fieldValue.trim() !== '' && /[a-z]/.test(fieldValue)) {
-          errors[field] = 'Use uppercase format only.';
-        } else {
-          delete errors[field];
-        }
-      });
-    
-      const siblingErrors = [];
-    
-      siblings?.forEach((sibling, index) => {
-        const siblingFirstName = sibling.firstName;
-        const siblingLastName = sibling.lastName;
-        if (siblingFirstName && siblingFirstName.trim() !== '' && !/^[A-Z]+$/.test(siblingFirstName)) {
-          siblingErrors.push(`Sibling ${index + 1} - First Name should be in uppercase.`);
-        }
-        if (siblingLastName && siblingLastName.trim() !== '' && !/^[A-Z]+$/.test(siblingLastName)) {
-          siblingErrors.push(`Sibling ${index + 1} - Last Name should be in uppercase.`);
-        }
-      });
-    
-      if (siblingErrors.length > 0) {
-        errors.siblingErrors = 'Please Capitalize all letters for all your Siblings information.';
-      } else {
-        delete errors.siblingErrors;
-      }
-    
-      setErrors(errors);
-    
-    }, [form, siblings]);
+
     useEffect(() =>{
       async function Fetch(){
         const rul = await Rulelist.FETCH_RULE()
@@ -273,44 +221,6 @@ function Persona() {
       }
       Fetch()
     },[rule])
-    useEffect(() => {
-      const updateGuardianInfo = () => {
-        const guardianInfo = value === 'Father'
-          ? {
-              guardianName: form.fatherName,
-              guardianlName: form.fatherlName,
-              guardianmName: form.fathermName,
-              relationship: 'Father',
-            }
-          : value === 'Mother'
-          ? {
-              guardianName: form.motherName,
-              guardianlName: form.motherlName,
-              guardianmName: form.mothermName,
-              relationship: 'Mother',
-            }
-          : {
-              guardianName: '',
-              guardianlName: '',
-              guardianmName: '',
-              relationship: '',
-            };
-
-        // Check if the new state is different before updating
-        const isGuardianCheckChanged = value === 'Father' || value === 'Mother';
-        if (isGuardianCheckChanged !== isGuardiancheck) {
-          dispatch(setForm(guardianInfo));
-          setisGuardiancheck(isGuardianCheckChanged);
-        }
-      };
-      updateGuardianInfo();
-    }, [value, form, dispatch, isGuardiancheck]);
-    useEffect(() =>{
-          localStorage.setItem('nofather',noFather);
-          localStorage.setItem('sameaddress',isSameAddress);
-          localStorage.setItem('onlychild',onlyChild);
-          
-      },[noFather,isSameAddress,onlyChild])
 
    const siblingfrm = siblings?.map((sibling, index) => (
     <>
@@ -324,7 +234,7 @@ function Persona() {
             name='lastName'
             placeholder="Enter sibling's last name"
             value={sibling.lastName}
-            onChange={handleInputChange1}
+            onChange={(e) =>handleInputChange1(index,e.target.name,e.target.value.toUpperCase())}
             error={errors.lastName}
             readonly={false}
           />
@@ -335,7 +245,7 @@ function Persona() {
             name='firstName'
             placeholder="Enter sibling's first name"
             value={sibling.firstName}
-            onChange={handleInputChange1}
+            onChange={(e) =>handleInputChange1(index,e.target.name,e.target.value.toUpperCase())}
             error={errors.firstName}
             readonly={false}
           />
@@ -346,7 +256,7 @@ function Persona() {
             name='middleName'
             placeholder="Enter sibling's middle name"
             value={sibling.middleName}
-            onChange={handleInputChange1}
+            onChange={(e) =>handleInputChange1(index,e.target.name,e.target.value.toUpperCase())}
             error={errors.middleName}
             readonly={false}
           />
@@ -383,7 +293,7 @@ function Persona() {
                 value={form.fatherlName}
                 onChange={handleInputChange}
                 error={errors.fatherlName}
-                readonly={isFather}
+                readonly={form.noFather}
               />
              <TextInput
                 label={"Father's first name"}
@@ -394,7 +304,7 @@ function Persona() {
                 value={form.fatherName}
                 onChange={handleInputChange}
                 error={errors.fatherName}
-                readonly={isFather}
+                readonly={form.noFather}
               />
              <TextInput
                 label={"Father's middle name"}
@@ -405,7 +315,7 @@ function Persona() {
                 value={form.fathermName}
                 onChange={handleInputChange}
                 error={errors.fathermName}
-                readonly={isFather}
+                readonly={form.noFather}
               />  
              <TextInput
                 label={"Father's Occupation"}
@@ -416,7 +326,7 @@ function Persona() {
                 value={form.fatherOccu}
                 onChange={handleInputChange}
                 error={errors.fatherOccu}
-                readonly={isFather}
+                readonly={form.noFather}
               />   
               <SelectInput
                 label={"Highest Educational Attaintment"}
@@ -425,10 +335,10 @@ function Persona() {
                 onChange={handleOptionChange}
                 options={fatherEducationOptions}
                 error={errors.fatherEduc}
-                read={isFather}
+                isDisabled={form.noFather}
               />
               <div>
-              <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={noFather} onChange={handleNoFather} />}
+              <FormControlLabel sx={{whiteSpace:'nowrap',marginLeft:'15px'}} control={<Switch checked={form.noFather} onChange={handleNoFather} />}
                label={"No Father"} />
               </div>  
             
@@ -498,12 +408,12 @@ function Persona() {
                   row
                   aria-labelledby="demo-radio-buttons-group-label"
                   name="radio-buttons-group"
-                  value={value || userData.relationship}
+                  value={value || form.relationship}
                   onChange={handleChangeRadio}
                 >
-                  <FormControlLabel value="Mother" control={<Radio />} label={t("Mother")} />
-                  <FormControlLabel disabled={noFather} value="Father" control={<Radio />} label={t("Father")} />
-                  <FormControlLabel value="Other" control={<Radio />} label={t("Other")} />
+                  <FormControlLabel value="MOTHER" control={<Radio />} label={t("Mother")} />
+                  <FormControlLabel disabled={form.noFather} value="FATHER" control={<Radio />} label={t("Father")} />
+                  <FormControlLabel value="OTHERS" control={<Radio />} label={t("Other")} />
                 </RadioGroup>
                 </Form.Group>
               </div>
@@ -553,21 +463,22 @@ function Persona() {
                       value={form.guardianAddress}
                       onChange={handleInputChange}
                       error={errors.guardianAddress}
-                      readonly={false}
+                      readonly={form.isSameAddress}
                     />
                      <FormControlLabel 
-                     control={<Switch checked={isSameAddress} onChange={handleSameAddress} />}
+                     control={<Switch checked={form.isSameAddress} onChange={handleSameAddress} />}
                       label={t("Same address")} />
                    </div>
-                   {!isGuardiancheck && <SelectInput
+                   <SelectInput
                       label={t("Relationship to guardian")}
                       required={true}
                       value={form.relationship}
                       onChange={handleOptionChange}
                       options={relationshipList}
                       error={errors.relationship}
-                    />} 
-                    <div className='mt-8 md:mt-0'>
+                      isDisabled={form.relationship === 'FATHER' || form.relationship === 'MOTHER'}
+                    />
+                    <div className='flex-1 mt-10 md:mt-0'>
                     <TeleInput
                         label={t("Guardian's Contact No.")}
                         type={'text'}
@@ -588,7 +499,7 @@ function Persona() {
           <h3 className='bg-[#043F97] w-full text-white pl-4 py-4 text-lg font-bold'>{t("List of Siblings")}</h3>
           </div>
           <div className='relative h-10'>
-          <FormControlLabel className='absolute right-0 ' control={<Switch checked={onlyChild} onChange={handleOnlyChild} />} label={t("I am only child")} />
+          <FormControlLabel className='absolute right-0 ' control={<Switch checked={form.onlyChild} onChange={handleOnlyChild} />} label={t("I am only child")} />
           </div>
           <div style={{width:'100%',marginLeft:'30px'}}>
           {errors.sibling && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.sibling}</p>}
@@ -597,14 +508,13 @@ function Persona() {
 
           {siblingfrm}
           <div className='flex justify-center items-center my-2'>
-          {!onlyChild && 
           <CustomButton
             label={'+ Add more siblings'}
-            color={'green'}
+            color={form.onlyChild === false ? 'green' : 'gray'} 
             loading={false}
             onClick={handleAddFields}
-            disabled={onlyChild}
-          /> }
+            disabled={form.onlyChild}
+            /> 
           </div>
         </div>
         <div className='flex justify-end items-end gap-2 pr-8 py-8'>

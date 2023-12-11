@@ -4,7 +4,7 @@ import './scholar.css';
 import swal from 'sweetalert';
 import Noimageprev from '../../userhome/assets/documenticon.png'
 import { DataGrid} from '@mui/x-data-grid';
-import { Box} from "@mui/material";
+import { Box, Typography} from "@mui/material";
 import Swal from 'sweetalert2';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -27,6 +27,18 @@ const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 50,
   color: '#fff',
 }));
+const ProgressContainer = styled("div")({
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  zIndex: 9999,
+  backdropFilter: "blur(10px)",
+});
 
 const StyledTab = styled(Tab)(({ theme }) => ({
    fontWeight: 'bold',
@@ -161,6 +173,7 @@ const [images, setImages] = useState([]);
 const [disabledInputs, setDisabledInputs] = useState([]);
 const [userFiles, setUserFiles] = useState([]);
 const applicantNum = user.info.applicantNum;
+const [submissionProgress, setSubmissionProgress] = useState(0);
 const [userInfo,setUserInfo] = useState([]);
 const [value, setValue] = React.useState(0);
   useEffect(() => {
@@ -252,15 +265,18 @@ const [value, setValue] = React.useState(0);
           handleSuccessfulUpload(index, res);
           
           messages.push({Name: docu.requirementName, Message: res.message})
+          setSubmissionProgress(((index + 1) / fileValues.length) * 100);
+          if (index === fileValues.length - 1) {
+            setSubmissionProgress(0);
+          }
         }catch (error) {
           handleFailedUpload(index, error);
         }
       }
+      setLoading(false);
     } catch (error) {
       console.log('An error occurred during file submission:', error);
     }
-
-      setLoading(false)
     if(messages.length > 0){
       const successMessages = messages.map((succ) => `${succ.Name}: ${succ.Message}`);
       swal(successMessages.join("\n"));
@@ -550,13 +566,26 @@ const [value, setValue] = React.useState(0);
 
   ];
 
-
+console.log(submissionProgress)
 
 return(
   <>
   <StyledBackdrop open={showBackdrop}>
     <CircularProgress color="inherit" />
   </StyledBackdrop>
+  {((submissionProgress > 0 && submissionProgress < 101) || loading)  && (
+        <ProgressContainer>
+          <CircularProgress
+            variant="determinate"
+            value={submissionProgress}
+            size={70}
+            thickness={4}
+          />
+          <Typography variant="caption" sx={{position:'absolute'}}>
+            {`${submissionProgress.toFixed(2)}%`}
+          </Typography>
+        </ProgressContainer>
+      )}
   <div>
       <TabContext value={value}>
         <Box>

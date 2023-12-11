@@ -36,6 +36,9 @@ const initialState = {
     relationship:'',
     schoID:'',
     suffix:'',
+    isSameAddress: false,
+    noFather: false,
+    onlyChild:false,
     siblings: [],
     userType:''
 }
