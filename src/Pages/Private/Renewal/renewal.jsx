@@ -1,7 +1,7 @@
 import React from 'react'
-
+import Renewal1 from '../../../LandingPage/Renewal/renewal'
 export const Renewal = () => {
   return (
-    <div>Renewal</div>
+    <div><Renewal1 /></div>
   )
 }

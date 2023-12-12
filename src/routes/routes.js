@@ -11,5 +11,6 @@ export const RouteUrl = {
     NEWS:'/dashboard/News',
     ANNOUNCEMENT:'/dashboard/Announcement',
     TRIVIA:'/dashboard/Trivia',
-    RENEWAL_FORM:'/dashboard/Renewal_Form'
+    RENEWAL_FORM:'/dashboard/Renewal_Form',
+    PAYOUT:'/dashboard/Payout'
 }

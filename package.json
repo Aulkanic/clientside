@@ -26,6 +26,7 @@
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.7",
     "env-cmd": "^10.1.0",
+    "flowbite": "^2.2.0",
     "formik": "^2.2.9",
     "framer-motion": "^10.12.12",
     "i18next": "^23.4.4",

@@ -14,6 +14,8 @@ import { ImNewspaper } from "react-icons/im";
 import { TfiAnnouncement } from "react-icons/tfi";
 import { GiGiftOfKnowledge } from "react-icons/gi";
 import { IoNotifications } from "react-icons/io5";
+import { FaWpforms } from "react-icons/fa6";
+import { BsCashCoin } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import MYDO from '../Images/mydo.png';
 import formatTimeDifference from '../helper/formatTimeDiff';
@@ -35,7 +37,62 @@ export default function Private(){
     const [selectedMenu,setSelectedMenu] = useState({
         id:0
     })
-    const links = [
+    const links = userDet.status === 'Approved' ? [
+      {
+        id:0,
+        name:'Home',
+        url: RouteUrl.DASHBOARD,
+        icon: <FaHome />
+      },
+      {
+        id:1,
+        name:'Profile',
+        url: RouteUrl.PROFILE,
+        icon: <MdManageAccounts />
+      },
+      {
+        id:2,
+        name:'Requirements',
+        url: RouteUrl.SCHOLAR_REQUIREMENT,
+        icon: <HiClipboardDocumentList />
+      },
+      {
+        id:3,
+        name:'Appointment',
+        url: RouteUrl.SCHOLAR_APPOINTMENT,
+        icon: <FaRegCalendarAlt />
+      },
+      {
+        id:4,
+        name:'Renewal',
+        url: RouteUrl.RENEWAL_FORM,
+        icon: <FaWpforms />
+      },
+      {
+        id:5,
+        name:'Payout',
+        url: RouteUrl.PAYOUT,
+        icon: <BsCashCoin />
+      },
+      {
+        id:6,
+        name:'News',
+        url: RouteUrl.NEWS,
+        icon: <ImNewspaper />
+      },
+      {
+        id:7,
+        name:'Announcement',
+        url: RouteUrl.ANNOUNCEMENT,
+        icon: <TfiAnnouncement />
+      },
+      {
+        id:8,
+        name:'Trivia',
+        url: RouteUrl.TRIVIA,
+        icon: <GiGiftOfKnowledge />
+      }
+    ] : [
       {
         id:0,
         name:'Home',
@@ -82,38 +139,39 @@ export default function Private(){
     useEffect(() =>{
       async function fetchData(){
         if (isRequesting) {
-          return; // If a request is already in progress, skip this iteration
+          return; 
         }
-  
-        setIsRequesting(true); // Set the flag to indicate that a request is in progress
-  
+        setIsRequesting(true); 
         try {
           const res = await FetchNotif.FETCH_NOTIF(applicantNum);
           const profileUserResponse = await FetchingProfileUser.FETCH_PROFILEUSER(applicantNum);
           const val = profileUserResponse.data.Profile;
-  
+
           dispatch(updateInfo({ key: 'remarks', value: val[0].remarks }));
-  
+          dispatch(updateInfo({ key: 'status', value: val[0].status }));
           if (val[0].status === 'Approved') {
-            await FetchingBmccSchoinfo.FETCH_SCHOLARSINFO(applicantNum);
+            const res1 = await FetchingBmccSchoinfo.FETCH_SCHOLARSINFO(applicantNum);
+            const val1 = res1.data.ScholarInf.results1;
+            dispatch(updateInfo({ key: 'scholarCode', value: val1[0].scholarCode }));
           }
   
           setNotification(res.data.reverse());
         } catch (error) {
           console.error('Error fetching data:', error);
         } finally {
-          setIsRequesting(false); // Reset the flag regardless of success or failure
+          setIsRequesting(false); 
         }
       }
   
       fetchData();
   
-      const intervalId = setInterval(fetchData, 5000);
+      // const intervalId = setInterval(fetchData, 5000);
   
-      return () => {
-        clearInterval(intervalId);
-      };
+      // return () => {
+      //   clearInterval(intervalId);
+      // };
     },[notification, applicantNum, dispatch, isRequesting,userDet])
+
     const onSelectedMenu = useCallback((item) => {
         setSelectedMenu({ ...item });
       }, []);

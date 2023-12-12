@@ -21,12 +21,10 @@ import store, { persistor} from './Redux/store';
 import { useEffect } from 'react';
 import { createContext } from 'react';
 import { useState } from 'react';
-import DownloadLink from './userhome/pages/marisko';
-import Renewal1 from './LandingPage/Renewal/renewal';
 import { RouteUrl } from './routes/routes';
 import { Public,Private } from './layout';
 import { Home,Login,Registration,ApplicationForm,ScholarshipProgram,
-         Dashboard,Profile,Requirements,Appointment,Announcement,News,Trivia,Renewal } from '../src/Pages';
+         Dashboard,Profile,Requirements,Appointment,Announcement,News,Trivia,Renewal,Payout } from '../src/Pages';
 import './App.css'
 import LoopingRhombusesSpinner from './userhome/loadingDesign/loading'
 
@@ -102,7 +100,11 @@ function App() {
         {
           path: RouteUrl.RENEWAL_FORM,
           element: <Renewal />
-        }
+        },
+        {
+          path: RouteUrl.PAYOUT,
+          element: <Payout />
+        },
       ]
     }
   ])
@@ -158,29 +160,3 @@ function App() {
 }
 
 export default App;
-
-
-{/* <Routes> 
-<Route exact path='/' element={<Bmccsite/>}/>
-<Route path='/ScholarshipProgram' element={<SchoCategory/>}/>
-<Route path='/login' element={<Login1/>}/>
-<Route path='/register' element={<Register/>}/>
-<Route path='/ApplicationForm' element={<StepContext/>}/>
-<Route path='/no-internet' element={<NoInternet/>}/>
-<Route path="/404" element={<PageNotFound />} />
-<Route path="/Renewal" element={<Renewal1 />} />
-<Route path="/MariskoApp" element={<DownloadLink />} />
-<Route path="*" element={<PageNotFound />} />
-
-
-<Route element={<RequireAuth/>}>
-   <Route path='/home' element={<Home1/>}/>
-   <Route path='/account' element={<Account/>}/>
-   <Route path='/scholar' element={<SCHOLAR/>}/>
-   <Route path='/scholar/info' element={<Schoinfo/>}/>
-   <Route path='/news' element={<News1/>}/>
-   <Route path='/announcement' element={<Announcement1/>}/>
-   <Route path='/trivia' element={<Trivia1/>}/>
-</Route>
-
-</Routes>   */}

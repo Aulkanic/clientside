@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { NewsAndAnnouncement,FetchingUserappoint,Rulelist,FetchRenewal,FetchingProfileUser,FetchingBmccSchoinfo } from '../../../Api/request'
+import { NewsAndAnnouncement,FetchingUserappoint,Rulelist,FetchRenewal } from '../../../Api/request'
 import CustomSlider from '../../../Components/Slider/slider';
 import Mydo from  '../../../Images/mydo.png'
 import { useSelector } from 'react-redux';
@@ -96,17 +96,17 @@ export const Dashboard = () => {
     }
     return details
   };
-const isOpen = isRenewalForm();
-const date = new Date(renewal.deadline)
-const formattedDate = date.toLocaleString('en-US', {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: 'numeric',
-  second: 'numeric',
-});
+    const isOpen = isRenewalForm();
+    const date = new Date(renewal.deadline)
+    const formattedDate = date.toLocaleString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+    });
   return (
     <div className='sm:w-[350px] md:w-[450px] lg:w-[800px] xl:w-[1100px] flex flex-col'>
       <div className={clsx(

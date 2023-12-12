@@ -9,7 +9,13 @@ import swal from 'sweetalert';
 import { Button } from '@mui/material'
 import { Backdrop, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { use } from 'i18next'
+import clsx from 'clsx';
+import TextInput from '../../Components/InputField/text';
+import TeleInput from '../../Components/InputField/telephone'
+import SelectInput from '../../Components/InputField/select'
+import CustomButton from '../../Components/Button/button'
+import { barangayList,yearList,elementaryList,juniorhighList,collegeList,seniorhighList } from '../../Pages/Public/ApplicationForm/listOptions'
+import { useDispatch, useSelector } from 'react-redux';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
     zIndex: theme.zIndex.drawer + 50,
@@ -37,78 +43,69 @@ const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   };
 
 const Renewal = () => {
-    const [schoinf,setSchoinf] = useState([])
-    const [renewal,setRenewal] = useState([])
-    const [schoid,setSchoid] = useState('')
-    const [reqlist,setReqlist] = useState([])
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.login);
+    const [schoinf,setSchoinf] = useState([]);
+    const [renewal,setRenewal] = useState([]);
+    const [reqlist,setReqlist] = useState([]);
     const [showBackdrop, setShowBackdrop] = useState(false);
-    const [file,setFile] = useState([])
-    const [phoneNum,setPhoneNum] = useState('')
-    const [baranggay,setBaranggay] = useState('')
-    const [school,setSchool] = useState('')
-    const [yearLevel,setYearlevel] = useState('')
-    const [gradeLevel,setGradelevel] = useState('')
-    const [guardian,setGuardian] = useState('')
-    const [disablebtn,setDisablebtn] = useState(false)
-    const [disablebtn1,setDisablebtn1] = useState(true)
-    const [errors,setErrors] = useState({})
+    const [file,setFile] = useState([]);
+    const [updated,setUpdated] = useState({
+      phoneNum: '',
+      baranggay:'',
+      school:'',
+      yearLevel:'',
+      gradeLevel:'',
+      guardian:''
+    })
+    const [disablebtn1,setDisablebtn1] = useState(true);
+    const [errors,setErrors] = useState({});
+    const scholarCode = user.info.scholarCode;
 
-    useEffect(() => {
-        async function fetchData() {
-          setShowBackdrop(true);
-          try {
-            const re = await FetchRenewal.FETCH_RENEW();
-            setRenewal(re.data.list[0]);
-          } catch (error) {
-            console.error('Error fetching renewal data:', error);
-            // Handle the error, e.g., show an error message
-          } finally {
-            setShowBackdrop(false);
-          }
-        }
-    
-        fetchData();
-      }, []);
-    
-    const Findscho = async() =>{
-  
-      if (!schoid || schoid === '') {
-        swal({
-          text: 'Please input your Scholar Code first',
-          timer: 2000,
-          buttons: false,
-          icon: "error",
-        });
-        return false;
-      }
-        const scholarCode = `SC-${schoid}`;
-        setShowBackdrop(true)
-        await FetchingBmccSchocODE.FETCH_SCHOLARSCODE(scholarCode)
-        .then(async(res) =>{
-          console.log(res)
-            if(res.data.success === 0){
-                setShowBackdrop(false)
-                swal('ERROR',res.data.message,'error')
-                return
-            }else{
-                setSchoinf(res.data.inf)
-                const Batch = res.data.inf[0].Batch;
-                const Scholartype = res.data.inf[0].scholarshipApplied;
-                const req = await ListofReq.FETCH_REQUIREMENTS()
-              
-                const renewalList = req.data.Requirements.results1?.filter((data) => 
+      useEffect(() => {
+          async function fetchData() {
+            try {
+
+              const re = await FetchRenewal.FETCH_RENEW();
+              const re1 = await FetchingBmccSchocODE.FETCH_SCHOLARSCODE(scholarCode)
+             
+                setSchoinf(re1.data.inf)
+                const Batch = re1.data.inf[0].Batch;
+                const Scholartype = re1.data.inf[0].scholarshipApplied;
+                const req = await ListofReq.FETCH_REQUIREMENTS();
+                const renewalList = req.data.Requirements.results?.filter((data) => 
                 data.docsfor === 'Renewal' &&
                 data.batch === Batch &&
                 data.schoName === Scholartype
                 )
                 setReqlist(renewalList)
-                setShowBackdrop(false)
-                setDisablebtn(true)
-                setDisablebtn1(false)
-            }
-        })
-    }
-    const handleFileChange = (index,data, event) => {
+              if(re.data.success !== 0){
+                setRenewal(re.data.list[0]);
+              }
+         
+            } catch (error) {
+              console.error('Error fetching renewal data:', error);
+              // Handle the error, e.g., show an error message
+            } 
+          }
+          fetchData();
+      }, []);
+      const getOptionsBasedOnYearLevel = (data) => {
+        const year = updated.yearLevel || data.yearLevel.toUpperCase();
+        switch (year) {
+          case 'ELEMENTARY':
+            return elementaryList;
+          case 'COLLEGE':
+            return collegeList;
+          case 'JUNIOR HIGHSCHOOL':
+            return juniorhighList;
+          case 'SENIOR HIGHSCHOOL':
+            return seniorhighList;
+          default:
+            return [];
+        }
+      };
+      const handleFileChange = (index,data, event) => {
         const files = [...file];
         const req = event.target.files[0]
         files[index] = {file:req,reqName:data.requirementName};
@@ -120,8 +117,8 @@ const Renewal = () => {
         try {
             event.preventDefault();
             const errors = {};
-            if(phoneNum){
-              if (!/^9\d{9}$/.test(phoneNum)) {
+            if(updated.phoneNum){
+              if (!/^9\d{9}$/.test(updated.phoneNum)) {
                 errors.contactNum = "Invalid phone number.";
               }
             }
@@ -205,15 +202,15 @@ const Renewal = () => {
             formData.append('scholarCode', user.scholarCode);
             formData.append('schoApplied', user.scholarshipApplied);
             formData.append('applicantNum', user.applicantNum);
-            formData.append('yearLevel', yearLevel || user.yearLevel);
-            formData.append('baranggay', baranggay || user.Baranggay);
+            formData.append('yearLevel', updated.yearLevel || user.yearLevel);
+            formData.append('baranggay', updated.baranggay || user.Baranggay);
             formData.append('batch', user.Batch);
             formData.append('email', user.email);
-            formData.append('phoneNum', phoneNum || user.phoneNum);
+            formData.append('phoneNum', updated.phoneNum || user.phoneNum);
             formData.append('remarks', user.remarks);
-            formData.append('gradeLevel', gradeLevel || user.gradeLevel);
-            formData.append('school', school || user.school);
-            formData.append('guardian', guardian || user.guardian);
+            formData.append('gradeLevel', updated.gradeLevel || user.gradeLevel);
+            formData.append('school', updated.school || user.school);
+            formData.append('guardian', updated.guardian || user.guardian);
             formData.append('deadline', renewal.deadline);
             formData.append('updated', date);
             formData.append('year', renewal.year);
@@ -247,10 +244,7 @@ const Renewal = () => {
                              .then((res)=>{
                               counter += 1;
                               if(counter === file.length){
-                                setSchoid('')
                                 setFile([])
-                                setSchoinf([])
-                                setReqlist([])
                                 setDisablebtn1(true)
                                 setShowBackdrop(false)
                                 swal({
@@ -275,8 +269,7 @@ const Renewal = () => {
         } catch (error) {
             console.error('An unexpected error occurred:', error);
         }
-    };
-    
+      };
       const createFormData = (filereq,det) => {
         const applicantNum = schoinf[0].scholarCode;
         const formData = new FormData();
@@ -286,8 +279,7 @@ const Renewal = () => {
         formData.append('Name', schoinf[0].Name);
         formData.append('tableName', renewal.reqtable);
         return formData;
-      };
-      
+      };     
       const uploadDocument = async (formData) => {
         try {
           const res = await FillRenewal1.SET_RENEW1(formData);
@@ -296,7 +288,6 @@ const Renewal = () => {
           throw error;
         }
       };
-      
       const handleFailedUpload = (index, error) => {
         setShowBackdrop(false)
         console.error(`File upload failed for index ${index}:`, error);
@@ -317,221 +308,146 @@ const Renewal = () => {
         }
         return details
       };
-    const isOpen = isRenewalForm();
-   
+      const handleOptionChange = (data) => {
+        const { name, value } = data;    
+        setUpdated({ [name]: value });
+      }
+      const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        const caps = value.toUpperCase()
+        setUpdated({ [name]: value });
+      };
+      const isOpen = isRenewalForm();
   return (
     <>
     <StyledBackdrop open={showBackdrop}>
     <CircularProgress color="inherit" />
     </StyledBackdrop>
-    {isOpen === 2 && (<div className='renewalcontainer'>
-        <div className='renewalform'>
-            <h1>Scholarship Renewal Form</h1>
-            <div className='searchid'>
-                <div style={{display:'flex',flexDirection:'column'}}>
-                <label htmlFor="">Scholarship Code:</label>
-                <div style={{display:'flex'}}>
-                <div className='schlabel'>SC-</div>
-                <input className='schid' type="text" 
-                placeholder='Input your Scholarship Code'
-                value={schoid}
-                onChange={(e) =>setSchoid(e.target.value)}
-                />
-                </div>
-                </div>
-                <div className='schoidbtn'>
-                <button disabled={disablebtn} style={{color:'white',textTransform:'none',width:'maxContent',height:'40px'}} className='myButton'
-                onClick={Findscho}
-                >
-                    Search
-                </button>
-                </div>
-
-            </div>
-            <div className="renewFormdet">
+    {isOpen === 2 && (<div className='w-full'>
+        <div className='w-full h-full bg-white p-10'>
+            <h1 className='font-bold text-3xl'>Scholarship Renewal Form</h1>
+            <div className="w-full flex flex-wrap flex-col md:flex-row gap-2">
                 {schoinf?.map((data) =>{
                     return (
                         <>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>Name</Form.Label>
-                            <Form.Control
-                            type="text" 
+                        <div className='flex-1 '>
+                          <h1 className='mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-2xl dark:text-white'>Details</h1>
+                        <TextInput
+                            label={"Name"}
+                            required={false}
+                            type={'text'}
                             name='Name'
-                            value={data.Name} 
-                            disabled
-                            />
-                            </Form.Group>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>Gender</Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            disabled
+                            value={data.Name}
+                            readonly={true}
+                          />
+                          <TextInput
+                            label={"Gender"}
+                            required={false}
+                            type={'text'}
                             name='Gender'
                             value={data.gender}
-                            />
-                            </Form.Group> 
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>Scholarship Applied</Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            name='Scholarship Applied'
-                            value={data.scholarshipApplied} 
-                            disabled
-                            />
-                            </Form.Group>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>Batch</Form.Label>
-                            <Form.Control 
-                            type="text" 
+                            readonly={true}
+                          />
+                          <TextInput
+                            label={"Scholarship Applied"}
+                            required={false}
+                            type={'text'}
+                            name='scholarshipApplied'
+                            value={data.scholarshipApplied}
+                            readonly={true}
+                          />
+                          <TextInput
+                            label={"Batch"}
+                            required={false}
+                            type={'text'}
                             name='Batch'
-                            value={data.Batch} 
-                            disabled
-                            />
-                            </Form.Group>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>Email</Form.Label>
-                            <Form.Control 
-                            type="text" 
+                            value={data.Batch}
+                            readonly={true}
+                          />
+                          <TextInput
+                            label={"Email"}
+                            required={false}
+                            type={'text'}
                             name='Email'
-                            value={data.email} 
-                            disabled
-                            />
-                            </Form.Group>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>Phone Number</Form.Label>
-                            <div style={{position:'relative'}}>
-                          
-                            <Form.Control 
-                            type="text" 
-                            name='Phone Number'
-                            value={phoneNum} 
-                            placeholder={data.phoneNum}
-                            onChange={(e) =>setPhoneNum(e.target.value)}
-                            />
-                            </div>
-                            {errors.contactNum && <p style={{color: 'red',fontSize:'12px',marginLeft:'5px'}}>{errors.contactNum}</p>}
-                            </Form.Group>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>Baranggay</Form.Label>
-                            <Form.Select
-                                as="select"
-                                name="barangay"
-                                value={baranggay || data.Baranggay}
-                                placeholder={data.Baranggay} 
-                                onChange={(e) => setBaranggay(e.target.value)}
-                              >
-                                <option value={''}></option>
-                                <option value={'Abangan Norte'}>ABANGAN NORTE</option>
-                                <option value={'Abangan Sur'}>ABANGAN SUR</option>
-                                <option value={'Ibayo'}>IBAYO</option>
-                                <option value={'Lambakin'}>LAMBAKIN</option>
-                                <option value={'Lias'}>LIAS</option>
-                                <option value={'Loma De Gato'}>LOMA DE GATO</option>
-                                <option value={'Nagbalon'}>NAGBALON</option>
-                                <option value={'Patubig'}>PATUBIG</option>
-                                <option value={'Poblacion 1'}>POBLACION 1</option>
-                                <option value={'Poblacion 2'}>POBLACION 2</option>
-                                <option value={'Prenza 1'}>PRENZA 1</option>
-                                <option value={'Prenza 2'}>PRENZA 2</option>
-                                <option value={'Saog'}>SAOG</option>
-                                <option value={'Sta. Rosa 1'}>STA. ROSA 1</option>
-                                <option value={'Sta. Rosa 2'}>STA. ROSA 2</option>
-                                <option value={'Tabing Ilog'}>TABING-ILOG</option>
-                              </Form.Select>
-                            </Form.Group>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>Current School</Form.Label>
-                            <Form.Control 
-                            type="text" 
+                            value={data.email}
+                            readonly={true}
+                          />
+                          <TeleInput
+                              label={'Phone Number'}
+                              type={'text'}
+                              required={true}
+                              name='contactNum'
+                              onChange={handleInputChange}
+                              error={errors.contactNum}
+                              value={updated.phoneNum || data.phoneNum}
+                              readonly={false}
+                          />
+                          <SelectInput
+                            label={"Barangay"}
+                            required={true}
+                            value={updated.baranggay || data.Baranggay.toUpperCase()}
+                            onChange={handleOptionChange}
+                            options={barangayList}
+                          />
+                          <TextInput
+                            label={"Current School"}
+                            required={false}
+                            type={'text'}
                             name='school'
-                            value={school}
+                            value={updated.school}
                             placeholder={data.school} 
-                            onChange={(e) => setSchool(e.target.value.toUpperCase())}
-                            />
-                            </Form.Group>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>Year Level</Form.Label>
-                            <Form.Select
-                            value={yearLevel || data.yearLevel}
-                            placeholder={data.yearLevel} 
-                            onChange={(e) =>setYearlevel(e.target.value)}
-                            >
-                             <option value={''}></option>
-                            <option disabled={data.yearLevel === 'Junior Highschool' || data.yearLevel === 'Senior Highschool' || data.yearLevel === 'College'} value={'Elementary'}>ELEMENTARY</option>
-                            <option disabled={data.yearLevel === 'College' || data.yearLevel === 'Senior Highschool'} value={'Junior Highschool'}>JUNIOR HIGHSCHOOL</option>
-                            <option disabled={data.yearLevel === 'College' || data.yearLevel === 'Elementary'} value={'Senior Highschool'}>SENIOR HIGHSCHOOL</option>
-                            <option disabled={data.yearLevel === 'Elementary'} value={'College'}>COLLEGE</option>
-                            </Form.Select>
-                            </Form.Group>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>Grade/Year</Form.Label>
-                            <Form.Select
-                            value={gradeLevel || data.gradeLevel} 
-                            placeholder={data.gradeLevel}
-                            onChange={(e) =>setGradelevel(e.target.value)}
-                            >
-                              {(yearLevel ? yearLevel === 'Elementary' : data.yearLevel === 'Elementary') && (<>
-                                <option value={''}></option>
-                              <option value={'Grade 1'}>GRADE 1</option>
-                              <option value={'Grade 2'}>GRADE 2</option>
-                              <option value={'Grade 3'}>GRADE 3</option>
-                              <option value={'Grade 4'}>GRADE 4</option>
-                              <option value={'Grade 5'}>GRADE 5</option>
-                              <option value={'Grade 6'}>GRADE 6</option>
-
-                              </>)}
-                              {(yearLevel ? yearLevel === 'Junior Highschool' : data.yearLevel === 'Junior Highschool') && (<>
-                                <option value={''}></option>
-                              <option value={'Grade 7'}>GRADE 7</option>
-                              <option value={'Grade 8'}>GRADE 8</option>
-                              <option value={'Grade 9'}>GRADE 9</option>
-                              <option value={'Grade 10'}>GRADE 10</option>
-
-                              </>)}
-                              {(yearLevel ? yearLevel === 'Senior Highschool' : data.yearLevel === 'Senior Highschool') && (<>
-                                <option value={''}></option>
-                                <option value={'Grade 11'}>GRADE 11</option>
-                                <option value={'Grade 12'}>GRADE 12</option>
-
-                              </>)}
-                              {(yearLevel ? yearLevel === 'College' : data.yearLevel === 'College') && (<>
-                                <option value={''}></option>
-                                <option value={'1st Year'}>1ST YEAR</option>
-                                <option value={'2nd Year'}>2ND YEAR</option>
-                                <option value={'3rd Year'}>3RD YEAR</option>
-                                <option value={'4th Year'}>4TH YEAR</option>
-
-                              </>)}
-                            </Form.Select>
-                            </Form.Group>
-                            <Form.Group as={Col}>
-                            <Form.Label className='frmlabel'>Guardian</Form.Label>
-                            <Form.Control 
-                            type="text" 
+                            onChange={handleInputChange}
+                            readonly={false}
+                          />
+                          <SelectInput
+                            label={"Year Level"}
+                            required={true}
+                            value={updated.yearLevel || data.yearLevel.toUpperCase()}
+                            onChange={handleOptionChange}
+                            options={yearList}
+                          />
+                          <SelectInput
+                            label={"Grade/Year"}
+                            required={true}
+                            value={updated.gradeLevel || data.gradeLevel.toUpperCase()}
+                            onChange={handleOptionChange}
+                            options={getOptionsBasedOnYearLevel(data)}
+                          />
+                          <TextInput
+                            label={"Guardian"}
+                            required={false}
+                            type={'text'}
                             name='guardian'
-                            value={guardian} 
-                            placeholder={data.guardian}
-                            onChange={(e) =>setGuardian(e.target.value.toUpperCase())}
-                            />
-                            </Form.Group>
-                            <br/>
-                            <Form.Label className='frmlabel'>List of Requirements</Form.Label>
+                            value={updated.guardian}
+                            placeholder={data.guardian} 
+                            onChange={handleInputChange}
+                            readonly={false}
+                          />
+                        </div>
+                        <div className='flex-1'>
+                        <h1 className='mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-2xl dark:text-white'>List of Requirements</h1>
                             {reqlist?.map((data,index) =>{
                                 return(
-                                    <Form.Group controlId="formFile" className="mb-3">
-                                    <Form.Label>{data.requirementName}</Form.Label>
-                                    <Form.Control type="file" accept=".jpg, .jpeg, .png"
-                                    onChange={(event) => handleFileChange(index,data, event)}
-                                    />
-                                    </Form.Group>
+                                  <div key={index}>                             
+                                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">{data.requirementName}</label>
+                                  <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                  id="file_input" type="file" onChange={(event) => handleFileChange(index,data, event)} />
+                                  </div>
                                 )
                             })}
+                        </div>
                         </>
                     )
                 })}
             </div>
             {schoinf.length > 0 && <div style={{margin:'15px'}}>
-                <Button disabled={disablebtn1} sx={{color:'white',textTransform:'none'}} className='myButton' onClick={handleSubmit}>Submit Renewal</Button>
+            <CustomButton
+            label={'Submit Renewal'}
+            color={'blue'} 
+            loading={false}
+            onClick={handleSubmit}
+            disabled={disablebtn1}
+            /> 
             </div>}
         </div>
     </div>)}
