@@ -238,10 +238,10 @@ export default function Private(){
         {/* Sidebar */}
         <div className={clsx(
           isSidebarOpen ? 'block' : 'hidden',
-          'md:block md:basis-1/5 relative bg-gray-600 h-screen text-white flex flex-col justify-between'
+          'md:block md:basis-1/5 relative bg-blueish h-screen text-white flex flex-col justify-between'
         )}>
           <div className="w-160 min-w-120">
-            <div className="w-120 min-w-120 p-5 bg-gray-500">
+            <div className="w-120 min-w-120 p-5 bg-blueish00">
               <div className='w-40 h-20 pb-2'>
               <img className='w-full h-full '
               src={MYDO} 
@@ -256,7 +256,7 @@ export default function Private(){
                 <div
                   className={clsx(
                     'p-3 w-full flex items-center gap-3 truncate transition-all duration-300',
-                    selectedMenu?.id === link.id ? 'bg-gray-300 text-[#043F97] rounded-md text-xl font-semibold leading-5' : 'font-light',
+                    selectedMenu?.id === link.id ? 'bg-blueish00 text-[#043F97] rounded-md text-xl font-semibold leading-5' : 'font-light',
                   )}
                   key={idx}
                 >
@@ -272,7 +272,7 @@ export default function Private(){
               ))}
             </div>
           </div>
-          <div className="absolute bottom-0 bg-gray-500 w-full h-10 flex justify-center font-bold items-center">
+          <div className="absolute bottom-0 bg-blueish00 w-full h-10 flex justify-center font-bold items-center">
             <button onClick={logOut} className='flex items-center justify-center gap-2 w-max -ml-4'>
             <CiLogout /> <p>Logout</p>
             </button>
@@ -280,7 +280,7 @@ export default function Private(){
         </div>
         {/* Body */}
         <div className="flex h-screen flex-1 w-screen flex-col pt-32 relative">
-          <nav className="bg-gray-700 text-white absolute w-full h-24 top-0 flex truncate justify-between items-center">
+          <nav className="bg-blueish text-white absolute w-full h-24 top-0 flex truncate justify-between items-center">
             <div className='flex-1'>
              <GiHamburgerMenu className={clsx(
                 'sm:flex',
