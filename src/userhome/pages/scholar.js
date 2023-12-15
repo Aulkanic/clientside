@@ -566,8 +566,6 @@ const [value, setValue] = React.useState(0);
 
   ];
 
-console.log(submissionProgress)
-
 return(
   <>
   <StyledBackdrop open={showBackdrop}>
