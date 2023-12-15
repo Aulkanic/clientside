@@ -39,6 +39,8 @@ const Endpoints = {
     CHANGE_PASSWORDBYOTP: 'OTP/ChangePassword',
     FETCH_BMCCSCHOLARINFO: 'BMCCScholar/SchoInfo/',
     FETCH_BMCCSCHOLARCODE: 'BMCCScholar/Renew/',
+    FETCH_RECEIVER: 'BMCCScholar/ReceiverInfo',
+    SET_RECEIVER: 'BMCCScholar/GuardianReceiver',
     FETCH_USERAPPOINTMENT: 'Appointment/appointmentSched/',
     USER_LOGOUT:'user/Logout',
     FFETCH_COLOR:'Dynamic/Colorslist',

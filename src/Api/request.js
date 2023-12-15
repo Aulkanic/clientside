@@ -161,4 +161,9 @@ export const CheckFamily = {
 export const NewsAndAnnouncement = {
     NEWS_ANNOUNCE: () => axiosInstance.get(Endpoints.NEWS_ANNOUNCE)
 }
-
+export const FetchingReceiver = {
+    GET_RECEIVER: (data) => axiosInstance.post(Endpoints.FETCH_RECEIVER,data)
+}
+export const SetupReceiver = {
+    SET_RECEIVER: (data) => axiosInstance.post(Endpoints.SET_RECEIVER,data)
+}
