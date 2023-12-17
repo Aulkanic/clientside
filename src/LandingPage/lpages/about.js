@@ -117,9 +117,8 @@ const About = () => {
             with the Municipal Treasurer Office on releasing of the Financial Assistance to the Scholars.
           </p>
         </div>
-
         <div className='flex-1'>
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 w-full'>
         <motion.div className="w-full"
         ref={ref2}
         initial='hidden'

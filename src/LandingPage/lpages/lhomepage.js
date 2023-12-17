@@ -7,6 +7,7 @@ import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { useContext } from "react";
 import { color } from "../../App";
 import CustomSlider from '../../Components/Slider/slider';
+import CustomCarousel from '../../Components/Slider/customCarousel';
 
 var settings = {
   dots: true,
@@ -84,15 +85,7 @@ function Lhomepage() {
               </p>
           </div>
           <div className='w-full md:w-1/2 mb-4 '>
-          <CustomSlider settings={settings}>
-            {imgList?.map((data, index) => {
-              return(
-              <div key={index} className='m-2'>
-                <img className='w-full h-full' 
-                src={data.File} alt=""/>
-              </div>
-            )})}
-          </CustomSlider>
+          <CustomCarousel images={imgList}/>
           </div>
       </div>
     </div>

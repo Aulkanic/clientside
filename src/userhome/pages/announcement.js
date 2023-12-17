@@ -17,22 +17,23 @@ const Announcement = () => {
   }, []);
   const announced = anno.map((data,index) => {
     return (
-      <Box key={index}>
-        <Card>
-      <div className="announcements">
-      <div className='anntitle'><h3>{data.title}</h3></div>
-      <div className='anndate'>{data.date}</div>
-      <div className='anncontent'>{data.content}</div>
+      <div className="w-full md:1/2 bg-white p-2 ">
+      <div className='font-bold text-xl '><h3>{data.title}</h3></div>
+      <div className='italic text-base'>{data.date}</div>
+      <div className='text-base'>{data.content}</div>
       </div>
-      </Card>
-      </Box>
     );
   });
   return (
     <>
-    <div className='anncard'>
-      <div className='annhead'><p>ANNOUNCEMENT</p><span><img src={Announceimg} alt="" /></span></div>
-      {anno.length > 0 ? (<div className='anncontent'>
+    <div className='w-full p-4'>
+      <div className='w-full flex justify-center items-center gap-4'>
+        <p className='tracking-wider font-bold'>ANNOUNCEMENT</p>
+        <span>
+        <img className='w-20 h-16' src={Announceimg} alt="" />
+        </span>
+      </div>
+      {anno.length > 0 ? (<div className='flex flex-wrap gap-2'>
       {announced}
       </div>) : (
       <div className='anncontent'>

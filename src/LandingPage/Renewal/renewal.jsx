@@ -327,11 +327,11 @@ const Renewal = () => {
         <div className='w-full h-full bg-white p-10'>
             <h1 className='font-bold text-3xl'>Scholarship Renewal Form</h1>
             <div className="w-full flex flex-wrap flex-col md:flex-row gap-2">
-                {schoinf?.map((data) =>{
+                {schoinf?.map((data,index) =>{
                     return (
                         <>
-                        <div className='flex-1 '>
-                          <h1 className='mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-2xl dark:text-white'>Details</h1>
+                        <div key={index} className='flex-1 pt-2 md:pt-0'>
+                          <h1 className='mb-4 text-lg md:text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-2xl dark:text-white'>Details</h1>
                         <TextInput
                             label={"Name"}
                             required={false}

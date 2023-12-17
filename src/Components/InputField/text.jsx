@@ -6,7 +6,7 @@ const TextInput = ({ label,required,type, name, placeholder, value, onChange, er
 
   return (
     <div className='flex-1 my-4 lg:mb-0 lg:mr-2'>
-      <label className='block text-gray-700 text-sm font-bold mb-1' htmlFor={name}>
+      <label className='block text-slate-900 dark:text-white text-sm font-bold mb-1' htmlFor={name}>
         {t(label)} {required && '*'}
       </label>
       <input

@@ -30,42 +30,38 @@ const News = () => {
     <>
   {activeState === 'News' && <div className='newsec'>
     {post.length > 0 ? (
-    <div className='ncard'>
-      <div className='latestnews'>
-        <h1 style={{margin:'5px'}}>Latest News</h1>
-        <Card sx={{width:'95%',display:'flex',justifyContent:'space-between',padding:'0px 10px 0px 10px',alignItems:'center'}}>
+    <div className='w-full flex flex-col md:flex-row gap-2'>
+      <div className='w-full md:w-1/2 flex flex-col gap-2'>
+        <h1 className='text-2xl font-bold'>Latest News</h1>
+        <Card className='w-full p-2 flex flex-col gap-2'>
             <Typography sx={{fontSize:'27px',fontWeight:'700'}}>{latest[0].title}</Typography>
-            <Typography>{latest[0].date}</Typography>
+            <Typography className='italic'>{latest[0].date}</Typography>
         </Card>
-        <div className='imgnews'>
+        <div className='w-full h-max'>
           <img src={latest[0].picture} alt="" />
         </div>
-        <div>
-          <Card sx={{width:'98%',padding:'10px',height:'200px',overflow:'auto'}}>
+        <div className='w-full bg-white p-2'>
             <Typography>{latest[0].description}</Typography>
-          </Card>
         </div>
       </div>
-      <div className='news'>
-        <h2 style={{margin:'5px'}}>Recent News</h2>
+      <div className='w-full md:w-1/2 flex flex-col gap-2'>
+        <h2 className='text-2xl font-bold'>Recent News</h2>
           { newslist?.map((data,index) =>{
               return(
-                <div key={index} className='newscon'>
-                <Card elevation={0} sx={{display:'flex',width:'97%',height:'100%',padding:'10px'}}>
-                    <div style={{width:'45%',marginRight:'10px'}}>
+                <div key={index} className='flex w-full h-40 bg-white rounded-md gap-2 p-2'>
+                    <div className='w-2/5'>
                     <img style={{width:'100%',height:'100%'}} src={data.picture} alt="" />
                     </div>
-                    <div style={{width:'45%',marginRight:'10px',height:'100%',overflow:'hidden'}}>
-                    <div style={{width:'100%',marginRight:'10px',height:'80%',overflow:'hidden'}}>
-                    <Typography>{data.title}</Typography>
-                    <Typography>{data.date}</Typography>
+                    <div className='w-2/3 h-full overflow-hidden'>
+                    <div className='w-full h-4/5 overflow-hidden'>
+                    <Typography className='font-bold'>{data.title}</Typography>
+                    <Typography className='italic'>{data.date}</Typography>
                     <Typography>{data.description}</Typography>
                     </div>
                     <div>
                       <Button onClick={() =>tabschange(data)} sx={{color:'blue',fontSize:'12px'}}>Read more</Button>
                     </div>
                     </div>
-                  </Card>
                 </div>
               )
           })

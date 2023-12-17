@@ -9,6 +9,8 @@ import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { useContext } from "react";
 import { color } from "../../App";
 import CustomSlider from '../../Components/Slider/slider';
+import CustomCarousel from '../../Components/Slider/customCarousel';
+import MultiCarousel from '../../Components/Slider/multiCarousel';
 
 const GreenButton = styled(Button)({
   backgroundColor: 'green',
@@ -50,15 +52,15 @@ function Contact() {
     hidden: { opacity: 0, x: -70 },
     visible: { opacity: 1, x: 0 }
   };
-
+console.log(imgList)
   return (
     <>
     {!loading && 
     <div className='flex flex-col justify-center items-center w-screen h-max'>
     <div className='w-full flex justify-center items-center'>
       <div className="w-full md:w-11/12 flex flex-col bg-white">
-        <div className='w-full flex flex-col p-4 md:p-0 md:flex-row mb-4 justify-center items-center'>
-          <div className='flex flex-col gap-4'>
+        <div className='w-full flex flex-col flex-wrap p-4 md:p-0 md:flex-row mb-4 justify-center items-center'>
+          <div className='w-1/2 flex flex-col gap-4'>
             <div className="w-full">
               <div className="flex flex-col">
                 <h1>Marilao Youth Development Office</h1>
@@ -82,16 +84,8 @@ function Contact() {
 
             </div>
           </div>
-          <div className='w-96'>
-              <CustomSlider settings={settings}>
-                {imgList?.map((data, index) => {
-                  return(
-                  <div key={index} className='m-2'>
-                    <img className='w-full h-full' 
-                    src={data.File} alt=""/>
-                  </div>
-                )})}
-              </CustomSlider>
+          <div className='w-1/2 h-full pr-4 pt-2'>
+              <CustomCarousel  images={imgList}/>
           </div>
         </div>
         <motion.div 

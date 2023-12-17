@@ -19,12 +19,12 @@ export default function Trivia() {
     return (
       <Box key={index}>
     <Card>
-    <div className='trivcard' key={triv.id}>
-        <div className="triv">
-          <div className="tri-img">
+    <div className='w-full' key={triv.id}>
+        <div className="flex flex-col md:flex-row p-4">
+          <div className="w-full md:w-1/2">
               <img src={triv.picture} alt="" />
           </div>
-          <div className="destriv">
+          <div className="w-full md:w-1/2">
               <div className="tri-title"><h1>{triv.title}</h1></div>
               <div className="tri-content">{triv.content}</div>
           </div>
@@ -40,9 +40,9 @@ export default function Trivia() {
 
   return (
     <>
-      <div className="trvdaycon">
-      <h1 className="trivhead">Trivia of the Day</h1>
-    <div className="tcard">
+      <div className="w-full grid place-items-center">
+      <h1 className="tracking-wider font-bold text-center text-xl">Trivia of the Day</h1>
+    <div className="w-full p-2">
           {Trivia}
       </div>
   </div>

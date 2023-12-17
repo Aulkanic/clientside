@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import './scho-info.css'
 import  Homepage from '../components/Homepage'
 import { Cango, FetchingApplicantsInfo, FetchingUserappoint,UserCango } from '../../Api/request'
-import { Tabs, Tab, Box, Modal, Card } from "@mui/material"; 
+import { Tabs, Tab, Box, Modal, Card } from "@mui/material";
+import CalendarIcon from '../../Images/calendar.png' 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -86,37 +87,34 @@ const Schoinfo = () => {
       const isCancel = data.statusApp === 'Cancel'
         return (
            <Box key={index} sx={{ flexGrow: 1, display:'flex',justifyContent:'center',alignItems:'center'}}>
-          <div className='appointlistcon'>
-              <Card sx={{padding:'5px'}}>
-                <div className='appointscon'>
-                <div className="calendar">
-                <div className="text">
-                  <span>{appointDays}</span>
-                </div>
-                </div>
-                <div className='appointdetails'>
-                  <p>Status: {isEnded ? "Ended" : isCancel ? 'Cancelled' : 'Ongoing'}</p>
-                  <p>Agenda: {data.Reason}</p>
-                  <p>Response: {data.canGo}</p>
-                  <p>Location: {data.Location}</p>
-                  <p>Time: {data.timeStart} - {data.timeEnd}</p>
-                  {data.statusApp === 'Ongoing' && data.isInterview === 'No' && data.canGo === 'Pending' ? 
-                  (<div>
-                  <button style={{marginRight:'10px'}} className='myButton1' onClick={() =>willgo(data,'Yes')}>
-                    Accept
-                  </button>
-                  <button disabled={data.canGo === 'No'} className='myButton2' onClick={() =>handleClickOpen(data)}>
-                    Decline
-                  </button>
-                  </div>) : data.isInterview === 'Reappoint' ? (<>
-                  <p>You've been Re-Appointed</p>
-                  </>) : data.isPassed !== 'Pending' ? (<p>
-                    <p>You've already responsed</p>
-                  </p>) : null}
-                </div>
+              <Card>
+                <div className='w-full flex flex-col md:flex-row p-4'>
+                      <div className="w-full md:w-2/5 h-40 relative grid place-items-center">
+                        <img className='w-full absolute h-full object-contain' src={CalendarIcon} alt="" />
+                        <p className='absolute z-50 text-lg font-bold'>{appointDays}</p>
+                      </div>
+                      <div className='w-full flex flex-col'>
+                        <p>Status: {isEnded ? "Ended" : isCancel ? 'Cancelled' : 'Ongoing'}</p>
+                        <p>Agenda: {data.Reason}</p>
+                        <p>Response: {data.canGo}</p>
+                        <p>Location: {data.Location}</p>
+                        <p>Time: {data.timeStart} - {data.timeEnd}</p>
+                        {data.statusApp === 'Ongoing' && data.isInterview === 'No' && data.canGo === 'Pending' ? 
+                        (<div>
+                        <button style={{marginRight:'10px'}} className='myButton1' onClick={() =>willgo(data,'Yes')}>
+                          Accept
+                        </button>
+                        <button disabled={data.canGo === 'No'} className='myButton2' onClick={() =>handleClickOpen(data)}>
+                          Decline
+                        </button>
+                        </div>) : data.isInterview === 'Reappoint' ? (<>
+                        <p>You've been Re-Appointed</p>
+                        </>) : data.isPassed !== 'Pending' ? (<p>
+                          <p>You've already responsed</p>
+                        </p>) : null}
+                      </div>
                 </div>
               </Card>
-          </div>
            </Box>           
         )
     })
@@ -145,7 +143,7 @@ const Schoinfo = () => {
         </DialogActions>
       </Dialog>
         <h1 className='appointheader'>Appointment Schedule</h1>
-        <div className="contappoint">
+        <div className="w-full">
         {appointuser.length > 0 ? (<div className='sicard'>
         {applicantdetails}
           </div>) : (

@@ -137,23 +137,23 @@ export const Payout = () => {
     <div className='flex flex-col md:flex-row gap-8'>
       <div>
         <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">Payout Details</h1>
-        <div className='w-max bg-white flex flex-col gap-4 h-max md:h-full'>
-            <div className='bg-blueish00 text-black w-max md:w-96 h-max px-4 py-8 rounded-lg'>
+        <div className='w-full flex flex-col gap-4 h-max md:h-full p-2'>
+            <div className='bg-blueish00 text-black w-full md:w-96 h-max px-4 py-8 rounded-lg'>
               {receiver.payoutSched.length > 0 ? `Date: ${receiver.payoutSched[0].date} at ${receiver.payoutSched[0].timeStart}-${receiver.payoutSched[0].timeEnd}` : ``} <br/>
               {receiver.payoutSched.length > 0 && `Location: ${receiver.payoutSched[0].Location}`}
             </div>
-            <div className='bg-blueish00 text-black w-max md:w-96 h-max px-4 py-8 rounded-lg'>
+            <div className='bg-blueish00 text-black w-full md:w-96 h-max px-4 py-8 rounded-lg'>
               BENEFITS: P5,000 {receiver.payoutSched.length > 0 && receiver.payoutSched[0].cashier}
             </div>
-            <div className='bg-blueish00 h-72 max-h-max text-black w-max md:w-96 px-4 py-8 rounded-lg'>
+            <div className='bg-blueish00 h-72 max-h-max text-black w-full md:w-96 px-4 py-8 rounded-lg'>
               REMINDER:
               {receiver.payoutSched.length > 0 && receiver.payoutSched[0].Reminder}
             </div>
         </div>
       </div>
       <div className='w-full flex-1'>
-        <div className='w-full flex justify-between'>
-          <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">Payout Receiver(if Guardian)</h1>
+        <div className='w-full p-2 flex flex-col md:flex-row justify-between'>
+          <h1 className="mb-4 text-lg md:text-3xl font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-3xl">Payout Receiver(if Guardian)</h1>
            {!isEdit ? 
           <div>
             <button onClick={(e) =>setIsEdit(true)} className='border-2 border-blueish flex items-center gap-1 px-4 py-2 text-blueish hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg'
@@ -162,18 +162,23 @@ export const Payout = () => {
               Edit Details
             </button>
           </div> : 
-          <div>
+          <div className='flex gap-2'>
              <button onClick={saveDetails} disabled={loading} className='border-2 border-blueish flex items-center gap-1 px-4 py-2 text-blueish hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg'
             >
               {!loading ? <IoMdSave /> : <AiOutlineLoading3Quarters className='animate-spin' />}
               {!loading ? 'Save Details' : 'Saving...'}
-            </button>             
+            </button>     
+            <button onClick={(e) =>setIsEdit(false)}
+            className='border-2 border-blueish flex items-center gap-1 px-4 py-2 text-blueish hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg'
+            >
+            Cancel
+            </button>        
           </div>}     
         </div>
         <div className='bg-white w-full h-full flex flex-col md:flex-row'>
-          <div className='w-2/5 bg-blueish'>
+          <div className='w-full md:w-2/5 bg-blueish'>
               <div className='flex relative justify-center items-top w-full h-max p-2 pt-4'>
-                <img className='w-full h-40 object-contained' 
+                <img className='w-full h-40 object-contained rounded-md' 
                 src={preview || receiver.receiverInfo[0]?.profile || ImgDef} alt="" />
                 <label className='absolute right-2 bottom-4 cursor-pointer' htmlFor="fileImg">
                 <FaCamera  className=' text-6xl'/>
@@ -227,7 +232,7 @@ export const Payout = () => {
                 />               
               </div>
           </div>
-          <div className='px-4 w-3/5'>
+          <div className='px-4 w-full md:w-3/5'>
                 <TextInput
                     label={'Relationship'}
                     type={'text'}

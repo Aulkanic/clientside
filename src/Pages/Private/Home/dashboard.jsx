@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import MYDO_Calendar from '../../../Components/Calendar/calendar';
 import VerticalStepper from '../../../Components/Stepper/vertical';
 import { convertToPesos } from '../../../helper/convertPesos';
+import CustomCarousel from '../../../Components/Slider/customCarousel';
 
   var settings = {
     dots: true,
@@ -65,7 +66,6 @@ export const Dashboard = () => {
         item.date = new Date(item.date);
       });
       res.data.sort((a,b) => b.date - a.date)
-      console.log(res3.data)
       const rules = res2.data.result;
       const ruling = rules ? (await convertToPesos(Number(user.info.yearLevel === 'Elementary' ? rules[0].priv1
                      : user.info.yearLevel === 'College' ? rules[0].priv3
@@ -114,30 +114,22 @@ export const Dashboard = () => {
         'bg-white p-2 rounded-lg')}>
         <h1 className='sm:text-base md:text-xl lg:text-3xl font-bold'>Latest News/Announcement</h1>
           {newsAnnounce.length > 0 ? (
-          <CustomSlider settings={settings}>
-            {newsAnnounce?.map((data, index) => {
-              return(
-              <div key={index} className='m-2 rounded-tr-md rounded-tl-md'>
-                <img className='w-full h-32 rounded-tr-md rounded-tl-md bg-gray-400' 
-                src={data.picture || Mydo} alt=""/>
-                <div className='bg-white h-12 p-2'>
-                  <h3 className='truncate hover:text-clip'>{data.title}</h3>
-                </div>
-              </div>
-            )})}
-          </CustomSlider>
+          <CustomCarousel 
+          images={newsAnnounce}
+          autoplay={false}
+          />
         ) : (
           <p>No news or announcements available.</p>
         )}
       </div>
-      <div className='flex flex-wrap flex-col md:flex-row h-96 mt-8'>
-        <div className='sm:w-full md:w-4/6 h-auto bg-white p-4 rounded-lg'>
+      <div className='flex flex-wrap flex-col md:flex-row h-full mt-8'>
+        <div className='w-full md:w-4/6 h-auto bg-white p-4 rounded-lg'>
           <h1 className='text-3xl font-semibold'>Appointment Schedule</h1>
           <MYDO_Calendar
             appointments={appointments}
           />
         </div>
-        <div className='sm:w-full md:w-2/6 h-auto bg-white p-4'>
+        <div className='w-full md:w-2/6 h-auto bg-white p-4'>
           
           {status !== 3 ? (
           <>
@@ -153,7 +145,7 @@ export const Dashboard = () => {
             <div className='mt-8'>
               {isOpen === 2 ? (
                 <div className='m-2 p-2 pt-8 rounded-lg relative shadow-[rgba(6,_24,_44,_0.4)_0px_0px_0px_2px,_rgba(6,_24,_44,_0.65)_0px_4px_6px_-1px,_rgba(255,_255,_255,_0.08)_0px_1px_0px_inset]'>
-                  <p className='absolute text-white font-bold bg-rose-600 w-max p-2 rounded-xl text-sm -right-8 -top-2'>Important!</p>
+                  <p className='absolute text-white font-bold bg-rose-600 w-max p-2 rounded-xl text-sm right-4 md:-right-8 -top-2'>Important!</p>
                   <h1 className='text-lg font-semibold'>Renewal for your Scholarship is now happening!</h1>
                   <p>Please update your information and submit needed requirement</p>
                   <p className='italic text-sm'>Deadline: {formattedDate}</p>
