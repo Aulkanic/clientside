@@ -22,6 +22,7 @@ import { styled } from '@mui/material/styles';
 import { Backdrop, CircularProgress } from '@mui/material';
 import { useSelector } from 'react-redux';
 import CustomButton from '../../Components/Button/button';
+import { isImageBlurred } from '../../helper/imgChecker';
 
 const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 50,
@@ -176,6 +177,7 @@ const applicantNum = user.info.applicantNum;
 const [submissionProgress, setSubmissionProgress] = useState(0);
 const [userInfo,setUserInfo] = useState([]);
 const [value, setValue] = React.useState(0);
+const [isBlurred, setIsBlurred] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -208,13 +210,23 @@ const [value, setValue] = React.useState(0);
   const handleChange = (event,newValue) => {
     setValue(newValue);
   };
-  const handleFileChange = (index, event) => {
+  const handleFileChange = async(index, event) => {
     const files = [...fileValues];
     files[index] = event.target.files[0];
     setFileValues(files);
     const previmg = files.map((img) =>
     img instanceof File ? URL.createObjectURL(img) : img)
     setImages(previmg);
+    try {
+      const blurred = await isImageBlurred(files[index]);
+      const blurIndex = [...isBlurred];
+      blurIndex[index]=blurred;
+      setIsBlurred(blurIndex);
+
+    } catch (error) {
+      console.error(error.message);
+    }
+
     const updatedFileNames = [...fileValues];
     if (files[index]) {
       updatedFileNames[index] = files[index].name;
@@ -323,6 +335,7 @@ const [value, setValue] = React.useState(0);
     updatedDisabledInputs[index] = true;
     setDisabledInputs(updatedDisabledInputs);
     setFileValues([])
+    setIsBlurred([])
     setSubmittedDocs1(res.DocumentSubmitted);
   };
   const handleFailedUpload = (index, error) => {
@@ -458,17 +471,16 @@ const [value, setValue] = React.useState(0);
                     <p style={{margin:0}}>Past due: Document submission is no longer possible.</p>
                   ) : (
                     !isDisabled && !hassubmit ? (
-                      <input
-                        type="file"
-                        accept=".jpg, .jpeg, .png"
-                        name={`${docu.requirementName}`}
-                        disabled={isDisabled}
-                        onChange={(event) => handleFileChange(index, event)}
-                      />
+                      <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                      id="file_input" accept=".jpg, .jpeg, .png" disabled={isDisabled} name={`${docu.requirementName}`} type="file" onChange={(event) => handleFileChange(index, event)} />
+
                     ) : (
                       <p style={{margin:0}}>Already Submitted</p>
                     )
                   )}
+                  {isBlurred[index] === 'High Quality' && <p className='bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300'>{isBlurred && isBlurred[index]}</p>}
+                  {isBlurred[index] === 'Low Quality' && <p className='bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300'>{isBlurred && isBlurred[index]}</p>}
+                  {isBlurred[index] === 'Normal Quality' && <p className='bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300'>{isBlurred && isBlurred[index]}</p>}
                 </div>
               </div>
           </div>
@@ -571,7 +583,7 @@ return(
   <StyledBackdrop open={showBackdrop}>
     <CircularProgress color="inherit" />
   </StyledBackdrop>
-  {((submissionProgress > 0 && submissionProgress < 101) || loading)  && (
+  {((submissionProgress > 0 && submissionProgress < 101) || (loading && fileValues.length === 1))  && (
         <ProgressContainer>
           <CircularProgress
             variant="determinate"

@@ -1,17 +1,3 @@
-import Bmccsite from './LandingPage/lpages/Bmccsite'
-import StepContext from './LandingPage/ApplicationgFrm/StepContext';
-import SchoCategory from './LandingPage/lpages/schoCategory';
-import Home1 from './userhome/pages/Home'
-import Account from './userhome/pages/account';
-import SCHOLAR from './userhome/pages/scholar';
-import Schoinfo from './userhome/pages/scho-info';
-import PageNotFound from './userhome/pages/PagenotFound';
-import NoInternet from './userhome/pages/NoInternet';
-import News1 from './userhome/pages/news';
-import Announcement1 from './userhome/pages/announcement';
-import Trivia1 from './userhome/pages/trivia';
-import Login1 from './userhome/pages/login';
-import Register from './userhome/pages/register'
 import { Route, Routes, createBrowserRouter, useNavigate, RouterProvider} from 'react-router-dom';
 import RequireAuth from './features/authenticate/RequireAuth';
 import { Colorlist,WebImg,Logos } from './Api/request'

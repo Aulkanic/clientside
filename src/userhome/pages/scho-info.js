@@ -86,10 +86,8 @@ const Schoinfo = () => {
       const isEnded = new Date(data.schedDate) < currentDate;
       const isCancel = data.statusApp === 'Cancel'
         return (
-           <Box key={index} sx={{ flexGrow: 1, display:'flex',justifyContent:'center',alignItems:'center'}}>
-              <Card>
-                <div className='w-full flex flex-col md:flex-row p-4'>
-                      <div className="w-full md:w-2/5 h-40 relative grid place-items-center">
+                <div key={index} className='w-full bg-white flex flex-col md:flex-row p-4'>
+                      <div className="w-full md:w-1/2 h-40 relative grid place-items-center">
                         <img className='w-full absolute h-full object-contain' src={CalendarIcon} alt="" />
                         <p className='absolute z-50 text-lg font-bold'>{appointDays}</p>
                       </div>
@@ -113,9 +111,7 @@ const Schoinfo = () => {
                           <p>You've already responsed</p>
                         </p>) : null}
                       </div>
-                </div>
-              </Card>
-           </Box>           
+                </div>       
         )
     })
     

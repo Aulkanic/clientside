@@ -9,6 +9,7 @@ import { FaHome } from "react-icons/fa";
 import { MdManageAccounts } from "react-icons/md";
 import { FetchNotif,ReadNotifi,FetchingBmccSchoinfo,FetchingProfileUser } from '../Api/request';
 import { HiClipboardDocumentList } from "react-icons/hi2";
+import { MdNotificationsActive } from "react-icons/md";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { ImNewspaper } from "react-icons/im";
 import { TfiAnnouncement } from "react-icons/tfi";
@@ -256,7 +257,7 @@ export default function Private(){
                 <div
                   className={clsx(
                     'p-3 w-full flex items-center gap-3 truncate transition-all duration-300',
-                    selectedMenu?.id === link.id ? 'bg-blueish00 text-[#043F97] rounded-md text-xl font-semibold leading-5' : 'font-light',
+                    selectedMenu?.id === link.id ? 'bg-blueish00 text-white rounded-md text-xl font-semibold leading-5' : 'font-light',
                   )}
                   key={idx}
                 >
@@ -294,12 +295,13 @@ export default function Private(){
                   badgeContent={notification?.filter((data) => data.remarks === 'unread').length} 
                   color="error"
                   onClick={handleClick}
-
+                  className={clsx(open ? 'animate-bounce text-3xl' : 'text-3xl')}
                 >
                   <button className=''
                     onClick={handleClick}
                   >
-                  <IoNotifications className={clsx(open ? 'text-blueish text-3xl' : 'text-3xl')} />
+                  {!open && <IoNotifications className={clsx(open ? 'text-white text-3xl' : 'text-3xl')} />}
+                  {open && <MdNotificationsActive className={clsx(open ? 'text-white text-3xl' : 'text-3xl')} />}
                   </button>
                 </Badge>
                 <Popover
@@ -315,7 +317,7 @@ export default function Private(){
                   anchorPosition={{ top: 80, left: 1100 }}
                 >
                   {notification ? (
-                    <div className='w-max h-96 overflow-y-auto p-4'>
+                    <div className='w-full md:w-96 h-96 overflow-y-auto p-4'>
                       <h1 className='text-black font-semibold text-lg'>Notification</h1>
                       {notifList}
                     </div>
