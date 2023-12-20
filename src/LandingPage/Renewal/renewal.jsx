@@ -43,13 +43,13 @@ const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
   };
 
 const Renewal = () => {
-    const dispatch = useDispatch();
     const user = useSelector((state) => state.login);
     const [schoinf,setSchoinf] = useState([]);
     const [renewal,setRenewal] = useState([]);
     const [reqlist,setReqlist] = useState([]);
     const [showBackdrop, setShowBackdrop] = useState(false);
     const [file,setFile] = useState([]);
+    const [loading,setLoading] = useState(false)
     const [updated,setUpdated] = useState({
       phoneNum: '',
       baranggay:'',
@@ -136,6 +136,7 @@ const Renewal = () => {
               });
               return false;
             }
+            console.log(errors)
             const hasEmptyOrUndefined = file.some((list) => {
            
               return !list.file || !list.reqName || !list;
@@ -193,7 +194,7 @@ const Renewal = () => {
             if(!isValid){
               return
             }
-
+            console.log('running')
             const user = schoinf[0];
             const date = new Date();
             const formData = new FormData();
@@ -217,12 +218,12 @@ const Renewal = () => {
             formData.append('tableName', renewal.reqtable);
             formData.append('renewTitle', renewal.renewTitle);
     
-            setShowBackdrop(true);
+            setLoading(true);
     
             const res = await FillRenewal.SET_RENEW(formData);
     
             if (res.data.success === 0) {
-                setShowBackdrop(false);
+                setLoading(false);
                 swal(res.data.message);
                 return;
             } else {
@@ -237,7 +238,6 @@ const Renewal = () => {
                             continue;
                         }
                         const formData = createFormData(filereq, det);
-                        setShowBackdrop(true);
     
                         try {
                              await uploadDocument(formData)
@@ -246,7 +246,7 @@ const Renewal = () => {
                               if(counter === file.length){
                                 setFile([])
                                 setDisablebtn1(true)
-                                setShowBackdrop(false)
+                                setLoading(false)
                                 swal({
                                   text: 'Successfully Submitted',
                                   timer: 2000,
@@ -289,7 +289,7 @@ const Renewal = () => {
         }
       };
       const handleFailedUpload = (index, error) => {
-        setShowBackdrop(false)
+        setLoading(false)
         console.error(`File upload failed for index ${index}:`, error);
         // You can implement appropriate error handling here
       };
@@ -376,10 +376,11 @@ const Renewal = () => {
                               label={'Phone Number'}
                               type={'text'}
                               required={true}
-                              name='contactNum'
+                              name='phoneNum'
                               onChange={handleInputChange}
                               error={errors.contactNum}
-                              value={updated.phoneNum || data.phoneNum}
+                              placeholder={data.phoneNum}
+                              value={updated.phoneNum}
                               readonly={false}
                           />
                           <SelectInput
@@ -431,7 +432,7 @@ const Renewal = () => {
                                   <div key={index}>                             
                                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">{data.requirementName}</label>
                                   <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                  id="file_input" type="file" onChange={(event) => handleFileChange(index,data, event)} />
+                                  id="file_input" accept=".jpg, .jpeg, .png" type="file" onChange={(event) => handleFileChange(index,data, event)} />
                                   </div>
                                 )
                             })}
@@ -444,9 +445,8 @@ const Renewal = () => {
             <CustomButton
             label={'Submit Renewal'}
             color={'blue'} 
-            loading={false}
+            loading={loading}
             onClick={handleSubmit}
-            disabled={disablebtn1}
             /> 
             </div>}
         </div>

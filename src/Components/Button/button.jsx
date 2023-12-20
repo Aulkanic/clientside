@@ -9,7 +9,7 @@ const CustomButton = ({label,addClass,loading,onClick,disabled,color}) => {
       onClick={onClick}
       className={clsx(
           addClass,
-          'transition-all flex gap-2 items-center justify-center duration-300 ease-in-out px-6 py-2 rounded w-max h-max text-white font-semibold',
+          'transition-all cursor-pointer flex gap-2 items-center justify-center duration-300 ease-in-out px-6 py-2 rounded w-max h-max text-white font-semibold',
           {
             'bg-blue-500 hover:bg-blue-700': color === 'blue',
             'bg-green-500 hover:bg-green-700': color === 'green',

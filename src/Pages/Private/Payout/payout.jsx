@@ -7,7 +7,7 @@ import { SetupReceiver,FetchingReceiver } from '../../../Api/request';
 import { useSelector } from 'react-redux';
 import { FaCamera } from "react-icons/fa";
 import swal from 'sweetalert';
-import { validateText,validateCellphoneNumber } from '../../../helper/validateField';
+import { validateText,validateCellphoneNumber, validateField } from '../../../helper/validateField';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export const Payout = () => {
@@ -77,13 +77,11 @@ export const Payout = () => {
     const validId = guardianReceiver.validId || oldData.valid_Id;
     const profile = guardianReceiver.profile || oldData.profile;
     const authorizedLetter = guardianReceiver.authorizedLetter || oldData.request_Letter;
-    console.log(validId)
-    console.log(authorizedLetter)
     errors.firstName = await validateText(firstName,50,'firstName');
     errors.lastName = await validateText(lastName,50,'lastName');
     errors.middleName = await validateText(middleName,50,'middleName');
     errors.contactNum = await validateCellphoneNumber(contactNum,'contactNum');
-    errors.address = await validateText(address,250,'address');
+    errors.address = await validateField(address,250,'address');
     errors.relationship = await validateText(relationship,50,'relationship');
     if(!validId || !authorizedLetter){
       swal({
