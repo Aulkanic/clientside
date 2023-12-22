@@ -1,5 +1,4 @@
-import { Route, Routes, createBrowserRouter, useNavigate, RouterProvider} from 'react-router-dom';
-import RequireAuth from './features/authenticate/RequireAuth';
+import { createBrowserRouter, RouterProvider} from 'react-router-dom';
 import { Colorlist,WebImg,Logos } from './Api/request'
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';

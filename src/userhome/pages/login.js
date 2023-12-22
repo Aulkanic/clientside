@@ -36,8 +36,6 @@ const Login = () => {
     const [step, setStep] = useState(0); 
     const [errors, setErrors] = useState({});
     const [loading,setLoading] = useState(false);
-    const [loading1,setLoading1] = useState(false);
-    const [loading2,setLoading2] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [otp, setOtp] = useState(new Array(6).fill(''));
