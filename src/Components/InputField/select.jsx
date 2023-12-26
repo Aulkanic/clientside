@@ -1,6 +1,6 @@
 // SelectInput.js
 import React from 'react';
-import Select from 'react-select';// Import your select library
+import Select from 'react-select';
 
 const SelectInput = ({ label,required, value, onChange, options,error,isDisabled }) => {
   return (
