@@ -38,7 +38,7 @@ export default function Private(){
     const [selectedMenu,setSelectedMenu] = useState({
         id:0
     })
-    const links = userDet.status === 'Approved' ? [
+    const links = userDet?.status === 'Approved' ? [
       {
         id:0,
         name:'Home',
@@ -147,15 +147,16 @@ export default function Private(){
           const res = await FetchNotif.FETCH_NOTIF(applicantNum);
           const profileUserResponse = await FetchingProfileUser.FETCH_PROFILEUSER(applicantNum);
           const val = profileUserResponse.data.Profile;
-
-          dispatch(updateInfo({ key: 'remarks', value: val[0].remarks }));
-          dispatch(updateInfo({ key: 'status', value: val[0].status }));
-          if (val[0].status === 'Approved') {
-            const res1 = await FetchingBmccSchoinfo.FETCH_SCHOLARSINFO(applicantNum);
-            const val1 = res1.data.ScholarInf.results1;
-            dispatch(updateInfo({ key: 'scholarCode', value: val1[0].scholarCode }));
+          if(val){
+            dispatch(updateInfo({ key: 'remarks', value: val[0].remarks }));
+            dispatch(updateInfo({ key: 'status', value: val[0].status }));
+            if (val[0].status === 'Approved') {
+              const res1 = await FetchingBmccSchoinfo.FETCH_SCHOLARSINFO(applicantNum);
+              const val1 = res1.data.ScholarInf.results1;
+              dispatch(updateInfo({ key: 'scholarCode', value: val1[0].scholarCode }));
+            }
           }
-  
+
           setNotification(res.data.reverse());
         } catch (error) {
           console.error('Error fetching data:', error);
