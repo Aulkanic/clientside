@@ -7,7 +7,7 @@ const initialState = {
     birthPlace:'',
     citizenship:'',
     contactNum:'',
-    course:'',
+    course:'NONE',
     School:'',
     yearLevel:'',
     SchoolAddress:'',

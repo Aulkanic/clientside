@@ -172,7 +172,8 @@ async function Check(){
       dispatch(setForm({ ["course"]: "NONE" }));
     }
     const isError = Object.values(errors).every(error => error === undefined)
-
+  console.log(isError)
+  console.log(errors)
     if (isError !== true) {
       setErrors(errors);
       return;
