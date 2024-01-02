@@ -24,6 +24,7 @@ import Popover from '@mui/material/Popover';
 import Badge from '@mui/material/Badge';
 import { updateInfo } from '../Redux/loginSlice';
 import { CiLogout } from "react-icons/ci";
+import { Logoutuser } from '../Api/request';
 
 export default function Private(){
     const dispatch = useDispatch();
@@ -177,7 +178,10 @@ export default function Private(){
     const onSelectedMenu = useCallback((item) => {
         setSelectedMenu({ ...item });
       }, []);
-    const logOut = () => {
+    const logOut = async() => {
+      const formData = new FormData();
+      formData.append('applicantNum',applicantNum)
+        await Logoutuser.USER_LOGOUT(formData)
         dispatch(signOut());
       };
     const notifList = notification?.map((data,index) =>{
