@@ -319,7 +319,6 @@ const Register = () => {
     .then(res => {
       if(res.data.message === 'Created'){
         const { applicantNum, fname, lname, mname, email,userType } = res.data.data;
-      
         setResstat('200');
         setSnackbarMessage('Account Created');
         setSnackbarOpen(true);
@@ -337,8 +336,7 @@ const Register = () => {
           Object.entries(formFields).forEach(([key, value]) => dispatch(setForm({ [key]: value })));
         }else{
           dispatch(setForm({ 'userType': userType }))
-          dispatch(setForm({ 'email': email }))
-          dispatch(setForm({ 'userType': userType }))
+          dispatch(setForm({ 'applicantNum': applicantNum }))
           dispatch(setForm({ 'email': email }))
           dispatch(setForm({ 'guardianName': fname.toUpperCase() }))
           dispatch(setForm({ 'guardianlName': lname.toUpperCase() }))
