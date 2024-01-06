@@ -403,7 +403,7 @@ function Persona() {
           <div className='w-full flex flex-col h-auto p-2'>
               <div className=''>
                 <h3 style={{fontSize:'18px',fontWeight:'bold',color:'rgb(11, 73, 128)',marginLeft:'5px'}}>{t("Guardian")}</h3>
-                <Form.Group as={Col}>
+                {form.famType !== 'OTHERS' && <Form.Group as={Col}>
                 <RadioGroup
                   row
                   aria-labelledby="demo-radio-buttons-group-label"
@@ -415,7 +415,7 @@ function Persona() {
                   <FormControlLabel disabled={form.noFather} value="FATHER" control={<Radio />} label={t("Father")} />
                   <FormControlLabel value="OTHERS" control={<Radio />} label={t("Other")} />
                 </RadioGroup>
-                </Form.Group>
+                </Form.Group>}
               </div>
               <div className='sm:block md:flex gap-2 p-2'>
                   <TextInput
