@@ -41,7 +41,7 @@ function Persona() {
     const [showBackdrop, setShowBackdrop] = useState(false);
     const [rule,setRule] = useState([]);
     const [siblings, setSiblings] = useState(form.siblings || [])
-    const [value, setValue] = useState('' || form.relationship);
+    const [value, setValue] = useState('' || form.famType);
     const [isGuardiancheck,setisGuardiancheck] = useState(false);
 
     const handleChangeRadio = (event) => {

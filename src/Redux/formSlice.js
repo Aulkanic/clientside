@@ -19,6 +19,7 @@ const initialState = {
     fatherOccu:'',
     familyCode:'',
     firstName:'',
+    famType:'OTHERS',
     gender:'',
     gradeLevel:'',
     guardianContact:'',

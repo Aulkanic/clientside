@@ -337,6 +337,7 @@ const Register = () => {
         }else{
           dispatch(setForm({ 'userType': userType }))
           dispatch(setForm({ 'applicantNum': applicantNum }))
+          dispatch(setForm({ 'famType': 'OTHERS' }))
           dispatch(setForm({ 'email': email }))
           dispatch(setForm({ 'guardianName': fname.toUpperCase() }))
           dispatch(setForm({ 'guardianlName': lname.toUpperCase() }))
@@ -442,8 +443,8 @@ const findCreatedAcc = async() =>{
           Object.entries(formFields).forEach(([key, value]) => dispatch(setForm({ [key]: value })));
         }else{
           dispatch(setForm({ 'userType': userType }))
-          dispatch(setForm({ 'email': email }))
-          dispatch(setForm({ 'userType': userType }))
+          dispatch(setForm({ 'applicantNum': applicantNum }))
+          dispatch(setForm({ 'famType': 'OTHERS' }))
           dispatch(setForm({ 'email': email }))
           dispatch(setForm({ 'guardianName': fname.toUpperCase() }))
           dispatch(setForm({ 'guardianlName': lname.toUpperCase() }))
