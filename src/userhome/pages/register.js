@@ -331,6 +331,7 @@ const Register = () => {
           middleName: mname,
           email,
           userType,
+          famType: ''
         };
         if(userType !== 'Guardian'){
           Object.entries(formFields).forEach(([key, value]) => dispatch(setForm({ [key]: value })));
@@ -438,6 +439,7 @@ const findCreatedAcc = async() =>{
           middleName: mname,
           email,
           userType,
+          famType:''
         };
         if(userType !== 'Guardian'){
           Object.entries(formFields).forEach(([key, value]) => dispatch(setForm({ [key]: value })));

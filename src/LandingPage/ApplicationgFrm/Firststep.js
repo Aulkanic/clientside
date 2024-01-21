@@ -166,7 +166,7 @@ async function Check(){
     errors.birthPlace = await validateField(form.birthPlace,200,'Birth Place');
     errors.contactNum = await validateCellphoneNumber(form.contactNum,'Contact Number');
     const fulladress = `${form.housenum} ${form.baranggay} MARILAO BULACAN`;
-    dispatch(setForm({ ["address"]: fulladress }));
+    dispatch(setForm({ "address": fulladress }));
     
     if(form.yearLevel === 'ELEMENTARY'){
       dispatch(setForm({ ["course"]: "NONE" }));

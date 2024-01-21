@@ -167,3 +167,6 @@ export const FetchingReceiver = {
 export const SetupReceiver = {
     SET_RECEIVER: (data) => axiosInstance.post(Endpoints.SET_RECEIVER,data)
 }
+export const ScanningQr = {
+    QR_CODE: (data) => axiosInstance.post(Endpoints.SCANQR,data)
+}
