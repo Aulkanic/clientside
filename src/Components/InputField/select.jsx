@@ -4,13 +4,13 @@ import Select from 'react-select';
 
 const SelectInput = ({ label,required, value, onChange, options,error,isDisabled }) => {
   return (
-    <div className='flex-1 my-4 flex h-max flex-col relative'>
+    <div className='flex-1 my-4 mb-2 flex h-max flex-col relative'>
       {label && <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor="baranggay">
         {label} {required && '*'}
       </label>}
       <Select
         fullWidth
-        className='h-full'
+        className='h-full -mt-1'
         value={options.find((option) => option.value === value)}
         onChange={onChange}
         placeholder=""

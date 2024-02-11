@@ -170,3 +170,9 @@ export const SetupReceiver = {
 export const ScanningQr = {
     QR_CODE: (data) => axiosInstance.post(Endpoints.SCANQR,data)
 }
+export const AcadmicyearListofScho ={
+    LIST:(data) => axiosInstance.get(Endpoints.ACADEMICYEARSCHO+data)
+}
+export const SetPayeeReceiver = {
+    SET:(data) => axiosInstance.post(Endpoints.SET_PAYRECEIVER,data)
+}
