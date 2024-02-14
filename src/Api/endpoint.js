@@ -57,7 +57,8 @@ const Endpoints = {
     NEWS_ANNOUNCE:'announce/NewsAndAnnouncement',
     SCANQR:'personalinfo/QRcode',
     ACADEMICYEARSCHO: 'payout/',
-    SET_PAYRECEIVER:'payout/set/receiver'
+    SET_PAYRECEIVER:'payout/set/receiver',
+    REMOVE_PAYRECEIVER:'payout/delete/receiverOf'
 
 }
 

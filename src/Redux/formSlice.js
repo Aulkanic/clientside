@@ -41,7 +41,8 @@ const initialState = {
     noFather: false,
     onlyChild:false,
     siblings: [],
-    userType:''
+    userType:'',
+    academicYear:''
 }
 
 const formSlice = createSlice({

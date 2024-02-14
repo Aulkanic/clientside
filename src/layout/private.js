@@ -254,7 +254,7 @@ export default function Private(){
               alt="" />
               </div>
               <p className='m-none text-xs truncate'>MARILAO YOUTH DEVELOPMENT OFFICE</p>
-              <p>BATCH {userDet.Batch}</p>
+              <p>Academic Year: {userDet.academicYear}</p>
             </div>
             <div className="bg-white h-[1px]"></div>
             <div className="flex flex-col w-full py-2 px-4">

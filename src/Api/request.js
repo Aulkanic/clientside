@@ -176,3 +176,9 @@ export const AcadmicyearListofScho ={
 export const SetPayeeReceiver = {
     SET:(data) => axiosInstance.post(Endpoints.SET_PAYRECEIVER,data)
 }
+export const RemovePayeeReceiver = {
+    REMOVE: (data) => {
+        console.log("Data:", data); // Add this line to log the data parameter
+        return axiosInstance.delete(Endpoints.REMOVE_PAYRECEIVER + `/?schoid=${data.get('schoid')}&batch=${data.get('batch')}&academicYear=${data.get('academicYear')}`);
+    }
+}

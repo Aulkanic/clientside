@@ -37,8 +37,9 @@ function SchoCategory() {
   }, [post]);
 
   const setSchoforForm = (schoname) =>{
-    localStorage.setItem('schoId',schoname)
-    dispatch(setForm({ 'schoId': schoname}))
+    localStorage.setItem('schoId',schoname.name)
+    dispatch(setForm({ 'schoId': schoname.name}))
+    dispatch(setForm({ 'academicYear': schoname.academicYear}))
     navigate('/register')
   }
 
@@ -55,7 +56,7 @@ function SchoCategory() {
       />
       </div>
       <div className="schoDet">
-        <div className='text-lg font-bold'><h4>{contact.name}</h4></div>
+        <div className='text-lg font-bold'><h4>{contact.name} for Academic Year {contact.academicYear}</h4></div>
         <div className='ndate'><h6>{contact.description}</h6></div>
         <div><p className='text-sm italic'>Start: {contact.startDate}</p></div>
         <div><p className='text-sm italic'>End: {contact.endDate}</p></div>
@@ -67,7 +68,7 @@ function SchoCategory() {
           label={'Apply Now'}
           color={'blue'}
           loading={false}
-          onClick={() =>setSchoforForm(contact.name)}
+          onClick={() =>setSchoforForm(contact)}
         />)
         : (
           <CustomButton
@@ -75,7 +76,7 @@ function SchoCategory() {
             color={'gray'}
             loading={false}
             disabled={true}
-            onClick={() =>setSchoforForm(contact.name)}
+            onClick={() =>setSchoforForm(contact)}
           />)}
       </div>
     </div>

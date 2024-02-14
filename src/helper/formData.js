@@ -1,4 +1,5 @@
 export default function createFormData(data){
+    console.log(data)
     const formData = new FormData();
 
     for (const key in data){

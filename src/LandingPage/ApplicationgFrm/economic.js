@@ -118,7 +118,7 @@ function Economic() {
       }
       const fname = toTitleCase(form.firstName);
       const lname = toTitleCase(form.lastName);
-      const mname = toTitleCase(form.middleName);
+      const mname = toTitleCase(form.middleName ?? '');
       const fullName = `${fname} ${mname} ${lname}`
       let birthdayValue = formattedBirthday;
 
@@ -160,6 +160,7 @@ function Economic() {
       formData.append('gradeLevel', form.gradeLevel);
       formData.append('userType', form.userType);
       formData.append('scholarId', form.schoId);
+      formData.append('academicYear',form.academicYear)
       formData.append('familyCode', form.familyCode);
       for (let i = 0; i < selectedValues.length; i++) {
         formData.append(`userfrm[${i}]`, JSON.stringify(selectedValues[i]));

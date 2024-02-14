@@ -78,6 +78,7 @@ const Renewal = () => {
                 data.batch === Batch &&
                 data.schoName === Scholartype
                 )
+                console.log(re)
                 setReqlist(renewalList)
               if(re.data.success !== 0){
                 setRenewal(re.data.list[0]);

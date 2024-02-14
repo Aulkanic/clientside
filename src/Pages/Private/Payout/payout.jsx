@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AcadmicyearListofScho, SetPayeeReceiver } from '../../../Api/request';
+import { AcadmicyearListofScho, RemovePayeeReceiver, SetPayeeReceiver } from '../../../Api/request';
 import { useSelector } from 'react-redux';
 import CustomAccordion from '../../../Components/Accordion/CustomAccordion';
 import TextInput from '../../../Components/InputField/text';
@@ -52,22 +52,59 @@ export const Payout = () => {
   }
   const handleSubmit = async(e,data) =>{
     e.preventDefault()
-    const det = data.results[0];
-    setFrmReceiver(prev =>({...prev,academicYear:data.academicYear,batch:data.batchtitle,scholarid:det.schoid}))
-    console.log(frmReceiver)
-    const formData = createFormData(frmReceiver)
+    console.log(data)
+    const det = data.PayDet[0];
+    const details ={
+      fname:frmReceiver.fname,
+      lname: frmReceiver.lname,
+      mname: frmReceiver.mname,
+      relationship: frmReceiver.relationship,
+      address: frmReceiver.address,
+      contactNum: frmReceiver.contactNum,
+      academicYear: data.academicYear,
+      batch: data.batchtitle,
+      scholarid: det.scholarCode
+    }
+
+    const formData = createFormData(details)
     const res = await SetPayeeReceiver.SET(formData)
-    console.log(res)
     if(res.data){
       alert('Submitted Successfully')
+      FetchData()
     }
   }
+  const handleRemoveGuardian = async(data) =>{
+    console.log(data)
+    const filter = data.results.filter(item => item.batch === data.batchtitle);
+    const det = filter[0]
+    const details = {
+      schoid: det.scholarCode,
+      academicYear: data.academicYear,
+      batch: data.batchtitle
+    }
+    console.log(details)
+    const formData = createFormData(details)
+    const formDataObject = {};
+    formData.forEach((value, key) => {
+      formDataObject[key] = value;
+    });
+    console.log(formDataObject)
+    const res = await RemovePayeeReceiver.REMOVE(formData);
+    console.log(res)
+    if(res.data){
+      FetchData()
+    }
+  }
+  console.log(allAcademic)
  return (
   <>
   <div>
     {allAcademic?.map((data,idx) =>{
-      const det = data.results[0];
+      const payDet = data.PayDet[0];
+      const isHaveGuardian = data.Receiver.length > 0;
+      const receiverDet = data.Receiver[0]
       return(
+        <div key={idx}>
         <CustomAccordion
           data={data}
           title={<p style={{fontWeight:'bold'}}>Academic Year: {data.academicYear} {data.batchtitle}</p>}
@@ -83,18 +120,46 @@ export const Payout = () => {
                   <td>Reminder:</td>
                 </tr>
                 <tr className='flex flex-col gap-4 text-right'>
-                  <td>{new Date(det.date).toLocaleDateString()}</td>
-                  <td>{new Date(det.timeStart).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} to {new Date(det.timeEnd).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                  <td>{det.location}</td>
-                  <td>{det.cashierId}</td>
-                  <td>{currencyFormat(det.total)}</td>
-                  <td>{det.reminder}</td>
+                  <td>{new Date(payDet?.date).toLocaleDateString()}</td>
+                  <td>{new Date(payDet?.timeStart).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} to {new Date(payDet?.timeEnd).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                  <td>{payDet?.location}</td>
+                  <td>{payDet?.cashierId}</td>
+                  <td>{currencyFormat(payDet?.total)}</td>
+                  <td>{payDet?.reminder}</td>
                 </tr>
               </tbody>
             </table>
             <div className='shadow-border h-max p-4'>
-            <p>Person incharge for receiving allowance</p>
-            <p className='text-sm italic font-semibold'>Note:Fill up this form if the guardian will be the one to received the allowance</p>
+              {isHaveGuardian ? (<div>
+                <div>
+                <p>Receiver  Information : </p>
+                </div>
+                <table className=''>
+              <tbody className='flex gap-8'>
+                <tr className='flex flex-col gap-4 font-bold'>
+                  <td>Name:</td>
+                  <td>Relationship:</td>
+                  <td>Address:</td>
+                  <td>Contact No:</td>
+                </tr>
+                <tr className='flex flex-col gap-4 text-right'>
+                  <td>{`${receiverDet?.receiverfname} ${receiverDet?.receivermname} ${receiverDet?.receiverlname}`}</td>
+                  <td>{receiverDet?.relationship}</td>
+                  <td>{receiverDet?.address}</td>
+                  <td>{receiverDet?.contactNum}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div className='flex justify-end items-end mt-4'>
+            <CustomButton
+              label={'Remove Guardian'}
+              color={'red'}
+              onClick={() =>{handleRemoveGuardian(data)}}
+            />
+            </div>
+              </div>) : (<div>
+              <p>Person incharge for receiving allowance</p>
+              <p className='text-sm italic font-semibold'>Note:Fill up this form if the guardian will be the one to received the allowance</p>
               <form action="" >
                 <div className='flex gap-4'>
                   <div className='w-full'>
@@ -164,9 +229,12 @@ export const Payout = () => {
                 </div>
 
               </form>
+              </div>)}
+
             </div>
           </div>}
         />
+        </div>
       )
     })}
   </div>
