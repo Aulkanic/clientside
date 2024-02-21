@@ -10,7 +10,7 @@ const SelectInput = ({ label,required, value, onChange, options,error,isDisabled
       </label>}
       <Select
         fullWidth
-        className='h-full -mt-1'
+        className='h-full -mt-1 z-50'
         value={options.find((option) => option.value === value)}
         onChange={onChange}
         placeholder=""

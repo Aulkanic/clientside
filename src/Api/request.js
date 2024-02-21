@@ -182,3 +182,12 @@ export const RemovePayeeReceiver = {
         return axiosInstance.delete(Endpoints.REMOVE_PAYRECEIVER + `/?schoid=${data.get('schoid')}&batch=${data.get('batch')}&academicYear=${data.get('academicYear')}`);
     }
 }
+export const ListOfRenewal = {
+    FETCH:() => axiosInstance.get(Endpoints.RENEWALACADEMIC)
+}
+export const SubmitRenewalForAcademicYear ={
+    SUBMIT:(data) => axiosInstance.post(Endpoints.SUBMITRENEWALACAD,data)
+}
+export const SubmitRenewalRequirements ={
+    SUBMIT:(data) => axiosInstance.post(Endpoints.SUBMITRENEWALREQ,data)
+}

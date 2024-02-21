@@ -54,11 +54,14 @@ const Endpoints = {
     SET_RENEW:'RenewalForm/FillRenewal',
     SET_RENEW1:'RenewalForm/FillRenewal1',
     FETCH_RENEW:'RenewalForm/YearlyRenew',
+    SUBMITRENEWALACAD:'RenewalForm/Submit/Renewal/Update',
+    SUBMITRENEWALREQ:'RenewalForm/Submit/Renewal/Requirement',
     NEWS_ANNOUNCE:'announce/NewsAndAnnouncement',
     SCANQR:'personalinfo/QRcode',
     ACADEMICYEARSCHO: 'payout/',
     SET_PAYRECEIVER:'payout/set/receiver',
-    REMOVE_PAYRECEIVER:'payout/delete/receiverOf'
+    REMOVE_PAYRECEIVER:'payout/delete/receiverOf',
+    RENEWALACADEMIC:'RenewalForm/All'
 
 }
 
