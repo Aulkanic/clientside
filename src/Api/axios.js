@@ -1,7 +1,6 @@
 import axios from 'axios';
-console.log(process.env.REACT_APP_API_URL)
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: 'https://be-mydo.vercel.app/api/v1/',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'multipart/form-data',

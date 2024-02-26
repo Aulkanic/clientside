@@ -2,7 +2,7 @@ import React from 'react';
 
 const DownloadLink = () => {
   const handleDownload = () => {
-    const downloadApiUrl = process.env.REACT_APP_DOWNLOAD_API_URL;
+    const downloadApiUrl = 'https://be-mydo.vercel.app/';
     const downloadLink = `${downloadApiUrl}MariskoApp`;
 
     const link = document.createElement('a');
@@ -12,7 +12,6 @@ const DownloadLink = () => {
     link.click();
     document.body.removeChild(link);
   };
-  console.log(process.env.REACT_APP_DOWNLOAD_API_URL)
   return (
     <div style={styles.container}>
       <p style={styles.text}>Click the button to download the app:</p>
