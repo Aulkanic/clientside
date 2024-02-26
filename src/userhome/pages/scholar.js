@@ -622,7 +622,7 @@ return(
                 label={'Upload'}
                 color={'green'}
                 loading={loading}
-                disabled={loading}
+                disabled={loading || isBlurred.length > 0}
                 onClick={handleSubmit}
               />
           </div>
