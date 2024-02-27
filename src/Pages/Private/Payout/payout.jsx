@@ -121,7 +121,7 @@ export const Payout = () => {
                 </tr>
                 <tr className='flex flex-col gap-4 text-right'>
                   <td>{new Date(payDet?.date).toLocaleDateString()}</td>
-                  <td>{new Date(payDet?.timeStart).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} to {new Date(payDet?.timeEnd).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                  <td>{new Date(payDet?.timeStart).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' , timeZone: 'UTC'})} to {new Date(payDet?.timeEnd).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' , timeZone: 'UTC'})}</td>
                   <td>{payDet?.location}</td>
                   <td>{payDet?.cashierId}</td>
                   <td>{currencyFormat(payDet?.total)}</td>
