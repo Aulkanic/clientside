@@ -15,6 +15,7 @@ import { color } from "../../App";
 import { Typography,Card,Paper } from '@mui/material'
 import { useInView } from 'react-intersection-observer'
 import { useAnimation } from 'framer-motion'
+import { fetchImageFromProxy } from '../../helper/fetchImage'
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -49,6 +50,16 @@ const About = () => {
   const {ref:ref3,inView:inView3} = useInView({
     threshold:0.5
   });
+  const [imgUrl, setImgUrl] = useState(null); 
+  useEffect(() => {
+    const fetchImage = async () => {
+      if (logolist && logolist.length > 0) {
+        const imgUrl = await fetchImageFromProxy(logolist[0]?.logo); // Fetch image URL
+        setImgUrl(imgUrl);
+      }
+    };
+    fetchImage();
+  }, [logolist]);
 
   const mission = {
     hidden: {
@@ -81,15 +92,10 @@ const About = () => {
       animation.start("hidden");
     }
   }, [inView1, animation]);
-
-
-
   const textVariants = {
     hidden: { opacity: 0, x: -70 },
     visible: { opacity: 1, x: 0 }
   };
-
-
   const BmccOfficial = [
     {profile:Member1,name:'Editha L. Ramos',job:'Community Affairs Officer III'},
     {profile:Member2,name:'Noriel Wency C. Correa',job:'Administrative Aide III'},
@@ -97,6 +103,7 @@ const About = () => {
     {profile:Member4,name:'Shaira Mae L. Usi',job:'Administrative Aide III'},
     {profile:Member5,name:'Aaron Jake M. Cadalin',job:'Administrative Aide III'},
   ]
+  console.log(imgUrl)
   return (
     <>
     {colorlist && 
@@ -167,7 +174,7 @@ const About = () => {
             variants={item}
             >
             <Card className='w-full p-2' elevation={3}>
-            <div className='backgroundimg' style={{backgroundImage:`url(${logolist[0].logo})`}}>
+            <div className='backgroundimg' style={{backgroundImage:`url(${MYDO})`}}>
               <div className='circular' style={{padding:'5px',borderRadius:'50%',position:'relative'}}>
               <Avatar sx={{width:100,height:90}} alt="Remy Sharp" src={data.profile} size="lg" />
               </div>

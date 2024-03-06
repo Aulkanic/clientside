@@ -58,7 +58,7 @@ const Faqs = () => {
         setFaqs(res.data.result)
       }
       Fetch()
-  },[faqs])
+  },[])
   const textVariants = {
     hidden: { opacity: 0, x: -70 },
     visible: { opacity: 1, x: 0 }

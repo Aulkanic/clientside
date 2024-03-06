@@ -6,6 +6,7 @@ import { color } from "../../App";
 import Avatar from '@mui/material/Avatar';
 import marilao from '../../userhome/assets/marilao.jpg'
 import Bmcc from '../../userhome/assets/logo.jpg'
+import MYDO from '../Assets/mydo.png'
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -14,12 +15,25 @@ import moment from 'moment';
 import MenuIcon from '@mui/icons-material/Menu';
 import { MdOutlineClear } from "react-icons/md";
 import clsx from 'clsx';
+import { fetchImageFromProxy } from '../../helper/fetchImage';
+import { Image } from 'antd';
 
 function Navbar() {
   const { colorlist,logolist } = useContext(color);
   const [open,setOpen] = useState(false)
+  const [bmccLogo, setBmccLogo] = useState(null);
   const [currentDateTime, setCurrentDateTime] = useState(moment().format('MMMM Do YYYY, h:mm:ss a'));
-
+  useEffect(() => {
+    // Fetch BMCC logo using fetchImageFromProxy function
+    fetchImageFromProxy(logolist[0].logo)
+      .then((response) => {
+        // Set the BMCC logo in state
+        setBmccLogo(response);
+      })
+      .catch((error) => {
+        console.error('Error fetching BMCC logo:', error);
+      });
+  }, [logolist]);
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentDateTime(moment().format('MMMM Do YYYY, h:mm:ss a'));
@@ -29,7 +43,6 @@ function Navbar() {
       clearInterval(timer);
     };
   }, []);
-
   return (
     <>
     {colorlist && logolist ? (
@@ -52,12 +65,12 @@ function Navbar() {
         </div>
         <div className='flex justify-between h-20'>
             <div className='flex flex-1 gap-2'>
-              <div className="w-16 md:w-24 h-16 md:h-24 relative border-2 md:border-4 rounded-full ml-2 mt-2 md:mt-4" 
+              <div className="w-16 md:w-24 h-16 md:h-24 relative border-2 md:border-4 rounded-full ml-2 mt-2 md:mt-4 z-50" 
               style={{borderColor:colorlist[0].bgColor}}>
               <img
-              className='w-full h-full object-cover rounded-full absolute'
+              className='w-full bg-white h-full object-cover rounded-full absolute'
               alt="BMCC"
-              src={logolist[0].logo}
+              src={MYDO}
               />
               </div>
               <div className='p-2'>

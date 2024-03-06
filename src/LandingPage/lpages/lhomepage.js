@@ -1,49 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../css/lhomepage.css'
 import {Link} from 'react-router-dom'
 import { motion } from "framer-motion";
-import { Card,Typography } from '@mui/material'
 import LoopingRhombusesSpinner from '../../userhome/loadingDesign/loading'
 import { useContext } from "react";
 import { color } from "../../App";
-import CustomSlider from '../../Components/Slider/slider';
 import CustomCarousel from '../../Components/Slider/customCarousel';
-
-var settings = {
-  dots: true,
-  infinite: false,
-  speed: 500,
-  lazyLoad: true,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  initialSlide: 0,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 1,
-      }
-    },
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 1,
-      }
-    },
-  ]
-};
+import { Image } from 'antd';
+import { fetchImageFromProxy } from '../../helper/fetchImage';
 
 function Lhomepage() {
   const { colorlist,imgList } = useContext(color);
-
+  const [imgUrl, setImgUrl] = useState(null); 
+  const [isLoading, setIsLoading] = useState(false)
+  useEffect(() => {
+    const fetchImage = async () => {
+      setIsLoading(true)
+      if (imgList && imgList.length > 0) {
+        const imgUrl = await fetchImageFromProxy(imgList[0]?.File); // Fetch image URL
+        setImgUrl(imgUrl);
+      }
+      setIsLoading(false)
+    };
+    fetchImage();
+  }, [imgList]);
+  console.log(imgUrl)
   const content = () =>{
     const imgUrl = imgList[0]?.File;
       return (
        <div className="relative">
-        <div className='w-full h-96'>
-          <img className='w-full h-full object-cover'
-           src={imgUrl} alt="" />
-        </div>
+          <div className='w-full h-96'>
+            <img className='w-full h-full object-cover' src={imgUrl} alt="" />
+          </div>
         <div className="absolute top-0 left-0 w-full h-28 md:h-24 backdrop-blur-sm bg-white/30">
 
         </div>
@@ -70,7 +58,7 @@ function Lhomepage() {
   }
   return (
     <>
-    {colorlist && imgList ? (
+    {(colorlist && imgList) && !isLoading ? (
     <div className='flex flex-col justify-center items-center w-screen h-max'>
     <div className='flex bg-white h-1/2 flex-col w-full md:w-11/12'>
       {content()}

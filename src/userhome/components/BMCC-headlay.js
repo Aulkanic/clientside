@@ -3,18 +3,19 @@ import '../css/Bmcc-header.css'
 import marilao from './../assets/marilao.jpg'
 import Bmcc from './../assets/logo.jpg'
 import Avatar from '@mui/material/Avatar';
+import { Image } from 'antd';
 import { useContext } from "react";
 import { color } from "../../App";
 import LoopingRhombusesSpinner from '../loadingDesign/loading'
 const Header = () => {
   const { colorlist,logolist } = useContext(color);
-
+console.log(logolist)
   return (
     <>
     {logolist ? (<div className='Header'>
       <div className='BMCC'>
         <div className='bmcc'>
-        <Avatar alt="" src={logolist[0].logo} sx={{width: 60, height: 60}} />
+        <Image alt="" src={logolist[0].logo} sx={{width: 60, height: 60}} />
         </div>
       
         <div>

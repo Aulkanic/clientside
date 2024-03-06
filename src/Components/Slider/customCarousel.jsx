@@ -2,11 +2,12 @@ import React, { useState,useEffect } from 'react';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import MYDO from '../../Images/mydo.png'
+import { Image } from 'antd';
+import { fetchImageFromProxy } from '../../helper/fetchImage';
 
 function CustomCarousel({images, showDots = true, autoplay, autoplayInterval = 3000 }) {
-
+  const [imageSrc, setImageSrc] = useState(null);
     const [currentIndex,setCurrentIndex] = useState(0);
-    const [preloadedImages, setPreloadedImages] = useState([]);
 
     const goToNextSlide = () =>{
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -16,22 +17,16 @@ function CustomCarousel({images, showDots = true, autoplay, autoplayInterval = 3
     }
   const isAtFirstIndex = currentIndex === 0;
   const isAtLastIndex = currentIndex === images.length - 1;
-
-
-
   useEffect(() => {
-    const preloadImages = () => {
-      const preloaded = [];
-      for (let i = 0; i < images.length; i++) {
-        const img = new Image();
-        img.src = images[i].File;
-        preloaded.push(img);
+    const fetchImage = async () => {
+      if (images[currentIndex]) {
+        const src = await fetchImageFromProxy(images[currentIndex].File || images[currentIndex].picture);
+        setImageSrc(src);
       }
-      setPreloadedImages(preloaded);
     };
+    fetchImage();
+  }, [currentIndex, images]);
 
-    preloadImages();
-  }, [images]);
 
   useEffect(() => {
     let intervalId;
@@ -57,10 +52,11 @@ function CustomCarousel({images, showDots = true, autoplay, autoplayInterval = 3
         >
         <ArrowLeftIcon className='text-white text-lg'/>
         </button>
-        <img
-            src={images[currentIndex].File || images[currentIndex].picture || MYDO}
+        <Image
+            src={imageSrc || MYDO}
             alt={`Slide ${currentIndex}`}
             className="transition-opacity duration-500 ease-in-out w-full"
+            loading='lazy'
             style={{ opacity: 1 }}
         />
         {images[currentIndex].title && <p className='absolute bottom-12 left-2 md:left-24 w-11/12 md:w-5/6 truncate rounded-md bg-white p-2'>{images[currentIndex].title}</p>}
