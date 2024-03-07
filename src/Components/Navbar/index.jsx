@@ -27,9 +27,7 @@ export default function CustomNavbar() {
   }, []);
 
   const handleLinkHover = (id) => {
-    console.log(id)
-    const keyId = id === hoveredLink ? 0 : id;
-    setHoveredLink(keyId);
+    setHoveredLink(id);
   }
   return (
     <div>
@@ -54,7 +52,7 @@ export default function CustomNavbar() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }} 
                     transition={{ duration: 0.3 }} 
-                    className='absolute top-12 w-max h-max flex flex-col shadow-[0px_19px_11px_0px_#00000024]'
+                    className='absolute top-12 w-max h-max flex flex-col shadow-[-1px_5px_11px_9px_#00000024]'
                     >
                     {item.child.map((val,idy) =>(
                         <p className='w-52 text-nowrap text-sm text-[#000AFF] bg-white hover:bg-[#000AFF] ease-in-out duration-300 text-sky-600 hover:text-white cursor-pointer p-2' key={idy}>{val}</p>
